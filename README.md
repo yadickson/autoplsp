@@ -106,11 +106,11 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 
 ### driver (required)
 
-JDBC Driver class name, example *oracle.jdbc.driver.OracleDriver*
+JDBC Driver class name, example **oracle.jdbc.driver.OracleDriver**
 
 ### connectionString (required)
 
-Database connection string, example *jdbc:oracle:thin:@host:port:service*
+Database connection string, example **jdbc:oracle:thin:@host:port:service**
 
 ### user (required)
 
@@ -130,13 +130,15 @@ Datasource JNDI name
 
 ### outputConfigFileName (optional)
 
-Default value ${project.artifactId}.xml
+Default value **${project.artifactId}.xml**
 
 ### outParameterCode (optional - default value OUT_RETURN_CODE)
 
 Output parameter code to evaluate process.
-If code is Zero (O), OK
-If code is not Zero (0), throw SQLException (OUT_RETURN_CODE + ":" + OUT_RETURN_MSG)
+
+If code is Zero (O), **OK**
+
+If code is not Zero (0), **throw SQLException (OUT_RETURN_CODE + ":" + OUT_RETURN_MSG)**
 
 ### outParameterMessage (optional - default value OUT_RETURN_MSG)
 

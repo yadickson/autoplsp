@@ -2,7 +2,7 @@
 
 Maven plugin for generate Java classes from StoredProcedure and Functions of Database
 
-##Support
+## Support
 
 - Oracle DataBase
 - Java >= 1.6
@@ -11,7 +11,7 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 - Configuration file generation for Spring
 - Use output parameters to evaluate process
 
-##Native type support
+## Native type support
 
 - NUMERIC
 - DECIMAL
@@ -24,7 +24,7 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 - TIMESTAMP
 - ROWID
 
-##Complex type support
+## Complex type support
 
 - REF CURSOR (only output)
 - TYPE OBJECT (only input)
@@ -32,7 +32,7 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 - TYPE TABLE [TYPE OBJECT] (only input)
 
 
-##POM properties
+## POM properties
 
 ```
 <properties>
@@ -42,7 +42,7 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 </properties>
 ```
 
-##POM dependencies
+## POM dependencies
 
 ```
 <dependency>
@@ -67,7 +67,7 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 </dependency>
 ```
 
-##POM plugin config
+## POM plugin config
 
 ```
 <plugin>
@@ -104,58 +104,58 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 </plugin>
 ```
 
-###driver (required)
+### driver (required)
 
 JDBC Driver class name, example *oracle.jdbc.driver.OracleDriver*
 
-###connectionString (required)
+### connectionString (required)
 
 Database connection string, example *jdbc:oracle:thin:@host:port:service*
 
-###user (required)
+### user (required)
 
 Database username
 
-###pass (required)
+### pass (required)
 
 Database password
 
-###javaDataSourceName (required)
+### javaDataSourceName (required)
 
 Datasource stereotype name
 
-###jndiDataSourceName (required)
+### jndiDataSourceName (required)
 
 Datasource JNDI name
 
-###outputConfigFileName (optional)
+### outputConfigFileName (optional)
 
 Default value ${project.artifactId}.xml
 
-###outParameterCode (optional - default value OUT_RETURN_CODE)
+### outParameterCode (optional - default value OUT_RETURN_CODE)
 
 Output parameter code to evaluate process.
 If code is Zero (O), OK
 If code is not Zero (0), throw SQLException (OUT_RETURN_CODE + ":" + OUT_RETURN_MSG)
 
-###outParameterMessage (optional - default value OUT_RETURN_MSG)
+### outParameterMessage (optional - default value OUT_RETURN_MSG)
 
 Output parameter message.
 
-###javaPackageName (required)
+### javaPackageName (required)
 
 Package name for Java classes
 
-###includes -> include (optional)
+### includes -> include (optional)
 
 Regular expression to include procedure and functions names, example SP_YES.*
 
-###excludes -> exclude (optional)
+### excludes -> exclude (optional)
 
 Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 
-##POM Basic Configuration (include all procedure and function)
+## POM Basic Configuration (include all procedure and function)
 
 ```
 <plugin>
@@ -181,7 +181,7 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 </plugin>
 ```
 
-##POM Basic Configuration (include one procedure)
+## POM Basic Configuration (include one procedure)
 
 ```
 <plugin>
@@ -211,7 +211,7 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 </plugin>
 ```
 
-##POM Basic Configuration (include two procedures)
+## POM Basic Configuration (include two procedures)
 
 ```
 <plugin>
@@ -242,7 +242,7 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 </plugin>
 ```
 
-##POM Basic Configuration (exclude one procedure)
+## POM Basic Configuration (exclude one procedure)
 
 ```
 <plugin>
@@ -272,7 +272,7 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 </plugin>
 ```
 
-#How to evaluate result code
+# How to evaluate result code
 
 **Examples**
 
@@ -310,13 +310,13 @@ BEGIN
 END FN_...;
 ```
 
-#Build project
+# Build project
 
 ```
 mvn clean package install
 ```
 
-#Configuration file generated
+# Configuration file generated
 
 **spring/database/[outputConfigFileName]**
 
@@ -338,7 +338,7 @@ mvn clean package install
 </beans>
 ```
 
-#Configuration in the parent project
+# Configuration in the parent project
 
 Add import resource in *root-context.xml*
 
@@ -358,7 +358,7 @@ Add import resource in *root-context.xml*
 ```
 
 
-##Examples
+## Examples
 
 - [function-without-parameters](https://github.com/yadickson/autoplsp-examples/function-without-parameters)
 - [function-with-parameters](https://github.com/yadickson/autoplsp-examples/function-with-parameters)

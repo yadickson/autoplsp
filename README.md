@@ -48,16 +48,23 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-context</artifactId>
-    <version>4.0.6.RELEASE</version>
+    <version>4.x.x.RELEASE</version>
     <scope>provided</scope>
 </dependency> 
 
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-jdbc</artifactId>
-    <version>4.0.6.RELEASE</version>
+    <version>4.x.x.RELEASE</version>
     <scope>provided</scope>
 </dependency> 
+
+<dependency>
+    <groupId>commons-lang</groupId>
+    <artifactId>commons-lang</artifactId>
+    <version>2.6</version>
+    <scope>provided</scope>
+</dependency>
 
 <dependency>
     <groupId>com.oracle.jdbc</groupId>

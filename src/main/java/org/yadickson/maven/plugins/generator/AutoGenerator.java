@@ -211,24 +211,27 @@ public class AutoGenerator extends AbstractMojo {
             SPGenerator generator = SPGeneratorFactory.getGenaratorConnection(driver);
             Connection connection = connManager.getConnection();
 
-            List<String> list = generator.findStoredProcedureNames(connection);
+            List<Procedure> list = generator.findProcedures(connection);
             List<Procedure> spList = new ArrayList<Procedure>();
 
-            for (String name : list) {
+            for (Procedure procedure : list) {
                 Pattern patternI = Pattern.compile(regexInclude, Pattern.CASE_INSENSITIVE);
                 Pattern patternE = Pattern.compile(regexExclude, Pattern.CASE_INSENSITIVE);
+
+                String name = procedure.getName();
+
                 boolean match = patternI.matcher(name).matches() && !patternE.matcher(name).matches();
 
                 try {
                     if (match) {
-                        LoggerManager.getInstance().info("[Generator] Process store procedure name: " + name);
-                        Procedure sp = generator.findStoredProcedure(connection, name);
-                        spList.add(sp);
+                        LoggerManager.getInstance().info("[Generator] Process store procedure name: " + procedure.getFullName());
+                        generator.fillProcedure(connection, procedure);
+                        spList.add(procedure);
                         LoggerManager.getInstance().info("[Generator] Process procedure success");
                     }
                 } catch (Exception ex) {
-                        LoggerManager.getInstance().info("[Generator] Stop process procedure name: " + name);
-                        throw ex;
+                    LoggerManager.getInstance().info("[Generator] Stop process procedure name: " + procedure.getFullName());
+                    throw ex;
                 }
             }
 

@@ -16,14 +16,13 @@ public interface SPGenerator {
      * @return
      * @throws Exception
      */
-    List<String> findStoredProcedureNames(Connection connection) throws Exception;
+    List<Procedure> findProcedures(Connection connection) throws Exception;
 
     /**
      *
      * @param connection
-     * @param procedureName
-     * @return
+     * @param procedure
      * @throws Exception
      */
-    Procedure findStoredProcedure(Connection connection, String procedureName) throws Exception;
+    void fillProcedure(Connection connection, Procedure procedure) throws Exception;
 }

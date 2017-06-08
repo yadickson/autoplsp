@@ -12,19 +12,21 @@ public class Procedure {
 
     private final String name;
     private final String packageName;
-    private final List<Parameter> parameters;
-    private final List<Parameter> inputParameters;
-    private final List<Parameter> outputParameters;
+    private List<Parameter> parameters;
+    private List<Parameter> inputParameters;
+    private List<Parameter> outputParameters;
 
     /**
      *
      * @param ppackageName
      * @param pname
-     * @param pparams
      */
-    public Procedure(String ppackageName, String pname, List<Parameter> pparams) {
+    public Procedure(String ppackageName, String pname) {
         this.packageName = ppackageName;
         this.name = pname;
+    }
+
+    public void setParameters(List<Parameter> pparams) {
         this.parameters = pparams;
 
         inputParameters = new ArrayList<Parameter>();
@@ -160,18 +162,6 @@ public class Procedure {
         return this.getParameters().get(0);
     }
 
-    /**
-     *
-     * @return
-     */
-    public boolean isFunction() {
-        if (this.parameters.isEmpty()) {
-            return false;
-        }
-
-        return this.parameters.get(0).getPosition() == 0;
-    }
-
     public String getFullName() {
         return (getHasPackage() ? getPackageName() + "." : "") + getName();
     }
@@ -188,5 +178,13 @@ public class Procedure {
      */
     public List<Parameter> getOutputParameters() {
         return outputParameters;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isFunction() {
+        return false;
     }
 }

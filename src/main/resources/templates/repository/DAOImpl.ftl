@@ -151,7 +151,7 @@ public class ${proc.className}DAOImpl implements ${proc.className}DAO {
         }
 
         if (val != 0) {
-            throw new java.sql.SQLException(val + ":" + description);
+            throw new java.sql.SQLException(description, null, val);
         }
         </#if>
 

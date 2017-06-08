@@ -145,7 +145,7 @@ Output parameter code to evaluate process.
 
 If code is Zero (O), **OK**
 
-If code is not Zero (0), **throw SQLException (OUT_RETURN_CODE + ":" + OUT_RETURN_MSG)**
+If code is not Zero (0), **throw SQLException (OUT_RETURN_MSG, null, OUT_RETURN_CODE)**
 
 ### outParameterMessage (optional - default value OUT_RETURN_MSG)
 

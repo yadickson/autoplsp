@@ -214,20 +214,25 @@ public class JavaGenerator extends TemplateGenerator {
         }
     }
 
+    /**
+     * Get output directory path
+     * @param path path
+     * @return full directory path
+     */
     @Override
     protected String getOutputPath(String path) {
         return super.getOutputPath(File.separatorChar + "autosp-generator" + File.separatorChar + getDirectoryPackage() + File.separatorChar + path);
     }
 
-    protected String getRepositoryOutputPath(String path) {
+    private String getRepositoryOutputPath(String path) {
         return this.getOutputPath(File.separatorChar + "repository" + File.separatorChar + path);
     }
 
-    protected String getDomainOutputPath(String path) {
+    private String getDomainOutputPath(String path) {
         return this.getOutputPath(File.separatorChar + "domain" + File.separatorChar + path);
     }
 
-    protected String getFileNameObjectPath(String path, String name) {
+    private String getFileNameObjectPath(String path, String name) {
         return path + File.separatorChar + name + ".java";
     }
 

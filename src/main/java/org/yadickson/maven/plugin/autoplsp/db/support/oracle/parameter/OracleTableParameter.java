@@ -87,6 +87,10 @@ public class OracleTableParameter extends Parameter {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getRealObjectName() {
         return objectName;
     }

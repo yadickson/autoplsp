@@ -71,6 +71,11 @@ public class ConfigGenerator extends TemplateGenerator {
         createTemplate(input, "/config/Config.ftl", getFileNamePath("database", fileName));
     }
 
+    /**
+     * Get output directory path
+     * @param path path
+     * @return full directory path
+     */
     @Override
     protected String getOutputPath(String path) {
         return super.getOutputPath("spring" + File.separatorChar + path);

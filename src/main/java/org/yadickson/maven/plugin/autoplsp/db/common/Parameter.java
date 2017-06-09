@@ -183,6 +183,11 @@ public abstract class Parameter implements Comparable<Parameter> {
      */
     public abstract String getSqlTypeName();
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public int compareTo(Parameter o) {
         return position.compareTo(o.position);

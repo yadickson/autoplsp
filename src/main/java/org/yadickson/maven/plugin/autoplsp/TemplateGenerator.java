@@ -28,57 +28,78 @@ import java.io.Writer;
 import java.util.Map;
 
 /**
- * Clase que permite invocar procedimientos para la generacion de archivos
+ * Template freemarker class manager
  *
  * @author Yadickson Soto
  */
 public class TemplateGenerator {
-    
+
     private final String outputDir;
     private final Configuration cfg;
 
     /**
-     * Constructor de la clase
+     * Class constructor
      *
-     * @param outputDir Directorio de salida de la solucion
+     * @param outputDir Output directory path result
      */
     public TemplateGenerator(String outputDir) {
         this.outputDir = outputDir;
-        
+
         Version version = new Version(2, 3, 23);
         cfg = new Configuration(version);
         cfg.setObjectWrapper(new DefaultObjectWrapper(version));
-        
+
         cfg.setClassForTemplateLoading(this.getClass(), "/templates");
         cfg.setDefaultEncoding("UTF-8");
     }
-    
+
+    /**
+     * Create template
+     *
+     * @param input Mapper information
+     * @param templateFileName template freemarker file name
+     * @param outputFileNamePath output filename
+     * @throws Exception If error
+     */
     protected void createTemplate(Map<String, Object> input, String templateFileName, String outputFileNamePath) throws Exception {
-        
+
         LoggerManager.getInstance().info("[TemplateGenerator] Create template: from " + templateFileName + " to " + outputFileNamePath);
-        
+
         Template template = getCfg().getTemplate(templateFileName);
         Writer out = new FileWriter(outputFileNamePath);
         template.process(input, out);
         out.flush();
         out.close();
     }
-    
+
+    /**
+     * Get output directory path and make directory if not exist
+     *
+     * @param path path
+     * @return full directory path
+     */
     protected String getOutputPath(String path) {
         String result = outputDir + File.separatorChar + path + File.separatorChar;
         new File(result).mkdirs();
         return result;
     }
-    
+
+    /**
+     * Get full filename path
+     *
+     * @param path directory path
+     * @param fileName filename
+     * @return full filename path
+     */
     protected String getFileNamePath(String path, String fileName) {
         return getOutputPath(path) + fileName;
     }
 
     /**
-     * @return the cfg
+     * @return the freemarker configuration
      */
     public Configuration getCfg() {
         return cfg;
     }
-    
+
 }

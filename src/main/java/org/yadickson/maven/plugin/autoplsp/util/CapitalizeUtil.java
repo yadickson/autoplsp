@@ -14,42 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.yadickson.maven.plugin.autoplsp.db.parameter;
+package org.yadickson.maven.plugin.autoplsp.util;
 
-import org.yadickson.maven.plugin.autoplsp.db.common.Parameter;
-import org.yadickson.maven.plugin.autoplsp.db.common.Direction;
+import org.apache.commons.lang.WordUtils;
 
 /**
+ * Capitalize util class
  *
  * @author Yadickson Soto
  */
-public abstract class RowIdParameter extends Parameter {
+public class CapitalizeUtil {
 
     /**
+     * Process string to capitalize
      *
-     * @param position
-     * @param pname
-     * @param pdirection
+     * @param value value to capitalize
+     * @return capitalize fully
      */
-    public RowIdParameter(int position, String pname, Direction pdirection) {
-        super(position, pname, pdirection);
+    public static String capitalize(String value) {
+        return WordUtils.capitalizeFully(value, new char[]{'_'}).replaceAll("_", "");
     }
 
     /**
+     * Process string to uncapitalize
      *
-     * @return
+     * @param value value to uncapitalize
+     * @return uncapitalize representation
      */
-    @Override
-    public int getSqlType() {
-        return java.sql.Types.OTHER;
+    public static String uncapitalize(String value) {
+        return WordUtils.uncapitalize(capitalize(value));
     }
 
-    /**
-     *
-     * @return
-     */
-    @Override
-    public String getSqlTypeName() {
-        return "java.sql.Types.OTHER";
-    }
 }

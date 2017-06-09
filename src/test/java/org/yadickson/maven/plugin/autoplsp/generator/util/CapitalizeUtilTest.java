@@ -14,42 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.yadickson.maven.plugin.autoplsp.db.parameter;
+package org.yadickson.maven.plugin.autoplsp.generator.util;
 
-import org.yadickson.maven.plugin.autoplsp.db.common.Parameter;
-import org.yadickson.maven.plugin.autoplsp.db.common.Direction;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.yadickson.maven.plugin.autoplsp.util.CapitalizeUtil;
 
 /**
+ * Capitalize util test
  *
  * @author Yadickson Soto
  */
-public abstract class RowIdParameter extends Parameter {
+public class CapitalizeUtilTest {
 
-    /**
-     *
-     * @param position
-     * @param pname
-     * @param pdirection
-     */
-    public RowIdParameter(int position, String pname, Direction pdirection) {
-        super(position, pname, pdirection);
+    public CapitalizeUtilTest() {
     }
 
-    /**
-     *
-     * @return
-     */
-    @Override
-    public int getSqlType() {
-        return java.sql.Types.OTHER;
+    @Test
+    public void testCapitalize() {
+
+        String result = CapitalizeUtil.capitalize("sp_test_capitalize");
+
+        assertNotNull(result);
+        assertEquals("SpTestCapitalize", result);
+
     }
 
-    /**
-     *
-     * @return
-     */
-    @Override
-    public String getSqlTypeName() {
-        return "java.sql.Types.OTHER";
+    @Test
+    public void testUncapitalize() {
+
+        String result = CapitalizeUtil.uncapitalize("sp_test_capitalize");
+
+        assertNotNull(result);
+        assertEquals("spTestCapitalize", result);
+
     }
 }

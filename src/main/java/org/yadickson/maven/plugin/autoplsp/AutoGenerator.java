@@ -225,7 +225,7 @@ public class AutoGenerator extends AbstractMojo {
 
         try {
 
-            SPGenerator generator = SPGeneratorFactory.getGenaratorConnection(driver);
+            SPGenerator generator = SPGeneratorFactory.getGenarator(driver);
             Connection connection = connManager.getConnection();
 
             List<Procedure> list = generator.findProcedures(connection);

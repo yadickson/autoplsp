@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 Yadickson Soto
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.yadickson.maven.plugin.autoplsp.db;
 
@@ -9,19 +20,20 @@ import org.yadickson.maven.plugin.autoplsp.db.support.oracle.OracleSPGenerator;
 import java.util.regex.Pattern;
 
 /**
- * Permite crear un generador de SP segun driver
+ * Store procedure and function generator factory from driver class name
  *
  * @author Yadickson Soto
  */
 public class SPGeneratorFactory {
 
     /**
+     * Create SP generator from driver class name
      *
-     * @param driver
-     * @return
-     * @throws Exception
+     * @param driver Database driver class name
+     * @return the sp generator
+     * @throws Exception If driver not supported
      */
-    public static SPGenerator getGenaratorConnection(String driver) throws Exception {
+    public static SPGenerator getGenarator(String driver) throws Exception {
 
         Pattern oraclePattern = Pattern.compile(".*Oracle.*", Pattern.CASE_INSENSITIVE);
 

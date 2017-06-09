@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Yadickson Soto
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.yadickson.maven.plugin.autoplsp;
 
 import org.yadickson.maven.plugin.autoplsp.db.common.Procedure;
@@ -18,7 +34,7 @@ import java.util.regex.Pattern;
 import org.apache.maven.model.Resource;
 
 /**
- * Objetivo para generar clases java a partir de la conexion a Base de Datos
+ * Maven plugin to java classes and config spring file generator from database
  *
  * @goal generator
  *
@@ -27,14 +43,14 @@ import org.apache.maven.model.Resource;
 public class AutoGenerator extends AbstractMojo {
 
     /**
-     * Proyecto maven para dar soporte a compilacion de codigo generado
+     * Maven projeck link
      *
      * @parameter default-value="${project}"
      */
     private MavenProject project;
 
     /**
-     * Driver a usar por el generador para la conexion a base de datos
+     * Driver to use in database connection
      *
      * @parameter property="generator.driver"
      * @required
@@ -42,7 +58,7 @@ public class AutoGenerator extends AbstractMojo {
     private String driver;
 
     /**
-     * String de conexion a la base de datos
+     * Database connection string
      *
      * @parameter property="generator.connectionString"
      * @required
@@ -50,7 +66,7 @@ public class AutoGenerator extends AbstractMojo {
     private String connectionString;
 
     /**
-     * Usuario de autenticacion a la base de datos
+     * Database username
      *
      * @parameter property="generator.user"
      * @required
@@ -58,7 +74,7 @@ public class AutoGenerator extends AbstractMojo {
     private String user;
 
     /**
-     * Contrasena de autenticacion a la base de datos
+     * Database password
      *
      * @parameter property="generator.pass"
      * @required
@@ -66,7 +82,7 @@ public class AutoGenerator extends AbstractMojo {
     private String pass;
 
     /**
-     * Directorio de salida de las clases generadas
+     * Output source directory
      *
      * @parameter property="generator.outputDirectory"
      * default-value="${project.build.directory}/generated-sources"
@@ -74,7 +90,7 @@ public class AutoGenerator extends AbstractMojo {
     private File outputDirectory;
 
     /**
-     * Directorio de salida para la configuracion
+     * Output resource directory
      *
      * @parameter property="generator.outputDirectoryResource"
      * default-value="${project.build.directory}/generated-resources"
@@ -82,7 +98,7 @@ public class AutoGenerator extends AbstractMojo {
     private File outputDirectoryResource;
 
     /**
-     * Archivo de configuracion de salida para spring
+     * Spring configuration file name
      *
      * @parameter property="generator.outputConfigFileName"
      * default-value="${project.artifactId}.xml"
@@ -90,7 +106,7 @@ public class AutoGenerator extends AbstractMojo {
     private String outputConfigFileName;
 
     /**
-     * Nombre del paquete resultante de clases
+     * Java package name
      *
      * @parameter property="generator.javaPackageName"
      * @required
@@ -98,7 +114,7 @@ public class AutoGenerator extends AbstractMojo {
     private String javaPackageName;
 
     /**
-     * Nombre del datasource a usar en la generacion de clases
+     * Datasource name
      *
      * @parameter property="generator.javaDataSourceName"
      * @required
@@ -106,7 +122,7 @@ public class AutoGenerator extends AbstractMojo {
     private String javaDataSourceName;
 
     /**
-     * Nombre del JNDI datasource a usar en ejecucion
+     * JNDI datasource name
      *
      * @parameter property="generator.jndiDataSourceName"
      * @required
@@ -114,21 +130,21 @@ public class AutoGenerator extends AbstractMojo {
     private String jndiDataSourceName;
 
     /**
-     * Expresiones para incluir en la generacion.
+     * Regular expression to include procedure names
      *
      * @parameter alias="includes"
      */
     private String[] mIncludes;
 
     /**
-     * Expresiones para excluir en la generacion.
+     * Regular expression to exclude procedure names
      *
      * @parameter alias="excludes"
      */
     private String[] mExcludes;
 
     /**
-     * Codigo de salida del procedimiento a buscar para evaluar
+     * Output parameter code to evaluate process
      *
      * @parameter property="generator.outParameterCode"
      * default-value="OUT_RETURN_CODE"
@@ -136,7 +152,7 @@ public class AutoGenerator extends AbstractMojo {
     private String outParameterCode;
 
     /**
-     * Mensaje de salida del procedimiento a buscar en la evaluacion
+     * Output parameter message
      *
      * @parameter property="generator.outParameterMessage"
      * default-value="OUT_RETURN_MSG"
@@ -144,9 +160,10 @@ public class AutoGenerator extends AbstractMojo {
     private String outParameterMessage;
 
     /**
-     * Metodo de generacion de clases para SP
+     * Maven execute method
      *
-     * @throws MojoExecutionException Excepcion de error generica
+     * @throws MojoExecutionException Launch if the generation process throws an
+     * error
      */
     @Override
     public void execute() throws MojoExecutionException {
@@ -253,16 +270,18 @@ public class AutoGenerator extends AbstractMojo {
     }
 
     /**
+     * Setter the includes from configuracion
      *
-     * @param includes
+     * @param includes the includes from configuracion
      */
     public void setIncludes(String[] includes) {
         mIncludes = includes;
     }
 
     /**
+     * Setter the excludes from configuracion
      *
-     * @param excludes
+     * @param excludes The excludes from configuracion
      */
     public void setExcludes(String[] excludes) {
         mExcludes = excludes;

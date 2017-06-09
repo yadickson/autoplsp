@@ -78,8 +78,8 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 
 ```
 <plugin>
-    <groupId>org.yadickson.plugin</groupId>
-    <artifactId>maven-autoplsp-plugin</artifactId>
+    <groupId>org.yadickson.maven.plugin</groupId>
+    <artifactId>maven-plugin-autoplsp</artifactId>
     <version>...</version>
     <executions>
         <execution>
@@ -168,8 +168,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ```
 <plugin>
-    <groupId>org.yadickson.plugin</groupId>
-    <artifactId>maven-autoplsp-plugin</artifactId>
+    <groupId>org.yadickson.maven.plugin</groupId>
+    <artifactId>maven-plugin-autoplsp</artifactId>
     <version>...</version>
     <executions>
         <execution>
@@ -177,8 +177,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
                 <goal>generator</goal>
             </goals>
             <configuration>
-                <driver>oracle.jdbc.driver.OracleDriver</driver>
-                <connectionString>jdbc:oracle:thin:@host:port:service</connectionString>
+                <driver>...</driver>
+                <connectionString>...</connectionString>
                 <user>...</user>
                 <pass>...</pass>
                 <javaDataSourceName>...DataSource</javaDataSourceName>
@@ -194,8 +194,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ```
 <plugin>
-    <groupId>org.yadickson.plugin</groupId>
-    <artifactId>maven-autoplsp-plugin</artifactId>
+    <groupId>org.yadickson.maven.plugin</groupId>
+    <artifactId>maven-plugin-autoplsp</artifactId>
     <version>...</version>
     <executions>
         <execution>
@@ -203,8 +203,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
                 <goal>generator</goal>
             </goals>
             <configuration>
-                <driver>oracle.jdbc.driver.OracleDriver</driver>
-                <connectionString>jdbc:oracle:thin:@host:port:service</connectionString>
+                <driver>...</driver>
+                <connectionString>...</connectionString>
                 <user>...</user>
                 <pass>...</pass>
                 <javaDataSourceName>...DataSource</javaDataSourceName>
@@ -224,8 +224,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ```
 <plugin>
-    <groupId>org.yadickson.plugin</groupId>
-    <artifactId>maven-autoplsp-plugin</artifactId>
+    <groupId>org.yadickson.maven.plugin</groupId>
+    <artifactId>maven-plugin-autoplsp</artifactId>
     <version>...</version>
     <executions>
         <execution>
@@ -233,8 +233,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
                 <goal>generator</goal>
             </goals>
             <configuration>
-                <driver>oracle.jdbc.driver.OracleDriver</driver>
-                <connectionString>jdbc:oracle:thin:@host:port:service</connectionString>
+                <driver>...</driver>
+                <connectionString>...</connectionString>
                 <user>...</user>
                 <pass>...</pass>
                 <javaDataSourceName>...DataSource</javaDataSourceName>
@@ -255,8 +255,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ```
 <plugin>
-    <groupId>org.yadickson.plugin</groupId>
-    <artifactId>maven-autoplsp-plugin</artifactId>
+    <groupId>org.yadickson.maven.plugin</groupId>
+    <artifactId>maven-plugin-autoplsp</artifactId>
     <version>...</version>
     <executions>
         <execution>
@@ -264,8 +264,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
                 <goal>generator</goal>
             </goals>
             <configuration>
-                <driver>oracle.jdbc.driver.OracleDriver</driver>
-                <connectionString>jdbc:oracle:thin:@host:port:service</connectionString>
+                <driver>...</driver>
+                <connectionString>...</connectionString>
                 <user>...</user>
                 <pass>...</pass>
                 <javaDataSourceName>...DataSource</javaDataSourceName>

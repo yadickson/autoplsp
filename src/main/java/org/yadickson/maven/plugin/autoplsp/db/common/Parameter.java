@@ -31,31 +31,34 @@ public abstract class Parameter implements Comparable<Parameter> {
     private final Integer position;
 
     /**
+     * Class constructor
      *
-     * @param position
-     * @param pname
-     * @param pdirection
+     * @param position The parameter position
+     * @param name The parameter name
+     * @param direction The parameter direction
      */
-    public Parameter(Integer position, String pname, Direction pdirection) {
+    public Parameter(Integer position, String name, Direction direction) {
         this.position = position;
-        this.name = pname;
-        this.direction = pdirection;
+        this.name = name;
+        this.direction = direction;
     }
 
     /**
+     * Getter direction
      *
-     * @return
+     * @return the direction
      */
     public Direction getDirection() {
         return this.direction;
     }
 
     /**
+     * Getter field name
      *
-     * @return
+     * @return the field name
      */
     public String getFieldName() {
-        return CapitalizeUtil.uncapitalize(getPropertyName());
+        return CapitalizeUtil.uncapitalize(getName());
     }
 
     /**
@@ -63,32 +66,26 @@ public abstract class Parameter implements Comparable<Parameter> {
      * @return
      */
     public String getName() {
-        return (this.name == null) ? "return" : this.name;
+        return (this.name == null) ? "out_return" : this.name;
     }
 
     /**
+     * Getter parameter list
      *
-     * @return @throws Exception
+     * @return @throws Exception error if not supported
      */
     public List<Parameter> getParameters() throws Exception {
         throw new Exception("Parameters not found");
     }
 
     /**
+     * Setter parameter list
      *
-     * @param params
-     * @throws Exception
+     * @param params The new parameter list
+     * @throws Exception error if not supported
      */
     public void setParameters(List<Parameter> params) throws Exception {
         throw new Exception("Parameters not found");
-    }
-
-    /**
-     *
-     * @return @throws Exception
-     */
-    public String getJavaTypeName() throws Exception {
-        throw new Exception("Java Type Name not found");
     }
 
     /**
@@ -165,11 +162,18 @@ public abstract class Parameter implements Comparable<Parameter> {
 
     /**
      *
-     * @return @throws Exception
+     * @return @throws Exception error if not supported
      */
     public String getObjectName() throws Exception {
         throw new Exception("Object Name not found");
     }
+
+    /**
+     * Getter the java type name
+     *
+     * @return The java type name
+     */
+    public abstract String getJavaTypeName();
 
     /**
      *

@@ -27,12 +27,12 @@ public class CharParameter extends Parameter {
 
     /**
      *
-     * @param position
-     * @param pname
-     * @param pdirection
+     * @param position The parameter position
+     * @param name The parameter name
+     * @param direction The parameter direction
      */
-    public CharParameter(int position, String pname, Direction pdirection) {
-        super(position, pname, pdirection);
+    public CharParameter(int position, String name, Direction direction) {
+        super(position, name, direction);
     }
 
     /**

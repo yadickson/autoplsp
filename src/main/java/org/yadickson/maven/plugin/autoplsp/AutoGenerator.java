@@ -33,130 +33,168 @@ import java.sql.Connection;
 import java.util.regex.Pattern;
 import org.apache.maven.model.Resource;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
 /**
  * Maven plugin to java classes and config spring file generator from database
  *
- * @goal generator
- *
- * @phase generate-sources
+ * @author Yadickson Soto
  */
+@Mojo(name = "generator",
+        threadSafe = true,
+        defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+        requiresProject = true)
 public class AutoGenerator extends AbstractMojo {
 
     /**
      * Maven projeck link
-     *
-     * @parameter default-value="${project}"
      */
+    @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
     /**
      * Driver to use in database connection
-     *
-     * @parameter property="generator.driver"
-     * @required
      */
+    @Parameter(name = "driver",
+            alias = "driver",
+            property = "generator.driver",
+            readonly = true,
+            required = true)
     private String driver;
 
     /**
      * Database connection string
-     *
-     * @parameter property="generator.connectionString"
-     * @required
      */
+    @Parameter(name = "connectionString",
+            alias = "connectionString",
+            property = "generator.connectionString",
+            readonly = true,
+            required = true)
     private String connectionString;
 
     /**
      * Database username
-     *
-     * @parameter property="generator.user"
-     * @required
      */
+    @Parameter(name = "user",
+            alias = "user",
+            property = "generator.user",
+            readonly = true,
+            required = true)
     private String user;
 
     /**
      * Database password
-     *
-     * @parameter property="generator.pass"
-     * @required
      */
+    @Parameter(name = "pass",
+            alias = "pass",
+            property = "generator.pass",
+            readonly = true,
+            required = true)
     private String pass;
 
     /**
      * Output source directory
-     *
-     * @parameter property="generator.outputDirectory"
-     * default-value="${project.build.directory}/generated-sources"
      */
+    @Parameter(name = "outputDirectory",
+            alias = "outputDirectory",
+            property = "generator.outputDirectory",
+            defaultValue = "${project.build.directory}/generated-sources",
+            readonly = true,
+            required = false)
     private File outputDirectory;
 
     /**
      * Output resource directory
-     *
-     * @parameter property="generator.outputDirectoryResource"
-     * default-value="${project.build.directory}/generated-resources"
      */
+    @Parameter(name = "outputDirectoryResource",
+            alias = "outputDirectoryResource",
+            property = "generator.outputDirectoryResource",
+            defaultValue = "${project.build.directory}/generated-resources",
+            readonly = true,
+            required = false)
     private File outputDirectoryResource;
 
     /**
      * Spring configuration file name
-     *
-     * @parameter property="generator.outputConfigFileName"
-     * default-value="${project.artifactId}.xml"
      */
+    @Parameter(name = "outputConfigFileName",
+            alias = "outputConfigFileName",
+            property = "generator.outputConfigFileName",
+            defaultValue = "${project.artifactId}.xml",
+            readonly = true,
+            required = false)
     private String outputConfigFileName;
 
     /**
      * Java package name
-     *
-     * @parameter property="generator.javaPackageName"
-     * @required
      */
+    @Parameter(name = "javaPackageName",
+            alias = "javaPackageName",
+            property = "generator.javaPackageName",
+            readonly = true,
+            required = true)
     private String javaPackageName;
 
     /**
      * Datasource name
-     *
-     * @parameter property="generator.javaDataSourceName"
-     * @required
      */
+    @Parameter(name = "javaDataSourceName",
+            alias = "javaDataSourceName",
+            property = "generator.javaDataSourceName",
+            readonly = true,
+            required = true)
     private String javaDataSourceName;
 
     /**
      * JNDI datasource name
-     *
-     * @parameter property="generator.jndiDataSourceName"
-     * @required
      */
+    @Parameter(name = "jndiDataSourceName",
+            alias = "jndiDataSourceName",
+            property = "generator.jndiDataSourceName",
+            readonly = true,
+            required = true)
     private String jndiDataSourceName;
 
     /**
      * Regular expression to include procedure names
-     *
-     * @parameter alias="includes"
      */
+    @Parameter(name = "mIncludes",
+            alias = "includes",
+            readonly = true,
+            required = false)
     private String[] mIncludes;
 
     /**
      * Regular expression to exclude procedure names
-     *
-     * @parameter alias="excludes"
      */
+    @Parameter(name = "mExcludes",
+            alias = "excludes",
+            readonly = true,
+            required = false)
     private String[] mExcludes;
 
     /**
      * Output parameter code to evaluate process
-     *
-     * @parameter property="generator.outParameterCode"
-     * default-value="OUT_RETURN_CODE"
      */
+    @Parameter(name = "outParameterCode",
+            alias = "outParameterCode",
+            property = "generator.outParameterCode",
+            defaultValue = "OUT_RETURN_CODE",
+            readonly = true,
+            required = false)
     private String outParameterCode;
 
     /**
      * Output parameter message
-     *
-     * @parameter property="generator.outParameterMessage"
-     * default-value="OUT_RETURN_MSG"
      */
+    @Parameter(name = "outParameterMessage",
+            alias = "outParameterMessage",
+            property = "generator.outParameterMessage",
+            defaultValue = "OUT_RETURN_MSG",
+            readonly = true,
+            required = false)
     private String outParameterMessage;
 
     /**
@@ -168,18 +206,18 @@ public class AutoGenerator extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
 
-        getLog().info("Driver: " + driver);
-        getLog().info("ConnectionString: " + connectionString);
-        getLog().info("User: " + user);
-        getLog().info("Pass: " + pass);
-        getLog().info("OutputDirectory: " + outputDirectory.getPath());
-        getLog().info("OutputDirectoryResource: " + outputDirectoryResource.getPath());
-        getLog().info("OutputConfigFileName: " + outputConfigFileName);
-        getLog().info("JavaPackageName: " + javaPackageName);
-        getLog().info("JavaDataSourceName: " + javaDataSourceName);
-        getLog().info("JNDIDataSourceName: " + jndiDataSourceName);
-        getLog().info("OutParameterCode: " + outParameterCode);
-        getLog().info("OutParameterMessage: " + outParameterMessage);
+        getLog().info("[AutoGenerator] Driver: " + driver);
+        getLog().info("[AutoGenerator] ConnectionString: " + connectionString);
+        getLog().info("[AutoGenerator] User: " + user);
+        getLog().info("[AutoGenerator] Pass: " + pass);
+        getLog().info("[AutoGenerator] OutputDirectory: " + outputDirectory.getPath());
+        getLog().info("[AutoGenerator] OutputDirectoryResource: " + outputDirectoryResource.getPath());
+        getLog().info("[AutoGenerator] OutputConfigFileName: " + outputConfigFileName);
+        getLog().info("[AutoGenerator] JavaPackageName: " + javaPackageName);
+        getLog().info("[AutoGenerator] JavaDataSourceName: " + javaDataSourceName);
+        getLog().info("[AutoGenerator] JNDIDataSourceName: " + jndiDataSourceName);
+        getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
+        getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
         outputDirectory.mkdirs();
         outputDirectoryResource.mkdirs();
@@ -218,8 +256,8 @@ public class AutoGenerator extends AbstractMojo {
 
         LoggerManager.getInstance().Configure(getLog());
 
-        LoggerManager.getInstance().info("[Generator] RegexInclude: " + regexInclude);
-        LoggerManager.getInstance().info("[Generator] RegexExclude: " + regexExclude);
+        LoggerManager.getInstance().info("[AutoGenerator] RegexInclude: " + regexInclude);
+        LoggerManager.getInstance().info("[AutoGenerator] RegexExclude: " + regexExclude);
 
         DriverConnection connManager = new DriverConnection(driver, connectionString, user, pass);
 
@@ -241,13 +279,13 @@ public class AutoGenerator extends AbstractMojo {
 
                 try {
                     if (match) {
-                        LoggerManager.getInstance().info("[Generator] Process store procedure name: " + procedure.getFullName());
+                        LoggerManager.getInstance().info("[AutoGenerator] Process store procedure name: " + procedure.getFullName());
                         generator.fillProcedure(connection, procedure);
                         spList.add(procedure);
-                        LoggerManager.getInstance().info("[Generator] Process procedure success");
+                        LoggerManager.getInstance().info("[AutoGenerator] Process procedure success");
                     }
                 } catch (Exception ex) {
-                    LoggerManager.getInstance().info("[Generator] Stop process procedure name: " + procedure.getFullName());
+                    LoggerManager.getInstance().info("[AutoGenerator] Stop process procedure name: " + procedure.getFullName());
                     throw ex;
                 }
             }

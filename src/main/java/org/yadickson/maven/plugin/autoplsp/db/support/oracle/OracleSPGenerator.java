@@ -218,6 +218,7 @@ public class OracleSPGenerator implements SPGenerator {
                             throw new Exception("Parameter name [" + p.getName() + "] is duplicated");
                         }
 
+                        LoggerManager.getInstance().info("Parameter (" + p.getPosition() + ") " + p.getName() + " [" + p.getSqlTypeName() + "]");
                         pNames.add(p.getName());
                         list.add(p);
                     }

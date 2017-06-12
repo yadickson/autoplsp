@@ -33,7 +33,7 @@ public class OracleDataSetParameterTest {
 
     @Before
     public void setup() {
-        parameter = new OracleDataSetParameter(0, null);
+        parameter = new OracleDataSetParameter(0, null, "");
         parameter.setParameters(new ArrayList<Parameter>());
     }
 
@@ -42,9 +42,9 @@ public class OracleDataSetParameterTest {
         assertNotNull(parameter.getParameters());
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testGetJavaTypeName() throws Exception {
-        parameter.getJavaTypeName();
+        assertNotNull(parameter.getJavaTypeName());
     }
 
     @Test

@@ -32,7 +32,7 @@ public class OracleMakeParameter extends MakeParameter {
     /**
      *
      * @param type
-     * @param position
+     * @param position The parameter position
      * @param name
      * @param direction
      * @param connection
@@ -53,7 +53,7 @@ public class OracleMakeParameter extends MakeParameter {
                 throw new Exception("Input REF CURSOR not supported");
             }
 
-            return new OracleDataSetParameter(position, name);
+            return new OracleDataSetParameter(position, name, "");
         }
 
         if (type.equalsIgnoreCase("OBJECT")) {

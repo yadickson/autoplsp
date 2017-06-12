@@ -27,12 +27,12 @@ public class OracleRowIdParameter extends RowIdParameter {
 
     /**
      *
-     * @param position
-     * @param pname
-     * @param pdirection
+     * @param position The parameter position
+     * @param name The parameter name
+     * @param direction The parameter direction
      */
-    public OracleRowIdParameter(int position, String pname, Direction pdirection) {
-        super(position, pname, pdirection);
+    public OracleRowIdParameter(int position, String name, Direction direction) {
+        super(position, name, direction);
     }
 
     /**

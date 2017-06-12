@@ -47,7 +47,7 @@ public class Procedure {
     /**
      * Setter parameter list and fill input/output parameter list too
      *
-     * @param parameters
+     * @param parameters all parameters
      */
     public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
@@ -66,41 +66,45 @@ public class Procedure {
     }
 
     /**
+     * Getter is procedure has package name
      *
-     * @return
-     */
-    public String getClassName() {
-        return CapitalizeUtil.capitalize(this.name);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean getHasInput() {
-        return !inputParameters.isEmpty();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean getHasOutput() {
-        return !outputParameters.isEmpty();
-    }
-
-    /**
-     *
-     * @return
+     * @return true is package name is not null
      */
     public boolean getHasPackage() {
         return this.packageName != null;
     }
 
     /**
-     * Permite conocer si el procedimiento posee un result set
+     * Getter class name capitalized
      *
-     * @return verdadero si posee un result set
+     * @return the class name capitalized
+     */
+    public String getClassName() {
+        return CapitalizeUtil.capitalize(this.name);
+    }
+
+    /**
+     * Getter is procedure has input parameter
+     *
+     * @return true is has input parameter
+     */
+    public boolean getHasInput() {
+        return !inputParameters.isEmpty();
+    }
+
+    /**
+     * Getter is procedure has output parameter
+     *
+     * @return true is has output parameter
+     */
+    public boolean getHasOutput() {
+        return !outputParameters.isEmpty();
+    }
+
+    /**
+     * Getter is procedure has result set parameter
+     *
+     * @return true is has result set parameter
      */
     public boolean getHasResultSet() {
         for (Parameter param : this.getParameters()) {
@@ -113,9 +117,9 @@ public class Procedure {
     }
 
     /**
-     * Permite conocer si el procedimiento posee un objeto
+     * Getter is procedure has object parameter
      *
-     * @return verdadero si posee un objeto
+     * @return true is has object parameter
      */
     public boolean getHasObject() {
         for (Parameter param : this.getParameters()) {
@@ -128,8 +132,9 @@ public class Procedure {
     }
 
     /**
+     * Getter is procedure has table (array) parameter
      *
-     * @return
+     * @return true is has table (array) parameter
      */
     public boolean getHasArray() {
         for (Parameter param : this.parameters) {
@@ -142,58 +147,44 @@ public class Procedure {
     }
 
     /**
+     * Getter procedure name
      *
-     * @return
-     */
-    public String getLowerName() {
-        return this.name.toLowerCase();
-    }
-
-    /**
-     *
-     * @return
+     * @return the name
      */
     public String getName() {
         return this.name;
     }
 
     /**
+     * Getter procedure package name
      *
-     * @return
+     * @return the package name
      */
     public String getPackageName() {
         return this.packageName;
     }
 
     /**
+     * Getter procedure parameter list
      *
-     * @return
+     * @return the parameter list
      */
     public List<Parameter> getParameters() {
         return this.parameters;
     }
 
     /**
+     * Getter procedure full name (package name and procedure name)
      *
-     * @return @throws Exception
-     */
-    public Parameter getRetorno() throws Exception {
-        if (!this.isFunction()) {
-            throw new Exception("No tiene retorno");
-        }
-
-        return this.getParameters().get(0);
-    }
-
-    /**
-     *
-     * @return
+     * @return the full name
      */
     public String getFullName() {
         return (getHasPackage() ? getPackageName() + "." : "") + getName();
     }
 
     /**
+     * Getter the input parameters
+     *
      * @return the inputParameters
      */
     public List<Parameter> getInputParameters() {
@@ -201,6 +192,8 @@ public class Procedure {
     }
 
     /**
+     * Getter the output parameters
+     *
      * @return the outputParameters
      */
     public List<Parameter> getOutputParameters() {
@@ -208,6 +201,7 @@ public class Procedure {
     }
 
     /**
+     * Method to get function definition condition
      *
      * @return false
      */

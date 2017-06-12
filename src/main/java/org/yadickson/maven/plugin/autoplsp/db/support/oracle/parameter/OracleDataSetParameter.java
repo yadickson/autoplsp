@@ -20,6 +20,7 @@ import org.yadickson.maven.plugin.autoplsp.db.common.Parameter;
 import org.yadickson.maven.plugin.autoplsp.db.common.Direction;
 import org.yadickson.maven.plugin.autoplsp.db.parameter.DataSetParameter;
 import java.util.List;
+import org.yadickson.maven.plugin.autoplsp.util.CapitalizeUtil;
 
 /**
  *
@@ -28,14 +29,17 @@ import java.util.List;
 public class OracleDataSetParameter extends DataSetParameter {
 
     private List<Parameter> parameters;
-    
+    private final String objectName;
+
     /**
      *
-     * @param position
-     * @param pname
+     * @param position The parameter position
+     * @param name The parameter name
+     * @param cursorName The cursor name
      */
-    public OracleDataSetParameter(int position, String pname) {
-        super(position, pname, Direction.Output);
+    public OracleDataSetParameter(int position, String name, String cursorName) {
+        super(position, name, Direction.Output);
+        this.objectName = cursorName;
     }
 
     /**
@@ -54,6 +58,20 @@ public class OracleDataSetParameter extends DataSetParameter {
     @Override
     public void setParameters(List<Parameter> params) {
         this.parameters = params;
+    }
+
+    @Override
+    public String getObjectName() {
+        return CapitalizeUtil.capitalize(objectName);
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String getJavaTypeName() {
+        return getObjectName() + "RS";
     }
 
     /**

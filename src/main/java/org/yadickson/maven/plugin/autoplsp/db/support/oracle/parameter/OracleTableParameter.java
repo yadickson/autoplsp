@@ -38,15 +38,15 @@ public class OracleTableParameter extends Parameter {
 
     /**
      *
-     * @param position
-     * @param pname
+     * @param position The parameter position
+     * @param name The parameter name
      * @param direction
      * @param connection
      * @param typeName
      * @throws Exception
      */
-    public OracleTableParameter(int position, String pname, Direction direction, Connection connection, String typeName) throws Exception {
-        super(position, pname, direction);
+    public OracleTableParameter(int position, String name, Direction direction, Connection connection, String typeName) throws Exception {
+        super(position, name, direction);
         this.objectName = typeName;
         addParameters(connection, typeName);
     }

@@ -23,6 +23,7 @@ import java.util.List;
 import org.yadickson.maven.plugin.autoplsp.util.CapitalizeUtil;
 
 /**
+ * Oracle Dataset parameter class
  *
  * @author Yadickson Soto
  */
@@ -32,6 +33,7 @@ public class OracleDataSetParameter extends DataSetParameter {
     private final String objectName;
 
     /**
+     * Class constructor
      *
      * @param position The parameter position
      * @param name The parameter name
@@ -43,8 +45,9 @@ public class OracleDataSetParameter extends DataSetParameter {
     }
 
     /**
+     * Getter parameter list
      *
-     * @return
+     * @return the parameter list
      */
     @Override
     public List<Parameter> getParameters() {
@@ -52,22 +55,29 @@ public class OracleDataSetParameter extends DataSetParameter {
     }
 
     /**
+     * Setter parameter list
      *
-     * @param params
+     * @param params The new parameter list
      */
     @Override
     public void setParameters(List<Parameter> params) {
         this.parameters = params;
     }
 
+    /**
+     * Getter the object database name
+     *
+     * @return the object name
+     */
     @Override
     public String getObjectName() {
         return CapitalizeUtil.capitalize(objectName);
     }
 
     /**
+     * Getter the java type name
      *
-     * @return
+     * @return The java type name
      */
     @Override
     public String getJavaTypeName() {
@@ -75,8 +85,9 @@ public class OracleDataSetParameter extends DataSetParameter {
     }
 
     /**
+     * Getter the sql type
      *
-     * @return
+     * @return The sql type
      */
     @Override
     public int getSqlType() {
@@ -84,8 +95,9 @@ public class OracleDataSetParameter extends DataSetParameter {
     }
 
     /**
+     * Getter the sql type name
      *
-     * @return
+     * @return the sql type name
      */
     @Override
     public String getSqlTypeName() {

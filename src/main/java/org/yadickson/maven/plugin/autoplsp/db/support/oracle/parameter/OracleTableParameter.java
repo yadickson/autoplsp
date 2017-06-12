@@ -27,7 +27,7 @@ import java.util.List;
 import org.yadickson.maven.plugin.autoplsp.util.CapitalizeUtil;
 
 /**
- * Implementacion para soporte de tipo de datos Table
+ * Oracle Table (Array) parameter class
  *
  * @author Yadickson Soto
  */
@@ -37,13 +37,14 @@ public class OracleTableParameter extends Parameter {
     private final String objectName;
 
     /**
+     * Class constructor
      *
      * @param position The parameter position
      * @param name The parameter name
-     * @param direction
-     * @param connection
-     * @param typeName
-     * @throws Exception
+     * @param direction Parameter direction
+     * @param connection Database connection
+     * @param typeName Particular parameter type name
+     * @throws Exception If create psrameter process throws an error
      */
     public OracleTableParameter(int position, String name, Direction direction, Connection connection, String typeName) throws Exception {
         super(position, name, direction);
@@ -52,8 +53,9 @@ public class OracleTableParameter extends Parameter {
     }
 
     /**
+     * Getter parameter list
      *
-     * @return
+     * @return the parameter list
      */
     @Override
     public List<Parameter> getParameters() {
@@ -61,8 +63,9 @@ public class OracleTableParameter extends Parameter {
     }
 
     /**
+     * Getter the sql type
      *
-     * @return
+     * @return The sql type
      */
     @Override
     public int getSqlType() {
@@ -70,8 +73,9 @@ public class OracleTableParameter extends Parameter {
     }
 
     /**
+     * Getter the sql type name
      *
-     * @return
+     * @return the sql type name
      */
     @Override
     public String getSqlTypeName() {
@@ -79,8 +83,9 @@ public class OracleTableParameter extends Parameter {
     }
 
     /**
+     * Method to know if parameter is table (array).
      *
-     * @return
+     * @return true if table (array)
      */
     @Override
     public boolean isArray() {
@@ -88,21 +93,28 @@ public class OracleTableParameter extends Parameter {
     }
 
     /**
+     * Getter the real object database name
      *
-     * @return
+     * @return the real object name
      */
     public String getRealObjectName() {
         return objectName;
     }
 
+    /**
+     * Getter the object database name
+     *
+     * @return the object name
+     */
     @Override
     public String getObjectName() {
         return CapitalizeUtil.capitalize(objectName);
     }
 
     /**
+     * Getter the java type name
      *
-     * @return
+     * @return The java type name
      */
     @Override
     public String getJavaTypeName() {

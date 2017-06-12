@@ -39,16 +39,18 @@ import org.yadickson.maven.plugin.autoplsp.db.MakeDirection;
 import org.yadickson.maven.plugin.autoplsp.db.common.Function;
 
 /**
+ * Oracle Store procedure and function generator class
  *
  * @author Yadickson Soto
  */
 public class OracleSPGenerator implements SPGenerator {
 
     /**
+     * Find all procedure from database
      *
-     * @param connection
-     * @return
-     * @throws Exception
+     * @param connection Database connection
+     * @return procedure list
+     * @throws Exception If error
      */
     @Override
     public List<Procedure> findProcedures(Connection connection) throws Exception {
@@ -87,10 +89,11 @@ public class OracleSPGenerator implements SPGenerator {
     }
 
     /**
+     * Fill parameters of procedure from database
      *
-     * @param connection
-     * @param procedure
-     * @throws Exception
+     * @param connection Database connection
+     * @param procedure procedure
+     * @throws Exception If error
      */
     @Override
     public void fillProcedure(Connection connection, Procedure procedure) throws Exception {

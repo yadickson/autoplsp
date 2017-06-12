@@ -23,22 +23,23 @@ import org.yadickson.maven.plugin.autoplsp.db.MakeParameter;
 import java.sql.Connection;
 
 /**
- * Creacion de parametros para oracle
+ * Oracle parameter create class
  *
  * @author Yadickson Soto
  */
 public class OracleMakeParameter extends MakeParameter {
 
     /**
+     * Oracle method to create parameter class from database information
      *
-     * @param type
-     * @param position The parameter position
-     * @param name
-     * @param direction
-     * @param connection
-     * @param typeName
-     * @return
-     * @throws Exception
+     * @param type Parameter type
+     * @param position Parameter position
+     * @param name Parameter name
+     * @param direction Parameter direction
+     * @param connection Database connection
+     * @param typeName Particular parameter type name
+     * @return the new parameter
+     * @throws Exception If create psrameter process throws an error
      */
     @Override
     public Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName) throws Exception {

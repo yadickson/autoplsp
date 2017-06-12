@@ -20,12 +20,14 @@ import org.yadickson.maven.plugin.autoplsp.db.common.Direction;
 import org.yadickson.maven.plugin.autoplsp.db.parameter.RowIdParameter;
 
 /**
+ * Oracle Row ID parameter class
  *
  * @author Yadickson Soto
  */
 public class OracleRowIdParameter extends RowIdParameter {
 
     /**
+     * Class construtor
      *
      * @param position The parameter position
      * @param name The parameter name
@@ -36,8 +38,9 @@ public class OracleRowIdParameter extends RowIdParameter {
     }
 
     /**
+     * Getter the java type name
      *
-     * @return
+     * @return The java type name
      */
     @Override
     public String getJavaTypeName() {

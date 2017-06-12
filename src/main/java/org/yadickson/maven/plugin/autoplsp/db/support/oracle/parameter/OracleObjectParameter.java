@@ -27,7 +27,7 @@ import java.util.List;
 import org.yadickson.maven.plugin.autoplsp.util.CapitalizeUtil;
 
 /**
- * Clase para la representacion de un tipo de objeto de oracle
+ * Oracle object parameter class
  *
  * @author Yadickson Soto
  */
@@ -37,13 +37,14 @@ public class OracleObjectParameter extends Parameter {
     private final String objectName;
 
     /**
+     * Class constructor
      *
      * @param position The parameter position
      * @param name The parameter name
-     * @param direction
-     * @param connection
-     * @param typeName
-     * @throws Exception
+     * @param direction Parameter direction
+     * @param connection Database connection
+     * @param typeName Particular parameter type name
+     * @throws Exception If create psrameter process throws an error
      */
     public OracleObjectParameter(int position, String name, Direction direction, Connection connection, String typeName) throws Exception {
         super(position, name, direction);
@@ -52,17 +53,19 @@ public class OracleObjectParameter extends Parameter {
     }
 
     /**
+     * Getter parameter list
      *
-     * @return @throws Exception
+     * @return the parameter list
      */
     @Override
-    public List<Parameter> getParameters() throws Exception {
+    public List<Parameter> getParameters() {
         return parameters;
     }
 
     /**
+     * Getter the java type name
      *
-     * @return
+     * @return The java type name
      */
     @Override
     public String getJavaTypeName() {
@@ -70,8 +73,9 @@ public class OracleObjectParameter extends Parameter {
     }
 
     /**
+     * Getter the sql type
      *
-     * @return
+     * @return The sql type
      */
     @Override
     public int getSqlType() {
@@ -79,8 +83,9 @@ public class OracleObjectParameter extends Parameter {
     }
 
     /**
+     * Getter the sql type name
      *
-     * @return
+     * @return the sql type name
      */
     @Override
     public String getSqlTypeName() {
@@ -88,8 +93,9 @@ public class OracleObjectParameter extends Parameter {
     }
 
     /**
+     * Method to know if parameter is object.
      *
-     * @return
+     * @return true if object
      */
     @Override
     public boolean isObject() {
@@ -97,13 +103,19 @@ public class OracleObjectParameter extends Parameter {
     }
 
     /**
+     * Getter the real object database name
      *
-     * @return
+     * @return the real object name
      */
     public String getRealObjectName() {
         return objectName;
     }
 
+    /**
+     * Getter the object database name
+     *
+     * @return the object name
+     */
     @Override
     public String getObjectName() {
         return CapitalizeUtil.capitalize(objectName);

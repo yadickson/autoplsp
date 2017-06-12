@@ -29,24 +29,27 @@ public class LoggerManager {
     private Log log;
 
     /**
+     * Getter the instance of the class
      *
-     * @return
+     * @return the instance
      */
     public static LoggerManager getInstance() {
         return INSTANCE;
     }
 
     /**
+     * Setter the main logger
      *
-     * @param log
+     * @param log the logger
      */
     public void Configure(Log log) {
         this.log = log;
     }
 
     /**
+     * Logger the info message
      *
-     * @param message
+     * @param message the message
      */
     public void info(String message) {
         if (log != null) {

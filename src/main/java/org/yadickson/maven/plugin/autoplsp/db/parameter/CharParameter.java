@@ -20,12 +20,14 @@ import org.yadickson.maven.plugin.autoplsp.db.common.Direction;
 import org.yadickson.maven.plugin.autoplsp.db.common.Parameter;
 
 /**
+ * Char Parameter class
  *
  * @author Yadickson Soto
  */
 public class CharParameter extends Parameter {
 
     /**
+     * Class constructor
      *
      * @param position The parameter position
      * @param name The parameter name
@@ -36,8 +38,9 @@ public class CharParameter extends Parameter {
     }
 
     /**
+     * Getter the java type name
      *
-     * @return
+     * @return the java type name
      */
     @Override
     public String getJavaTypeName() {
@@ -45,8 +48,9 @@ public class CharParameter extends Parameter {
     }
 
     /**
+     * Getter the sql type
      *
-     * @return
+     * @return the sql type
      */
     @Override
     public int getSqlType() {
@@ -54,8 +58,9 @@ public class CharParameter extends Parameter {
     }
 
     /**
+     * Getter the sql type name
      *
-     * @return
+     * @return the sql type name
      */
     @Override
     public String getSqlTypeName() {
@@ -63,8 +68,9 @@ public class CharParameter extends Parameter {
     }
 
     /**
+     * Method to know if parameter is string.
      *
-     * @return
+     * @return true if string
      */
     @Override
     public boolean isString() {

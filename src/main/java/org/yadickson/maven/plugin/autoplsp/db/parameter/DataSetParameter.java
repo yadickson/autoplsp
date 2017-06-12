@@ -20,12 +20,14 @@ import org.yadickson.maven.plugin.autoplsp.db.common.Parameter;
 import org.yadickson.maven.plugin.autoplsp.db.common.Direction;
 
 /**
+ * Dataset parameter class
  *
  * @author Yadickson Soto
  */
 public abstract class DataSetParameter extends Parameter {
 
     /**
+     * Class constructor
      *
      * @param position The parameter position
      * @param name The parameter name
@@ -36,8 +38,9 @@ public abstract class DataSetParameter extends Parameter {
     }
 
     /**
+     * Method to know if parameter is result set or cursor.
      *
-     * @return
+     * @return true if result set
      */
     @Override
     public boolean isResultSet() {

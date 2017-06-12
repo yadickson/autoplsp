@@ -20,12 +20,14 @@ import org.yadickson.maven.plugin.autoplsp.db.common.Parameter;
 import org.yadickson.maven.plugin.autoplsp.db.common.Direction;
 
 /**
+ * Row ID parameter class
  *
  * @author Yadickson Soto
  */
 public abstract class RowIdParameter extends Parameter {
 
     /**
+     * Class constructor
      *
      * @param position The parameter position
      * @param name The parameter name
@@ -36,8 +38,9 @@ public abstract class RowIdParameter extends Parameter {
     }
 
     /**
+     * Getter the sql type
      *
-     * @return
+     * @return the sql type
      */
     @Override
     public int getSqlType() {
@@ -45,8 +48,9 @@ public abstract class RowIdParameter extends Parameter {
     }
 
     /**
+     * Getter the sql type name
      *
-     * @return
+     * @return the sql type name
      */
     @Override
     public String getSqlTypeName() {

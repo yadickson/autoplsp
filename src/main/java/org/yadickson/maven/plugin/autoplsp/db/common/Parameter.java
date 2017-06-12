@@ -62,8 +62,9 @@ public abstract class Parameter implements Comparable<Parameter> {
     }
 
     /**
+     * Getter parameter name
      *
-     * @return
+     * @return the parameter name
      */
     public String getName() {
         return (this.name == null) ? "out_return" : this.name;
@@ -72,7 +73,8 @@ public abstract class Parameter implements Comparable<Parameter> {
     /**
      * Getter parameter list
      *
-     * @return @throws Exception error if not supported
+     * @return the parameter list
+     * @throws Exception error if not supported
      */
     public List<Parameter> getParameters() throws Exception {
         throw new Exception("Parameters not found");
@@ -89,80 +91,91 @@ public abstract class Parameter implements Comparable<Parameter> {
     }
 
     /**
+     * Getter position
      *
-     * @return
+     * @return the parameter position
      */
     public Integer getPosition() {
         return this.position;
     }
 
     /**
+     * Getter property name (The name capitalized)
      *
-     * @return
+     * @return the property name
      */
     public String getPropertyName() {
         return CapitalizeUtil.capitalize(getName());
     }
 
     /**
+     * Method to know if parameter is input.
      *
-     * @return
+     * @return true if direction is input
      */
     public boolean isInput() {
         return this.direction == Direction.Input || this.direction == Direction.InputOutput;
     }
 
     /**
+     * Method to know if parameter is output.
      *
-     * @return
+     * @return true if direction is output
      */
     public boolean isOutput() {
         return this.direction == Direction.Output || this.direction == Direction.InputOutput;
     }
 
     /**
+     * Method to know if parameter is number.
      *
-     * @return
+     * @return true if number
      */
     public boolean isNumber() {
         return false;
     }
 
     /**
+     * Method to know if parameter is string.
      *
-     * @return
+     * @return true if string
      */
     public boolean isString() {
         return false;
     }
 
     /**
+     * Method to know if parameter is result set or cursor.
      *
-     * @return
+     * @return true if result set
      */
     public boolean isResultSet() {
         return false;
     }
 
     /**
+     * Method to know if parameter is object.
      *
-     * @return
+     * @return true if object
      */
     public boolean isObject() {
         return false;
     }
 
     /**
+     * Method to know if parameter is table (array).
      *
-     * @return
+     * @return true if table
      */
     public boolean isArray() {
         return false;
     }
 
     /**
+     * Getter the object database name
      *
-     * @return @throws Exception error if not supported
+     * @return the object name
+     * @throws Exception error if not supported
      */
     public String getObjectName() throws Exception {
         throw new Exception("Object Name not found");
@@ -176,25 +189,28 @@ public abstract class Parameter implements Comparable<Parameter> {
     public abstract String getJavaTypeName();
 
     /**
+     * Getter the sql type
      *
-     * @return
+     * @return The sql type
      */
     public abstract int getSqlType();
 
     /**
+     * Getter the sql type name
      *
-     * @return
+     * @return the sql type name
      */
     public abstract String getSqlTypeName();
 
     /**
+     * Compare parameter to sort
      *
-     * @param o
-     * @return
+     * @param obj parameter to compare
+     * @return position diff
      */
     @Override
-    public int compareTo(Parameter o) {
-        return position.compareTo(o.position);
+    public int compareTo(Parameter obj) {
+        return position.compareTo(obj.position);
     }
 
 }

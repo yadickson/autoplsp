@@ -21,6 +21,7 @@ import org.yadickson.maven.plugin.autoplsp.db.common.Parameter;
 import org.yadickson.maven.plugin.autoplsp.db.parameter.CharParameter;
 import org.yadickson.maven.plugin.autoplsp.db.MakeParameter;
 import java.sql.Connection;
+import org.yadickson.maven.plugin.autoplsp.db.common.Procedure;
 
 /**
  * Oracle parameter create class
@@ -38,11 +39,12 @@ public class OracleMakeParameter extends MakeParameter {
      * @param direction Parameter direction
      * @param connection Database connection
      * @param typeName Particular parameter type name
+     * @param procedure The procedure owner
      * @return the new parameter
      * @throws Exception If create psrameter process throws an error
      */
     @Override
-    public Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName) throws Exception {
+    public Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws Exception {
         if (type.equalsIgnoreCase("VARCHAR2")) {
             return new CharParameter(position, name, direction);
         }
@@ -54,7 +56,7 @@ public class OracleMakeParameter extends MakeParameter {
                 throw new Exception("Input REF CURSOR not supported");
             }
 
-            return new OracleDataSetParameter(position, name, "");
+            return new OracleDataSetParameter(position, name, procedure.getClassName());
         }
 
         if (type.equalsIgnoreCase("OBJECT")) {

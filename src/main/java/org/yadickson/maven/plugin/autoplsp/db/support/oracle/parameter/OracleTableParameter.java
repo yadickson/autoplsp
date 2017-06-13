@@ -145,7 +145,7 @@ public class OracleTableParameter extends Parameter {
                 String pName = result.getString("NAME");
 
                 LoggerManager.getInstance().info("[OracleArrayParameter] type: " + dType + " name: " + pName);
-                parameters.add(new OracleMakeParameter().create(dType, 0, "Value", Direction.Input, connection, pName));
+                parameters.add(new OracleMakeParameter().create(dType, 0, "Value", Direction.Input, connection, pName, null));
             }
         } catch (Exception ex) {
             throw new Exception(ex);

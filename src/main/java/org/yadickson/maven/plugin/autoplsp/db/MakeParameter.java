@@ -24,6 +24,7 @@ import org.yadickson.maven.plugin.autoplsp.db.parameter.ClobParameter;
 import org.yadickson.maven.plugin.autoplsp.db.parameter.DateParameter;
 import org.yadickson.maven.plugin.autoplsp.db.parameter.NumberParameter;
 import java.sql.Connection;
+import org.yadickson.maven.plugin.autoplsp.db.common.Procedure;
 
 /**
  * Make parameter class
@@ -41,10 +42,11 @@ public abstract class MakeParameter {
      * @param direction Parameter direction
      * @param connection Database connection
      * @param typeName Particular parameter type name
+     * @param procedure The procedure owner
      * @return the new parameter
      * @throws Exception If create psrameter process throws an error
      */
-    public Parameter create(String type, int position, String name, Direction direction, Connection connection, String typeName) throws Exception {
+    public Parameter create(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws Exception {
 
         if (type == null) {
             throw new Exception("Parameter type is null");
@@ -66,7 +68,7 @@ public abstract class MakeParameter {
             return new DateParameter(position, name, direction);
         }
 
-        return getOwnerParameter(type, position, name, direction, connection, typeName);
+        return getOwnerParameter(type, position, name, direction, connection, typeName, procedure);
     }
 
     /**
@@ -78,8 +80,9 @@ public abstract class MakeParameter {
      * @param direction Parameter direction
      * @param connection Database connection
      * @param typeName Particular parameter type name
+     * @param procedure The procedure owner
      * @return the new parameter
      * @throws Exception If create psrameter process throws an error
      */
-    public abstract Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName) throws Exception;
+    public abstract Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws Exception;
 }

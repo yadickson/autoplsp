@@ -124,7 +124,7 @@ public class OracleSPGenerator implements SPGenerator {
                 Direction direction = new MakeDirection().getDirection(result.getString("IN_OUT"));
 
                 LoggerManager.getInstance().info("[OracleSPGenerator] Process (" + position + ") " + parameterName + " " + direction + " " + dataType + " " + typeName);
-                Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, direction, connection, typeName);
+                Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, direction, connection, typeName, procedure);
                 LoggerManager.getInstance().info("[OracleSPGenerator] Parameter (" + param.getPosition() + ") " + param.getName() + " " + param.getDirection() + " [" + param.getSqlTypeName() + "]");
 
                 parameters.put(position, param);
@@ -215,7 +215,7 @@ public class OracleSPGenerator implements SPGenerator {
 
                 try {
                     for (int j = 0; j < metadata.getColumnCount(); j++) {
-                        Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.Output, connection, null);
+                        Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.Output, connection, null, null);
 
                         if (pNames.contains(p.getName())) {
                             throw new Exception("Parameter name [" + p.getName() + "] is duplicated");

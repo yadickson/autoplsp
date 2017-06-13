@@ -1,29 +1,47 @@
+/*
+ * Copyright (C) 2017 Yadickson Soto
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 <#if parameter.resultSet>
 package ${javaPackage}.repository.mapper;
 
-import ${javaPackage}.domain.${proc.className}${parameter.propertyName}RS;
+import ${javaPackage}.domain.${parameter.javaTypeName};
 
 /**
- * Mapper para resultset de ${parameter.name}
- * @author Generado por @GENERATOR.NAME@
+ * Resultset mapper of ${parameter.name}
+ *
+ * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
 @SuppressWarnings({"rawtypes","unchecked"})
-public class ${proc.className}${parameter.propertyName}RSRowMapper implements org.springframework.jdbc.core.RowMapper, java.io.Serializable {
+public class ${parameter.javaTypeName}RowMapper implements org.springframework.jdbc.core.RowMapper, java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Mapea un registro del resultset a un bean
+     * Resultset mapper
+     *
      * @param resultSet resultset
-     * @param i numero de fila
-     * @throws java.sql.SQLException en caso de error
-     * @return el bean
+     * @param i row number
+     * @throws java.sql.SQLException
+     * @return object
      */
     @Override
     public Object mapRow (java.sql.ResultSet resultSet, int i) throws java.sql.SQLException
     {
-        ${proc.className}${parameter.propertyName}RS result = new ${proc.className}${parameter.propertyName}RS();
+        ${parameter.javaTypeName} result = new ${parameter.javaTypeName}();
         
         <#list parameter.parameters as paramrs>
         <#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>

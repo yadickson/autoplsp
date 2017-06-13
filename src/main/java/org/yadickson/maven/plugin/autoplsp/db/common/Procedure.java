@@ -80,7 +80,7 @@ public class Procedure {
      * @return the class name capitalized
      */
     public String getClassName() {
-        return CapitalizeUtil.capitalize(this.name);
+        return CapitalizeUtil.capitalize(getFullName().replace(".", "_"));
     }
 
     /**

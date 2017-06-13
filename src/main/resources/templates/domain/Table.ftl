@@ -1,9 +1,26 @@
+/*
+ * Copyright (C) 2017 Yadickson Soto
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 <#if parameter.array>
 package ${javaPackage}.domain;
 
 /**
- * Bean de array para ${parameter.objectName}
- * @author Generado por @GENERATOR.NAME@
+ * Bean objet for datatype ${parameter.realObjectName}
+ *
+ * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
 public class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}> implements java.io.Serializable {
@@ -11,10 +28,11 @@ public class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.p
     private static final long serialVersionUID = 1L;
 
     /**
-     * Permite obtener el Array de Oracle
-     * @param connection Conexion a base de datos
-     * @return array Object
-     * @throws Exception Excepcion si error
+     * Getter data object type
+     *
+     * @param connection Database connection
+     * @return object
+     * @throws Exception
      */
     public Object getObject(java.sql.Connection connection) throws Exception {
 
@@ -35,8 +53,9 @@ public class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.p
     }
 
     /**
-     * Obtener representacion del objeto
-     * @return representacion del objeto
+     * Getter to string
+     *
+     * @return to string
      */
     @Override
     public String toString() {

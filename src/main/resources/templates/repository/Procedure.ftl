@@ -1,14 +1,31 @@
+/*
+ * Copyright (C) 2017 Yadickson Soto
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package ${javaPackage}.repository.sp;
 
 <#list proc.parameters as parameter>
 <#if parameter.resultSet>
-import ${javaPackage}.repository.mapper.${proc.className}${parameter.propertyName}RSRowMapper;
+import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
 </#if>
 </#list>
 
 /**
- * Clase que implementa el Stored Procedure ${proc.fullName}
- * @author Generado por @GENERATOR.NAME@
+ * JDBC Stored Procedure ${proc.fullName}
+ *
+ * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
 @SuppressWarnings({"rawtypes","unchecked"})
@@ -16,13 +33,11 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.StoredP
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Nombre del stored procedure
-     */
     public static final String SPROC_NAME = "${proc.fullName}";
-    
+
     /**
-     * Construye un storedprocedure a partir de un dataSource
+     * Class constructor from dataSource
+     *
      * @param dataSource dataSource
      */
     public ${proc.className}SP(javax.sql.DataSource dataSource) {
@@ -37,11 +52,12 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.StoredP
         </#list>
         compile();
     }
-    
+
     /**
-     * Ejecuta el storedprocedure
-     * @return respuesta del storedprocedure
-     * @param params parametros
+     * Execute the stored procedure
+     *
+     * @return response
+     * @param params input parameters
      */
     @Override
     public java.util.Map execute(java.util.Map params) {

@@ -70,6 +70,7 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
     <groupId>com.oracle</groupId>
     <artifactId>ojdbc6</artifactId>
     <version>12.1.0.2</version>
+    <scope>provided</scope>
 </dependency>
 ```
 
@@ -118,6 +119,13 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
             </configuration>
         </execution>
     </executions>
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>12.1.0.2</version>
+        </dependency>
+    </dependencies>
 </plugin>
 ```
 

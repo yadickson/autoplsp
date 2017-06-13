@@ -77,8 +77,10 @@ public class ${parameter.javaTypeName} implements java.io.Serializable {
      * @return object
      * @throws Exception
      */
+    @SuppressWarnings("deprecation")
     public Object getObject(java.sql.Connection connection) throws Exception {
-        return connection.createStruct("${parameter.realObjectName}", new Object[]{<#list parameter.parameters as parameter>get${parameter.propertyName}()<#sep>, </#sep></#list>});
+        oracle.sql.StructDescriptor descriptor = oracle.sql.StructDescriptor.createDescriptor("${parameter.realObjectName}", connection);
+        return new oracle.sql.STRUCT(descriptor, connection, new Object[]{<#list parameter.parameters as parameter>get${parameter.propertyName}()<#sep>, </#sep></#list>});
     }
 
     /**

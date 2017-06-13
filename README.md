@@ -67,11 +67,21 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 </dependency>
 
 <dependency>
-    <groupId>com.oracle.jdbc</groupId>
-    <artifactId>ojdbc6_g</artifactId>
-    <version>10.0.3.6</version>
-    <scope>provided</scope>
+    <groupId>com.oracle</groupId>
+    <artifactId>ojdbc6</artifactId>
+    <version>12.1.0.2</version>
 </dependency>
+```
+
+## Repository for Oracle JDBC driver
+
+```
+<repositories>
+    <repository>
+        <id>jahia</id>
+        <url>http://maven.jahia.org/maven2/</url>
+    </repository>
+</repositories>
 ```
 
 ## POM plugin config

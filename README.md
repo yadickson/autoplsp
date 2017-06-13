@@ -77,20 +77,22 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 ## Repository for Oracle JDBC driver and Plugin
 
 ```
-    <repositories>
-        <repository>
-            <id>jahia</id>
-            <url>http://maven.jahia.org/maven2/</url>
-        </repository>
-    </repositories>
+<repositories>
+    <repository>
+        <id>jahia</id>
+        <url>http://maven.jahia.org/maven2/</url>
+    </repository>
+</repositories>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jitpack.io</id>
-            <url>http://jitpack.io</url>
-        </pluginRepository>
-    </pluginRepositories>
+<pluginRepositories>
+    <pluginRepository>
+        <id>jitpack.io</id>
+        <url>http://jitpack.io</url>
+    </pluginRepository>
+</pluginRepositories>
 ```
+
+[maven repository jitpack.io](https://jitpack.io/#yadickson/autoplsp)
 
 ## POM plugin config
 

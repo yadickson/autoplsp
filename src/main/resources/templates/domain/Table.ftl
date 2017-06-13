@@ -36,7 +36,6 @@ public class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.p
      */
     public Object getObject(java.sql.Connection connection) throws Exception {
 
-        oracle.sql.ArrayDescriptor descriptor = oracle.sql.ArrayDescriptor.createDescriptor("${parameter.realObjectName}", connection);
         Object[] input = new Object[size()];
 
         int i = 0;
@@ -49,7 +48,7 @@ public class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.p
             </#if>
         }
 
-        return new oracle.sql.ARRAY(descriptor, connection, input);
+        return ((oracle.jdbc.driver.OracleConnection) connection).createOracleArray("${parameter.realObjectName}", input);
     }
 
     /**

@@ -78,8 +78,7 @@ public class ${parameter.javaTypeName} implements java.io.Serializable {
      * @throws Exception
      */
     public Object getObject(java.sql.Connection connection) throws Exception {
-        oracle.sql.StructDescriptor descriptor = oracle.sql.StructDescriptor.createDescriptor("${parameter.realObjectName}", connection);
-        return new oracle.sql.STRUCT(descriptor, connection, new Object[]{<#list parameter.parameters as parameter>get${parameter.propertyName}()<#sep>, </#sep></#list>});
+        return connection.createStruct("${parameter.realObjectName}", new Object[]{<#list parameter.parameters as parameter>get${parameter.propertyName}()<#sep>, </#sep></#list>});
     }
 
     /**

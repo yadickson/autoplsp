@@ -57,8 +57,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Driver to use in database connection
      */
-    @Parameter(name = "driver",
-            alias = "driver",
+    @Parameter(
             property = "generator.driver",
             readonly = true,
             required = true)
@@ -67,8 +66,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Database connection string
      */
-    @Parameter(name = "connectionString",
-            alias = "connectionString",
+    @Parameter(
             property = "generator.connectionString",
             readonly = true,
             required = true)
@@ -77,8 +75,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Database username
      */
-    @Parameter(name = "user",
-            alias = "user",
+    @Parameter(
             property = "generator.user",
             readonly = true,
             required = true)
@@ -87,8 +84,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Database password
      */
-    @Parameter(name = "pass",
-            alias = "pass",
+    @Parameter(
             property = "generator.pass",
             readonly = true,
             required = true)
@@ -97,8 +93,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Output source directory
      */
-    @Parameter(name = "outputDirectory",
-            alias = "outputDirectory",
+    @Parameter(
             property = "generator.outputDirectory",
             defaultValue = "${project.build.directory}/generated-sources",
             readonly = true,
@@ -108,8 +103,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Output resource directory
      */
-    @Parameter(name = "outputDirectoryResource",
-            alias = "outputDirectoryResource",
+    @Parameter(
             property = "generator.outputDirectoryResource",
             defaultValue = "${project.build.directory}/generated-resources",
             readonly = true,
@@ -119,8 +113,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Spring configuration file name
      */
-    @Parameter(name = "outputConfigFileName",
-            alias = "outputConfigFileName",
+    @Parameter(
             property = "generator.outputConfigFileName",
             defaultValue = "${project.artifactId}.xml",
             readonly = true,
@@ -130,8 +123,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Java package name
      */
-    @Parameter(name = "javaPackageName",
-            alias = "javaPackageName",
+    @Parameter(
             property = "generator.javaPackageName",
             readonly = true,
             required = true)
@@ -140,8 +132,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Datasource name
      */
-    @Parameter(name = "javaDataSourceName",
-            alias = "javaDataSourceName",
+    @Parameter(
             property = "generator.javaDataSourceName",
             readonly = true,
             required = true)
@@ -150,8 +141,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * JNDI datasource name
      */
-    @Parameter(name = "jndiDataSourceName",
-            alias = "jndiDataSourceName",
+    @Parameter(
             property = "generator.jndiDataSourceName",
             readonly = true,
             required = true)
@@ -160,7 +150,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Regular expression to include procedure names
      */
-    @Parameter(name = "mIncludes",
+    @Parameter(
             alias = "includes",
             readonly = true,
             required = false)
@@ -169,7 +159,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Regular expression to exclude procedure names
      */
-    @Parameter(name = "mExcludes",
+    @Parameter(
             alias = "excludes",
             readonly = true,
             required = false)
@@ -178,8 +168,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Output parameter code to evaluate process
      */
-    @Parameter(name = "outParameterCode",
-            alias = "outParameterCode",
+    @Parameter(
             property = "generator.outParameterCode",
             defaultValue = "OUT_RETURN_CODE",
             readonly = true,
@@ -189,8 +178,7 @@ public class AutoGenerator extends AbstractMojo {
     /**
      * Output parameter message
      */
-    @Parameter(name = "outParameterMessage",
-            alias = "outParameterMessage",
+    @Parameter(
             property = "generator.outParameterMessage",
             defaultValue = "OUT_RETURN_MSG",
             readonly = true,

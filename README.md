@@ -89,8 +89,8 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
 
 ```
 <plugin>
-    <groupId>org.yadickson.maven.plugin</groupId>
-    <artifactId>maven-plugin-autoplsp</artifactId>
+    <groupId>com.github.yadickson</groupId>
+    <artifactId>autoplsp</artifactId>
     <version>...</version>
     <executions>
         <execution>
@@ -186,8 +186,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ```
 <plugin>
-    <groupId>org.yadickson.maven.plugin</groupId>
-    <artifactId>maven-plugin-autoplsp</artifactId>
+    <groupId>com.github.yadickson</groupId>
+    <artifactId>autoplsp</artifactId>
     <version>...</version>
     <executions>
         <execution>
@@ -205,6 +205,13 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>12.1.0.2</version>
+        </dependency>
+    </dependencies>
 </plugin>
 ```
 
@@ -212,8 +219,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ```
 <plugin>
-    <groupId>org.yadickson.maven.plugin</groupId>
-    <artifactId>maven-plugin-autoplsp</artifactId>
+    <groupId>com.github.yadickson</groupId>
+    <artifactId>autoplsp</artifactId>
     <version>...</version>
     <executions>
         <execution>
@@ -235,6 +242,13 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>12.1.0.2</version>
+        </dependency>
+    </dependencies>
 </plugin>
 ```
 
@@ -242,8 +256,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ```
 <plugin>
-    <groupId>org.yadickson.maven.plugin</groupId>
-    <artifactId>maven-plugin-autoplsp</artifactId>
+    <groupId>com.github.yadickson</groupId>
+    <artifactId>autoplsp</artifactId>
     <version>...</version>
     <executions>
         <execution>
@@ -266,6 +280,13 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>12.1.0.2</version>
+        </dependency>
+    </dependencies>
 </plugin>
 ```
 
@@ -273,8 +294,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ```
 <plugin>
-    <groupId>org.yadickson.maven.plugin</groupId>
-    <artifactId>maven-plugin-autoplsp</artifactId>
+    <groupId>com.github.yadickson</groupId>
+    <artifactId>autoplsp</artifactId>
     <version>...</version>
     <executions>
         <execution>
@@ -296,6 +317,13 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>12.1.0.2</version>
+        </dependency>
+    </dependencies>
 </plugin>
 ```
 
@@ -383,16 +411,4 @@ Add import resource in *root-context.xml*
 
 </beans>
 ```
-
-
-## Examples
-
-- [function-without-parameters](https://github.com/yadickson/autoplsp-examples/function-without-parameters)
-- [function-with-parameters](https://github.com/yadickson/autoplsp-examples/function-with-parameters)
-- [procedure-without-parameters](https://github.com/yadickson/autoplsp-examples/procedure-without-parameters)
-- [procedure-with-parameters](https://github.com/yadickson/autoplsp-examples/procedure-with-parameters)
-- [procedure-with-cursor-parameters](https://github.com/yadickson/autoplsp-examples/procedure-with-cursor-parameters)
-- [procedure-with-object-parameter](https://github.com/yadickson/autoplsp-examples/procedure-with-object-parameter)
-- [procedure-with-table-parameter](https://github.com/yadickson/autoplsp-examples/procedure-with-table-parameter)
-
 

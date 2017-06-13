@@ -132,17 +132,6 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            <!--plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <configuration>
-                    <outputDirectory>/absolute/path/to/the/output/directory</outputDirectory>
-                    <finalName>filename-of-generated-jar-file</finalName>
-                    <attach>false</attach>
-                </configuration>
-            </plugin-->
       
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -163,7 +152,7 @@
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>3.7</version>
             </plugin>
-
+                
         </plugins>
                 
         <pluginManagement>
@@ -199,19 +188,7 @@
             </plugin>
 
         </plugins>
-    </reporting> 
 
-    <distributionManagement>
-        <repository>
-            <id>deployment</id>
-            <name>Internal Releases</name>
-            <url>http://200.14.166.249:8081/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>deployment</id>
-            <name>Internal Releases</name>
-            <url>http://200.14.166.249:8081/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+    </reporting>
 
 </project>

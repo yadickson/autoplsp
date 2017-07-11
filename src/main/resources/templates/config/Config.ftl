@@ -10,6 +10,6 @@
         <property name="resourceRef" value="true" />
     </bean>
 
-    <context:component-scan base-package="${javaPackage}"/>
+    <context:component-scan base-package="${javaPackage}.repository"/>
 
 </beans>

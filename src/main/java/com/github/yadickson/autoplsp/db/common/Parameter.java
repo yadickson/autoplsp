@@ -127,6 +127,15 @@ public abstract class Parameter implements Comparable<Parameter> {
     }
 
     /**
+     * Method to know if parameter is input.
+     *
+     * @return true if direction is input
+     */
+    public boolean isInputOutput() {
+        return this.direction == Direction.InputOutput;
+    }
+
+    /**
      * Method to know if parameter is number.
      *
      * @return true if number

@@ -48,7 +48,7 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.StoredP
         setFunction(false);
         </#if>
         <#list proc.parameters as parameter>
-        declareParameter(new org.springframework.jdbc.core.Sql<#if parameter.output>Out<#elseif !parameter.input>InOut</#if>Parameter ("${parameter.name}", ${parameter.sqlTypeName}<#if parameter.resultSet>, new ${proc.className}${parameter.propertyName}RSRowMapper ()</#if>));
+        declareParameter(new org.springframework.jdbc.core.Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter ("${parameter.name}", ${parameter.sqlTypeName}<#if parameter.resultSet>, new ${proc.className}${parameter.propertyName}RSRowMapper ()</#if>));
         </#list>
         compile();
     }

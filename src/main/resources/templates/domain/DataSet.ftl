@@ -23,9 +23,8 @@ package ${javaPackage}.domain;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+@SuppressWarnings("serial")
 public class ${parameter.javaTypeName} implements java.io.Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     <#list parameter.parameters as parameter2>
     private ${parameter2.javaTypeName} ${parameter2.fieldName} = null;

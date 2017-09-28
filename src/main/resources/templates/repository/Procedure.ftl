@@ -28,20 +28,18 @@ import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings({"rawtypes","unchecked"})
+@SuppressWarnings({"serial", "rawtypes","unchecked"})
 public class ${proc.className}SP extends org.springframework.jdbc.object.StoredProcedure implements java.io.Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     public static final String SPROC_NAME = "${proc.fullName}";
 
     /**
      * Class constructor from dataSource
      *
-     * @param dataSource dataSource
+     * @param jdbcTemplate jdbcTemplate
      */
-    public ${proc.className}SP(javax.sql.DataSource dataSource) {
-        super(dataSource, SPROC_NAME);
+    public ${proc.className}SP(org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
+        super(jdbcTemplate.getDataSource(), SPROC_NAME);
         <#if proc.function>
         setFunction(true);
         <#else>

@@ -38,24 +38,24 @@ import org.springframework.stereotype.Repository;
  * @version @GENERATOR.VERSION@
  */
 @Repository
-@SuppressWarnings({"rawtypes","unchecked"})
+@SuppressWarnings({"serial", "rawtypes","unchecked"})
 public class ${proc.className}DAOImpl implements ${proc.className}DAO {
 
     <#if proc.hasObject || proc.hasArray>
-    private javax.sql.DataSource dataSource;
+    private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
     </#if>
     private ${proc.className}SP sp = null;
 
     /**
-     * Setter for datasource
-     * @param dataSource dataSource
+     * Setter for jdbcTemplate
+     * @param jdbcTemplate jdbcTemplate
      */
-    @Resource(name="${dataSource}")
-    public void setDataSource(javax.sql.DataSource dataSource) {
+    @Resource(name="${jdbcTemplate}")
+    public void setJdbcTemplate(org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
         <#if proc.hasObject || proc.hasArray>
-        this.dataSource = dataSource;
+        this.jdbcTemplate = jdbcTemplate;
         </#if>
-        this.sp = new ${proc.className}SP(dataSource);
+        this.sp = new ${proc.className}SP(jdbcTemplate);
     }
 
     /**
@@ -76,7 +76,7 @@ public class ${proc.className}DAOImpl implements ${proc.className}DAO {
         try {
         <#list proc.inputParameters as parameter>
         <#if parameter.object || parameter.array>
-            mparams.put("${parameter.name}", params.get${parameter.propertyName}().getObject(dataSource.getConnection()));
+            mparams.put("${parameter.name}", params.get${parameter.propertyName}().getObject(jdbcTemplate.getDataSource().getConnection()));
         <#else>
             mparams.put("${parameter.name}", params.get${parameter.propertyName} ());
         </#if>

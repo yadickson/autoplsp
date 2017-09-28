@@ -22,7 +22,11 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="${dataSource}"/>
     </bean>
-    
+
+    <bean id="${jdbcTemplate}" name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" >
+        <property name="dataSource" ref="${dataSource}" />
+    </bean>
+
     <context:component-scan base-package="${javaPackage}.repository"/>
 
 </beans>

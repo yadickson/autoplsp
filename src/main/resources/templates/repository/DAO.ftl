@@ -29,7 +29,7 @@ import ${javaPackage}.domain.${proc.className}OUT;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface ${proc.className}DAO {
+public interface ${proc.className}DAO extends java.io.Serializable {
 
     /**
      * Execute stored procedure

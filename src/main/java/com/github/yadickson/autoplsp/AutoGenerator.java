@@ -139,6 +139,16 @@ public class AutoGenerator extends AbstractMojo {
     private String javaDataSourceName;
 
     /**
+     * JdbcTemplate name
+     */
+    @Parameter(
+            property = "generator.javaJdbcTemplateName",
+            defaultValue = "jdbcTemplate",
+            readonly = true,
+            required = false)
+    private String javaJdbcTemplateName;
+
+    /**
      * JNDI datasource name
      */
     @Parameter(
@@ -203,6 +213,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] OutputConfigFileName: " + outputConfigFileName);
         getLog().info("[AutoGenerator] JavaPackageName: " + javaPackageName);
         getLog().info("[AutoGenerator] JavaDataSourceName: " + javaDataSourceName);
+        getLog().info("[AutoGenerator] JavaJdbcTemplateName: " + javaJdbcTemplateName);
         getLog().info("[AutoGenerator] JNDIDataSourceName: " + jndiDataSourceName);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
@@ -279,12 +290,12 @@ public class AutoGenerator extends AbstractMojo {
             }
 
             JavaGenerator template = new JavaGenerator(outputDirectory.getPath(),
-                    javaPackageName, javaDataSourceName,
+                    javaPackageName, javaDataSourceName, javaJdbcTemplateName,
                     outParameterCode, outParameterMessage);
 
             template.process(spList);
 
-            ConfigGenerator config = new ConfigGenerator(outputDirectoryResource.getPath(), javaPackageName, javaDataSourceName, jndiDataSourceName, outputConfigFileName);
+            ConfigGenerator config = new ConfigGenerator(outputDirectoryResource.getPath(), javaPackageName, javaDataSourceName, javaJdbcTemplateName, jndiDataSourceName, outputConfigFileName);
             config.process();
 
         } catch (Exception ex) {

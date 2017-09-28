@@ -23,9 +23,8 @@ package ${javaPackage}.domain;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+@SuppressWarnings("serial")
 public class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}> implements java.io.Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     /**
      * Getter data object type

@@ -34,6 +34,7 @@ public class JavaGenerator extends TemplateGenerator {
 
     private final String javaPackage;
     private final String dataSource;
+    private final String jdbcTemplate;
     private final String outParameterCode;
     private final String outParameterMessage;
 
@@ -43,18 +44,21 @@ public class JavaGenerator extends TemplateGenerator {
      * @param outputDir Output resource directory
      * @param packageName Java package name
      * @param dataSource Datasource name
+     * @param jdbcTemplate JdbcTemplate name
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
      */
     public JavaGenerator(String outputDir,
             String packageName,
             String dataSource,
+            String jdbcTemplate,
             String outParameterCode,
             String outParameterMessage) {
 
         super(outputDir);
         this.javaPackage = packageName;
         this.dataSource = dataSource;
+        this.jdbcTemplate = jdbcTemplate;
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
     }
@@ -97,6 +101,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put("proc", procedure);
         input.put("javaPackage", javaPackage);
         input.put("dataSource", dataSource);
+        input.put("jdbcTemplate", jdbcTemplate);
         input.put("outParameterCode", outParameterCode);
         input.put("outParameterMessage", outParameterMessage);
 

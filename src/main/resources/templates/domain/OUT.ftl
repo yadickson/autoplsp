@@ -22,9 +22,8 @@ package ${javaPackage}.domain;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+@SuppressWarnings("serial")
 public class ${proc.className}OUT implements java.io.Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     <#list proc.outputParameters as parameter>
     private <#if parameter.resultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName} = null;

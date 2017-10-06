@@ -76,7 +76,7 @@ public class ${proc.className}DAOImpl implements ${proc.className}DAO {
         try {
         <#list proc.inputParameters as parameter>
         <#if parameter.object || parameter.array>
-            mparams.put("${parameter.name}", params.get${parameter.propertyName}().getObject(jdbcTemplate.getDataSource().getConnection()));
+            mparams.put("${parameter.name}", params.get${parameter.propertyName}().getObject(org.springframework.jdbc.datasource.DataSourceUtils.getConnection(jdbcTemplate.getDataSource())));
         <#else>
             mparams.put("${parameter.name}", params.get${parameter.propertyName} ());
         </#if>

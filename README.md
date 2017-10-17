@@ -1,5 +1,7 @@
 # Maven Auto PLSQL/SP Generator Plugin
 
+[![Release](https://jitpack.io/v/yadickson/autoplsp.svg)](https://jitpack.io/#yadickson/autoplsp)
+
 Maven plugin for generate Java classes from StoredProcedure and Functions of Database
 
 ## Support
@@ -92,8 +94,6 @@ Maven plugin for generate Java classes from StoredProcedure and Functions of Dat
     </pluginRepository>
 </pluginRepositories>
 ```
-
-[maven repository jitpack.io](https://jitpack.io/#yadickson/autoplsp)
 
 ## POM plugin config
 

@@ -43,12 +43,12 @@ public class ${parameter.javaTypeName}RowMapper implements org.springframework.j
         
         <#list parameter.parameters as paramrs>
         <#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName})resultSet.getTimestamp(${paramrs.position}));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName})resultSet.getTimestamp("${paramrs.name}"));
         <#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
-        java.sql.Clob clob${paramrs.propertyName} = (java.sql.Clob) resultSet.getObject(${paramrs.position});
+        java.sql.Clob clob${paramrs.propertyName} = (java.sql.Clob) resultSet.getObject("${paramrs.name}");
         result.set${paramrs.propertyName}( clob${paramrs.propertyName} == null ? null : clob${paramrs.propertyName}.getSubString(1, (int) clob${paramrs.propertyName}.length()));
         <#else>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName})resultSet.getObject(${paramrs.position}));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName})resultSet.getObject("${paramrs.name}"));
         </#if>
         </#list>
 

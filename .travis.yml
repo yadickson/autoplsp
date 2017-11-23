@@ -10,7 +10,7 @@ after_success:
 
 deploy:
   provider: script
-  script: make -f deploy/Makefile
+  script: make -f deploy/Makefile deploy
   on:
     tags: true
 

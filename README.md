@@ -3,8 +3,9 @@
 [![TravisCI Status][travis-image]][travis-url]
 [![Codecov Status][codecov-image]][codecov-url]
 [![Release][jitpack-image]][jitpack-url]
+[![Maven Central][maven-image]][maven-url]
 
-Maven plugin for generate Java classes from StoredProcedure and Functions of Database
+Maven plugin to generate Java classes from StoredProcedure and Functions in Database
 
 ## Support
 
@@ -472,4 +473,6 @@ public class CustomServiceImpl implements CustomService {
 [jitpack-image]: https://jitpack.io/v/yadickson/autoplsp.svg
 [jitpack-url]: https://jitpack.io/#yadickson/autoplsp
 
+[maven-image]: https://maven-badges.herokuapp.com/maven-central/com.github.yadickson/autoplsp/badge.svg
+[maven-url]: https://maven-badges.herokuapp.com/maven-central/com.github.yadickson/autoplsp
 

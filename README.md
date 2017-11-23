@@ -40,7 +40,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 ## POM properties
 
-```
+```xml
 <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
@@ -50,7 +50,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 ## POM dependencies
 
-```
+```xml
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-context</artifactId>
@@ -82,7 +82,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 ## Repository for Oracle JDBC driver and Plugin
 
-```
+```xml
 <repositories>
     <repository>
         <id>jahia</id>
@@ -100,7 +100,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 ## POM plugin config
 
-```
+```xml
 <plugin>
     <groupId>com.github.yadickson</groupId>
     <artifactId>autoplsp</artifactId>
@@ -202,7 +202,7 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ## POM Basic Configuration (include all procedure and function)
 
-```
+```xml
 <plugin>
     <groupId>com.github.yadickson</groupId>
     <artifactId>autoplsp</artifactId>
@@ -235,7 +235,7 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ## POM Basic Configuration (include one procedure)
 
-```
+```xml
 <plugin>
     <groupId>com.github.yadickson</groupId>
     <artifactId>autoplsp</artifactId>
@@ -272,7 +272,7 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ## POM Basic Configuration (include two procedures)
 
-```
+```xml
 <plugin>
     <groupId>com.github.yadickson</groupId>
     <artifactId>autoplsp</artifactId>
@@ -310,7 +310,7 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 ## POM Basic Configuration (exclude one procedure)
 
-```
+```xml
 <plugin>
     <groupId>com.github.yadickson</groupId>
     <artifactId>autoplsp</artifactId>
@@ -349,43 +349,37 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 **Examples**
 
-```
-CREATE OR REPLACE PROCEDURE SP_...
+```sql
+CREATE OR REPLACE PROCEDURE SP_PROCEDURE
 (
-    ...
-
-    [outParameterCode] OUT NUMBER,
-    [outParameterMessage] OUT VARCHAR2
+    OUT_P_CODE OUT NUMBER,
+    OUR_P_MSG OUT VARCHAR2
 )
 AS
 BEGIN
 
-    ...
+    NULL;
 
-END SP_...;
+END SP_PROCEDURE;
 ```
-```
-CREATE OR REPLACE FUNCTION FN_...
+```sql
+CREATE OR REPLACE FUNCTION FN_FUNCTION
 (
-    ...
-
-    [outParameterCode] OUT NUMBER,
-    [outParameterMessage] OUT VARCHAR2
+    OUT_P_CODE OUT NUMBER,
+    OUR_P_MSG OUT VARCHAR2
 )
 RETURN NUMBER
 AS
 BEGIN
 
-    ...
-    
-    RETURN ...;
+    RETURN 0;
 
-END FN_...;
+END FN_FUNCTION;
 ```
 
 # Build project
 
-```
+```bash
 mvn clean package install
 ```
 
@@ -393,7 +387,7 @@ mvn clean package install
 
 **spring/database/[outputConfigFileName]**
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -432,7 +426,7 @@ mvn clean package install
 
 Add import resource in *root-context.xml*
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -449,7 +443,7 @@ Add import resource in *root-context.xml*
 
 # Transaction annotation example
 
-```
+```Java
 @Service
 public class CustomServiceImpl implements CustomService {
 

@@ -1,4 +1,4 @@
 all:
-	gpg --keyserver hkp://pool.sks-keyservers.net --recv ${MAVEN_GPG_KEY}
+	gpg --import deploy/private-key.gpg
 	mvn versions:set -DnewVersion=${TRAVIS_TAG}
 	mvn clean deploy -P release --settings deploy/settings.xml

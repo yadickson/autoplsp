@@ -9,6 +9,7 @@ jdk:
   - openjdk8
   - openjdk9
 
+install: true
 sudo: false
 
 script: "mvn cobertura:cobertura"

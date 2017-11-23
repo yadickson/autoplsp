@@ -1,6 +1,8 @@
 # Maven Auto PLSQL/SP Generator Plugin
 
-[![Release](https://jitpack.io/v/yadickson/autoplsp.svg)](https://jitpack.io/#yadickson/autoplsp)
+[![TravisCI Status][travis-image]][travis-url]
+[![Codecov Status][codecov-image]][codecov-url]
+[![Release][jitpack-image]][jitpack-url]
 
 Maven plugin for generate Java classes from StoredProcedure and Functions of Database
 
@@ -460,3 +462,14 @@ public class CustomServiceImpl implements CustomService {
     }
 }
 ```
+
+[travis-image]: https://travis-ci.org/yadickson/autoplsp.svg
+[travis-url]: https://travis-ci.org/yadickson/autoplsp
+
+[codecov-image]: https://codecov.io/gh/yadickson/autoplsp/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/yadickson/autoplsp
+
+[jitpack-image]: https://jitpack.io/v/yadickson/autoplsp.svg
+[jitpack-url]: https://jitpack.io/#yadickson/autoplsp
+
+

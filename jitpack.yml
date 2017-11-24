@@ -1,0 +1,2 @@
+before_install:
+   - mvn versions:set -DnewVersion=${VERSION}

@@ -5,7 +5,7 @@
     <groupId>com.github.yadickson</groupId>
     <artifactId>autoplsp</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.1.5-SNAPSHOT</version>
+    <version>1.1.6</version>
     <name>Maven Auto PLSQL/SP Generator Plugin</name>
     <description>Maven plugin to generate Java classes from StoredProcedure and Functions in Database</description>
     <url>https://github.com/yadickson/autoplsp</url>
@@ -78,9 +78,9 @@
         </dependency>
         
         <dependency>
-            <groupId>com.oracle</groupId>
+            <groupId>com.jslsolucoes</groupId>
             <artifactId>ojdbc6</artifactId>
-            <version>12.1.0.2</version>
+            <version>11.2.0.1.0</version>
             <scope>provided</scope>
         </dependency>
         
@@ -256,13 +256,6 @@
         </plugins>
 
     </reporting>
-
-    <repositories>
-        <repository>
-            <id>jahia</id>
-            <url>http://maven.jahia.org/maven2/</url>
-        </repository>
-    </repositories>
 
     <profiles>
         <profile>

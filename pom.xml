@@ -5,7 +5,7 @@
     <groupId>com.github.yadickson</groupId>
     <artifactId>autoplsp</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.1.9-SNAPSHOT</version>
+    <version>1.1.10-SNAPSHOT</version>
     <name>Maven Auto PLSQL/SP Generator Plugin</name>
     <description>Maven plugin to generate Java classes from StoredProcedure and Functions in Database</description>
     <url>https://github.com/yadickson/autoplsp</url>
@@ -210,15 +210,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-
         </plugins>
                 
         <pluginManagement>
@@ -265,6 +256,17 @@
         
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.6</version>
+                        <configuration>
+                            <mavenExecutorId>forked-path</mavenExecutorId>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <arguments>-Psonatype-oss-release</arguments>
+                        </configuration>                    
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>1.5</version>
                         <configuration>
@@ -279,26 +281,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
-                        <executions>
-                            <execution>
-                                <id>default-deploy</id>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>deploy</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <skipStaging>false</skipStaging>
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                        </configuration>
                     </plugin>
 
                 </plugins>

@@ -9,7 +9,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 ## Support
 
-- Oracle DataBase
+- Oracle DataBase 11g and 12c
 - Java >= 1.6
 - Spring Framework 4
 - Auto package name detection
@@ -73,23 +73,16 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 </dependency>
 
 <dependency>
-    <groupId>com.oracle</groupId>
+    <groupId>com.jslsolucoes</groupId>
     <artifactId>ojdbc6</artifactId>
-    <version>12.1.0.2</version>
+    <version>11.2.0.1.0</version>
     <scope>provided</scope>
 </dependency>
 ```
 
-## Repository for Oracle JDBC driver and Plugin
+## Repository for Maven Plugin
 
 ```xml
-<repositories>
-    <repository>
-        <id>jahia</id>
-        <url>http://maven.jahia.org/maven2/</url>
-    </repository>
-</repositories>
-
 <pluginRepositories>
     <pluginRepository>
         <id>jitpack.io</id>
@@ -135,9 +128,9 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
     </executions>
     <dependencies>
         <dependency>
-            <groupId>com.oracle</groupId>
+            <groupId>com.jslsolucoes</groupId>
             <artifactId>ojdbc6</artifactId>
-            <version>12.1.0.2</version>
+            <version>11.2.0.1.0</version>
         </dependency>
     </dependencies>
 </plugin>
@@ -225,9 +218,9 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
     </executions>
     <dependencies>
         <dependency>
-            <groupId>com.oracle</groupId>
+            <groupId>com.jslsolucoes</groupId>
             <artifactId>ojdbc6</artifactId>
-            <version>12.1.0.2</version>
+            <version>11.2.0.1.0</version>
         </dependency>
     </dependencies>
 </plugin>
@@ -262,9 +255,9 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
     </executions>
     <dependencies>
         <dependency>
-            <groupId>com.oracle</groupId>
+            <groupId>com.jslsolucoes</groupId>
             <artifactId>ojdbc6</artifactId>
-            <version>12.1.0.2</version>
+            <version>11.2.0.1.0</version>
         </dependency>
     </dependencies>
 </plugin>
@@ -300,9 +293,9 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
     </executions>
     <dependencies>
         <dependency>
-            <groupId>com.oracle</groupId>
+            <groupId>com.jslsolucoes</groupId>
             <artifactId>ojdbc6</artifactId>
-            <version>12.1.0.2</version>
+            <version>11.2.0.1.0</version>
         </dependency>
     </dependencies>
 </plugin>
@@ -337,9 +330,9 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
     </executions>
     <dependencies>
         <dependency>
-            <groupId>com.oracle</groupId>
+            <groupId>com.jslsolucoes</groupId>
             <artifactId>ojdbc6</artifactId>
-            <version>12.1.0.2</version>
+            <version>11.2.0.1.0</version>
         </dependency>
     </dependencies>
 </plugin>

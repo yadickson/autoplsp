@@ -5,7 +5,7 @@
     <groupId>com.github.yadickson</groupId>
     <artifactId>autoplsp</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.1.8-SNAPSHOT</version>
+    <version>1.1.9-SNAPSHOT</version>
     <name>Maven Auto PLSQL/SP Generator Plugin</name>
     <description>Maven plugin to generate Java classes from StoredProcedure and Functions in Database</description>
     <url>https://github.com/yadickson/autoplsp</url>
@@ -296,7 +296,7 @@
                         <configuration>
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <skipStaging>true</skipStaging>
+                            <skipStaging>false</skipStaging>
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
                         </configuration>
                     </plugin>

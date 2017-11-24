@@ -7,7 +7,7 @@ after_success:
 deploy:
   skip_cleanup: true
   provider: script
-  script: make -f deploy/Makefile
+  script: make -f deploy.mk
   on:
     tags: true
 env:

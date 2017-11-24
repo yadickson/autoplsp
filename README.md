@@ -80,13 +80,25 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 </dependency>
 ```
 
-## Repository for Maven Plugin
+## Repository for Maven Plugin on JitPack
 
 ```xml
 <pluginRepositories>
     <pluginRepository>
         <id>jitpack.io</id>
         <url>http://jitpack.io</url>
+    </pluginRepository>
+</pluginRepositories>
+```
+
+## Repository for Maven Plugin on OSS Sonatype
+
+```
+<pluginRepositories>
+    <pluginRepository>
+        <id>oss.sonatype.org</id>
+        <name>OSS Sonatype Release Repository</name>
+        <url>https://oss.sonatype.org/content/repositories/releases</url>
     </pluginRepository>
 </pluginRepositories>
 ```

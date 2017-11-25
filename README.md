@@ -4,6 +4,7 @@
 [![Codecov Status][codecov-image]][codecov-url]
 [![Release][jitpack-image]][jitpack-url]
 [![Central OSSRH][oss-nexus-image]][oss-nexus-url]
+[![Central Maven][central-image]][central-url]
 
 Maven plugin to generate Java classes from StoredProcedure and Functions in Database
 
@@ -93,7 +94,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 ## Repository for Maven Plugin on OSS Sonatype
 
-```
+```xml
 <pluginRepositories>
     <pluginRepository>
         <id>oss.sonatype.org</id>
@@ -475,3 +476,5 @@ public class CustomServiceImpl implements CustomService {
 [oss-nexus-image]: https://img.shields.io/nexus/r/https/oss.sonatype.org/com.github.yadickson/autoplsp.svg
 [oss-nexus-url]: https://oss.sonatype.org/#nexus-search;quick~autoplsp
 
+[central-image]: https://maven-badges.herokuapp.com/maven-central/com.github.yadickson/autoplsp/badge.svg
+[central-url]: https://maven-badges.herokuapp.com/maven-central/com.github.yadickson/autoplsp

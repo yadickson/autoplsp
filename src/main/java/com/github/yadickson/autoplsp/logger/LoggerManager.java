@@ -42,7 +42,7 @@ public class LoggerManager {
      *
      * @param log the logger
      */
-    public void Configure(Log log) {
+    public void configure(Log log) {
         this.log = log;
     }
 

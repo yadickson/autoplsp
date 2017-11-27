@@ -44,14 +44,14 @@ public class LoggerManagerTest {
 
     @Test
     public void testConfigurationNull() {
-        LoggerManager.getInstance().Configure(null);
+        LoggerManager.getInstance().configure(null);
         LoggerManager.getInstance().info("");
     }
 
     @Test
     public void testConfigurationSuccess() {
         Mockito.doNothing().when(log).info(Mockito.anyString());
-        LoggerManager.getInstance().Configure(log);
+        LoggerManager.getInstance().configure(log);
         LoggerManager.getInstance().info("");
     }
 }

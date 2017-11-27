@@ -253,7 +253,7 @@ public class AutoGenerator extends AbstractMojo {
             regexExclude = StringUtils.join(excludes, "|");
         }
 
-        LoggerManager.getInstance().Configure(getLog());
+        LoggerManager.getInstance().configure(getLog());
 
         LoggerManager.getInstance().info("[AutoGenerator] RegexInclude: " + regexInclude);
         LoggerManager.getInstance().info("[AutoGenerator] RegexExclude: " + regexExclude);

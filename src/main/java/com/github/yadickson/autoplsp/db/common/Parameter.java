@@ -222,4 +222,28 @@ public abstract class Parameter implements Comparable<Parameter> {
         return position.compareTo(obj.position);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 17 * hash + (this.direction != null ? this.direction.hashCode() : 0);
+        hash = 17 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 17 * hash + (this.position != null ? this.position.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Parameter other = (Parameter) obj;
+        return !((this.name == null) ? (other.name != null) : !this.name.equals(other.name));
+    }
+
 }

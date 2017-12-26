@@ -16,11 +16,11 @@
  */
 package com.github.yadickson.autoplsp.db.common;
 
-import com.github.yadickson.autoplsp.db.common.Direction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import com.github.yadickson.autoplsp.db.MakeDirection;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
  * Make direction test
@@ -40,30 +40,30 @@ public class MakeDirectionTest {
     }
 
     @Test
-    public void testInputDirection() throws Exception {
+    public void testInputDirection() throws BusinessException {
         Direction d = direction.getDirection("In");
         assertEquals(Direction.Input, d);
     }
 
     @Test
-    public void testOutputDirection() throws Exception {
+    public void testOutputDirection() throws BusinessException {
         Direction d = direction.getDirection("oUt");
         assertEquals(Direction.Output, d);
     }
 
     @Test
-    public void testInputOutputDirection() throws Exception {
+    public void testInputOutputDirection() throws BusinessException {
         Direction d = direction.getDirection("IN/OUT");
         assertEquals(Direction.InputOutput, d);
     }
 
     @Test(expected = Exception.class)
-    public void testNullDirection() throws Exception {
+    public void testNullDirection() throws BusinessException {
         direction.getDirection(null);
     }
 
     @Test(expected = Exception.class)
-    public void testUnknowDirection() throws Exception {
+    public void testUnknowDirection() throws BusinessException {
         direction.getDirection("xx");
     }
 }

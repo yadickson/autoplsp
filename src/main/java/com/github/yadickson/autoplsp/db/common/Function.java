@@ -42,4 +42,9 @@ public class Function extends Procedure {
     public boolean isFunction() {
         return true;
     }
+
+    @Override
+    public int getOutputParameterSize() {
+        return super.getOutputParameterSize() + 1;
+    }
 }

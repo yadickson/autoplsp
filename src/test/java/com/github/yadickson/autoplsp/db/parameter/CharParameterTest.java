@@ -16,8 +16,8 @@
  */
 package com.github.yadickson.autoplsp.db.parameter;
 
-import com.github.yadickson.autoplsp.db.parameter.CharParameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,57 +37,57 @@ public class CharParameterTest {
     }
 
     @Test(expected = Exception.class)
-    public void testGetParameters() throws Exception {
+    public void testGetParameters() throws BusinessException {
         parameter.getParameters();
     }
 
     @Test(expected = Exception.class)
-    public void testSetParameters() throws Exception {
+    public void testSetParameters() throws BusinessException {
         parameter.setParameters(null);
     }
 
     @Test
-    public void testGetJavaTypeName() throws Exception {
+    public void testGetJavaTypeName() throws BusinessException {
         String javaType = parameter.getJavaTypeName();
         assertNotNull(javaType);
         assertEquals("String", javaType);
     }
 
     @Test
-    public void testGetSqlType() throws Exception {
+    public void testGetSqlType() throws BusinessException {
         int sqlType = parameter.getSqlType();
         assertEquals(java.sql.Types.VARCHAR, sqlType);
     }
 
     @Test
-    public void testGetSqlTypeName() throws Exception {
+    public void testGetSqlTypeName() throws BusinessException {
         String sqlType = parameter.getSqlTypeName();
         assertNotNull(sqlType);
         assertEquals("java.sql.Types.VARCHAR", sqlType);
     }
 
     @Test
-    public void tesNumberFalse() throws Exception {
+    public void tesNumberFalse() throws BusinessException {
         assertFalse(parameter.isNumber());
     }
 
     @Test
-    public void tesStringTrue() throws Exception {
+    public void tesStringTrue() throws BusinessException {
         assertTrue(parameter.isString());
     }
 
     @Test
-    public void testResultSetFalse() throws Exception {
+    public void testResultSetFalse() throws BusinessException {
         assertFalse(parameter.isResultSet());
     }
 
     @Test
-    public void testObjectFalse() throws Exception {
+    public void testObjectFalse() throws BusinessException {
         assertFalse(parameter.isObject());
     }
 
     @Test
-    public void tesArrayFalse() throws Exception {
+    public void tesArrayFalse() throws BusinessException {
         assertFalse(parameter.isArray());
     }
 }

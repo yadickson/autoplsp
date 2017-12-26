@@ -17,6 +17,7 @@
 package com.github.yadickson.autoplsp.db;
 
 import com.github.yadickson.autoplsp.db.support.oracle.OracleSPGenerator;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.util.regex.Pattern;
 
 /**
@@ -31,9 +32,9 @@ public class SPGeneratorFactory {
      *
      * @param driver Database driver class name
      * @return the sp generator
-     * @throws Exception If driver not supported
+     * @throws BusinessException If driver not supported
      */
-    public static SPGenerator getGenarator(String driver) throws Exception {
+    public static SPGenerator getGenarator(String driver) throws BusinessException {
 
         Pattern oraclePattern = Pattern.compile(".*Oracle.*", Pattern.CASE_INSENSITIVE);
 
@@ -41,7 +42,7 @@ public class SPGeneratorFactory {
             return new OracleSPGenerator();
         }
 
-        throw new Exception("Driver [" + driver + "] not supported");
+        throw new BusinessException("Driver [" + driver + "] not supported");
     }
 
 }

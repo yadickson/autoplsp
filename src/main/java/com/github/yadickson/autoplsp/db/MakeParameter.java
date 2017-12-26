@@ -25,6 +25,7 @@ import com.github.yadickson.autoplsp.db.parameter.DateParameter;
 import com.github.yadickson.autoplsp.db.parameter.NumberParameter;
 import java.sql.Connection;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
  * Make parameter class
@@ -44,12 +45,12 @@ public abstract class MakeParameter {
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
      * @return the new parameter
-     * @throws Exception If create psrameter process throws an error
+     * @throws BusinessException If create psrameter process throws an error
      */
-    public Parameter create(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws Exception {
+    public Parameter create(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException {
 
         if (type == null) {
-            throw new Exception("Parameter type is null");
+            throw new BusinessException("Parameter type is null");
         }
 
         if (type.equalsIgnoreCase("CHAR")) {
@@ -82,7 +83,7 @@ public abstract class MakeParameter {
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
      * @return the new parameter
-     * @throws Exception If create psrameter process throws an error
+     * @throws BusinessException If create psrameter process throws an error
      */
-    public abstract Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws Exception;
+    public abstract Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException;
 }

@@ -16,15 +16,19 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
+import com.github.yadickson.autoplsp.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
+import java.sql.SQLException;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 /**
  * Oracle object parameter class
@@ -44,9 +48,9 @@ public class OracleObjectParameter extends Parameter {
      * @param direction Parameter direction
      * @param connection Database connection
      * @param typeName Particular parameter type name
-     * @throws Exception If create psrameter process throws an error
+     * @throws BusinessException If create psrameter process throws an error
      */
-    public OracleObjectParameter(int position, String name, Direction direction, Connection connection, String typeName) throws Exception {
+    public OracleObjectParameter(int position, String name, Direction direction, Connection connection, String typeName) throws BusinessException {
         super(position, name, direction);
         this.objectName = typeName;
         addParameters(connection, typeName);
@@ -121,7 +125,7 @@ public class OracleObjectParameter extends Parameter {
         return CapitalizeUtil.capitalize(objectName);
     }
 
-    private void addParameters(Connection connection, String typeName) throws Exception {
+    private void addParameters(Connection connection, String typeName) throws BusinessException {
 
         if (connection == null) {
             return;
@@ -129,30 +133,30 @@ public class OracleObjectParameter extends Parameter {
 
         LoggerManager.getInstance().info("[OracleObjectParameter] Create object parameter " + typeName);
 
-        PreparedStatement statement = connection.prepareStatement("SELECT ATTR_NAME, ATTR_TYPE_NAME, ATTR_NO from SYS.ALL_TYPE_ATTRS WHERE OWNER=USER AND TYPE_NAME = ? ORDER BY ATTR_NO");
-        statement.setString(1, typeName);
+        List<ParameterBean> list = null;
 
-        if (!statement.execute()) {
-            throw new Exception("[OracleObjectParameter] Error find attributes from type " + typeName);
-        }
+        QueryRunner run = new QueryRunner();
+        ResultSetHandler<List<ParameterBean>> h = new BeanListHandler<ParameterBean>(ParameterBean.class);
 
-        ResultSet result = statement.getResultSet();
-        parameters = new ArrayList<Parameter>();
+        String sql = "SELECT ATTR_NAME as name, ATTR_TYPE_NAME as dtype, ATTR_NO as position from SYS.ALL_TYPE_ATTRS WHERE OWNER=USER AND TYPE_NAME = ? ORDER BY ATTR_NO";
 
         try {
-            while (result.next()) {
-                String dType = result.getString("ATTR_TYPE_NAME");
-                int pos = result.getInt("ATTR_NO");
-                String pName = result.getString("ATTR_NAME");
-                Parameter param = new OracleMakeParameter().create(dType, pos, pName, Direction.Input, connection, null, null);
-                LoggerManager.getInstance().info("[OracleObjectParameter] (" + param.getPosition() + ") " + param.getName() + " [" + param.getSqlTypeName() + "]");
-                parameters.add(param);
-            }
-        } catch (Exception ex) {
-            throw new Exception(ex);
-        } finally {
-            result.close();
-            statement.close();
+            list = run.query(connection, sql, h, typeName);
+        } catch (SQLException ex) {
+            throw new BusinessException("[OracleObjectParameter] Error find attributes from type " + typeName, ex);
+        }
+
+        parameters = new ArrayList<Parameter>();
+        
+        for (ParameterBean p : list) {
+
+            String dataType = p.getDtype();
+            Integer position = p.getPosition();
+            String parameterName = p.getName();
+
+            Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, Direction.Input, connection, null, null);
+            LoggerManager.getInstance().info("[OracleObjectParameter] (" + param.getPosition() + ") " + param.getName() + " [" + param.getSqlTypeName() + "]");
+            parameters.add(param);
         }
     }
 

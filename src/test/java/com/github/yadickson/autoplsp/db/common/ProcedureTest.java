@@ -16,7 +16,6 @@
  */
 package com.github.yadickson.autoplsp.db.common;
 
-import com.github.yadickson.autoplsp.db.common.Procedure;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -16,8 +16,8 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
-import com.github.yadickson.autoplsp.db.support.oracle.parameter.OracleDataSetParameter;
 import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.util.ArrayList;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -39,40 +39,40 @@ public class OracleDataSetParameterTest {
     }
 
     @Test
-    public void testGetParameters() throws Exception {
+    public void testGetParameters() throws BusinessException {
         assertNotNull(parameter.getParameters());
     }
 
     @Test
-    public void testGetJavaTypeName() throws Exception {
+    public void testGetJavaTypeName() throws BusinessException {
         assertNotNull(parameter.getJavaTypeName());
     }
 
     @Test
-    public void testGetSqlType() throws Exception {
+    public void testGetSqlType() throws BusinessException {
         int sqlType = parameter.getSqlType();
         assertEquals(oracle.jdbc.OracleTypes.CURSOR, sqlType);
     }
 
     @Test
-    public void testGetSqlTypeName() throws Exception {
+    public void testGetSqlTypeName() throws BusinessException {
         String sqlType = parameter.getSqlTypeName();
         assertNotNull(sqlType);
         assertEquals("oracle.jdbc.OracleTypes.CURSOR", sqlType);
     }
 
     @Test
-    public void testResultSetTrue() throws Exception {
+    public void testResultSetTrue() throws BusinessException {
         assertTrue(parameter.isResultSet());
     }
 
     @Test
-    public void testObjectFalse() throws Exception {
+    public void testObjectFalse() throws BusinessException {
         assertFalse(parameter.isObject());
     }
 
     @Test
-    public void tesArrayFalse() throws Exception {
+    public void tesArrayFalse() throws BusinessException {
         assertFalse(parameter.isArray());
     }
 }

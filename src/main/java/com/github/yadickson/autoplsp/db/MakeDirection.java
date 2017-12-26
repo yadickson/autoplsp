@@ -17,6 +17,7 @@
 package com.github.yadickson.autoplsp.db;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
  * Make direction parameter class fron string value
@@ -30,11 +31,11 @@ public class MakeDirection {
      *
      * @param value Direction string value
      * @return direction value
-     * @throws Exception If the direction value is not supported
+     * @throws BusinessException If the direction value is not supported
      */
-    public Direction getDirection(String value) throws Exception {
+    public Direction getDirection(String value) throws BusinessException {
         if (value == null) {
-            throw new Exception("Direction is null");
+            throw new BusinessException("Direction is null");
         }
 
         if (value.equalsIgnoreCase("IN")) {
@@ -49,7 +50,7 @@ public class MakeDirection {
             return Direction.InputOutput;
         }
 
-        throw new Exception("Direction [" + value + "] not implement");
+        throw new BusinessException("Direction [" + value + "] not implement");
     }
 
 }

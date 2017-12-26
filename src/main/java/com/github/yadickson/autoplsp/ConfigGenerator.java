@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp;
 
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.io.File;
 
@@ -62,9 +63,9 @@ public class ConfigGenerator extends TemplateGenerator {
     /**
      * Create spring configuration file from template
      *
-     * @throws Exception Launch if the generation process throws an error
+     * @throws BusinessException Launch if the generation process throws an error
      */
-    public void process() throws Exception {
+    public void process() throws BusinessException {
         LoggerManager.getInstance().info("[ConfigGenerator] Process spring template config");
         Map<String, Object> input = new HashMap<String, Object>();
 

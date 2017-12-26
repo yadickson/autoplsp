@@ -16,11 +16,6 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
-import com.github.yadickson.autoplsp.db.support.oracle.parameter.OracleMakeParameter;
-import com.github.yadickson.autoplsp.db.support.oracle.parameter.OracleDataSetParameter;
-import com.github.yadickson.autoplsp.db.support.oracle.parameter.OracleRowIdParameter;
-import com.github.yadickson.autoplsp.db.support.oracle.parameter.OracleObjectParameter;
-import com.github.yadickson.autoplsp.db.support.oracle.parameter.OracleTableParameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.parameter.BlobParameter;
@@ -32,6 +27,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
  *
@@ -47,17 +43,17 @@ public class OracleMakeParameterTest {
     }
 
     @Test(expected = Exception.class)
-    public void testNullType() throws Exception {
+    public void testNullType() throws BusinessException {
         maker.create(null, 0, null, Direction.Input, null, null, null);
     }
 
     @Test(expected = Exception.class)
-    public void testUnknowType() throws Exception {
+    public void testUnknowType() throws BusinessException {
         maker.create("xx", 0, null, Direction.Input, null, null, null);
     }
 
     @Test
-    public void testChar() throws Exception {
+    public void testChar() throws BusinessException {
         Parameter parameter = maker.create("char", 1, "charName", Direction.Input, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof CharParameter);
@@ -67,7 +63,7 @@ public class OracleMakeParameterTest {
     }
 
     @Test
-    public void testVarchar2() throws Exception {
+    public void testVarchar2() throws BusinessException {
         Parameter parameter = maker.create("varchar2", 2, "vcName", Direction.Output, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof CharParameter);
@@ -77,7 +73,7 @@ public class OracleMakeParameterTest {
     }
 
     @Test
-    public void testNumber() throws Exception {
+    public void testNumber() throws BusinessException {
         Parameter parameter = maker.create("number", 1, "numberName", Direction.Input, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof NumberParameter);
@@ -87,7 +83,7 @@ public class OracleMakeParameterTest {
     }
 
     @Test
-    public void testDecimal() throws Exception {
+    public void testDecimal() throws BusinessException {
         Parameter parameter = maker.create("decimal", 2, "decimalName", Direction.Output, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof NumberParameter);
@@ -97,7 +93,7 @@ public class OracleMakeParameterTest {
     }
 
     @Test
-    public void testClob() throws Exception {
+    public void testClob() throws BusinessException {
         Parameter parameter = maker.create("clob", 1, "clobName", Direction.Input, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof ClobParameter);
@@ -107,7 +103,7 @@ public class OracleMakeParameterTest {
     }
 
     @Test
-    public void testBlob() throws Exception {
+    public void testBlob() throws BusinessException {
         Parameter parameter = maker.create("blob", 1, "blobName", Direction.Input, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof BlobParameter);
@@ -117,7 +113,7 @@ public class OracleMakeParameterTest {
     }
 
     @Test
-    public void testDate() throws Exception {
+    public void testDate() throws BusinessException {
         Parameter parameter = maker.create("date", 1, "dateName", Direction.Input, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof DateParameter);
@@ -127,7 +123,7 @@ public class OracleMakeParameterTest {
     }
 
     @Test
-    public void testTimestamp() throws Exception {
+    public void testTimestamp() throws BusinessException {
         Parameter parameter = maker.create("timestamp", 2, "tsName", Direction.Output, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof DateParameter);
@@ -137,7 +133,7 @@ public class OracleMakeParameterTest {
     }
 
     @Test
-    public void testRowId() throws Exception {
+    public void testRowId() throws BusinessException {
         Parameter parameter = maker.create("rowid", 1, "rowName", Direction.Input, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleRowIdParameter);
@@ -147,12 +143,12 @@ public class OracleMakeParameterTest {
     }
 
     @Test(expected = Exception.class)
-    public void testRefCursorInputError() throws Exception {
+    public void testRefCursorInputError() throws BusinessException {
         maker.create("ref cursor", 1, "rcName", Direction.Input, null, null, null);
     }
 
     @Test
-    public void testRefCursor() throws Exception {
+    public void testRefCursor() throws BusinessException {
         Parameter parameter = maker.create("ref cursor", 1, "rc_name", Direction.Output, null, null, new Procedure("package", "test"));
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleDataSetParameter);
@@ -164,12 +160,12 @@ public class OracleMakeParameterTest {
     }
 
     @Test(expected = Exception.class)
-    public void testObjectOutputError() throws Exception {
+    public void testObjectOutputError() throws BusinessException {
         maker.create("object", 1, "objName", Direction.Output, null, null, null);
     }
 
     @Test
-    public void testObject() throws Exception {
+    public void testObject() throws BusinessException {
         Parameter parameter = maker.create("object", 1, "objName", Direction.Input, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleObjectParameter);
@@ -180,12 +176,12 @@ public class OracleMakeParameterTest {
     }
 
     @Test(expected = Exception.class)
-    public void testTableOutputError() throws Exception {
+    public void testTableOutputError() throws BusinessException {
         maker.create("table", 1, "tName", Direction.Output, null, null, null);
     }
 
     @Test
-    public void testTable() throws Exception {
+    public void testTable() throws BusinessException {
         Parameter parameter = maker.create("table", 1, "tName", Direction.Input, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleTableParameter);

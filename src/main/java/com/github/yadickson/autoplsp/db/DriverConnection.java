@@ -16,9 +16,12 @@
  */
 package com.github.yadickson.autoplsp.db;
 
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
+import org.apache.commons.dbutils.DbUtils;
 
 /**
  * Database connection manager
@@ -53,23 +56,31 @@ public class DriverConnection {
      * Open database connection
      *
      * @return Database connection
-     * @throws Exception Launch if the open connection process throws an
+     * @throws BusinessException Launch if the open connection process throws an
      * error
      */
-    public Connection getConnection() throws Exception {
+    public Connection getConnection() throws BusinessException {
 
         if (connection != null) {
             return connection;
         }
 
-        Class.forName(this.driver);
+        try {
 
-        connection = DriverManager.getConnection(
-                this.connectionString,
-                this.user,
-                this.pass);
+            Class.forName(this.driver);
 
-        return connection;
+            connection = DriverManager.getConnection(
+                    this.connectionString,
+                    this.user,
+                    this.pass);
+
+            return connection;
+
+        } catch (SQLException ex) {
+            throw new BusinessException("", ex);
+        } catch (ClassNotFoundException ex) {
+            throw new BusinessException("", ex);
+        }
     }
 
     /**
@@ -78,13 +89,9 @@ public class DriverConnection {
     public void closeConnection() {
 
         try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (Exception ex) {
-            LoggerManager.getInstance().info("[DriverConnection] Error: " + ex.getMessage());
-        } finally {
-            connection = null;
+            DbUtils.close(connection);
+        } catch (SQLException ex) {
+            LoggerManager.getInstance().error(ex);
         }
     }
 }

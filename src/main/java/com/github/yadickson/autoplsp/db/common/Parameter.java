@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp.db.common;
 
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.util.List;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 
@@ -24,7 +25,7 @@ import com.github.yadickson.autoplsp.util.CapitalizeUtil;
  *
  * @author Yadickson Soto
  */
-public abstract class Parameter implements Comparable<Parameter> {
+public abstract class Parameter {
 
     private final Direction direction;
     private final String name;
@@ -74,20 +75,20 @@ public abstract class Parameter implements Comparable<Parameter> {
      * Getter parameter list
      *
      * @return the parameter list
-     * @throws Exception error if not supported
+     * @throws BusinessException error if not supported
      */
-    public List<Parameter> getParameters() throws Exception {
-        throw new Exception("Parameters not found");
+    public List<Parameter> getParameters() throws BusinessException {
+        throw new BusinessException("Parameters not found");
     }
 
     /**
      * Setter parameter list
      *
      * @param params The new parameter list
-     * @throws Exception error if not supported
+     * @throws BusinessException error if not supported
      */
-    public void setParameters(List<Parameter> params) throws Exception {
-        throw new Exception("Parameters not found");
+    public void setParameters(List<Parameter> params) throws BusinessException {
+        throw new BusinessException("Parameters not found");
     }
 
     /**
@@ -184,10 +185,10 @@ public abstract class Parameter implements Comparable<Parameter> {
      * Getter the object database name
      *
      * @return the object name
-     * @throws Exception error if not supported
+     * @throws BusinessException error if not supported
      */
-    public String getObjectName() throws Exception {
-        throw new Exception("Object Name not found");
+    public String getObjectName() throws BusinessException {
+        throw new BusinessException("Object Name not found");
     }
 
     /**
@@ -210,40 +211,5 @@ public abstract class Parameter implements Comparable<Parameter> {
      * @return the sql type name
      */
     public abstract String getSqlTypeName();
-
-    /**
-     * Compare parameter to sort
-     *
-     * @param obj parameter to compare
-     * @return position diff
-     */
-    @Override
-    public int compareTo(Parameter obj) {
-        return position.compareTo(obj.position);
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 17 * hash + (this.direction != null ? this.direction.hashCode() : 0);
-        hash = 17 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 17 * hash + (this.position != null ? this.position.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Parameter other = (Parameter) obj;
-        return !((this.name == null) ? (other.name != null) : !this.name.equals(other.name));
-    }
 
 }

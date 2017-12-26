@@ -22,6 +22,7 @@ import com.github.yadickson.autoplsp.db.parameter.CharParameter;
 import com.github.yadickson.autoplsp.db.MakeParameter;
 import java.sql.Connection;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
  * Oracle parameter create class
@@ -41,10 +42,10 @@ public class OracleMakeParameter extends MakeParameter {
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
      * @return the new parameter
-     * @throws Exception If create psrameter process throws an error
+     * @throws BusinessException If create psrameter process throws an error
      */
     @Override
-    public Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws Exception {
+    public Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException {
         if (type.equalsIgnoreCase("VARCHAR2")) {
             return new CharParameter(position, name, direction);
         }
@@ -53,7 +54,7 @@ public class OracleMakeParameter extends MakeParameter {
         }
         if (type.equalsIgnoreCase("REF CURSOR")) {
             if (direction != Direction.Output) {
-                throw new Exception("Input REF CURSOR not supported");
+                throw new BusinessException("Input REF CURSOR not supported");
             }
 
             return new OracleDataSetParameter(position, name, procedure.getClassName());
@@ -61,7 +62,7 @@ public class OracleMakeParameter extends MakeParameter {
 
         if (type.equalsIgnoreCase("OBJECT")) {
             if (direction != Direction.Input) {
-                throw new Exception("Output OBJECT not supported");
+                throw new BusinessException("Output OBJECT not supported");
             }
 
             return new OracleObjectParameter(position, name, direction, connection, typeName);
@@ -69,12 +70,12 @@ public class OracleMakeParameter extends MakeParameter {
 
         if (type.equalsIgnoreCase("TABLE")) {
             if (direction != Direction.Input) {
-                throw new Exception("Output TABLE not supported");
+                throw new BusinessException("Output TABLE not supported");
             }
 
             return new OracleTableParameter(position, name, direction, connection, typeName);
         }
 
-        throw new Exception("Type [" + type + " " + name + "] not supported");
+        throw new BusinessException("Type [" + type + " " + name + "] not supported");
     }
 }

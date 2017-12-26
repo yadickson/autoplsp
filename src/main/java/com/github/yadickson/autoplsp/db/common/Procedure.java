@@ -208,4 +208,12 @@ public class Procedure {
     public boolean isFunction() {
         return false;
     }
+    
+    public int getInputParameterSize() {
+        return inputParameters.size();
+    }
+    
+    public int getOutputParameterSize() {
+        return outputParameters.size();
+    }
 }

@@ -16,15 +16,19 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
+import com.github.yadickson.autoplsp.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
+import java.sql.SQLException;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 /**
  * Oracle Table (Array) parameter class
@@ -44,9 +48,9 @@ public class OracleTableParameter extends Parameter {
      * @param direction Parameter direction
      * @param connection Database connection
      * @param typeName Particular parameter type name
-     * @throws Exception If create psrameter process throws an error
+     * @throws BusinessException If create psrameter process throws an error
      */
-    public OracleTableParameter(int position, String name, Direction direction, Connection connection, String typeName) throws Exception {
+    public OracleTableParameter(int position, String name, Direction direction, Connection connection, String typeName) throws BusinessException {
         super(position, name, direction);
         this.objectName = typeName;
         addParameters(connection, typeName);
@@ -121,7 +125,7 @@ public class OracleTableParameter extends Parameter {
         return getObjectName() + "Table";
     }
 
-    private void addParameters(Connection connection, String typeName) throws Exception {
+    private void addParameters(Connection connection, String typeName) throws BusinessException {
 
         if (connection == null) {
             return;
@@ -129,30 +133,28 @@ public class OracleTableParameter extends Parameter {
 
         LoggerManager.getInstance().info("[OracleArrayParameter] Create object parameter " + typeName);
 
-        PreparedStatement statement = connection.prepareStatement("select (CASE WHEN ELEM_TYPE_OWNER IS NOT NULL THEN 'OBJECT' ELSE ELEM_TYPE_NAME END) AS TYPE, ELEM_TYPE_NAME AS NAME from SYS.ALL_COLL_TYPES WHERE OWNER=USER and TYPE_NAME = ?");
-        statement.setString(1, typeName);
+        List<ParameterBean> list = null;
 
-        if (!statement.execute()) {
-            throw new Exception("[OracleArrayParameter] Error find attributes from type " + typeName);
-        }
+        QueryRunner run = new QueryRunner();
+        ResultSetHandler<List<ParameterBean>> h = new BeanListHandler<ParameterBean>(ParameterBean.class);
 
-        ResultSet result = statement.getResultSet();
-        parameters = new ArrayList<Parameter>();
+        String sql = "select (CASE WHEN ELEM_TYPE_OWNER IS NOT NULL THEN 'OBJECT' ELSE ELEM_TYPE_NAME END) AS DTYPE, ELEM_TYPE_NAME AS NAME from SYS.ALL_COLL_TYPES WHERE OWNER=USER and TYPE_NAME = ?";
 
         try {
-            if (result.next()) {
-                String dType = result.getString("TYPE");
-                String pName = result.getString("NAME");
+            list = run.query(connection, sql, h, typeName);
+        } catch (SQLException ex) {
+            throw new BusinessException("[OracleTableParameter] Error find attributes from type " + typeName, ex);
+        }
 
-                LoggerManager.getInstance().info("[OracleArrayParameter] type: " + dType + " name: " + pName);
-                parameters.add(new OracleMakeParameter().create(dType, 0, "Value", Direction.Input, connection, pName, null));
-            }
-        } catch (Exception ex) {
-            throw new Exception(ex);
-        } finally {
-            result.close();
-            statement.close();
+        parameters = new ArrayList<Parameter>();
+
+        for (ParameterBean p : list) {
+
+            String dataType = p.getDtype();
+            String parameterName = p.getName();
+
+            LoggerManager.getInstance().info("[OracleArrayParameter] type: " + dataType + " name: " + parameterName);
+            parameters.add(new OracleMakeParameter().create(dataType, 0, "Value", Direction.Input, connection, parameterName, null));
         }
     }
-
 }

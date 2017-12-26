@@ -18,6 +18,7 @@ package com.github.yadickson.autoplsp;
 
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.io.File;
 import java.util.List;
@@ -67,9 +68,9 @@ public class JavaGenerator extends TemplateGenerator {
      * Java classes generator from template
      *
      * @param procedures The procedures to generate
-     * @throws Exception Launch if the generation process throws an error
+     * @throws BusinessException Launch if the generation process throws an error
      */
-    public void process(List<Procedure> procedures) throws Exception {
+    public void process(List<Procedure> procedures) throws BusinessException {
         LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedures.size() + " procedures");
 
         for (Procedure procedure : procedures) {
@@ -86,7 +87,7 @@ public class JavaGenerator extends TemplateGenerator {
         }
     }
 
-    private void processStoredProcedure(Procedure procedure) throws Exception {
+    private void processStoredProcedure(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
         input.put("proc", procedure);
@@ -95,7 +96,7 @@ public class JavaGenerator extends TemplateGenerator {
         createTemplate(input, "/repository/Procedure.ftl", getFileNamePath(getRepositoryOutputPath("sp"), procedure, "SP"));
     }
 
-    private void processStoredProcedureService(Procedure procedure) throws Exception {
+    private void processStoredProcedureService(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
         input.put("proc", procedure);
@@ -111,7 +112,7 @@ public class JavaGenerator extends TemplateGenerator {
         createTemplate(input, "/repository/DAOImpl.ftl", getFileNamePath(procedurePath, procedure, "DAOImpl"));
     }
 
-    private void processStoredProcedureParameter(Procedure procedure) throws Exception {
+    private void processStoredProcedureParameter(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
         input.put("proc", procedure);
@@ -132,7 +133,7 @@ public class JavaGenerator extends TemplateGenerator {
         }
     }
 
-    private void processStoredProcedureParameterRS(Procedure procedure) throws Exception {
+    private void processStoredProcedureParameterRS(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
         input.put("proc", procedure);
@@ -152,7 +153,7 @@ public class JavaGenerator extends TemplateGenerator {
         }
     }
 
-    private void processStoredProcedureMapperRS(Procedure procedure) throws Exception {
+    private void processStoredProcedureMapperRS(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
         input.put("proc", procedure);
@@ -172,7 +173,7 @@ public class JavaGenerator extends TemplateGenerator {
         }
     }
 
-    private void processStoredProcedureParameterObject(Procedure procedure) throws Exception {
+    private void processStoredProcedureParameterObject(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
         input.put("proc", procedure);
@@ -192,7 +193,7 @@ public class JavaGenerator extends TemplateGenerator {
         }
     }
 
-    private void processStoredProcedureParameterArray(Procedure procedure) throws Exception {
+    private void processStoredProcedureParameterArray(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
         input.put("proc", procedure);

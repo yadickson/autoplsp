@@ -17,6 +17,7 @@
 package com.github.yadickson.autoplsp.db;
 
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.sql.Connection;
 import java.util.List;
 
@@ -32,16 +33,16 @@ public interface SPGenerator {
      *
      * @param connection Database connection
      * @return procedure list
-     * @throws Exception If error
+     * @throws BusinessException If error
      */
-    List<Procedure> findProcedures(Connection connection) throws Exception;
+    List<Procedure> findProcedures(Connection connection) throws BusinessException;
 
     /**
      * Fill parameters of procedure from database
      *
      * @param connection Database connection
      * @param procedure procedure
-     * @throws Exception If error
+     * @throws BusinessException If error
      */
-    void fillProcedure(Connection connection, Procedure procedure) throws Exception;
+    void fillProcedure(Connection connection, Procedure procedure) throws BusinessException;
 }

@@ -16,27 +16,32 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle;
 
+import com.github.yadickson.autoplsp.bean.ParameterBean;
+import com.github.yadickson.autoplsp.bean.ProcedureBean;
 import com.github.yadickson.autoplsp.db.support.oracle.parameter.OracleMakeParameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.yadickson.autoplsp.db.SPGenerator;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import org.apache.commons.lang.StringUtils;
 import com.github.yadickson.autoplsp.db.MakeDirection;
 import com.github.yadickson.autoplsp.db.common.Function;
+import com.github.yadickson.autoplsp.handler.BusinessException;
+import java.sql.SQLException;
+import java.util.Map;
+import java.util.TreeMap;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 /**
  * Oracle Store procedure and function generator class
@@ -50,37 +55,30 @@ public class OracleSPGenerator implements SPGenerator {
      *
      * @param connection Database connection
      * @return procedure list
-     * @throws Exception If error
+     * @throws BusinessException If error
      */
     @Override
-    public List<Procedure> findProcedures(Connection connection) throws Exception {
+    public List<Procedure> findProcedures(Connection connection) throws BusinessException {
         LoggerManager.getInstance().info("[OracleSPGenerator] Find all procedure by name");
 
-        PreparedStatement statement = connection.prepareStatement("SELECT OBJECT_NAME as PACKAGE, PROCEDURE_NAME as NAME, case when (SELECT count(position) as type FROM all_arguments WHERE OWNER=USER AND object_name = allp.PROCEDURE_NAME AND package_name = allp.OBJECT_NAME and position = 0) = 0 then 'PROCEDURE' else 'FUNCTION' end as type FROM SYS.ALL_PROCEDURES allp WHERE OWNER=USER and OBJECT_TYPE ='PACKAGE' and PROCEDURE_NAME is not null\n"
-                + "union SELECT null as PACKAGE, OBJECT_NAME AS NAME, OBJECT_TYPE as TYPE FROM SYS.ALL_PROCEDURES WHERE OWNER=USER and (OBJECT_TYPE = 'FUNCTION' or OBJECT_TYPE='PROCEDURE')");
-
-        if (!statement.execute()) {
-            throw new Exception("[OracleSPGenerator] Error find procedures");
-        }
-
-        ResultSet result = statement.getResultSet();
-
         List<Procedure> list = new ArrayList<Procedure>();
+        List<ProcedureBean> procedures = null;
+
+        QueryRunner run = new QueryRunner();
+        ResultSetHandler<List<ProcedureBean>> h = new BeanListHandler<ProcedureBean>(ProcedureBean.class);
+
+        String sql = "SELECT OBJECT_NAME as PKG, PROCEDURE_NAME as NAME, case when (SELECT count(position) as type FROM all_arguments WHERE OWNER=USER AND object_name = allp.PROCEDURE_NAME AND package_name = allp.OBJECT_NAME and position = 0) = 0 then 'PROCEDURE' else 'FUNCTION' end as type FROM SYS.ALL_PROCEDURES allp WHERE OWNER=USER and OBJECT_TYPE ='PACKAGE' and PROCEDURE_NAME is not null union SELECT null as PKG, OBJECT_NAME AS NAME, OBJECT_TYPE as TYPE FROM SYS.ALL_PROCEDURES WHERE OWNER=USER and (OBJECT_TYPE = 'FUNCTION' or OBJECT_TYPE='PROCEDURE')";
 
         try {
-            while (result.next()) {
-                String pkg = result.getString("package");
-                String name = result.getString("name");
-                Boolean p = result.getString("type").equalsIgnoreCase("PROCEDURE");
-                Procedure procedure = p ? new Procedure(pkg, name) : new Function(pkg, name);
-                LoggerManager.getInstance().info("[OracleSPGenerator] Found " + procedure.getFullName());
-                list.add(procedure);
-            }
-        } catch (Exception ex) {
-            throw new Exception(ex);
-        } finally {
-            result.close();
-            statement.close();
+            procedures = run.query(connection, sql, h);
+        } catch (SQLException ex) {
+            throw new BusinessException("[OracleSPGenerator] Error find procedures", ex);
+        }
+
+        for (ProcedureBean p : procedures) {
+            Procedure procedure = p.getType().equalsIgnoreCase("PROCEDURE") ? new Procedure(p.getPkg(), p.getName()) : new Function(p.getPkg(), p.getName());
+            LoggerManager.getInstance().info("[OracleSPGenerator] Found (" + p.getType() + ") " + procedure.getFullName());
+            list.add(procedure);
         }
 
         LoggerManager.getInstance().info("[OracleSPGenerator] Found " + list.size() + " procedures");
@@ -93,70 +91,52 @@ public class OracleSPGenerator implements SPGenerator {
      *
      * @param connection Database connection
      * @param procedure procedure
-     * @throws Exception If error
+     * @throws BusinessException If error
      */
     @Override
-    public void fillProcedure(Connection connection, Procedure procedure) throws Exception {
+    public void fillProcedure(Connection connection, Procedure procedure) throws BusinessException {
         LoggerManager.getInstance().info("[OracleSPGenerator] Create store procedure " + procedure.getFullName());
 
-        PreparedStatement statement = connection.prepareStatement("SELECT argument_name, data_type, position, in_out, type_name FROM all_arguments WHERE OWNER=USER AND object_name = ? AND (? is null OR package_name = ?) order by argument_name asc nulls first, position");
+        Map<Integer, Parameter> mparameters = new TreeMap<Integer, Parameter>();
+        List<ParameterBean> parameters = null;
 
-        statement.setString(1, procedure.getName());
-        statement.setString(2, procedure.getPackageName());
-        statement.setString(3, procedure.getPackageName());
+        QueryRunner run = new QueryRunner();
+        ResultSetHandler<List<ParameterBean>> h = new BeanListHandler<ParameterBean>(ParameterBean.class);
 
-        if (!statement.execute()) {
-            throw new Exception("[OracleSPGenerator] Error find parameter from procedure " + procedure.getFullName());
-        }
-
-        ResultSet result = statement.getResultSet();
-
-        Map<Integer, Parameter> parameters = new TreeMap<Integer, Parameter>();
+        String sql = "SELECT argument_name as name, position, in_out as direction, data_type as dtype, type_name as ntype FROM all_arguments WHERE OWNER=USER AND object_name = ? AND (? is null OR package_name = ?) order by position asc, argument_name asc nulls first";
 
         try {
-            while (result.next()) {
-
-                String dataType = result.getString("DATA_TYPE");
-                String typeName = result.getString("TYPE_NAME");
-
-                Integer position = result.getInt("POSITION");
-                String parameterName = result.getString("ARGUMENT_NAME");
-                Direction direction = new MakeDirection().getDirection(result.getString("IN_OUT"));
-
-                LoggerManager.getInstance().info("[OracleSPGenerator] Process (" + position + ") " + parameterName + " " + direction + " " + dataType + " " + typeName);
-                Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, direction, connection, typeName, procedure);
-                LoggerManager.getInstance().info("[OracleSPGenerator] Parameter (" + param.getPosition() + ") " + param.getName() + " " + param.getDirection() + " [" + param.getSqlTypeName() + "]");
-
-                parameters.put(position, param);
-            }
-        } catch (Exception ex) {
-            throw new Exception(ex);
-        } finally {
-            result.close();
-            statement.close();
+            parameters = run.query(connection, sql, h, procedure.getName(), procedure.getPackageName(), procedure.getPackageName());
+        } catch (SQLException ex) {
+            throw new BusinessException("[OracleSPGenerator] Error find parameter from procedure " + procedure.getFullName(), ex);
         }
 
-        boolean findMultiple = false;
+        for (ParameterBean p : parameters) {
 
-        List<Parameter> psort = new ArrayList<Parameter>(parameters.values());
-        Collections.sort(psort);
+            String dataType = p.getDtype();
+            String typeName = p.getNtype();
 
-        for (Parameter param : psort) {
+            Integer position = p.getPosition();
+            String parameterName = p.getName();
+            Direction direction = new MakeDirection().getDirection(p.getDirection());
 
-            if (param.isResultSet()) {
-                findMultiple = true;
-                break;
-            }
+            LoggerManager.getInstance().info("[OracleSPGenerator] Process (" + position + ") " + parameterName + " " + direction + " " + dataType + " " + typeName);
+            Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, direction, connection, typeName, procedure);
+            LoggerManager.getInstance().info("[OracleSPGenerator] Parameter (" + param.getPosition() + ") " + param.getName() + " " + param.getDirection() + " [" + param.getSqlTypeName() + "]");
+
+            mparameters.put(position, param);
         }
 
-        if (findMultiple) {
-            findOracleDataSetParameter(connection, procedure, psort);
+        List<Parameter> list = new ArrayList<Parameter>(mparameters.values());
+        procedure.setParameters(list);
+
+        if (procedure.getHasResultSet()) {
+            findOracleDataSetParameter(connection, procedure, list);
         }
 
-        procedure.setParameters(psort);
     }
 
-    private void findOracleDataSetParameter(Connection connection, Procedure procedure, List<Parameter> parameters) throws Exception {
+    private void findOracleDataSetParameter(Connection connection, Procedure procedure, List<Parameter> parameters) throws BusinessException {
 
         boolean isFunction = procedure.isFunction();
 
@@ -179,9 +159,12 @@ public class OracleSPGenerator implements SPGenerator {
         sql += ") }";
 
         LoggerManager.getInstance().info(sql);
-        CallableStatement statement = connection.prepareCall(sql);
+
+        CallableStatement statement = null;
 
         try {
+
+            statement = connection.prepareCall(sql);
 
             for (int i = 0; i < parameters.size(); i++) {
                 if (parameters.get(i).isInput()) {
@@ -205,7 +188,7 @@ public class OracleSPGenerator implements SPGenerator {
                 ResultSet result = (ResultSet) statement.getObject(position);
 
                 if (result == null) {
-                    throw new Exception("[OracleSPGenerator] ResultSet null");
+                    throw new BusinessException("[OracleSPGenerator] ResultSet null");
                 }
 
                 ResultSetMetaData metadata = result.getMetaData();
@@ -218,7 +201,7 @@ public class OracleSPGenerator implements SPGenerator {
                         Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.Output, connection, null, null);
 
                         if (pNames.contains(p.getName())) {
-                            throw new Exception("Parameter name [" + p.getName() + "] is duplicated");
+                            throw new BusinessException("Parameter name [" + p.getName() + "] is duplicated");
                         }
 
                         LoggerManager.getInstance().info("Parameter (" + p.getPosition() + ") " + p.getName() + " [" + p.getSqlTypeName() + "]");
@@ -226,7 +209,7 @@ public class OracleSPGenerator implements SPGenerator {
                         list.add(p);
                     }
                 } catch (Exception ex) {
-                    throw new Exception(ex);
+                    throw new BusinessException("", ex);
                 } finally {
                     result.close();
                 }
@@ -234,8 +217,14 @@ public class OracleSPGenerator implements SPGenerator {
                 parameters.get(i).setParameters(list);
             }
 
+        } catch (SQLException ex) {
+            throw new BusinessException("", ex);
         } finally {
-            statement.close();
+            try {
+                statement.close();
+            } catch (SQLException ex) {
+                LoggerManager.getInstance().error(ex);
+            }
         }
     }
 }

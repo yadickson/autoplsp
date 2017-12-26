@@ -56,4 +56,15 @@ public class LoggerManager {
             log.info(message);
         }
     }
+
+    /**
+     * Logger the error message
+     *
+     * @param ex the exception
+     */
+    public void error(Throwable ex) {
+        if (log != null) {
+            log.error(ex);
+        }
+    }
 }

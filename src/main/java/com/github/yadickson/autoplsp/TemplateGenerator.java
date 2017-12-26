@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp;
 
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.io.File;
 
@@ -59,17 +60,21 @@ public class TemplateGenerator {
      * @param input Mapper information
      * @param templateFileName template freemarker file name
      * @param outputFileNamePath output filename
-     * @throws Exception If error
+     * @throws BusinessException If error
      */
-    protected void createTemplate(Map<String, Object> input, String templateFileName, String outputFileNamePath) throws Exception {
+    protected void createTemplate(Map<String, Object> input, String templateFileName, String outputFileNamePath) throws BusinessException {
 
         LoggerManager.getInstance().info("[TemplateGenerator] Create template: from " + templateFileName + " to " + outputFileNamePath);
 
-        Template template = getCfg().getTemplate(templateFileName);
-        Writer out = new FileWriter(outputFileNamePath);
-        template.process(input, out);
-        out.flush();
-        out.close();
+        try {
+            Template template = getCfg().getTemplate(templateFileName);
+            Writer out = new FileWriter(outputFileNamePath);
+            template.process(input, out);
+            out.flush();
+            out.close();
+        } catch (Exception ex) {
+            throw new BusinessException("", ex);
+        }
     }
 
     /**

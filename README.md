@@ -36,7 +36,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 - REF CURSOR (only output)
 - TYPE OBJECT (only input)
-- TYPE TABLE [NATIVO] (only input)
+- TYPE TABLE [NATIVE] (only input)
 - TYPE TABLE [TYPE OBJECT] (only input)
 
 

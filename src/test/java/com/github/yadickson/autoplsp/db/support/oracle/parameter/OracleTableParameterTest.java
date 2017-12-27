@@ -116,7 +116,7 @@ public class OracleTableParameterTest {
 
         new OracleTableParameter(1, "tableObject", Direction.Input, connection, "typeObject");
     }
-
+*/
     @Test
     public void testGetJavaTypeName() throws BusinessException {
         OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.Input, null, "type_value");
@@ -157,5 +157,5 @@ public class OracleTableParameterTest {
         OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.Input, null, "type_value");
         assertTrue(parameter.isArray());
     }
-*/
+
 }

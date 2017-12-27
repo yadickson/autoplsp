@@ -114,7 +114,7 @@ public class OracleObjectParameterTest {
 
         new OracleObjectParameter(1, "nameObject", Direction.Input, connection, "typeObject");
     }
-
+*/
     @Test
     public void testGetJavaTypeName() throws BusinessException {
         OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.Input, null, "type_value");
@@ -155,5 +155,5 @@ public class OracleObjectParameterTest {
         OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.Input, null, "type_value");
         assertFalse(parameter.isArray());
     }
-*/
+
 }

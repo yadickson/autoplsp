@@ -20,7 +20,7 @@ public class ResultSetCursorHandler implements ResultSetHandler<Object[]> {
     public Object[] handle(ResultSet rs) throws SQLException {
 
         if (!rs.next()) {
-            return null;
+            return new Object[0];
         }
 
         ResultSetMetaData meta = rs.getMetaData();

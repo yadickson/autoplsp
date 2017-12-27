@@ -133,23 +133,7 @@ public class OracleSPGenerator implements SPGenerator {
 
         boolean isFunction = procedure.isFunction();
 
-        String sql = "{call ";
-        if (isFunction) {
-            sql += "?:= ";
-        }
-
-        sql += procedure.getFullName();
-        sql += "(";
-
-        int args = isFunction ? parameters.size() - 1 : parameters.size();
-        List<String> argv = new ArrayList<String>();
-
-        for (int i = 0; i < args; i++) {
-            argv.add("?");
-        }
-
-        sql += StringUtils.join(argv, ",");
-        sql += ") }";
+        String sql = getProcedureSql(procedure, parameters);
 
         LoggerManager.getInstance().info(sql);
 
@@ -184,30 +168,7 @@ public class OracleSPGenerator implements SPGenerator {
                     throw new BusinessException("[OracleSPGenerator] ResultSet null");
                 }
 
-                ResultSetMetaData metadata = result.getMetaData();
-
-                List<Parameter> list = new ArrayList<Parameter>();
-                Set<String> pNames = new TreeSet<String>();
-
-                try {
-                    for (int j = 0; j < metadata.getColumnCount(); j++) {
-                        Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.OUTPUT, connection, null, null);
-
-                        if (pNames.contains(p.getName())) {
-                            throw new BusinessException("Parameter name [" + p.getName() + "] is duplicated");
-                        }
-
-                        LoggerManager.getInstance().info("Parameter (" + p.getPosition() + ") " + p.getName() + " [" + p.getSqlTypeName() + "]");
-                        pNames.add(p.getName());
-                        list.add(p);
-                    }
-                } catch (Exception ex) {
-                    throw new BusinessException("", ex);
-                } finally {
-                    result.close();
-                }
-
-                parameters.get(i).setParameters(list);
+                parameters.get(i).setParameters(getParameters(connection, result));
             }
 
         } catch (SQLException ex) {
@@ -220,4 +181,57 @@ public class OracleSPGenerator implements SPGenerator {
             }
         }
     }
+
+    private String getProcedureSql(Procedure procedure, List<Parameter> parameters) {
+        boolean isFunction = procedure.isFunction();
+
+        String sql = "{call ";
+        if (isFunction) {
+            sql += "?:= ";
+        }
+
+        sql += procedure.getFullName();
+        sql += "(";
+
+        int args = isFunction ? parameters.size() - 1 : parameters.size();
+        List<String> argv = new ArrayList<String>();
+
+        for (int i = 0; i < args; i++) {
+            argv.add("?");
+        }
+
+        sql += StringUtils.join(argv, ",");
+        sql += ") }";
+
+        return sql;
+    }
+
+    private List<Parameter> getParameters(Connection connection, ResultSet result) throws BusinessException, SQLException {
+
+        ResultSetMetaData metadata = result.getMetaData();
+
+        List<Parameter> list = new ArrayList<Parameter>();
+        Set<String> pNames = new TreeSet<String>();
+
+        try {
+            for (int j = 0; j < metadata.getColumnCount(); j++) {
+                Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.OUTPUT, connection, null, null);
+
+                if (pNames.contains(p.getName())) {
+                    throw new BusinessException("Parameter name [" + p.getName() + "] is duplicated");
+                }
+
+                LoggerManager.getInstance().info("Parameter (" + p.getPosition() + ") " + p.getName() + " [" + p.getSqlTypeName() + "]");
+                pNames.add(p.getName());
+                list.add(p);
+            }
+        } catch (Exception ex) {
+            throw new BusinessException("", ex);
+        } finally {
+            result.close();
+        }
+
+        return list;
+    }
+
 }

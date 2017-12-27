@@ -33,7 +33,7 @@ public class OracleRowIdParameterTest {
 
     @Before
     public void setup() {
-        parameter = new OracleRowIdParameter(0, null, Direction.Input);
+        parameter = new OracleRowIdParameter(0, null, Direction.INPUT);
     }
 
     @Test(expected = Exception.class)

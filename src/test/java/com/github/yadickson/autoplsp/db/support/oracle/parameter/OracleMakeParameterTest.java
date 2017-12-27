@@ -44,150 +44,150 @@ public class OracleMakeParameterTest {
 
     @Test(expected = Exception.class)
     public void testNullType() throws BusinessException {
-        maker.create(null, 0, null, Direction.Input, null, null, null);
+        maker.create(null, 0, null, Direction.INPUT, null, null, null);
     }
 
     @Test(expected = Exception.class)
     public void testUnknowType() throws BusinessException {
-        maker.create("xx", 0, null, Direction.Input, null, null, null);
+        maker.create("xx", 0, null, Direction.INPUT, null, null, null);
     }
 
     @Test
     public void testChar() throws BusinessException {
-        Parameter parameter = maker.create("char", 1, "charName", Direction.Input, null, null, null);
+        Parameter parameter = maker.create("char", 1, "charName", Direction.INPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof CharParameter);
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("charName", parameter.getName());
-        assertEquals(Direction.Input, parameter.getDirection());
+        assertEquals(Direction.INPUT, parameter.getDirection());
     }
 
     @Test
     public void testVarchar2() throws BusinessException {
-        Parameter parameter = maker.create("varchar2", 2, "vcName", Direction.Output, null, null, null);
+        Parameter parameter = maker.create("varchar2", 2, "vcName", Direction.OUTPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof CharParameter);
         assertEquals(new Integer(2), parameter.getPosition());
         assertEquals("vcName", parameter.getName());
-        assertEquals(Direction.Output, parameter.getDirection());
+        assertEquals(Direction.OUTPUT, parameter.getDirection());
     }
 
     @Test
     public void testNumber() throws BusinessException {
-        Parameter parameter = maker.create("number", 1, "numberName", Direction.Input, null, null, null);
+        Parameter parameter = maker.create("number", 1, "numberName", Direction.INPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof NumberParameter);
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("numberName", parameter.getName());
-        assertEquals(Direction.Input, parameter.getDirection());
+        assertEquals(Direction.INPUT, parameter.getDirection());
     }
 
     @Test
     public void testDecimal() throws BusinessException {
-        Parameter parameter = maker.create("decimal", 2, "decimalName", Direction.Output, null, null, null);
+        Parameter parameter = maker.create("decimal", 2, "decimalName", Direction.OUTPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof NumberParameter);
         assertEquals(new Integer(2), parameter.getPosition());
         assertEquals("decimalName", parameter.getName());
-        assertEquals(Direction.Output, parameter.getDirection());
+        assertEquals(Direction.OUTPUT, parameter.getDirection());
     }
 
     @Test
     public void testClob() throws BusinessException {
-        Parameter parameter = maker.create("clob", 1, "clobName", Direction.Input, null, null, null);
+        Parameter parameter = maker.create("clob", 1, "clobName", Direction.INPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof ClobParameter);
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("clobName", parameter.getName());
-        assertEquals(Direction.Input, parameter.getDirection());
+        assertEquals(Direction.INPUT, parameter.getDirection());
     }
 
     @Test
     public void testBlob() throws BusinessException {
-        Parameter parameter = maker.create("blob", 1, "blobName", Direction.Input, null, null, null);
+        Parameter parameter = maker.create("blob", 1, "blobName", Direction.INPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof BlobParameter);
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("blobName", parameter.getName());
-        assertEquals(Direction.Input, parameter.getDirection());
+        assertEquals(Direction.INPUT, parameter.getDirection());
     }
 
     @Test
     public void testDate() throws BusinessException {
-        Parameter parameter = maker.create("date", 1, "dateName", Direction.Input, null, null, null);
+        Parameter parameter = maker.create("date", 1, "dateName", Direction.INPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof DateParameter);
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("dateName", parameter.getName());
-        assertEquals(Direction.Input, parameter.getDirection());
+        assertEquals(Direction.INPUT, parameter.getDirection());
     }
 
     @Test
     public void testTimestamp() throws BusinessException {
-        Parameter parameter = maker.create("timestamp", 2, "tsName", Direction.Output, null, null, null);
+        Parameter parameter = maker.create("timestamp", 2, "tsName", Direction.OUTPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof DateParameter);
         assertEquals(new Integer(2), parameter.getPosition());
         assertEquals("tsName", parameter.getName());
-        assertEquals(Direction.Output, parameter.getDirection());
+        assertEquals(Direction.OUTPUT, parameter.getDirection());
     }
 
     @Test
     public void testRowId() throws BusinessException {
-        Parameter parameter = maker.create("rowid", 1, "rowName", Direction.Input, null, null, null);
+        Parameter parameter = maker.create("rowid", 1, "rowName", Direction.INPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleRowIdParameter);
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("rowName", parameter.getName());
-        assertEquals(Direction.Input, parameter.getDirection());
+        assertEquals(Direction.INPUT, parameter.getDirection());
     }
 
     @Test(expected = Exception.class)
     public void testRefCursorInputError() throws BusinessException {
-        maker.create("ref cursor", 1, "rcName", Direction.Input, null, null, null);
+        maker.create("ref cursor", 1, "rcName", Direction.INPUT, null, null, null);
     }
 
     @Test
     public void testRefCursor() throws BusinessException {
-        Parameter parameter = maker.create("ref cursor", 1, "rc_name", Direction.Output, null, null, new Procedure("package", "test"));
+        Parameter parameter = maker.create("ref cursor", 1, "rc_name", Direction.OUTPUT, null, null, new Procedure("package", "test"));
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleDataSetParameter);
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("rc_name", parameter.getName());
         assertEquals("rcName", parameter.getFieldName());
-        assertEquals(Direction.Output, parameter.getDirection());
+        assertEquals(Direction.OUTPUT, parameter.getDirection());
         assertEquals("PackageTestRcNameRS", parameter.getJavaTypeName());
     }
 
     @Test(expected = Exception.class)
     public void testObjectOutputError() throws BusinessException {
-        maker.create("object", 1, "objName", Direction.Output, null, null, null);
+        maker.create("object", 1, "objName", Direction.OUTPUT, null, null, null);
     }
 
     @Test
     public void testObject() throws BusinessException {
-        Parameter parameter = maker.create("object", 1, "objName", Direction.Input, null, null, null);
+        Parameter parameter = maker.create("object", 1, "objName", Direction.INPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleObjectParameter);
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("objName", parameter.getName());
-        assertEquals(Direction.Input, parameter.getDirection());
+        assertEquals(Direction.INPUT, parameter.getDirection());
         assertNotNull(parameter.getParameters());
     }
 
     @Test(expected = Exception.class)
     public void testTableOutputError() throws BusinessException {
-        maker.create("table", 1, "tName", Direction.Output, null, null, null);
+        maker.create("table", 1, "tName", Direction.OUTPUT, null, null, null);
     }
 
     @Test
     public void testTable() throws BusinessException {
-        Parameter parameter = maker.create("table", 1, "tName", Direction.Input, null, null, null);
+        Parameter parameter = maker.create("table", 1, "tName", Direction.INPUT, null, null, null);
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleTableParameter);
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("tName", parameter.getName());
-        assertEquals(Direction.Input, parameter.getDirection());
+        assertEquals(Direction.INPUT, parameter.getDirection());
         assertNotNull(parameter.getParameters());
     }
 }

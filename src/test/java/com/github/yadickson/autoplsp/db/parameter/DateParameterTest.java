@@ -33,7 +33,7 @@ public class DateParameterTest {
 
     @Before
     public void setup() {
-        parameter = new DateParameter(0, null, Direction.Input);
+        parameter = new DateParameter(0, null, Direction.INPUT);
     }
 
     @Test(expected = Exception.class)

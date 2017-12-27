@@ -133,7 +133,7 @@ public class OracleObjectParameter extends Parameter {
             Integer position = p.getPosition();
             String parameterName = p.getName();
 
-            Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, Direction.Input, connection, null, null);
+            Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, Direction.INPUT, connection, null, null);
             LoggerManager.getInstance().info("[OracleObjectParameter] (" + param.getPosition() + ") " + param.getName() + " [" + param.getSqlTypeName() + "]");
             parameters.add(param);
         }

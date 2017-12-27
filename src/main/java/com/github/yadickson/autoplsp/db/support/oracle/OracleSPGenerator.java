@@ -198,7 +198,7 @@ public class OracleSPGenerator implements SPGenerator {
 
                 try {
                     for (int j = 0; j < metadata.getColumnCount(); j++) {
-                        Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.Output, connection, null, null);
+                        Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.OUTPUT, connection, null, null);
 
                         if (pNames.contains(p.getName())) {
                             throw new BusinessException("Parameter name [" + p.getName() + "] is duplicated");

@@ -33,7 +33,7 @@ public class BlobParameterTest {
 
     @Before
     public void setup() {
-        parameter = new BlobParameter(0, null, Direction.Input);
+        parameter = new BlobParameter(0, null, Direction.INPUT);
     }
 
     @Test(expected = Exception.class)

@@ -23,16 +23,8 @@ package com.github.yadickson.autoplsp.db.common;
  */
 public enum Direction {
 
-    /**
-     * Input parameter
-     */
-    Input,
-    /**
-     * Output parameter
-     */
-    Output,
-    /**
-     * Dual
-     */
-    InputOutput
+    INPUT,
+    OUTPUT,
+    INPUT_OUTPUT
+
 }

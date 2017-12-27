@@ -39,15 +39,15 @@ public class MakeDirection {
         }
 
         if (value.equalsIgnoreCase("IN")) {
-            return Direction.Input;
+            return Direction.INPUT;
         }
 
         if (value.equalsIgnoreCase("OUT")) {
-            return Direction.Output;
+            return Direction.OUTPUT;
         }
 
         if (value.equalsIgnoreCase("IN/OUT")) {
-            return Direction.InputOutput;
+            return Direction.INPUT_OUTPUT;
         }
 
         throw new BusinessException("Direction [" + value + "] not implement");

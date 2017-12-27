@@ -53,7 +53,7 @@ public class OracleMakeParameter extends MakeParameter {
             return new OracleRowIdParameter(position, name, direction);
         }
         if (type.equalsIgnoreCase("REF CURSOR")) {
-            if (direction != Direction.Output) {
+            if (direction != Direction.OUTPUT) {
                 throw new BusinessException("Input REF CURSOR not supported");
             }
 
@@ -61,7 +61,7 @@ public class OracleMakeParameter extends MakeParameter {
         }
 
         if (type.equalsIgnoreCase("OBJECT")) {
-            if (direction != Direction.Input) {
+            if (direction != Direction.INPUT) {
                 throw new BusinessException("Output OBJECT not supported");
             }
 
@@ -69,7 +69,7 @@ public class OracleMakeParameter extends MakeParameter {
         }
 
         if (type.equalsIgnoreCase("TABLE")) {
-            if (direction != Direction.Input) {
+            if (direction != Direction.INPUT) {
                 throw new BusinessException("Output TABLE not supported");
             }
 

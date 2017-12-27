@@ -33,7 +33,7 @@ public class CharParameterTest {
 
     @Before
     public void setup() {
-        parameter = new CharParameter(0, null, Direction.Input);
+        parameter = new CharParameter(0, null, Direction.INPUT);
     }
 
     @Test(expected = Exception.class)

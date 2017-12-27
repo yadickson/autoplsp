@@ -33,7 +33,7 @@ public class NumberParameterTest {
 
     @Before
     public void setup() {
-        parameter = new NumberParameter(0, null, Direction.Input);
+        parameter = new NumberParameter(0, null, Direction.INPUT);
     }
 
     @Test(expected = Exception.class)

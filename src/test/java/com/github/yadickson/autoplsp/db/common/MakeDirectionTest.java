@@ -42,19 +42,19 @@ public class MakeDirectionTest {
     @Test
     public void testInputDirection() throws BusinessException {
         Direction d = direction.getDirection("In");
-        assertEquals(Direction.Input, d);
+        assertEquals(Direction.INPUT, d);
     }
 
     @Test
     public void testOutputDirection() throws BusinessException {
         Direction d = direction.getDirection("oUt");
-        assertEquals(Direction.Output, d);
+        assertEquals(Direction.OUTPUT, d);
     }
 
     @Test
     public void testInputOutputDirection() throws BusinessException {
         Direction d = direction.getDirection("IN/OUT");
-        assertEquals(Direction.InputOutput, d);
+        assertEquals(Direction.INPUT_OUTPUT, d);
     }
 
     @Test(expected = Exception.class)

@@ -115,7 +115,7 @@ public abstract class Parameter {
      * @return true if direction is input
      */
     public boolean isInput() {
-        return this.direction == Direction.Input || this.direction == Direction.InputOutput;
+        return this.direction == Direction.INPUT || this.direction == Direction.INPUT_OUTPUT;
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class Parameter {
      * @return true if direction is output
      */
     public boolean isOutput() {
-        return this.direction == Direction.Output || this.direction == Direction.InputOutput;
+        return this.direction == Direction.OUTPUT || this.direction == Direction.INPUT_OUTPUT;
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class Parameter {
      * @return true if direction is input
      */
     public boolean isInputOutput() {
-        return this.direction == Direction.InputOutput;
+        return this.direction == Direction.INPUT_OUTPUT;
     }
 
     /**

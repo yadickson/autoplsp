@@ -133,7 +133,7 @@ public class OracleTableParameter extends Parameter {
             String parameterName = p.getName();
 
             LoggerManager.getInstance().info("[OracleArrayParameter] type: " + dataType + " name: " + parameterName);
-            parameters.add(new OracleMakeParameter().create(dataType, 0, "Value", Direction.Input, connection, parameterName, null));
+            parameters.add(new OracleMakeParameter().create(dataType, 0, "Value", Direction.INPUT, connection, parameterName, null));
         }
     }
 }

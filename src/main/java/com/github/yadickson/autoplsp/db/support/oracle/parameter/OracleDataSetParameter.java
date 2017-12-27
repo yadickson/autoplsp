@@ -40,7 +40,7 @@ public class OracleDataSetParameter extends DataSetParameter {
      * @param className The procedure class name
      */
     public OracleDataSetParameter(int position, String name, String className) {
-        super(position, name, Direction.Output);
+        super(position, name, Direction.OUTPUT);
         this.className = className;
     }
 

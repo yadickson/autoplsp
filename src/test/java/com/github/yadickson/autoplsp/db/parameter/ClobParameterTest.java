@@ -33,7 +33,7 @@ public class ClobParameterTest {
 
     @Before
     public void setup() {
-        parameter = new ClobParameter(0, null, Direction.Input);
+        parameter = new ClobParameter(0, null, Direction.INPUT);
     }
 
     @Test(expected = Exception.class)

@@ -19,6 +19,7 @@ package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.sql.Connection;
@@ -125,7 +126,7 @@ public class OracleTableParameter extends Parameter {
 
         String sql = "select (CASE WHEN ELEM_TYPE_OWNER IS NOT NULL THEN 'OBJECT' ELSE ELEM_TYPE_NAME END) AS DTYPE, ELEM_TYPE_NAME AS NAME from SYS.ALL_COLL_TYPES WHERE OWNER=USER and TYPE_NAME = ?";
 
-        List<ParameterBean> list = OracleComplexParameter.getParameters(connection, sql, typeName);
+        List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, typeName);
 
         for (ParameterBean p : list) {
 

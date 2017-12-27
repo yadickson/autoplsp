@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.yadickson.autoplsp.db.support.oracle.parameter;
+package com.github.yadickson.autoplsp.db.util;
 
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.handler.BusinessException;
@@ -20,15 +20,16 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
  *
  * @author Yadickson Soto
  */
-public class OracleComplexParameter {
+public class FindParameterImpl implements FindParameter {
 
-    public static List<ParameterBean> getParameters(Connection connection, String sql, String typeName) throws BusinessException {
+    @Override
+    public List<ParameterBean> getParameters(Connection connection, String sql, String typeName) throws BusinessException {
 
         if (connection == null) {
             return new ArrayList<ParameterBean>();
         }
 
-        LoggerManager.getInstance().info("[OracleComplexParameter] Create object parameter " + typeName);
+        LoggerManager.getInstance().info("[FindParameterImpl] Create object parameter " + typeName);
 
         List<ParameterBean> list = null;
 
@@ -38,7 +39,7 @@ public class OracleComplexParameter {
         try {
             list = run.query(connection, sql, h, typeName);
         } catch (SQLException ex) {
-            throw new BusinessException("[OracleComplexParameter] Error find attributes from type " + typeName, ex);
+            throw new BusinessException("[FindParameterImpl] Error find attributes from type " + typeName, ex);
         }
 
         return list;

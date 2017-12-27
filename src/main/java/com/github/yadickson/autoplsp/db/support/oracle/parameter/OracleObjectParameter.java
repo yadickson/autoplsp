@@ -19,6 +19,7 @@ package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.sql.Connection;
@@ -125,7 +126,7 @@ public class OracleObjectParameter extends Parameter {
 
         String sql = "SELECT ATTR_NAME as name, ATTR_TYPE_NAME as dtype, ATTR_NO as position from SYS.ALL_TYPE_ATTRS WHERE OWNER=USER AND TYPE_NAME = ? ORDER BY ATTR_NO";
 
-        List<ParameterBean> list = OracleComplexParameter.getParameters(connection, sql, typeName);
+        List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, typeName);
 
         for (ParameterBean p : list) {
 

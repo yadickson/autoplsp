@@ -39,6 +39,19 @@ public class JavaGenerator extends TemplateGenerator {
     private final String outParameterCode;
     private final String outParameterMessage;
 
+    private static final String PROCEDURE_NAME = "proc";
+    private static final String PARAMETER_NAME = "parameter";
+    private static final String JAVA_PACKAGE_NAME = "javaPackage";
+    private static final String DATA_SOURCE_NAME = "dataSource";
+    private static final String JDBC_TEMPLATE_NAME = "jdbcTemplate";
+    private static final String OUT_CODE_NAME = "outParameterCode";
+    private static final String OUT_MESSAGE_NAME = "outParameterMessage";
+    private static final String EXT_FILE = ".java";
+
+    private static final String SOURCE_GENERATOR_PATH = File.separatorChar + "autosp-generator" + File.separatorChar;
+    private static final String REPOSITORY_PATH = File.separatorChar + "repository" + File.separatorChar;
+    private static final String DOMAIN_PATH = File.separatorChar + "domain" + File.separatorChar;
+
     /**
      * Class constructor
      *
@@ -68,7 +81,8 @@ public class JavaGenerator extends TemplateGenerator {
      * Java classes generator from template
      *
      * @param procedures The procedures to generate
-     * @throws BusinessException Launch if the generation process throws an error
+     * @throws BusinessException Launch if the generation process throws an
+     * error
      */
     public void process(List<Procedure> procedures) throws BusinessException {
         LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedures.size() + " procedures");
@@ -90,33 +104,33 @@ public class JavaGenerator extends TemplateGenerator {
     private void processStoredProcedure(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put("proc", procedure);
-        input.put("javaPackage", javaPackage);
+        input.put(PROCEDURE_NAME, procedure);
+        input.put(JAVA_PACKAGE_NAME, javaPackage);
 
-        createTemplate(input, "/repository/Procedure.ftl", getFileNamePath(getRepositoryOutputPath("sp"), procedure, "SP"));
+        createTemplate(input, REPOSITORY_PATH + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath("sp"), procedure, "SP"));
     }
 
     private void processStoredProcedureService(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put("proc", procedure);
-        input.put("javaPackage", javaPackage);
-        input.put("dataSource", dataSource);
-        input.put("jdbcTemplate", jdbcTemplate);
-        input.put("outParameterCode", outParameterCode);
-        input.put("outParameterMessage", outParameterMessage);
+        input.put(PROCEDURE_NAME, procedure);
+        input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DATA_SOURCE_NAME, dataSource);
+        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
+        input.put(OUT_CODE_NAME, outParameterCode);
+        input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
         String procedurePath = getRepositoryOutputPath("");
 
-        createTemplate(input, "/repository/DAO.ftl", getFileNamePath(procedurePath, procedure, "DAO"));
-        createTemplate(input, "/repository/DAOImpl.ftl", getFileNamePath(procedurePath, procedure, "DAOImpl"));
+        createTemplate(input, REPOSITORY_PATH + "DAO.ftl", getFileNamePath(procedurePath, procedure, "DAO"));
+        createTemplate(input, REPOSITORY_PATH + "DAOImpl.ftl", getFileNamePath(procedurePath, procedure, "DAOImpl"));
     }
 
     private void processStoredProcedureParameter(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put("proc", procedure);
-        input.put("javaPackage", javaPackage);
+        input.put(PROCEDURE_NAME, procedure);
+        input.put(JAVA_PACKAGE_NAME, javaPackage);
 
         if (!procedure.getHasInput() && !procedure.getHasOutput()) {
             return;
@@ -125,19 +139,19 @@ public class JavaGenerator extends TemplateGenerator {
         String parameterPath = getDomainOutputPath("");
 
         if (procedure.getHasInput()) {
-            createTemplate(input, "/domain/IN.ftl", getFileNamePath(parameterPath, procedure, "IN"));
+            createTemplate(input, DOMAIN_PATH + "IN.ftl", getFileNamePath(parameterPath, procedure, "IN"));
         }
 
         if (procedure.getHasOutput()) {
-            createTemplate(input, "/domain/OUT.ftl", getFileNamePath(parameterPath, procedure, "OUT"));
+            createTemplate(input, DOMAIN_PATH + "OUT.ftl", getFileNamePath(parameterPath, procedure, "OUT"));
         }
     }
 
     private void processStoredProcedureParameterRS(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put("proc", procedure);
-        input.put("javaPackage", javaPackage);
+        input.put(PROCEDURE_NAME, procedure);
+        input.put(JAVA_PACKAGE_NAME, javaPackage);
 
         if (!procedure.getHasResultSet()) {
             return;
@@ -147,8 +161,8 @@ public class JavaGenerator extends TemplateGenerator {
 
         for (Parameter param : procedure.getParameters()) {
             if (param.isOutput() && param.isResultSet()) {
-                input.put("parameter", param);
-                createTemplate(input, "/domain/DataSet.ftl", getFileNamePath(parameterPath, procedure, param, "RS"));
+                input.put(PARAMETER_NAME, param);
+                createTemplate(input, DOMAIN_PATH + "DataSet.ftl", getFileNamePath(parameterPath, procedure, param, "RS"));
             }
         }
     }
@@ -156,8 +170,8 @@ public class JavaGenerator extends TemplateGenerator {
     private void processStoredProcedureMapperRS(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put("proc", procedure);
-        input.put("javaPackage", javaPackage);
+        input.put(PROCEDURE_NAME, procedure);
+        input.put(JAVA_PACKAGE_NAME, javaPackage);
 
         if (!procedure.getHasResultSet()) {
             return;
@@ -167,8 +181,8 @@ public class JavaGenerator extends TemplateGenerator {
 
         for (Parameter param : procedure.getParameters()) {
             if (param.isOutput() && param.isResultSet()) {
-                input.put("parameter", param);
-                createTemplate(input, "/repository/Mapper.ftl", getFileNamePath(parameterPath, procedure, param, "RSRowMapper"));
+                input.put(PARAMETER_NAME, param);
+                createTemplate(input, REPOSITORY_PATH + "Mapper.ftl", getFileNamePath(parameterPath, procedure, param, "RSRowMapper"));
             }
         }
     }
@@ -176,8 +190,8 @@ public class JavaGenerator extends TemplateGenerator {
     private void processStoredProcedureParameterObject(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put("proc", procedure);
-        input.put("javaPackage", javaPackage);
+        input.put(PROCEDURE_NAME, procedure);
+        input.put(JAVA_PACKAGE_NAME, javaPackage);
 
         if (!procedure.getHasObject()) {
             return;
@@ -187,8 +201,8 @@ public class JavaGenerator extends TemplateGenerator {
 
         for (Parameter param : procedure.getParameters()) {
             if (param.isObject()) {
-                input.put("parameter", param);
-                createTemplate(input, "/domain/Object.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
+                input.put(PARAMETER_NAME, param);
+                createTemplate(input, DOMAIN_PATH + "Object.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
             }
         }
     }
@@ -196,8 +210,8 @@ public class JavaGenerator extends TemplateGenerator {
     private void processStoredProcedureParameterArray(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put("proc", procedure);
-        input.put("javaPackage", javaPackage);
+        input.put(PROCEDURE_NAME, procedure);
+        input.put(JAVA_PACKAGE_NAME, javaPackage);
 
         if (!procedure.getHasArray()) {
             return;
@@ -207,13 +221,13 @@ public class JavaGenerator extends TemplateGenerator {
 
         for (Parameter param : procedure.getParameters()) {
             if (param.isArray()) {
-                input.put("parameter", param);
-                createTemplate(input, "/domain/Table.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
+                input.put(PARAMETER_NAME, param);
+                createTemplate(input, DOMAIN_PATH + "Table.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
 
                 for (Parameter p : param.getParameters()) {
                     if (p.isObject()) {
-                        input.put("parameter", p);
-                        createTemplate(input, "/domain/Object.ftl", getFileNameObjectPath(parameterPath, p.getJavaTypeName()));
+                        input.put(PARAMETER_NAME, p);
+                        createTemplate(input, DOMAIN_PATH + "Object.ftl", getFileNameObjectPath(parameterPath, p.getJavaTypeName()));
                     }
                 }
             }
@@ -222,32 +236,33 @@ public class JavaGenerator extends TemplateGenerator {
 
     /**
      * Get output directory path
+     *
      * @param path path
      * @return full directory path
      */
     @Override
     protected String getOutputPath(String path) {
-        return super.getOutputPath(File.separatorChar + "autosp-generator" + File.separatorChar + getDirectoryPackage() + File.separatorChar + path);
+        return super.getOutputPath(SOURCE_GENERATOR_PATH + getDirectoryPackage() + File.separatorChar + path);
     }
 
     private String getRepositoryOutputPath(String path) {
-        return this.getOutputPath(File.separatorChar + "repository" + File.separatorChar + path);
+        return this.getOutputPath(REPOSITORY_PATH + path);
     }
 
     private String getDomainOutputPath(String path) {
-        return this.getOutputPath(File.separatorChar + "domain" + File.separatorChar + path);
+        return this.getOutputPath(DOMAIN_PATH + path);
     }
 
     private String getFileNameObjectPath(String path, String name) {
-        return path + File.separatorChar + name + ".java";
+        return path + File.separatorChar + name + EXT_FILE;
     }
 
     private String getFileNamePath(String path, Procedure procedure, String type) {
-        return path + File.separatorChar + procedure.getClassName() + type + ".java";
+        return path + File.separatorChar + procedure.getClassName() + type + EXT_FILE;
     }
 
     private String getFileNamePath(String path, Procedure procedure, Parameter param, String type) {
-        return path + File.separatorChar + procedure.getClassName() + param.getPropertyName() + type + ".java";
+        return path + File.separatorChar + procedure.getClassName() + param.getPropertyName() + type + EXT_FILE;
     }
 
     private String getDirectoryPackage() {

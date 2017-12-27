@@ -35,7 +35,6 @@ import java.util.TreeSet;
 import org.apache.commons.lang.StringUtils;
 import com.github.yadickson.autoplsp.db.MakeDirection;
 import com.github.yadickson.autoplsp.db.common.Function;
-import com.github.yadickson.autoplsp.db.util.FindProcedure;
 import com.github.yadickson.autoplsp.db.util.FindProcedureImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.sql.SQLException;

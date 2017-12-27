@@ -27,6 +27,10 @@ import java.util.regex.Pattern;
  */
 public class SPGeneratorFactory {
 
+    private SPGeneratorFactory() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Create SP generator from driver class name
      *

@@ -25,6 +25,10 @@ import org.apache.commons.lang.WordUtils;
  */
 public class CapitalizeUtil {
 
+    private CapitalizeUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Process string to capitalize
      *

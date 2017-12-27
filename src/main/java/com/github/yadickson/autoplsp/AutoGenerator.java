@@ -276,16 +276,11 @@ public class AutoGenerator extends AbstractMojo {
 
                 boolean match = patternI.matcher(name).matches() && !patternE.matcher(name).matches();
 
-                try {
-                    if (match) {
-                        LoggerManager.getInstance().info("[AutoGenerator] Process store procedure name: " + procedure.getFullName());
-                        generator.fillProcedure(connection, procedure);
-                        spList.add(procedure);
-                        LoggerManager.getInstance().info("[AutoGenerator] Process procedure success");
-                    }
-                } catch (Exception ex) {
-                    LoggerManager.getInstance().info("[AutoGenerator] Stop process procedure name: " + procedure.getFullName());
-                    throw ex;
+                if (match) {
+                    LoggerManager.getInstance().info("[AutoGenerator] Process store procedure name: " + procedure.getFullName());
+                    generator.fillProcedure(connection, procedure);
+                    spList.add(procedure);
+                    LoggerManager.getInstance().info("[AutoGenerator] Process procedure success");
                 }
             }
 

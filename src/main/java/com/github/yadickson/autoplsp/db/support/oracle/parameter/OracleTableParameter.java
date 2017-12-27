@@ -16,7 +16,7 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
-import com.github.yadickson.autoplsp.bean.ParameterBean;
+import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
@@ -25,10 +25,6 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
-import java.sql.SQLException;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 /**
  * Oracle Table (Array) parameter class
@@ -37,7 +33,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
  */
 public class OracleTableParameter extends Parameter {
 
-    private List<Parameter> parameters;
+    private final List<Parameter> parameters = new ArrayList<Parameter>();
     private final String objectName;
 
     /**
@@ -127,26 +123,9 @@ public class OracleTableParameter extends Parameter {
 
     private void addParameters(Connection connection, String typeName) throws BusinessException {
 
-        if (connection == null) {
-            return;
-        }
-
-        LoggerManager.getInstance().info("[OracleArrayParameter] Create object parameter " + typeName);
-
-        List<ParameterBean> list = null;
-
-        QueryRunner run = new QueryRunner();
-        ResultSetHandler<List<ParameterBean>> h = new BeanListHandler<ParameterBean>(ParameterBean.class);
-
         String sql = "select (CASE WHEN ELEM_TYPE_OWNER IS NOT NULL THEN 'OBJECT' ELSE ELEM_TYPE_NAME END) AS DTYPE, ELEM_TYPE_NAME AS NAME from SYS.ALL_COLL_TYPES WHERE OWNER=USER and TYPE_NAME = ?";
 
-        try {
-            list = run.query(connection, sql, h, typeName);
-        } catch (SQLException ex) {
-            throw new BusinessException("[OracleTableParameter] Error find attributes from type " + typeName, ex);
-        }
-
-        parameters = new ArrayList<Parameter>();
+        List<ParameterBean> list = OracleComplexParameter.getParameters(connection, sql, typeName);
 
         for (ParameterBean p : list) {
 

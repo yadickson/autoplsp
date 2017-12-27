@@ -172,7 +172,7 @@ public class OracleMakeParameterTest {
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("objName", parameter.getName());
         assertEquals(Direction.Input, parameter.getDirection());
-        assertNull(parameter.getParameters());
+        assertNotNull(parameter.getParameters());
     }
 
     @Test(expected = Exception.class)
@@ -188,6 +188,6 @@ public class OracleMakeParameterTest {
         assertEquals(new Integer(1), parameter.getPosition());
         assertEquals("tName", parameter.getName());
         assertEquals(Direction.Input, parameter.getDirection());
-        assertNull(parameter.getParameters());
+        assertNotNull(parameter.getParameters());
     }
 }

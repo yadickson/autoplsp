@@ -16,8 +16,8 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle;
 
-import com.github.yadickson.autoplsp.bean.ParameterBean;
-import com.github.yadickson.autoplsp.bean.ProcedureBean;
+import com.github.yadickson.autoplsp.db.bean.ParameterBean;
+import com.github.yadickson.autoplsp.db.bean.ProcedureBean;
 import com.github.yadickson.autoplsp.db.support.oracle.parameter.OracleMakeParameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.common.Parameter;

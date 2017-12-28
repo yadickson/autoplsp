@@ -125,7 +125,6 @@ public class OracleObjectParameter extends Parameter {
     private void addParameters(Connection connection, String typeName) throws BusinessException {
 
         String sql = "SELECT ATTR_NAME as name, ATTR_TYPE_NAME as dtype, ATTR_NO as position from SYS.ALL_TYPE_ATTRS WHERE OWNER=USER AND TYPE_NAME = ? ORDER BY ATTR_NO";
-
         List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, typeName);
 
         for (ParameterBean p : list) {

@@ -35,14 +35,12 @@ import java.util.TreeSet;
 import org.apache.commons.lang.StringUtils;
 import com.github.yadickson.autoplsp.db.MakeDirection;
 import com.github.yadickson.autoplsp.db.common.Function;
+import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.db.util.FindProcedureImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 /**
  * Oracle Store procedure and function generator class
@@ -65,7 +63,6 @@ public class OracleSPGenerator implements SPGenerator {
         List<Procedure> list = new ArrayList<Procedure>();
 
         String sql = "SELECT OBJECT_NAME as PKG, PROCEDURE_NAME as NAME, case when (SELECT count(position) as type FROM all_arguments WHERE OWNER=USER AND object_name = allp.PROCEDURE_NAME AND package_name = allp.OBJECT_NAME and position = 0) = 0 then 'PROCEDURE' else 'FUNCTION' end as type FROM SYS.ALL_PROCEDURES allp WHERE OWNER=USER and OBJECT_TYPE ='PACKAGE' and PROCEDURE_NAME is not null union SELECT null as PKG, OBJECT_NAME AS NAME, OBJECT_TYPE as TYPE FROM SYS.ALL_PROCEDURES WHERE OWNER=USER and (OBJECT_TYPE = 'FUNCTION' or OBJECT_TYPE='PROCEDURE')";
-
         List<ProcedureBean> procedures = new FindProcedureImpl().getProcedures(connection, sql);
 
         for (ProcedureBean p : procedures) {
@@ -91,18 +88,9 @@ public class OracleSPGenerator implements SPGenerator {
         LoggerManager.getInstance().info("[OracleSPGenerator] Create store procedure " + procedure.getFullName());
 
         Map<Integer, Parameter> mparameters = new TreeMap<Integer, Parameter>();
-        List<ParameterBean> parameters = null;
-
-        QueryRunner run = new QueryRunner();
-        ResultSetHandler<List<ParameterBean>> h = new BeanListHandler<ParameterBean>(ParameterBean.class);
 
         String sql = "SELECT argument_name as name, position, in_out as direction, data_type as dtype, type_name as ntype FROM all_arguments WHERE OWNER=USER AND object_name = ? AND (? is null OR package_name = ?) order by position asc, argument_name asc nulls first";
-
-        try {
-            parameters = run.query(connection, sql, h, procedure.getName(), procedure.getPackageName(), procedure.getPackageName());
-        } catch (SQLException ex) {
-            throw new BusinessException("[OracleSPGenerator] Error find parameter from procedure " + procedure.getFullName(), ex);
-        }
+        List<ParameterBean> parameters = new FindParameterImpl().getParameters(connection, sql, procedure.getName(), procedure.getPackageName(), procedure.getPackageName());
 
         for (ParameterBean p : parameters) {
 

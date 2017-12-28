@@ -7,7 +7,6 @@ package com.github.yadickson.autoplsp.db.util;
 
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.handler.BusinessException;
-import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,13 +22,11 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 public class FindParameterImpl implements FindParameter {
 
     @Override
-    public List<ParameterBean> getParameters(Connection connection, String sql, String typeName) throws BusinessException {
+    public List<ParameterBean> getParameters(Connection connection, String sql, Object ... parameters) throws BusinessException {
 
         if (connection == null) {
             return new ArrayList<ParameterBean>();
         }
-
-        LoggerManager.getInstance().info("[FindParameterImpl] Create object parameter " + typeName);
 
         List<ParameterBean> list = null;
 
@@ -37,9 +34,9 @@ public class FindParameterImpl implements FindParameter {
         ResultSetHandler<List<ParameterBean>> h = new BeanListHandler<ParameterBean>(ParameterBean.class);
 
         try {
-            list = run.query(connection, sql, h, typeName);
+            list = run.query(connection, sql, h, parameters);
         } catch (SQLException ex) {
-            throw new BusinessException("[FindParameterImpl] Error find attributes from type " + typeName, ex);
+            throw new BusinessException("[FindParameterImpl] Error find attributes", ex);
         }
 
         return list;

@@ -4,6 +4,7 @@
 [![Quality Gate][sonar-status-image]][sonar-url]
 [![Codecov Status][codecov-image]][codecov-url]
 [![Dependency Status][versioneye-image]][versioneye-url]
+[![Central OSSRH][oss-nexus-image]][oss-nexus-url]
 [![Central Maven][central-image]][central-url]
 
 

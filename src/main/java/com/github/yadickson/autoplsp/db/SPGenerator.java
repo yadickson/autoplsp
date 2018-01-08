@@ -26,7 +26,27 @@ import java.util.List;
  *
  * @author Yadickson Soto
  */
-public interface SPGenerator {
+public abstract class SPGenerator {
+
+    private final String name;
+
+    /**
+     * Class constructor
+     *
+     * @param name sp generator name
+     */
+    public SPGenerator(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Get generator name
+     *
+     * @return procedure list
+     */
+    public String getName() {
+        return name;
+    }
 
     /**
      * Find all procedure from database
@@ -35,7 +55,7 @@ public interface SPGenerator {
      * @return procedure list
      * @throws BusinessException If error
      */
-    List<Procedure> findProcedures(Connection connection) throws BusinessException;
+    public abstract List<Procedure> findProcedures(Connection connection) throws BusinessException;
 
     /**
      * Fill parameters of procedure from database
@@ -44,5 +64,5 @@ public interface SPGenerator {
      * @param procedure procedure
      * @throws BusinessException If error
      */
-    void fillProcedure(Connection connection, Procedure procedure) throws BusinessException;
+    public abstract void fillProcedure(Connection connection, Procedure procedure) throws BusinessException;
 }

@@ -76,10 +76,17 @@ public class ${parameter.javaTypeName} implements java.io.Serializable {
      * @return object
      * @throws Exception
      */
-    @SuppressWarnings("deprecation")
     public Object getObject(java.sql.Connection connection) throws Exception {
+<#if driverName == 'oracle' >
+<#if driverVersion == '11' >
         oracle.sql.StructDescriptor descriptor = oracle.sql.StructDescriptor.createDescriptor("${parameter.realObjectName}", connection);
         return new oracle.sql.STRUCT(descriptor, connection, new Object[]{<#list parameter.parameters as parameter>get${parameter.propertyName}()<#sep>, </#sep></#list>});
+<#else>
+        return connection.createStruct("${parameter.realObjectName}", input);
+</#if>
+<#else>
+        return throw new Exception("driver ${driverName} not supported");
+</#if>
     }
 
     /**

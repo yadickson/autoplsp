@@ -47,7 +47,16 @@ import java.util.TreeMap;
  *
  * @author Yadickson Soto
  */
-public class OracleSPGenerator implements SPGenerator {
+public class OracleSPGenerator extends SPGenerator {
+
+    /**
+     * Class constructor
+     *
+     * @param name sp generator
+     */
+    public OracleSPGenerator(String name) {
+        super(name);
+    }
 
     /**
      * Find all procedure from database

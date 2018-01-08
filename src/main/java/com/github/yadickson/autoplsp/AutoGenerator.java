@@ -286,7 +286,7 @@ public class AutoGenerator extends AbstractMojo {
 
             JavaGenerator template = new JavaGenerator(outputDirectory.getPath(),
                     javaPackageName, javaDataSourceName, javaJdbcTemplateName,
-                    outParameterCode, outParameterMessage);
+                    outParameterCode, outParameterMessage, generator.getName(), connManager.getVersion());
 
             template.process(spList);
 

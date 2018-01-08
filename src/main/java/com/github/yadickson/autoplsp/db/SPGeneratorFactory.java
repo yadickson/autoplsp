@@ -43,7 +43,7 @@ public class SPGeneratorFactory {
         Pattern oraclePattern = Pattern.compile(".*Oracle.*", Pattern.CASE_INSENSITIVE);
 
         if (oraclePattern.matcher(driver).matches()) {
-            return new OracleSPGenerator();
+            return new OracleSPGenerator("oracle");
         }
 
         throw new BusinessException("Driver [" + driver + "] not supported");

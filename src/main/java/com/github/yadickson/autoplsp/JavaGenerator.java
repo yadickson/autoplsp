@@ -38,6 +38,8 @@ public class JavaGenerator extends TemplateGenerator {
     private final String jdbcTemplate;
     private final String outParameterCode;
     private final String outParameterMessage;
+    private final String driverName;
+    private final String driverVersion;
 
     private static final String PROCEDURE_NAME = "proc";
     private static final String PARAMETER_NAME = "parameter";
@@ -52,6 +54,9 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String REPOSITORY_PATH = File.separatorChar + "repository" + File.separatorChar;
     private static final String DOMAIN_PATH = File.separatorChar + "domain" + File.separatorChar;
 
+    private static final String DRIVER_NAME = "driverName";
+    private static final String DRIVER_VERSION = "driverVersion";
+
     /**
      * Class constructor
      *
@@ -61,13 +66,17 @@ public class JavaGenerator extends TemplateGenerator {
      * @param jdbcTemplate JdbcTemplate name
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
+     * @param driverName driver name
+     * @param driverVersion driver version
      */
     public JavaGenerator(String outputDir,
             String packageName,
             String dataSource,
             String jdbcTemplate,
             String outParameterCode,
-            String outParameterMessage) {
+            String outParameterMessage,
+            String driverName,
+            String driverVersion) {
 
         super(outputDir);
         this.javaPackage = packageName;
@@ -75,6 +84,8 @@ public class JavaGenerator extends TemplateGenerator {
         this.jdbcTemplate = jdbcTemplate;
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
+        this.driverName = driverName;
+        this.driverVersion = driverVersion;
     }
 
     /**
@@ -192,6 +203,8 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DRIVER_NAME, driverName);
+        input.put(DRIVER_VERSION, driverVersion);
 
         if (!procedure.getHasObject()) {
             return;
@@ -212,6 +225,8 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DRIVER_NAME, driverName);
+        input.put(DRIVER_VERSION, driverVersion);
 
         if (!procedure.getHasArray()) {
             return;

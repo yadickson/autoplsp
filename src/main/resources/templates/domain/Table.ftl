@@ -33,7 +33,6 @@ public class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.p
      * @return object
      * @throws Exception
      */
-    @SuppressWarnings("deprecation")
     public Object getObject(java.sql.Connection connection) throws Exception {
 
         Object[] input = new Object[size()];
@@ -48,7 +47,15 @@ public class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.p
             </#if>
         }
 
+<#if driverName == 'oracle' >
+<#if driverVersion == '11' >
         return ((oracle.jdbc.OracleConnection)(connection)).createARRAY("${parameter.realObjectName}", input);
+<#else>
+        return ((oracle.jdbc.OracleConnection)(connection)).createOracleArray("${parameter.realObjectName}", input);
+</#if>
+<#else>
+        return throw new Exception("driver ${driverName} not supported");
+</#if>
     }
 
     /**

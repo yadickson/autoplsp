@@ -36,6 +36,9 @@ public class DriverConnection {
     private final String user;
     private Connection connection;
 
+    private String name;
+    private String version;
+
     /**
      * Class constructor
      *
@@ -74,6 +77,12 @@ public class DriverConnection {
                     this.user,
                     this.pass);
 
+            name = connection.getMetaData().getDriverName();
+            version = "" + connection.getMetaData().getDriverMajorVersion();
+
+            LoggerManager.getInstance().info("Driver Name: " + name);
+            LoggerManager.getInstance().info("Driver Version: " + connection.getMetaData().getDriverVersion());
+
             return connection;
 
         } catch (SQLException ex) {
@@ -93,5 +102,13 @@ public class DriverConnection {
         } catch (SQLException ex) {
             LoggerManager.getInstance().error(ex);
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getVersion() {
+        return version;
     }
 }

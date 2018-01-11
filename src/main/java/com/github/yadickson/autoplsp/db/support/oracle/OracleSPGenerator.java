@@ -17,7 +17,6 @@
 package com.github.yadickson.autoplsp.db.support.oracle;
 
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
-import com.github.yadickson.autoplsp.db.bean.ProcedureBean;
 import com.github.yadickson.autoplsp.db.support.oracle.parameter.OracleMakeParameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.common.Parameter;
@@ -34,9 +33,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import org.apache.commons.lang.StringUtils;
 import com.github.yadickson.autoplsp.db.MakeDirection;
-import com.github.yadickson.autoplsp.db.common.Function;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
-import com.github.yadickson.autoplsp.db.util.FindProcedureImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.sql.SQLException;
 import java.util.Map;
@@ -59,30 +56,13 @@ public class OracleSPGenerator extends SPGenerator {
     }
 
     /**
-     * Find all procedure from database
+     * Method getter sql procedures
      *
-     * @param connection Database connection
-     * @return procedure list
-     * @throws BusinessException If error
+     * @return sql to find procedures
      */
     @Override
-    public List<Procedure> findProcedures(Connection connection) throws BusinessException {
-        LoggerManager.getInstance().info("[OracleSPGenerator] Find all procedure by name");
-
-        List<Procedure> list = new ArrayList<Procedure>();
-
-        String sql = "SELECT OBJECT_NAME as PKG, PROCEDURE_NAME as NAME, case when (SELECT count(position) as type FROM all_arguments WHERE OWNER=USER AND object_name = allp.PROCEDURE_NAME AND package_name = allp.OBJECT_NAME and position = 0) = 0 then 'PROCEDURE' else 'FUNCTION' end as type FROM SYS.ALL_PROCEDURES allp WHERE OWNER=USER and OBJECT_TYPE ='PACKAGE' and PROCEDURE_NAME is not null union SELECT null as PKG, OBJECT_NAME AS NAME, OBJECT_TYPE as TYPE FROM SYS.ALL_PROCEDURES WHERE OWNER=USER and (OBJECT_TYPE = 'FUNCTION' or OBJECT_TYPE='PROCEDURE')";
-        List<ProcedureBean> procedures = new FindProcedureImpl().getProcedures(connection, sql);
-
-        for (ProcedureBean p : procedures) {
-            Procedure procedure = p.getType().equalsIgnoreCase("PROCEDURE") ? new Procedure(p.getPkg(), p.getName()) : new Function(p.getPkg(), p.getName());
-            LoggerManager.getInstance().info("[OracleSPGenerator] Found (" + p.getType() + ") " + procedure.getFullName());
-            list.add(procedure);
-        }
-
-        LoggerManager.getInstance().info("[OracleSPGenerator] Found " + list.size() + " procedures");
-
-        return list;
+    public String getProcedureQuery() {
+        return "SELECT OBJECT_NAME as PKG, PROCEDURE_NAME as NAME, case when (SELECT count(position) as type FROM all_arguments WHERE OWNER=USER AND object_name = allp.PROCEDURE_NAME AND package_name = allp.OBJECT_NAME and position = 0) = 0 then 'PROCEDURE' else 'FUNCTION' end as type FROM SYS.ALL_PROCEDURES allp WHERE OWNER=USER and OBJECT_TYPE ='PACKAGE' and PROCEDURE_NAME is not null union SELECT null as PKG, OBJECT_NAME AS NAME, OBJECT_TYPE as TYPE FROM SYS.ALL_PROCEDURES WHERE OWNER=USER and (OBJECT_TYPE = 'FUNCTION' or OBJECT_TYPE='PROCEDURE')";
     }
 
     /**

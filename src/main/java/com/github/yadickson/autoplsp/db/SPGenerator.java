@@ -16,9 +16,14 @@
  */
 package com.github.yadickson.autoplsp.db;
 
+import com.github.yadickson.autoplsp.db.bean.ProcedureBean;
+import com.github.yadickson.autoplsp.db.common.Function;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.db.util.FindProcedureImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
+import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,13 +54,36 @@ public abstract class SPGenerator {
     }
 
     /**
+     * Method getter sql procedures
+     *
+     * @return sql to find procedures
+     */
+    public abstract String getProcedureQuery();
+
+    /**
      * Find all procedure from database
      *
      * @param connection Database connection
      * @return procedure list
      * @throws BusinessException If error
      */
-    public abstract List<Procedure> findProcedures(Connection connection) throws BusinessException;
+    public final List<Procedure> findProcedures(Connection connection) throws BusinessException {
+        LoggerManager.getInstance().info("[SPGenerator] Find all procedure by name");
+
+        List<Procedure> list = new ArrayList<Procedure>();
+
+        List<ProcedureBean> procedures = new FindProcedureImpl().getProcedures(connection, getProcedureQuery());
+
+        for (ProcedureBean p : procedures) {
+            Procedure procedure = p.getType().equalsIgnoreCase("PROCEDURE") ? new Procedure(p.getPkg(), p.getName()) : new Function(p.getPkg(), p.getName());
+            LoggerManager.getInstance().info("[SPGenerator] Found (" + p.getType() + ") " + procedure.getFullName());
+            list.add(procedure);
+        }
+
+        LoggerManager.getInstance().info("[SPGenerator] Found " + list.size() + " procedures");
+
+        return list;
+    }
 
     /**
      * Fill parameters of procedure from database

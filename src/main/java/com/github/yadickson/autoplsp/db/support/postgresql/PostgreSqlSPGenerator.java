@@ -19,10 +19,7 @@ package com.github.yadickson.autoplsp.db.support.postgresql;
 import com.github.yadickson.autoplsp.db.MakeDirection;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.common.Parameter;
-import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.yadickson.autoplsp.db.SPGenerator;
@@ -31,11 +28,7 @@ import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.support.postgresql.parameter.PostgreSqlMakeParameter;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
-import java.util.Set;
-import java.util.TreeSet;
-import org.apache.commons.lang.StringUtils;
 import com.github.yadickson.autoplsp.handler.BusinessException;
-import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -151,9 +144,9 @@ public class PostgreSqlSPGenerator extends SPGenerator {
         List<Parameter> list = new ArrayList<Parameter>(mparameters.values());
         procedure.setParameters(list);
 
-        if (procedure.getHasResultSet()) {
+        //if (procedure.getHasResultSet()) {
             //findOracleDataSetParameter(connection, procedure, list);
-        }
+        //}
 
     }
 /*

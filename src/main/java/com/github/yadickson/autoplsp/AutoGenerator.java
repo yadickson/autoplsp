@@ -55,20 +55,18 @@ public class AutoGenerator extends AbstractMojo {
     private MavenProject project;
 
     /**
-     * Driver to use in database connection
+     * Database driver
      */
     @Parameter(
-            property = "generator.driver",
-            readonly = true,
+            property = "autoplsp.driver",
             required = true)
     private String driver;
 
     /**
-     * Database connection string
+     * Database url connection string
      */
     @Parameter(
-            property = "generator.connectionString",
-            readonly = true,
+            property = "autoplsp.connectionString",
             required = true)
     private String connectionString;
 
@@ -76,8 +74,7 @@ public class AutoGenerator extends AbstractMojo {
      * Database username
      */
     @Parameter(
-            property = "generator.user",
-            readonly = true,
+            property = "autoplsp.user",
             required = true)
     private String user;
 
@@ -85,8 +82,7 @@ public class AutoGenerator extends AbstractMojo {
      * Database password
      */
     @Parameter(
-            property = "generator.pass",
-            readonly = true,
+            property = "autoplsp.pass",
             required = true)
     private String pass;
 
@@ -94,7 +90,6 @@ public class AutoGenerator extends AbstractMojo {
      * Output source directory
      */
     @Parameter(
-            property = "generator.outputDirectory",
             defaultValue = "${project.build.directory}/generated-sources",
             readonly = true,
             required = false)
@@ -104,7 +99,6 @@ public class AutoGenerator extends AbstractMojo {
      * Output resource directory
      */
     @Parameter(
-            property = "generator.outputDirectoryResource",
             defaultValue = "${project.build.directory}/generated-resources",
             readonly = true,
             required = false)
@@ -114,7 +108,6 @@ public class AutoGenerator extends AbstractMojo {
      * Spring configuration file name
      */
     @Parameter(
-            property = "generator.outputConfigFileName",
             defaultValue = "${project.artifactId}.xml",
             readonly = true,
             required = false)
@@ -124,7 +117,6 @@ public class AutoGenerator extends AbstractMojo {
      * Java package name
      */
     @Parameter(
-            property = "generator.javaPackageName",
             readonly = true,
             required = true)
     private String javaPackageName;
@@ -133,7 +125,6 @@ public class AutoGenerator extends AbstractMojo {
      * Datasource name
      */
     @Parameter(
-            property = "generator.javaDataSourceName",
             readonly = true,
             required = true)
     private String javaDataSourceName;
@@ -142,7 +133,6 @@ public class AutoGenerator extends AbstractMojo {
      * JdbcTemplate name
      */
     @Parameter(
-            property = "generator.javaJdbcTemplateName",
             defaultValue = "jdbcTemplate",
             readonly = true,
             required = false)
@@ -152,7 +142,6 @@ public class AutoGenerator extends AbstractMojo {
      * JNDI datasource name
      */
     @Parameter(
-            property = "generator.jndiDataSourceName",
             readonly = true,
             required = true)
     private String jndiDataSourceName;
@@ -179,7 +168,6 @@ public class AutoGenerator extends AbstractMojo {
      * Output parameter code to evaluate process
      */
     @Parameter(
-            property = "generator.outParameterCode",
             defaultValue = "OUT_RETURN_CODE",
             readonly = true,
             required = false)
@@ -189,7 +177,6 @@ public class AutoGenerator extends AbstractMojo {
      * Output parameter message
      */
     @Parameter(
-            property = "generator.outParameterMessage",
             defaultValue = "OUT_RETURN_MSG",
             readonly = true,
             required = false)

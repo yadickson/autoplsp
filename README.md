@@ -19,6 +19,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 - Configuration file generation for Spring
 - Use output parameters to evaluate process
 - Transaction annotation
+- Command line for driver, user, pass and connectionString parameters
 
 ## Native type support
 
@@ -184,6 +185,10 @@ Regular expression to include procedure and functions names, example SP_YES.*
 
 Regular expression to exclude procedure and functions names, example SP_NOT.*
 
+
+# Command line support
+
+> mvn clean package -Dautoplsp.driver=... -Dautoplsp.connectionString=... -Dautoplsp.user=... -Dautoplsp.pass=...
 
 ## POM Basic Configuration (include all procedure and function)
 

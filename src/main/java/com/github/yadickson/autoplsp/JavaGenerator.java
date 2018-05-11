@@ -194,7 +194,7 @@ public class JavaGenerator extends TemplateGenerator {
 
         for (Parameter param : procedure.getParameters()) {
             if (param.isOutput() && param.isResultSet()) {
-                DataSetParameter dataSetParameter = ((DataSetParameter) param);
+                DataSetParameter dataSetParameter = (DataSetParameter) param;
 
                 if (dataSetParameter.getExtend()) {
                     String javaTypeName = dataSetParameter.getHierarchyFieldName();

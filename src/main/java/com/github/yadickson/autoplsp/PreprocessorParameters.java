@@ -77,7 +77,6 @@ public class PreprocessorParameters {
             }
 
             List<DataSetParameter> parameters = entry.getValue();
-            String baseParent = parameters.get(0).getParent();
             String baseName = parameters.get(0).getName();
 
             if (!baseNames.containsKey(baseName)) {

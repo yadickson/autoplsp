@@ -18,6 +18,7 @@ package com.github.yadickson.autoplsp;
 
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.db.parameter.DataSetParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.io.File;
@@ -106,6 +107,7 @@ public class JavaGenerator extends TemplateGenerator {
             processStoredProcedureService(procedure);
             processStoredProcedureParameter(procedure);
             processStoredProcedureParameterRS(procedure);
+            processStoredProcedureParameterRSCommon(procedure);
             processStoredProcedureMapperRS(procedure);
             processStoredProcedureParameterObject(procedure);
             processStoredProcedureParameterArray(procedure);
@@ -174,6 +176,37 @@ public class JavaGenerator extends TemplateGenerator {
             if (param.isOutput() && param.isResultSet()) {
                 input.put(PARAMETER_NAME, param);
                 createTemplate(input, DOMAIN_PATH + "DataSet.ftl", getFileNamePath(parameterPath, procedure, param, "RS"));
+            }
+        }
+    }
+
+    private void processStoredProcedureParameterRSCommon(Procedure procedure) throws BusinessException {
+        Map<String, Object> input = new HashMap<String, Object>();
+
+        input.put(PROCEDURE_NAME, procedure);
+        input.put(JAVA_PACKAGE_NAME, javaPackage);
+
+        if (!procedure.getHasResultSet()) {
+            return;
+        }
+
+        String parameterPath = getDomainOutputPath("");
+
+        for (Parameter param : procedure.getParameters()) {
+            if (param.isOutput() && param.isResultSet()) {
+                DataSetParameter dataSetParameter = ((DataSetParameter) param);
+
+                if (dataSetParameter.getExtend()) {
+                    String javaTypeName = dataSetParameter.getHierarchyFieldName();
+                    String fileName = getFileNameObjectPath(parameterPath, javaTypeName);
+
+                    dataSetParameter.setSuperClass(true);
+                    dataSetParameter.setExtend(false);
+
+                    input.put(PARAMETER_NAME, dataSetParameter);
+
+                    createTemplate(input, DOMAIN_PATH + "DataSet.ftl", fileName);
+                }
             }
         }
     }

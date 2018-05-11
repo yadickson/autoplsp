@@ -25,7 +25,7 @@ import java.util.List;
 import com.github.yadickson.autoplsp.db.SPGenerator;
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
-import com.github.yadickson.autoplsp.db.common.ParameterSort;
+import com.github.yadickson.autoplsp.util.ParameterSort;
 import com.github.yadickson.autoplsp.db.support.postgresql.parameter.PostgreSqlMakeParameter;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.logger.LoggerManager;

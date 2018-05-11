@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.yadickson.autoplsp.db.common;
+package com.github.yadickson.autoplsp.util;
 
+import com.github.yadickson.autoplsp.db.common.Parameter;
 import java.util.Comparator;
 
 /**

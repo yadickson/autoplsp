@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import org.apache.commons.lang.StringUtils;
 import com.github.yadickson.autoplsp.db.MakeDirection;
-import com.github.yadickson.autoplsp.db.common.ParameterSort;
+import com.github.yadickson.autoplsp.util.ParameterSort;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.sql.SQLException;

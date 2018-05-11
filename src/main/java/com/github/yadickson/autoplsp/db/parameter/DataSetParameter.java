@@ -19,6 +19,7 @@ package com.github.yadickson.autoplsp.db.parameter;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 
 /**
  * Dataset parameter class
@@ -26,6 +27,10 @@ import com.github.yadickson.autoplsp.db.common.Procedure;
  * @author Yadickson Soto
  */
 public abstract class DataSetParameter extends Parameter {
+
+    private String hierarchyName;
+    private boolean superClass;
+    private boolean extend;
 
     /**
      * Class constructor
@@ -37,6 +42,8 @@ public abstract class DataSetParameter extends Parameter {
      */
     public DataSetParameter(int position, String name, Direction direction, Procedure procedure) {
         super(position, name, direction, procedure);
+        this.superClass = false;
+        this.extend = false;
     }
 
     /**
@@ -49,4 +56,59 @@ public abstract class DataSetParameter extends Parameter {
         return true;
     }
 
+    /**
+     * Getter field name
+     *
+     * @return the field name
+     */
+    public String getHierarchyFieldName() {
+        return CapitalizeUtil.capitalize(getHierarchyName());
+    }
+
+    /**
+     * @return the hierarchyName
+     */
+    public String getHierarchyName() {
+        return hierarchyName;
+    }
+
+    /**
+     * @param hierarchyName the hierarchyName to set
+     */
+    public void setHierarchyName(String hierarchyName) {
+        this.hierarchyName = hierarchyName;
+    }
+
+    /**
+     * @return the superClass
+     */
+    public boolean getSuperClass() {
+        return superClass;
+    }
+
+    /**
+     * @param superClass the superClass to set
+     */
+    public void setSuperClass(boolean superClass) {
+        this.superClass = superClass;
+    }
+
+    /**
+     * @return the extend
+     */
+    public boolean getExtend() {
+        return extend;
+    }
+
+    /**
+     * @param extend the extend to set
+     */
+    public void setExtend(boolean extend) {
+        this.extend = extend;
+    }
+
+    public String getDataSetClassName() {
+        return superClass ? getHierarchyFieldName() : this.getJavaTypeName();
+    }
+    
 }

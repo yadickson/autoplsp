@@ -58,6 +58,17 @@ public class LoggerManager {
     }
 
     /**
+     * Logger the warn message
+     *
+     * @param message the message
+     */
+    public void warn(String message) {
+        if (log != null) {
+            log.warn(message);
+        }
+    }
+
+    /**
      * Logger the error message
      *
      * @param ex the exception

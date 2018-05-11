@@ -29,13 +29,16 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import com.github.yadickson.autoplsp.db.SPGenerator;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
+import com.github.yadickson.autoplsp.util.ProcedureSort;
 import java.sql.Connection;
+import java.util.Collections;
 import java.util.regex.Pattern;
 import org.apache.maven.model.Resource;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.plexus.util.CollectionUtils;
 
 /**
  * Maven plugin to java classes and config spring file generator from database
@@ -270,6 +273,11 @@ public class AutoGenerator extends AbstractMojo {
                     LoggerManager.getInstance().info("[AutoGenerator] Process procedure success");
                 }
             }
+
+            Collections.sort(spList, new ProcedureSort());
+            
+            PreprocessorParameters preprocessors = new PreprocessorParameters();
+            preprocessors.process(spList);
 
             JavaGenerator template = new JavaGenerator(outputDirectory.getPath(),
                     javaPackageName, javaDataSourceName, javaJdbcTemplateName,

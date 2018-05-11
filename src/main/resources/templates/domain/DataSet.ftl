@@ -18,37 +18,48 @@
 package ${javaPackage}.domain;
 
 /**
- * DataSet parameter ${parameter.name} in ${proc.fullName}
+ * DataSet parameter <#if !parameter.superClass>${parameter.name} in ${proc.fullName}<#else>${parameter.hierarchyFieldName}</#if>
  *
- * @author @GENERATOR.NAME@
+<#if parameter.extend> * @see ${parameter.hierarchyFieldName}
+</#if> * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
 @SuppressWarnings("serial")
-public class ${parameter.javaTypeName} implements java.io.Serializable {
+public class ${parameter.dataSetClassName} <#if parameter.extend>extends ${parameter.hierarchyFieldName} </#if>implements java.io.Serializable {
 
+<#if !parameter.extend>
     <#list parameter.parameters as parameter2>
     private ${parameter2.javaTypeName} ${parameter2.fieldName} = null;
     </#list>
+</#if>
 
     /**
-     * Class constructor ${parameter.javaTypeName}.
+     * Class constructor ${parameter.dataSetClassName}.
      */
-    public ${parameter.javaTypeName}() {
+    public ${parameter.dataSetClassName}() {
+<#if parameter.extend>
+        super();
+</#if>
     }
 
     /**
-     * Class constructor ${parameter.javaTypeName}.
+     * Class constructor ${parameter.dataSetClassName}.
      *
     <#list parameter.parameters as parameter2>
      * @param ${parameter2.fieldName} set value of ${parameter2.fieldName}
     </#list>
      */
-    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>${parameter2.javaTypeName} ${parameter2.fieldName}<#sep>, </#sep></#list>) {
+    public ${parameter.dataSetClassName}(<#list parameter.parameters as parameter2>${parameter2.javaTypeName} ${parameter2.fieldName}<#sep>, </#sep></#list>) {
+<#if !parameter.extend>
         <#list parameter.parameters as parameter2>
         this.${parameter2.fieldName} = ${parameter2.fieldName};
         </#list>
+<#else>
+        super(<#list parameter.parameters as parameter2>${parameter2.fieldName}<#sep>, </#sep></#list>);
+</#if>
     }
 
+<#if !parameter.extend>
     <#list parameter.parameters as parameter2>
     /**
      * Getter for ${parameter2.fieldName}
@@ -87,5 +98,6 @@ public class ${parameter.javaTypeName} implements java.io.Serializable {
 
         return str.toString();
     }
+</#if>
 }
 </#if>

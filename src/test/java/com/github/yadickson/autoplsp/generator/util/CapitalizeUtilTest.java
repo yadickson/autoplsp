@@ -49,4 +49,24 @@ public class CapitalizeUtilTest {
         assertEquals("spTestCapitalize", result);
 
     }
+
+    @Test
+    public void testCapitalizeFromNull() {
+
+        String result = CapitalizeUtil.capitalize(null);
+
+        assertNotNull(result);
+        assertEquals("null", result);
+
+    }
+
+    @Test
+    public void testCapitalizeFromUppercase() {
+
+        String result = CapitalizeUtil.capitalize("COMMON_CLASS_25");
+
+        assertNotNull(result);
+        assertEquals("CommonClass25", result);
+
+    }
 }

@@ -36,7 +36,7 @@ public class CapitalizeUtil {
      * @return capitalize fully
      */
     public static String capitalize(String value) {
-        return WordUtils.capitalizeFully(value, new char[]{'_'}).replaceAll("_", "");
+        return value == null ? "null" : WordUtils.capitalizeFully(value, new char[]{'_'}).replaceAll("_", "");
     }
 
     /**

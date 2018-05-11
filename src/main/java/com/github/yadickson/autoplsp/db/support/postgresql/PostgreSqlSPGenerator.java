@@ -25,10 +25,12 @@ import java.util.List;
 import com.github.yadickson.autoplsp.db.SPGenerator;
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
+import com.github.yadickson.autoplsp.db.common.ParameterSort;
 import com.github.yadickson.autoplsp.db.support.postgresql.parameter.PostgreSqlMakeParameter;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import com.github.yadickson.autoplsp.handler.BusinessException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -150,7 +152,7 @@ public class PostgreSqlSPGenerator extends SPGenerator {
 
     }
 /*
-    private void findOracleDataSetParameter(Connection connection, Procedure procedure, List<Parameter> parameters) throws BusinessException {
+    private void findOracleDataSetParameter(Procedure procedure, Connection connection, Procedure procedure, List<Parameter> parameters) throws BusinessException {
 
         boolean isFunction = procedure.isFunction();
 
@@ -189,7 +191,7 @@ public class PostgreSqlSPGenerator extends SPGenerator {
                     throw new BusinessException("[PostgreSqlSPGenerator] ResultSet null");
                 }
 
-                parameters.get(i).setParameters(getParameters(connection, result));
+                parameters.get(i).setParameters(getParameters(procedure, connection, result));
             }
 
         } catch (SQLException ex) {
@@ -236,7 +238,7 @@ public class PostgreSqlSPGenerator extends SPGenerator {
 
         try {
             for (int j = 0; j < metadata.getColumnCount(); j++) {
-                Parameter p = null; //new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.OUTPUT, connection, null, null);
+                Parameter p = null; //new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.OUTPUT, connection, null, procedure);
 
                 if (pNames.contains(p.getName())) {
                     throw new BusinessException("Parameter name [" + p.getName() + "] is duplicated");
@@ -251,6 +253,8 @@ public class PostgreSqlSPGenerator extends SPGenerator {
         } finally {
             result.close();
         }
+    
+        Collections.sort(list, new ParameterSort());
 
         return list;
     }

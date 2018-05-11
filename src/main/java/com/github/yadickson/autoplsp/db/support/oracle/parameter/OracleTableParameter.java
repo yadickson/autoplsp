@@ -19,6 +19,7 @@ package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
@@ -38,19 +39,20 @@ public class OracleTableParameter extends Parameter {
     private final String objectName;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param position The parameter position
      * @param name The parameter name
      * @param direction Parameter direction
+     * @param procedure Procedure
      * @param connection Database connection
      * @param typeName Particular parameter type name
-     * @throws BusinessException If create psrameter process throws an error
+     * @throws BusinessException If create parameter process throws an error
      */
-    public OracleTableParameter(int position, String name, Direction direction, Connection connection, String typeName) throws BusinessException {
-        super(position, name, direction);
+    public OracleTableParameter(int position, String name, Direction direction, Procedure procedure, Connection connection, String typeName) throws BusinessException {
+        super(position, name, direction, procedure);
         this.objectName = typeName;
-        addParameters(connection, typeName);
+        addParameters(procedure, connection, typeName);
     }
 
     /**
@@ -122,7 +124,7 @@ public class OracleTableParameter extends Parameter {
         return getObjectName() + "Table";
     }
 
-    private void addParameters(Connection connection, String typeName) throws BusinessException {
+    private void addParameters(Procedure procedure, Connection connection, String typeName) throws BusinessException {
 
         String sql = "select (CASE WHEN ELEM_TYPE_OWNER IS NOT NULL THEN 'OBJECT' ELSE ELEM_TYPE_NAME END) AS DTYPE, ELEM_TYPE_NAME AS NAME from SYS.ALL_COLL_TYPES WHERE OWNER=USER and TYPE_NAME = ?";
         List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, typeName);
@@ -133,7 +135,7 @@ public class OracleTableParameter extends Parameter {
             String parameterName = p.getName();
 
             LoggerManager.getInstance().info("[OracleArrayParameter] type: " + dataType + " name: " + parameterName);
-            parameters.add(new OracleMakeParameter().create(dataType, 0, "Value", Direction.INPUT, connection, parameterName, null));
+            parameters.add(new OracleMakeParameter().create(dataType, 0, "Value", Direction.INPUT, connection, parameterName, procedure));
         }
     }
 }

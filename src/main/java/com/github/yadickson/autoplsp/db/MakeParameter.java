@@ -54,19 +54,19 @@ public abstract class MakeParameter {
         }
 
         if (type.equalsIgnoreCase("CHAR")) {
-            return new CharParameter(position, name, direction);
+            return new CharParameter(position, name, direction, procedure);
         }
         if (type.equalsIgnoreCase("NUMBER") || type.equalsIgnoreCase("DECIMAL") || type.equalsIgnoreCase("FLOAT")) {
-            return new NumberParameter(position, name, direction);
+            return new NumberParameter(position, name, direction, procedure);
         }
         if (type.equalsIgnoreCase("CLOB")) {
-            return new ClobParameter(position, name, direction);
+            return new ClobParameter(position, name, direction, procedure);
         }
         if (type.equalsIgnoreCase("BLOB")) {
-            return new BlobParameter(position, name, direction);
+            return new BlobParameter(position, name, direction, procedure);
         }
         if (type.equalsIgnoreCase("DATE") || type.equalsIgnoreCase("TIMESTAMP")) {
-            return new DateParameter(position, name, direction);
+            return new DateParameter(position, name, direction, procedure);
         }
 
         return getOwnerParameter(type, position, name, direction, connection, typeName, procedure);
@@ -83,7 +83,7 @@ public abstract class MakeParameter {
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
      * @return the new parameter
-     * @throws BusinessException If create psrameter process throws an error
+     * @throws BusinessException If create parameter process throws an error
      */
     public abstract Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException;
 }

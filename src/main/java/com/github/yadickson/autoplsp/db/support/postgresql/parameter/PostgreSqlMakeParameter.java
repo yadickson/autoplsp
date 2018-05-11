@@ -43,15 +43,15 @@ public class PostgreSqlMakeParameter extends MakeParameter {
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
      * @return the new parameter
-     * @throws BusinessException If create psrameter process throws an error
+     * @throws BusinessException If create parameter process throws an error
      */
     @Override
     public Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException {
         if (type.equalsIgnoreCase("TEXT") || type.equalsIgnoreCase("character varying")) {
-            return new CharParameter(position, name, direction);
+            return new CharParameter(position, name, direction, procedure);
         }
         if (type.equalsIgnoreCase("INTEGER")  || type.equalsIgnoreCase("REAL") ) {
-            return new NumberParameter(position, name, direction);
+            return new NumberParameter(position, name, direction, procedure);
         }
 
         throw new BusinessException("Type [" + type + " " + name + "] not supported");

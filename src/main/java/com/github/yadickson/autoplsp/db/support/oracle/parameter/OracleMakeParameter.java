@@ -47,17 +47,17 @@ public class OracleMakeParameter extends MakeParameter {
     @Override
     public Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException {
         if (type.equalsIgnoreCase("VARCHAR2")) {
-            return new CharParameter(position, name, direction);
+            return new CharParameter(position, name, direction, procedure);
         }
         if (type.equalsIgnoreCase("ROWID")) {
-            return new OracleRowIdParameter(position, name, direction);
+            return new OracleRowIdParameter(position, name, direction, procedure);
         }
         if (type.equalsIgnoreCase("REF CURSOR")) {
             if (direction != Direction.OUTPUT) {
                 throw new BusinessException("Input REF CURSOR not supported");
             }
 
-            return new OracleDataSetParameter(position, name, procedure.getClassName());
+            return new OracleDataSetParameter(position, name, procedure);
         }
 
         if (type.equalsIgnoreCase("OBJECT")) {
@@ -65,7 +65,7 @@ public class OracleMakeParameter extends MakeParameter {
                 throw new BusinessException("Output OBJECT not supported");
             }
 
-            return new OracleObjectParameter(position, name, direction, connection, typeName);
+            return new OracleObjectParameter(position, name, direction, procedure, connection, typeName);
         }
 
         if (type.equalsIgnoreCase("TABLE")) {
@@ -73,7 +73,7 @@ public class OracleMakeParameter extends MakeParameter {
                 throw new BusinessException("Output TABLE not supported");
             }
 
-            return new OracleTableParameter(position, name, direction, connection, typeName);
+            return new OracleTableParameter(position, name, direction, procedure, connection, typeName);
         }
 
         throw new BusinessException("Type [" + type + " " + name + "] not supported");

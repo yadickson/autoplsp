@@ -17,17 +17,15 @@
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
-import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 /**
@@ -117,7 +115,7 @@ public class OracleObjectParameterTest {
 */
     @Test
     public void testGetJavaTypeName() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, null, "type_value");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
         String javaType = parameter.getJavaTypeName();
         assertNotNull(javaType);
         assertEquals("TypeValueObject", javaType);
@@ -125,14 +123,14 @@ public class OracleObjectParameterTest {
 
     @Test
     public void testGetSqlType() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, null, "type_value");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
         int sqlType = parameter.getSqlType();
         assertEquals(oracle.jdbc.OracleTypes.STRUCT, sqlType);
     }
 
     @Test
     public void testGetSqlTypeName() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, null, "type_value");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
         String sqlType = parameter.getSqlTypeName();
         assertNotNull(sqlType);
         assertEquals("oracle.jdbc.OracleTypes.STRUCT", sqlType);
@@ -140,19 +138,19 @@ public class OracleObjectParameterTest {
 
     @Test
     public void testResultSetFalse() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, null, "type_value");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
         assertFalse(parameter.isResultSet());
     }
 
     @Test
     public void testObjectTrue() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, null, "type_value");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
         assertTrue(parameter.isObject());
     }
 
     @Test
     public void tesArrayFalse() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, null, "type_value");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
         assertFalse(parameter.isArray());
     }
 

@@ -17,6 +17,7 @@
 package com.github.yadickson.autoplsp.db.parameter;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
+import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -33,7 +34,7 @@ public class DateParameterTest {
 
     @Before
     public void setup() {
-        parameter = new DateParameter(0, null, Direction.INPUT);
+        parameter = new DateParameter(0, null, Direction.INPUT, new Procedure("", ""));
     }
 
     @Test(expected = Exception.class)

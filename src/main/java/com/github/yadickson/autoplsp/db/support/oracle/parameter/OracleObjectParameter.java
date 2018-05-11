@@ -19,6 +19,7 @@ package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
@@ -38,19 +39,20 @@ public class OracleObjectParameter extends Parameter {
     private final String objectName;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param position The parameter position
      * @param name The parameter name
      * @param direction Parameter direction
+     * @param procedure Procedure
      * @param connection Database connection
      * @param typeName Particular parameter type name
-     * @throws BusinessException If create psrameter process throws an error
+     * @throws BusinessException If create parameter process throws an error
      */
-    public OracleObjectParameter(int position, String name, Direction direction, Connection connection, String typeName) throws BusinessException {
-        super(position, name, direction);
+    public OracleObjectParameter(int position, String name, Direction direction, Procedure procedure, Connection connection, String typeName) throws BusinessException {
+        super(position, name, direction, procedure);
         this.objectName = typeName;
-        addParameters(connection, typeName);
+        addParameters(procedure, connection, typeName);
     }
 
     /**
@@ -122,7 +124,7 @@ public class OracleObjectParameter extends Parameter {
         return CapitalizeUtil.capitalize(objectName);
     }
 
-    private void addParameters(Connection connection, String typeName) throws BusinessException {
+    private void addParameters(Procedure procedure, Connection connection, String typeName) throws BusinessException {
 
         String sql = "SELECT ATTR_NAME as name, ATTR_TYPE_NAME as dtype, ATTR_NO as position from SYS.ALL_TYPE_ATTRS WHERE OWNER=USER AND TYPE_NAME = ? ORDER BY ATTR_NO";
         List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, typeName);
@@ -133,7 +135,7 @@ public class OracleObjectParameter extends Parameter {
             Integer position = p.getPosition();
             String parameterName = p.getName();
 
-            Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, Direction.INPUT, connection, null, null);
+            Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, Direction.INPUT, connection, null, procedure);
             LoggerManager.getInstance().info("[OracleObjectParameter] (" + param.getPosition() + ") " + param.getName() + " [" + param.getSqlTypeName() + "]");
             parameters.add(param);
         }

@@ -18,6 +18,7 @@ package com.github.yadickson.autoplsp.db.parameter;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.db.common.Procedure;
 
 /**
  * Clob parameter class
@@ -32,9 +33,10 @@ public class ClobParameter extends Parameter {
      * @param position The parameter position
      * @param name The parameter name
      * @param direction The parameter direction
+     * @param procedure The procedure
      */
-    public ClobParameter(int position, String name, Direction direction) {
-        super(position, name, direction);
+    public ClobParameter(int position, String name, Direction direction, Procedure procedure) {
+        super(position, name, direction, procedure);
     }
 
     /**

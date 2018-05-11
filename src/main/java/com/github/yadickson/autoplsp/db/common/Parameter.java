@@ -30,6 +30,7 @@ public abstract class Parameter {
     private final Direction direction;
     private final String name;
     private final Integer position;
+    private final String parent;
 
     /**
      * Class constructor
@@ -37,11 +38,13 @@ public abstract class Parameter {
      * @param position The parameter position
      * @param name The parameter name
      * @param direction The parameter direction
+     * @param procedure The procedure parent
      */
-    public Parameter(Integer position, String name, Direction direction) {
+    public Parameter(Integer position, String name, Direction direction, Procedure procedure) {
         this.position = position;
         this.name = name;
         this.direction = direction;
+        this.parent = procedure.getFullName();
     }
 
     /**
@@ -107,6 +110,13 @@ public abstract class Parameter {
      */
     public String getPropertyName() {
         return CapitalizeUtil.capitalize(getName());
+    }
+
+    /**
+     * @return the parent
+     */
+    public String getParent() {
+        return parent;
     }
 
     /**

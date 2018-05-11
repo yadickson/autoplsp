@@ -17,6 +17,7 @@
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
 import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.util.ArrayList;
 import static org.junit.Assert.*;
@@ -34,7 +35,7 @@ public class OracleDataSetParameterTest {
 
     @Before
     public void setup() {
-        parameter = new OracleDataSetParameter(0, null, "");
+        parameter = new OracleDataSetParameter(0, null, new Procedure("", ""));
         parameter.setParameters(new ArrayList<Parameter>());
     }
 

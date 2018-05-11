@@ -33,9 +33,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import org.apache.commons.lang.StringUtils;
 import com.github.yadickson.autoplsp.db.MakeDirection;
+import com.github.yadickson.autoplsp.db.common.ParameterSort;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -145,7 +147,7 @@ public class OracleSPGenerator extends SPGenerator {
                     throw new BusinessException("[OracleSPGenerator] ResultSet null");
                 }
 
-                parameters.get(i).setParameters(getParameters(connection, result));
+                parameters.get(i).setParameters(getParameters(procedure, connection, result));
             }
 
         } catch (SQLException ex) {
@@ -183,7 +185,7 @@ public class OracleSPGenerator extends SPGenerator {
         return sql;
     }
 
-    private List<Parameter> getParameters(Connection connection, ResultSet result) throws BusinessException, SQLException {
+    private List<Parameter> getParameters(Procedure procedure, Connection connection, ResultSet result) throws BusinessException, SQLException {
 
         ResultSetMetaData metadata = result.getMetaData();
 
@@ -192,7 +194,7 @@ public class OracleSPGenerator extends SPGenerator {
 
         try {
             for (int j = 0; j < metadata.getColumnCount(); j++) {
-                Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.OUTPUT, connection, null, null);
+                Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.OUTPUT, connection, null, procedure);
 
                 if (pNames.contains(p.getName())) {
                     throw new BusinessException("Parameter name [" + p.getName() + "] is duplicated");
@@ -208,6 +210,8 @@ public class OracleSPGenerator extends SPGenerator {
             result.close();
         }
 
+        Collections.sort(list, new ParameterSort());
+        
         return list;
     }
 

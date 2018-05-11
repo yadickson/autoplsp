@@ -18,6 +18,7 @@ package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
+import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.parameter.DataSetParameter;
 import java.util.List;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
@@ -37,11 +38,11 @@ public class OracleDataSetParameter extends DataSetParameter {
      *
      * @param position The parameter position
      * @param name The parameter name
-     * @param className The procedure class name
+     * @param procedure The procedure
      */
-    public OracleDataSetParameter(int position, String name, String className) {
-        super(position, name, Direction.OUTPUT);
-        this.className = className;
+    public OracleDataSetParameter(int position, String name, Procedure procedure) {
+        super(position, name, Direction.OUTPUT, procedure);
+        this.className = procedure.getClassName();
     }
 
     /**

@@ -19,13 +19,16 @@ package com.github.yadickson.autoplsp.db.common;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
+import java.io.Serializable;
 
 /**
  * The procedure class
  *
  * @author Yadickson Soto
  */
-public class Procedure {
+public class Procedure implements Serializable {
+
+    static final long serialVersionUID = 1;
 
     private final String name;
     private final String packageName;
@@ -42,6 +45,10 @@ public class Procedure {
     public Procedure(String packageName, String procedureName) {
         this.packageName = packageName;
         this.name = procedureName;
+
+        parameters = new ArrayList<Parameter>();
+        inputParameters = new ArrayList<Parameter>();
+        outputParameters = new ArrayList<Parameter>();
     }
 
     /**
@@ -52,8 +59,8 @@ public class Procedure {
     public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
 
-        inputParameters = new ArrayList<Parameter>();
-        outputParameters = new ArrayList<Parameter>();
+        inputParameters.clear();
+        outputParameters.clear();
 
         for (Parameter p : parameters) {
             if (p.isInput()) {
@@ -208,11 +215,11 @@ public class Procedure {
     public boolean isFunction() {
         return false;
     }
-    
+
     public int getInputParameterSize() {
         return inputParameters.size();
     }
-    
+
     public int getOutputParameterSize() {
         return outputParameters.size();
     }

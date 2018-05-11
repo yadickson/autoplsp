@@ -30,6 +30,8 @@ import com.github.yadickson.autoplsp.util.CapitalizeUtil;
  */
 public class OracleDataSetParameter extends DataSetParameter {
 
+    static final long serialVersionUID = 1;
+
     private List<Parameter> parameters;
     private final String className;
 

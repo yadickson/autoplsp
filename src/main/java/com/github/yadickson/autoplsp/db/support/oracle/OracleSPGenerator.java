@@ -154,7 +154,9 @@ public class OracleSPGenerator extends SPGenerator {
             throw new BusinessException("", ex);
         } finally {
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException ex) {
                 LoggerManager.getInstance().error(ex);
             }
@@ -211,7 +213,7 @@ public class OracleSPGenerator extends SPGenerator {
         }
 
         Collections.sort(list, new ParameterSort());
-        
+
         return list;
     }
 

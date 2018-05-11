@@ -31,6 +31,8 @@ import com.github.yadickson.autoplsp.handler.BusinessException;
  */
 public class OracleMakeParameter extends MakeParameter {
 
+    static final long serialVersionUID = 1;
+
     /**
      * Oracle method to create parameter class from database information
      *

@@ -5,11 +5,15 @@
  */
 package com.github.yadickson.autoplsp.db.bean;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Yadickson Soto
  */
-public class ParameterBean {
+public class ParameterBean implements Serializable {
+
+    static final long serialVersionUID = 1;
 
     private String name;
     private Integer position;

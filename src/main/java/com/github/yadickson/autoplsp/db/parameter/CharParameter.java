@@ -27,6 +27,8 @@ import com.github.yadickson.autoplsp.db.common.Procedure;
  */
 public class CharParameter extends Parameter {
 
+    static final long serialVersionUID = 1;
+
     /**
      * Class constructor
      *

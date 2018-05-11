@@ -35,6 +35,8 @@ import com.github.yadickson.autoplsp.util.CapitalizeUtil;
  */
 public class OracleTableParameter extends Parameter {
 
+    static final long serialVersionUID = 1;
+
     private final List<Parameter> parameters = new ArrayList<Parameter>();
     private final String objectName;
 

@@ -27,6 +27,8 @@ import com.github.yadickson.autoplsp.db.parameter.RowIdParameter;
  */
 public class OracleRowIdParameter extends RowIdParameter {
 
+    static final long serialVersionUID = 1;
+
     /**
      * Class constructor.
      *

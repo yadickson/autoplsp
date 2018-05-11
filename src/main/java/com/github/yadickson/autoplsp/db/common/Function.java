@@ -23,6 +23,8 @@ package com.github.yadickson.autoplsp.db.common;
  */
 public class Function extends Procedure {
 
+    static final long serialVersionUID = 1;
+
     /**
      * Class constructor
      *

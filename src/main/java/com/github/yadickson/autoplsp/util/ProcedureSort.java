@@ -6,6 +6,7 @@
 package com.github.yadickson.autoplsp.util;
 
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -13,7 +14,9 @@ import java.util.Comparator;
  *
  * @author Yadickson Soto
  */
-public class ProcedureSort implements Comparator<Procedure> {
+public class ProcedureSort implements Comparator<Procedure>, Serializable {
+
+    static final long serialVersionUID = 1;
 
     @Override
     public int compare(Procedure a, Procedure b) {

@@ -63,7 +63,8 @@ public class ConfigGenerator extends TemplateGenerator {
     /**
      * Create spring configuration file from template
      *
-     * @throws BusinessException Launch if the generation process throws an error
+     * @throws BusinessException Launch if the generation process throws an
+     * error
      */
     public void process() throws BusinessException {
         LoggerManager.getInstance().info("[ConfigGenerator] Process spring template config");
@@ -79,11 +80,13 @@ public class ConfigGenerator extends TemplateGenerator {
 
     /**
      * Get output directory path
+     *
      * @param path path
      * @return full directory path
+     * @exception BusinessException if error
      */
     @Override
-    protected String getOutputPath(String path) {
+    protected String getOutputPath(String path) throws BusinessException {
         return super.getOutputPath("spring" + File.separatorChar + path);
     }
 

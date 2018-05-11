@@ -24,8 +24,10 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.Version;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
@@ -68,10 +70,13 @@ public class TemplateGenerator {
 
         try {
             Template template = getCfg().getTemplate(templateFileName);
-            Writer out = new FileWriter(outputFileNamePath);
+            File file = new File(outputFileNamePath);
+            Writer out = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8"));
             template.process(input, out);
             out.flush();
             out.close();
+        } catch (RuntimeException ex) {
+            throw new BusinessException("", ex);
         } catch (Exception ex) {
             throw new BusinessException("", ex);
         }
@@ -82,10 +87,16 @@ public class TemplateGenerator {
      *
      * @param path path
      * @return full directory path
+     * @exception BusinessException if error
      */
-    protected String getOutputPath(String path) {
+    protected String getOutputPath(String path) throws BusinessException {
         String result = outputDir + File.separatorChar + path + File.separatorChar;
-        new File(result).mkdirs();
+        File file = new File(result);
+
+        if (!file.mkdirs()) {
+            throw new BusinessException("Not was possible made the directory " + result);
+        }
+
         return result;
     }
 
@@ -95,8 +106,9 @@ public class TemplateGenerator {
      * @param path directory path
      * @param fileName filename
      * @return full filename path
+     * @exception BusinessException if error
      */
-    protected String getFileNamePath(String path, String fileName) {
+    protected String getFileNamePath(String path, String fileName) throws BusinessException {
         return getOutputPath(path) + fileName;
     }
 

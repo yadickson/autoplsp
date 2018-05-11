@@ -28,6 +28,8 @@ import com.github.yadickson.autoplsp.util.CapitalizeUtil;
  */
 public abstract class DataSetParameter extends Parameter {
 
+    static final long serialVersionUID = 1;
+
     private String hierarchyName;
     private boolean superClass;
     private boolean extend;

@@ -11,9 +11,10 @@ import java.io.Serializable;
  *
  * @author Yadickson Soto
  */
-@SuppressWarnings("serial")
 public class ProcedureBean implements Serializable {
-    
+
+    static final long serialVersionUID = 1;
+
     private String pkg;
     private String name;
     private String type;

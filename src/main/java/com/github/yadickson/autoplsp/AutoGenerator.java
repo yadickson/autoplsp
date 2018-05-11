@@ -32,6 +32,7 @@ import com.github.yadickson.autoplsp.logger.LoggerManager;
 import com.github.yadickson.autoplsp.util.ProcedureSort;
 import java.sql.Connection;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import org.apache.maven.model.Resource;
 
@@ -207,8 +208,13 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
-        outputDirectory.mkdirs();
-        outputDirectoryResource.mkdirs();
+        if (!outputDirectory.mkdirs()) {
+            throw new MojoExecutionException("Fail make " + outputDirectory + " directory.");
+        }
+
+        if (!outputDirectoryResource.mkdirs()) {
+            throw new MojoExecutionException("Fail make " + outputDirectoryResource + " directory.");
+        }
 
         project.addCompileSourceRoot(outputDirectory.getPath());
 
@@ -224,13 +230,13 @@ public class AutoGenerator extends AbstractMojo {
 
         if (mIncludes != null) {
             for (String include : mIncludes) {
-                includes.add("(" + include.toUpperCase() + ")");
+                includes.add("(" + include.toUpperCase(Locale.ENGLISH) + ")");
             }
         }
 
         if (mExcludes != null) {
             for (String exclude : mExcludes) {
-                excludes.add("(" + exclude.toUpperCase() + ")");
+                excludes.add("(" + exclude.toUpperCase(Locale.ENGLISH) + ")");
             }
         }
 
@@ -274,7 +280,7 @@ public class AutoGenerator extends AbstractMojo {
             }
 
             Collections.sort(spList, new ProcedureSort());
-            
+
             PreprocessorParameters preprocessors = new PreprocessorParameters();
             preprocessors.process(spList);
 
@@ -287,6 +293,9 @@ public class AutoGenerator extends AbstractMojo {
             ConfigGenerator config = new ConfigGenerator(outputDirectoryResource.getPath(), javaPackageName, javaDataSourceName, javaJdbcTemplateName, jndiDataSourceName, outputConfigFileName);
             config.process();
 
+        } catch (RuntimeException ex) {
+            getLog().error(ex.getMessage(), ex);
+            throw new MojoExecutionException("Fail sp generator");
         } catch (Exception ex) {
             getLog().error(ex.getMessage(), ex);
             throw new MojoExecutionException("Fail sp generator");
@@ -301,7 +310,7 @@ public class AutoGenerator extends AbstractMojo {
      * @param includes the includes from configuracion
      */
     public void setIncludes(String[] includes) {
-        mIncludes = includes;
+        mIncludes = includes == null ? null : includes.clone();
     }
 
     /**
@@ -310,6 +319,6 @@ public class AutoGenerator extends AbstractMojo {
      * @param excludes The excludes from configuracion
      */
     public void setExcludes(String[] excludes) {
-        mExcludes = excludes;
+        mExcludes = excludes == null ? null : excludes.clone();
     }
 }

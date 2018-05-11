@@ -45,7 +45,7 @@ public abstract class MakeParameter {
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
      * @return the new parameter
-     * @throws BusinessException If create psrameter process throws an error
+     * @throws BusinessException If create parameter process throws an error
      */
     public Parameter create(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException {
 

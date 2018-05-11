@@ -19,13 +19,16 @@ package com.github.yadickson.autoplsp.db.common;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.util.List;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
+import java.io.Serializable;
 
 /**
  * Parameter class
  *
  * @author Yadickson Soto
  */
-public abstract class Parameter {
+public abstract class Parameter implements Serializable {
+
+    static final long serialVersionUID = 1;
 
     private final Direction direction;
     private final String name;

@@ -287,17 +287,18 @@ public class JavaGenerator extends TemplateGenerator {
      *
      * @param path path
      * @return full directory path
+     * @exception BusinessException if error
      */
     @Override
-    protected String getOutputPath(String path) {
+    protected String getOutputPath(String path) throws BusinessException {
         return super.getOutputPath(SOURCE_GENERATOR_PATH + getDirectoryPackage() + File.separatorChar + path);
     }
 
-    private String getRepositoryOutputPath(String path) {
+    private String getRepositoryOutputPath(String path) throws BusinessException {
         return this.getOutputPath(REPOSITORY_PATH + path);
     }
 
-    private String getDomainOutputPath(String path) {
+    private String getDomainOutputPath(String path) throws BusinessException {
         return this.getOutputPath(DOMAIN_PATH + path);
     }
 

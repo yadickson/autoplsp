@@ -27,6 +27,8 @@ import com.github.yadickson.autoplsp.db.common.Procedure;
  */
 public abstract class RowIdParameter extends Parameter {
 
+    static final long serialVersionUID = 1;
+
     /**
      * Class constructor
      *

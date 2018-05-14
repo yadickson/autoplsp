@@ -103,14 +103,14 @@ public class JavaGenerator extends TemplateGenerator {
 
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedure.getFullName());
 
-            processStoredProcedure(procedure);
-            processStoredProcedureService(procedure);
-            processStoredProcedureParameter(procedure);
             processStoredProcedureParameterRS(procedure);
-            processStoredProcedureMapperRS(procedure);
+            processStoredProcedureParameterRSCommon(procedure);
             processStoredProcedureParameterObject(procedure);
             processStoredProcedureParameterArray(procedure);
-            processStoredProcedureParameterRSCommon(procedure);
+            processStoredProcedureMapperRS(procedure);
+            processStoredProcedureParameter(procedure);
+            processStoredProcedure(procedure);
+            processStoredProcedureService(procedure);
         }
     }
 
@@ -225,8 +225,12 @@ public class JavaGenerator extends TemplateGenerator {
 
         for (Parameter param : procedure.getParameters()) {
             if (param.isOutput() && param.isResultSet()) {
-                input.put(PARAMETER_NAME, param);
-                createTemplate(input, REPOSITORY_PATH + "Mapper.ftl", getFileNamePath(parameterPath, procedure, param, "RSRowMapper"));
+
+                DataSetParameter dataSetParameter = (DataSetParameter) param;
+                input.put(PARAMETER_NAME, dataSetParameter);
+                String fileName = dataSetParameter.getSuperClass() ? getFileNameObjectPath(parameterPath, param.getJavaTypeName() + "RowMapper") : getFileNamePath(parameterPath, procedure, param, "RSRowMapper");
+
+                createTemplate(input, REPOSITORY_PATH + "Mapper.ftl", fileName);
             }
         }
     }

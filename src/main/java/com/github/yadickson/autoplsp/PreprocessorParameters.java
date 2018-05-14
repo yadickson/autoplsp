@@ -101,11 +101,11 @@ public class PreprocessorParameters {
             for (DataSetParameter parameter : parameters) {
                 parameter.setHierarchyName(name);
                 parameter.setExtend(true);
-                LoggerManager.getInstance().info("[PreprocessorParameters] Reuse" + parameter.getJavaTypeName() + " -> " + parameter.getHierarchyFieldName());
+                LoggerManager.getInstance().info("[PreprocessorParameters] Reuse " + parameter.getJavaTypeName() + " -> " + parameter.getHierarchyFieldName());
             }
         }
 
-        LoggerManager.getInstance().info("[PreprocessorParameters] Reuse" + relations.keySet().size() + " parameteres ");
+        LoggerManager.getInstance().info("[PreprocessorParameters] Finished.");
 
     }
 

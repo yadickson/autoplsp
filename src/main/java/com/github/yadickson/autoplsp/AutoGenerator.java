@@ -208,11 +208,11 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
-        if (!outputDirectory.mkdirs()) {
+        if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
             throw new MojoExecutionException("Fail make " + outputDirectory + " directory.");
         }
 
-        if (!outputDirectoryResource.mkdirs()) {
+        if (!outputDirectoryResource.exists() && !outputDirectoryResource.mkdirs()) {
             throw new MojoExecutionException("Fail make " + outputDirectoryResource + " directory.");
         }
 

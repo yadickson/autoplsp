@@ -93,7 +93,7 @@ public class TemplateGenerator {
         String result = outputDir + File.separatorChar + path + File.separatorChar;
         File file = new File(result);
 
-        if (!file.mkdirs()) {
+        if (!file.exists() && !file.mkdirs()) {
             throw new BusinessException("Not was possible made the directory " + result);
         }
 

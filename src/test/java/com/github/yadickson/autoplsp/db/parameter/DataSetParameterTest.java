@@ -49,7 +49,7 @@ public class DataSetParameterTest {
     @Test
     public void testSelectJavaTypeNameByDefault() throws BusinessException {
         Assert.assertFalse(parameter.getSuperClass());
-        Assert.assertEquals("JavaTypeName", parameter.getDataSetClassName());
+        Assert.assertEquals("JavaTypeName", parameter.getJavaTypeName());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class DataSetParameterTest {
     public void testSelectJavaTypeNameAndExtendHierarchyName() throws BusinessException {
         parameter.setHierarchyName("Name");
         parameter.setExtend(true);
-        Assert.assertEquals("JavaTypeName", parameter.getDataSetClassName());
+        Assert.assertEquals("JavaTypeName", parameter.getJavaTypeName());
         Assert.assertFalse(parameter.getSuperClass());
         Assert.assertTrue(parameter.getExtend());
     }

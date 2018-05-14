@@ -21,7 +21,6 @@ import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.parameter.DataSetParameter;
 import java.util.List;
-import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 
 /**
  * Oracle Dataset parameter class
@@ -33,7 +32,6 @@ public class OracleDataSetParameter extends DataSetParameter {
     static final long serialVersionUID = 1;
 
     private List<Parameter> parameters;
-    private final String className;
 
     /**
      * Class constructor
@@ -44,7 +42,6 @@ public class OracleDataSetParameter extends DataSetParameter {
      */
     public OracleDataSetParameter(int position, String name, Procedure procedure) {
         super(position, name, Direction.OUTPUT, procedure);
-        this.className = procedure.getClassName();
     }
 
     /**
@@ -65,16 +62,6 @@ public class OracleDataSetParameter extends DataSetParameter {
     @Override
     public void setParameters(List<Parameter> params) {
         this.parameters = params;
-    }
-
-    /**
-     * Getter the java type name
-     *
-     * @return The java type name
-     */
-    @Override
-    public String getJavaTypeName() {
-        return className + CapitalizeUtil.capitalize(getName()) + "RS";
     }
 
     /**

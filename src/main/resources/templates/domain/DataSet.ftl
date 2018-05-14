@@ -25,7 +25,7 @@ package ${javaPackage}.domain;
  * @version @GENERATOR.VERSION@
  */
 @SuppressWarnings("serial")
-public class ${parameter.dataSetClassName} <#if parameter.extend>extends ${parameter.hierarchyFieldName} </#if>implements java.io.Serializable {
+public class ${parameter.javaTypeName} <#if parameter.extend>extends ${parameter.hierarchyFieldName} </#if>implements java.io.Serializable {
 
 <#if !parameter.extend>
     <#list parameter.parameters as parameter2>
@@ -34,22 +34,22 @@ public class ${parameter.dataSetClassName} <#if parameter.extend>extends ${param
 </#if>
 
     /**
-     * Class constructor ${parameter.dataSetClassName}.
+     * Class constructor ${parameter.javaTypeName}.
      */
-    public ${parameter.dataSetClassName}() {
+    public ${parameter.javaTypeName}() {
 <#if parameter.extend>
         super();
 </#if>
     }
 
     /**
-     * Class constructor ${parameter.dataSetClassName}.
+     * Class constructor ${parameter.javaTypeName}.
      *
     <#list parameter.parameters as parameter2>
      * @param ${parameter2.fieldName} set value of ${parameter2.fieldName}
     </#list>
      */
-    public ${parameter.dataSetClassName}(<#list parameter.parameters as parameter2>${parameter2.javaTypeName} ${parameter2.fieldName}<#sep>, </#sep></#list>) {
+    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>${parameter2.javaTypeName} ${parameter2.fieldName}<#sep>, </#sep></#list>) {
 <#if !parameter.extend>
         <#list parameter.parameters as parameter2>
         this.${parameter2.fieldName} = ${parameter2.fieldName};

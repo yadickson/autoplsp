@@ -31,6 +31,7 @@ public abstract class DataSetParameter extends Parameter {
     static final long serialVersionUID = 1;
 
     private String hierarchyName;
+    private final String className;
     private boolean superClass;
     private boolean extend;
 
@@ -46,6 +47,7 @@ public abstract class DataSetParameter extends Parameter {
         super(position, name, direction, procedure);
         this.superClass = false;
         this.extend = false;
+        this.className = procedure.getClassName();
     }
 
     /**
@@ -109,8 +111,14 @@ public abstract class DataSetParameter extends Parameter {
         this.extend = extend;
     }
 
-    public String getDataSetClassName() {
-        return superClass ? getHierarchyFieldName() : this.getJavaTypeName();
+    /**
+     * Getter the java type name
+     *
+     * @return The java type name
+     */
+    @Override
+    public String getJavaTypeName() {
+        return superClass ? getHierarchyFieldName() : className + CapitalizeUtil.capitalize(getName()) + "RS";
     }
-    
+
 }

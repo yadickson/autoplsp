@@ -107,10 +107,10 @@ public class JavaGenerator extends TemplateGenerator {
             processStoredProcedureService(procedure);
             processStoredProcedureParameter(procedure);
             processStoredProcedureParameterRS(procedure);
-            processStoredProcedureParameterRSCommon(procedure);
             processStoredProcedureMapperRS(procedure);
             processStoredProcedureParameterObject(procedure);
             processStoredProcedureParameterArray(procedure);
+            processStoredProcedureParameterRSCommon(procedure);
         }
     }
 

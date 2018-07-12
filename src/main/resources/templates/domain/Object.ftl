@@ -23,10 +23,17 @@ package ${javaPackage}.domain;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings("serial")
-public class ${parameter.javaTypeName} implements java.io.Serializable {
+public final class ${parameter.javaTypeName} implements java.io.Serializable {
 
+    /**
+     * Serialization.
+     */
+    static final long serialVersionUID = 1L;
     <#list parameter.parameters as parameter2>
+
+    /**
+     * Field parameter ${parameter2.fieldName}.
+     */
     private ${parameter2.javaTypeName} ${parameter2.fieldName} = null;
     </#list>
 
@@ -40,12 +47,12 @@ public class ${parameter.javaTypeName} implements java.io.Serializable {
      * Class Constructor ${parameter.javaTypeName}.
      *
     <#list parameter.parameters as parameter2>
-     * @param ${parameter2.fieldName} set value of ${parameter2.fieldName}
+     * @param _${parameter2.fieldName} set value of ${parameter2.fieldName}
     </#list>
      */
-    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>${parameter2.javaTypeName} ${parameter2.fieldName}<#sep>, </#sep></#list>) {
+    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} _${parameter2.fieldName}<#sep>, </#sep></#list>) {
         <#list parameter.parameters as parameter2>
-        this.${parameter2.fieldName} = ${parameter2.fieldName};
+        this.${parameter2.fieldName} = _${parameter2.fieldName};
         </#list>
     }
 
@@ -76,7 +83,7 @@ public class ${parameter.javaTypeName} implements java.io.Serializable {
      * @return object
      * @throws Exception
      */
-    public Object getObject(java.sql.Connection connection) throws Exception {
+    public Object getObject(final java.sql.Connection connection) throws Exception {
 <#if driverName == 'oracle' >
 <#if driverVersion == '11' >
         oracle.sql.StructDescriptor descriptor = oracle.sql.StructDescriptor.createDescriptor("${parameter.realObjectName}", connection);

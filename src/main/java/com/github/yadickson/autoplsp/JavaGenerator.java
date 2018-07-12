@@ -104,7 +104,6 @@ public class JavaGenerator extends TemplateGenerator {
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedure.getFullName());
 
             processStoredProcedureParameterRS(procedure);
-            processStoredProcedureParameterRSCommon(procedure);
             processStoredProcedureParameterObject(procedure);
             processStoredProcedureParameterArray(procedure);
             processStoredProcedureMapperRS(procedure);
@@ -180,37 +179,6 @@ public class JavaGenerator extends TemplateGenerator {
         }
     }
 
-    private void processStoredProcedureParameterRSCommon(Procedure procedure) throws BusinessException {
-        Map<String, Object> input = new HashMap<String, Object>();
-
-        input.put(PROCEDURE_NAME, procedure);
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-
-        if (!procedure.getHasResultSet()) {
-            return;
-        }
-
-        String parameterPath = getDomainOutputPath("");
-
-        for (Parameter param : procedure.getParameters()) {
-            if (param.isOutput() && param.isResultSet()) {
-                DataSetParameter dataSetParameter = (DataSetParameter) param;
-
-                if (dataSetParameter.getExtend()) {
-                    String javaTypeName = dataSetParameter.getHierarchyFieldName();
-                    String fileName = getFileNameObjectPath(parameterPath, javaTypeName);
-
-                    dataSetParameter.setSuperClass(true);
-                    dataSetParameter.setExtend(false);
-
-                    input.put(PARAMETER_NAME, dataSetParameter);
-
-                    createTemplate(input, DOMAIN_PATH + "DataSet.ftl", fileName);
-                }
-            }
-        }
-    }
-
     private void processStoredProcedureMapperRS(Procedure procedure) throws BusinessException {
         Map<String, Object> input = new HashMap<String, Object>();
 
@@ -228,7 +196,7 @@ public class JavaGenerator extends TemplateGenerator {
 
                 DataSetParameter dataSetParameter = (DataSetParameter) param;
                 input.put(PARAMETER_NAME, dataSetParameter);
-                String fileName = dataSetParameter.getSuperClass() ? getFileNameObjectPath(parameterPath, param.getJavaTypeName() + "RowMapper") : getFileNamePath(parameterPath, procedure, param, "RSRowMapper");
+                String fileName = getFileNamePath(parameterPath, procedure, param, "RSRowMapper");
 
                 createTemplate(input, REPOSITORY_PATH + "Mapper.ftl", fileName);
             }

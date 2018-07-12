@@ -30,10 +30,7 @@ public abstract class DataSetParameter extends Parameter {
 
     static final long serialVersionUID = 1;
 
-    private String hierarchyName;
     private final String className;
-    private boolean superClass;
-    private boolean extend;
 
     /**
      * Class constructor
@@ -45,8 +42,6 @@ public abstract class DataSetParameter extends Parameter {
      */
     public DataSetParameter(int position, String name, Direction direction, Procedure procedure) {
         super(position, name, direction, procedure);
-        this.superClass = false;
-        this.extend = false;
         this.className = procedure.getClassName();
     }
 
@@ -61,64 +56,13 @@ public abstract class DataSetParameter extends Parameter {
     }
 
     /**
-     * Getter field name
-     *
-     * @return the field name
-     */
-    public String getHierarchyFieldName() {
-        return CapitalizeUtil.capitalize(getHierarchyName());
-    }
-
-    /**
-     * @return the hierarchyName
-     */
-    public String getHierarchyName() {
-        return hierarchyName;
-    }
-
-    /**
-     * @param hierarchyName the hierarchyName to set
-     */
-    public void setHierarchyName(String hierarchyName) {
-        this.hierarchyName = hierarchyName;
-    }
-
-    /**
-     * @return the superClass
-     */
-    public boolean getSuperClass() {
-        return superClass;
-    }
-
-    /**
-     * @param superClass the superClass to set
-     */
-    public void setSuperClass(boolean superClass) {
-        this.superClass = superClass;
-    }
-
-    /**
-     * @return the extend
-     */
-    public boolean getExtend() {
-        return extend;
-    }
-
-    /**
-     * @param extend the extend to set
-     */
-    public void setExtend(boolean extend) {
-        this.extend = extend;
-    }
-
-    /**
-     * Getter the java type name
+     * Getter the java type name.
      *
      * @return The java type name
      */
     @Override
     public String getJavaTypeName() {
-        return superClass ? getHierarchyFieldName() : className + CapitalizeUtil.capitalize(getName()) + "RS";
+        return className + CapitalizeUtil.capitalize(getName()) + "RS";
     }
 
 }

@@ -48,35 +48,7 @@ public class DataSetParameterTest {
 
     @Test
     public void testSelectJavaTypeNameByDefault() throws BusinessException {
-        Assert.assertFalse(parameter.getSuperClass());
         Assert.assertEquals("JavaTypeName", parameter.getJavaTypeName());
-    }
-
-    @Test
-    public void testNotExtendByDefault() throws BusinessException {
-        Assert.assertNull(parameter.getHierarchyName());
-        Assert.assertFalse(parameter.getExtend());
-    }
-
-    @Test
-    public void testSelectJavaTypeNameAndExtendHierarchyName() throws BusinessException {
-        parameter.setHierarchyName("Name");
-        parameter.setExtend(true);
-        Assert.assertEquals("JavaTypeName", parameter.getJavaTypeName());
-        Assert.assertFalse(parameter.getSuperClass());
-        Assert.assertTrue(parameter.getExtend());
-    }
-
-    @Test
-    public void testSelectHierarchyJavaTypeNameAndNotExtendHierarchyName() throws BusinessException {
-
-        parameter.setHierarchyName("Name");
-
-        parameter.setSuperClass(true);
-        parameter.setExtend(false);
-
-        Assert.assertTrue(parameter.getSuperClass());
-        Assert.assertFalse(parameter.getExtend());
     }
 
 }

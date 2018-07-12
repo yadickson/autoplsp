@@ -17,15 +17,22 @@
 package ${javaPackage}.domain;
 
 /**
- * Output parameters for stored procedure ${proc.fullName}
+ * Output parameters for stored procedure ${proc.fullName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings("serial")
-public class ${proc.className}OUT implements java.io.Serializable {
+public final class ${proc.className}OUT implements java.io.Serializable {
 
+    /**
+     * Serialization.
+     */
+    static final long serialVersionUID = 1L;
     <#list proc.outputParameters as parameter>
+
+    /**
+     * Output parameter ${parameter.fieldName}.
+     */
     private <#if parameter.resultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName} = null;
     </#list>
 
@@ -39,18 +46,18 @@ public class ${proc.className}OUT implements java.io.Serializable {
      * Class constructor ${proc.className}OUT.
      *
     <#list proc.outputParameters as parameter>
-     * @param ${parameter.fieldName} set value of ${parameter.fieldName}
+     * @param _${parameter.fieldName} set value of ${parameter.fieldName}
     </#list>
      */
-    public ${proc.className}OUT(<#list proc.outputParameters as parameter><#if parameter.resultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName}<#sep>, </#sep></#list>) {
+    public ${proc.className}OUT(<#list proc.outputParameters as parameter>final <#if parameter.resultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> _${parameter.fieldName}<#sep>, </#sep></#list>) {
         <#list proc.outputParameters as parameter>
-        this.${parameter.fieldName} = ${parameter.fieldName};
+        this.${parameter.fieldName} = _${parameter.fieldName};
         </#list>
     }
 
     <#list proc.outputParameters as parameter>
     /**
-     * Getter for ${parameter.fieldName}
+     * Getter for ${parameter.fieldName}.
      *
      * @return ${parameter.fieldName}
      */
@@ -59,17 +66,17 @@ public class ${proc.className}OUT implements java.io.Serializable {
     }
 
     /**
-     * Setter for ${parameter.fieldName}
+     * Setter for ${parameter.fieldName}.
      *
-     * @param ${parameter.fieldName} ${parameter.fieldName}
+     * @param _${parameter.fieldName} ${parameter.fieldName}
      */
-    public void set${parameter.propertyName}(<#if parameter.resultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName}) {
-        this.${parameter.fieldName} = ${parameter.fieldName};
+    public void set${parameter.propertyName}(final <#if parameter.resultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> _${parameter.fieldName}) {
+        this.${parameter.fieldName} = _${parameter.fieldName};
     }
 
     </#list>
     /**
-     * Getter to string
+     * Getter to string.
      *
      * @return to string
      */

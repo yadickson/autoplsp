@@ -18,51 +18,48 @@
 package ${javaPackage}.domain;
 
 /**
- * DataSet parameter <#if !parameter.superClass>${parameter.name} in ${proc.fullName}<#else>${parameter.hierarchyFieldName}</#if>
+ * DataSet parameter ${parameter.name} in ${proc.fullName}.
  *
-<#if parameter.extend> * @see ${parameter.hierarchyFieldName}
-</#if> * @author @GENERATOR.NAME@
+ * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings("serial")
-public class ${parameter.javaTypeName} <#if parameter.extend>extends ${parameter.hierarchyFieldName} </#if>implements java.io.Serializable {
+public final class ${parameter.javaTypeName} implements java.io.Serializable {
 
-<#if !parameter.extend>
+    /**
+     * Serialization.
+     */
+    static final long serialVersionUID = 1L;
     <#list parameter.parameters as parameter2>
+
+    /**
+     * Field parameter ${parameter2.fieldName}.
+     */
     private ${parameter2.javaTypeName} ${parameter2.fieldName} = null;
     </#list>
-</#if>
 
     /**
      * Class constructor ${parameter.javaTypeName}.
      */
     public ${parameter.javaTypeName}() {
-<#if parameter.extend>
-        super();
-</#if>
+
     }
 
     /**
      * Class constructor ${parameter.javaTypeName}.
      *
     <#list parameter.parameters as parameter2>
-     * @param ${parameter2.fieldName} set value of ${parameter2.fieldName}
+     * @param _${parameter2.fieldName} set value of ${parameter2.fieldName}
     </#list>
      */
-    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>${parameter2.javaTypeName} ${parameter2.fieldName}<#sep>, </#sep></#list>) {
-<#if !parameter.extend>
+    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} _${parameter2.fieldName}<#sep>, </#sep></#list>) {
         <#list parameter.parameters as parameter2>
-        this.${parameter2.fieldName} = ${parameter2.fieldName};
+        this.${parameter2.fieldName} = _${parameter2.fieldName};
         </#list>
-<#else>
-        super(<#list parameter.parameters as parameter2>${parameter2.fieldName}<#sep>, </#sep></#list>);
-</#if>
     }
 
-<#if !parameter.extend>
     <#list parameter.parameters as parameter2>
     /**
-     * Getter for ${parameter2.fieldName}
+     * Getter for ${parameter2.fieldName}.
      *
      * @return ${parameter2.fieldName}
      */
@@ -71,17 +68,17 @@ public class ${parameter.javaTypeName} <#if parameter.extend>extends ${parameter
     }
 
     /**
-     * Setter for ${parameter2.fieldName}
+     * Setter for ${parameter2.fieldName}.
      *
-     * @param ${parameter2.fieldName} ${parameter2.fieldName}
+     * @param _${parameter2.fieldName} ${parameter2.fieldName}
      */
-    public void set${parameter2.propertyName}(${parameter2.javaTypeName} ${parameter2.fieldName}) {
-        this.${parameter2.fieldName} = ${parameter2.fieldName};
+    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} _${parameter2.fieldName}) {
+        this.${parameter2.fieldName} = _${parameter2.fieldName};
     }
 
     </#list>
     /**
-     * Getter to string
+     * Getter to string.
      *
      * @return to string
      */
@@ -98,6 +95,5 @@ public class ${parameter.javaTypeName} <#if parameter.extend>extends ${parameter
 
         return str.toString();
     }
-</#if>
 }
 </#if>

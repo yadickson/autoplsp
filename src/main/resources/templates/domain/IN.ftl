@@ -18,15 +18,22 @@
 package ${javaPackage}.domain;
 
 /**
- * Input parameters for stored procedure ${proc.fullName}
+ * Input parameters for stored procedure ${proc.fullName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings("serial")
-public class ${proc.className}IN implements java.io.Serializable {
+public final class ${proc.className}IN implements java.io.Serializable {
 
+    /**
+     * Serialization.
+     */
+    static final long serialVersionUID = 1L;
     <#list proc.inputParameters as parameter>
+
+    /**
+     * Input parameter ${parameter.fieldName}.
+     */
     private ${parameter.javaTypeName} ${parameter.fieldName} = null;
     </#list>
 
@@ -40,18 +47,18 @@ public class ${proc.className}IN implements java.io.Serializable {
      * Class constructor ${proc.className}IN.
      *
     <#list proc.inputParameters as parameter>
-     * @param ${parameter.fieldName} set value of ${parameter.fieldName}
+     * @param _${parameter.fieldName} set value of ${parameter.fieldName}
     </#list>
      */
-    public ${proc.className}IN(<#list proc.inputParameters as parameter>${parameter.javaTypeName} ${parameter.fieldName}<#sep>, </#sep></#list>) {
+    public ${proc.className}IN(<#list proc.inputParameters as parameter>final ${parameter.javaTypeName} _${parameter.fieldName}<#sep>, </#sep></#list>) {
         <#list proc.inputParameters as parameter>
-        this.${parameter.fieldName} = ${parameter.fieldName};
+        this.${parameter.fieldName} = _${parameter.fieldName};
         </#list>
     }
 
     <#list proc.inputParameters as parameter>
     /**
-     * Getter for ${parameter.fieldName}
+     * Getter for ${parameter.fieldName}.
      *
      * @return ${parameter.fieldName}
      */
@@ -60,17 +67,17 @@ public class ${proc.className}IN implements java.io.Serializable {
     }
 
     /**
-     * Setter for ${parameter.fieldName}
+     * Setter for ${parameter.fieldName}.
      *
-     * @param ${parameter.fieldName} ${parameter.fieldName}
+     * @param _${parameter.fieldName} ${parameter.fieldName}
      */
-    public void set${parameter.propertyName}(${parameter.javaTypeName} ${parameter.fieldName}) {
-        this.${parameter.fieldName} = ${parameter.fieldName};
+    public void set${parameter.propertyName}(final ${parameter.javaTypeName} _${parameter.fieldName}) {
+        this.${parameter.fieldName} = _${parameter.fieldName};
     }
 
     </#list>
     /**
-     * Getter to string
+     * Getter to string.
      *
      * @return to string
      */

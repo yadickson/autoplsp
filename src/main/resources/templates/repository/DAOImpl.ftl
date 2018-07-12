@@ -38,9 +38,13 @@ import org.springframework.stereotype.Repository;
  * @version @GENERATOR.VERSION@
  */
 @Repository
-@SuppressWarnings({"serial", "rawtypes","unchecked"})
-public class ${proc.className}DAOImpl implements ${proc.className}DAO {
+@SuppressWarnings({"rawtypes","unchecked"})
+public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 
+    /**
+     * Serialization.
+     */
+    static final long serialVersionUID = 1L;
     <#if proc.hasObject || proc.hasArray>
     private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
     </#if>
@@ -51,7 +55,7 @@ public class ${proc.className}DAOImpl implements ${proc.className}DAO {
      * @param jdbcTemplate jdbcTemplate
      */
     @Resource(name="${jdbcTemplate}")
-    public void setJdbcTemplate(org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
+    public void setJdbcTemplate(final org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
         <#if proc.hasObject || proc.hasArray>
         this.jdbcTemplate = jdbcTemplate;
         </#if>
@@ -66,7 +70,7 @@ public class ${proc.className}DAOImpl implements ${proc.className}DAO {
      * @throws java.sql.SQLException
      */
     @Override
-    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>${proc.className}IN params</#if>) throws java.sql.SQLException {
+    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>final ${proc.className}IN params</#if>) throws java.sql.SQLException {
 
         java.util.Map mparams = new java.util.HashMap();
         <#if proc.hasOutput>
@@ -127,7 +131,7 @@ public class ${proc.className}DAOImpl implements ${proc.className}DAO {
      * @param result map to evaluate
      * @throws java.sql.SQLException
      */
-    private java.util.Map evaluateResult(java.util.Map result) throws java.sql.SQLException {
+    private java.util.Map evaluateResult(final java.util.Map result) throws java.sql.SQLException {
 
         if (result == null) {
             return null;

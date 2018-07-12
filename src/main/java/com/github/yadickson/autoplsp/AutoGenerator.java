@@ -281,9 +281,6 @@ public class AutoGenerator extends AbstractMojo {
 
             Collections.sort(spList, new ProcedureSort());
 
-            PreprocessorParameters preprocessors = new PreprocessorParameters();
-            preprocessors.process(spList);
-
             JavaGenerator template = new JavaGenerator(outputDirectory.getPath(),
                     javaPackageName, javaDataSourceName, javaJdbcTemplateName,
                     outParameterCode, outParameterMessage, generator.getName(), connManager.getVersion());

@@ -28,9 +28,17 @@ import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings({"serial", "rawtypes","unchecked"})
+@SuppressWarnings({"rawtypes","unchecked"})
 public class ${proc.className}SP extends org.springframework.jdbc.object.StoredProcedure implements java.io.Serializable {
 
+    /**
+     * Serialization.
+     */
+    static final long serialVersionUID = 1L;
+
+    /**
+     * Full procedure name.
+     */
     public static final String SPROC_NAME = "${proc.fullName}";
 
     /**
@@ -38,7 +46,7 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.StoredP
      *
      * @param jdbcTemplate jdbcTemplate
      */
-    public ${proc.className}SP(org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
+    public ${proc.className}SP(final org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate.getDataSource(), SPROC_NAME);
         <#if proc.function>
         setFunction(true);

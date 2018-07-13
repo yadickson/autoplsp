@@ -60,7 +60,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
         <#if proc.hasObject || proc.hasArray>
         this.jdbcTemplate = _jdbcTemplate;
         </#if>
-        this.sp = new ${proc.className}SP(jdbcTemplate);
+        this.sp = new ${proc.className}SP(_jdbcTemplate);
     }
 
     /**

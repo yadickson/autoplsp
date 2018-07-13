@@ -20,7 +20,7 @@ package ${javaPackage}.repository.mapper;
 import ${javaPackage}.domain.${parameter.javaTypeName};
 
 /**
- * Resultset mapper of ${parameter.name}
+ * Resultset mapper of ${parameter.name}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
@@ -34,11 +34,11 @@ public class ${parameter.javaTypeName}RowMapper implements org.springframework.j
     static final long serialVersionUID = 1L;
 
     /**
-     * Resultset mapper
+     * Resultset mapper.
      *
-     * @param resultSet resultset
-     * @param i row number
-     * @throws java.sql.SQLException
+     * @param resultSet resultset.
+     * @param i row number.
+     * @throws java.sql.SQLException if error.
      * @return object
      */
     @Override

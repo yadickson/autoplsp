@@ -32,7 +32,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Repository;
 
 /**
- * JDBCTemplate implementation for stored procedure ${proc.fullName}
+ * JDBCTemplate implementation for stored procedure ${proc.fullName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
@@ -51,23 +51,24 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
     private ${proc.className}SP sp = null;
 
     /**
-     * Setter for jdbcTemplate
-     * @param jdbcTemplate jdbcTemplate
+     * Setter for jdbcTemplate.
+     *
+     * @param _jdbcTemplate jdbcTemplate
      */
     @Resource(name="${jdbcTemplate}")
-    public void setJdbcTemplate(final org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
+    public void setJdbcTemplate(final org.springframework.jdbc.core.JdbcTemplate _jdbcTemplate) {
         <#if proc.hasObject || proc.hasArray>
-        this.jdbcTemplate = jdbcTemplate;
+        this.jdbcTemplate = _jdbcTemplate;
         </#if>
         this.sp = new ${proc.className}SP(jdbcTemplate);
     }
 
     /**
-     * Execute stored procedure
+     * Execute stored procedure.
      *
-     * <#if proc.hasInput>@param params input parameters</#if>
+     * <#if proc.hasInput>@param _params input parameters</#if>
      * <#if proc.hasOutput>@return output parameters</#if>
-     * @throws java.sql.SQLException
+     * @throws java.sql.SQLException if error.
      */
     @Override
     public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>final ${proc.className}IN params</#if>) throws java.sql.SQLException {
@@ -126,10 +127,10 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
     <#if proc.hasOutput>
 
     /**
-     * Evaluate output parameters fron database
+     * Evaluate output parameters from database.
      *
-     * @param result map to evaluate
-     * @throws java.sql.SQLException
+     * @param result map to evaluate.
+     * @throws java.sql.SQLException if error.
      */
     private java.util.Map evaluateResult(final java.util.Map result) throws java.sql.SQLException {
 

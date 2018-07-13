@@ -18,7 +18,7 @@
 package ${javaPackage}.domain;
 
 /**
- * Bean objet for datatype ${parameter.realObjectName}
+ * Bean object for datatype ${parameter.realObjectName}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
@@ -58,7 +58,7 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
 
     <#list parameter.parameters as parameter2>
     /**
-     * Getter for ${parameter2.fieldName}
+     * Getter for ${parameter2.fieldName}.
      *
      * @return ${parameter2.fieldName}
      */
@@ -67,7 +67,7 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
     }
 
     /**
-     * Setter for ${parameter2.fieldName}
+     * Setter for ${parameter2.fieldName}.
      *
      * @param ${parameter2.fieldName} ${parameter2.fieldName}
      */
@@ -77,7 +77,7 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
 
     </#list>
     /**
-     * Getter data object type
+     * Getter data object type.
      *
      * @param connection Database connection
      * @return object
@@ -97,7 +97,7 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
     }
 
     /**
-     * Getter to string
+     * Getter to string.
      *
      * @return to string
      */

@@ -18,7 +18,7 @@
 package ${javaPackage}.domain;
 
 /**
- * Bean objet for datatype ${parameter.realObjectName}
+ * Bean object for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
@@ -31,7 +31,7 @@ public final class ${parameter.javaTypeName} extends java.util.ArrayList<${param
     static final long serialVersionUID = 1L;
 
     /**
-     * Getter data object type
+     * Getter data object type.
      *
      * @param connection Database connection
      * @return object
@@ -63,7 +63,7 @@ public final class ${parameter.javaTypeName} extends java.util.ArrayList<${param
     }
 
     /**
-     * Getter to string
+     * Getter to string.
      *
      * @return to string
      */

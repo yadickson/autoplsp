@@ -23,7 +23,7 @@ import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
 </#list>
 
 /**
- * JDBC Stored Procedure ${proc.fullName}
+ * JDBC Stored Procedure ${proc.fullName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
@@ -42,7 +42,7 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.StoredP
     public static final String SPROC_NAME = "${proc.fullName}";
 
     /**
-     * Class constructor from dataSource
+     * Class constructor from dataSource.
      *
      * @param jdbcTemplate jdbcTemplate
      */
@@ -60,10 +60,10 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.StoredP
     }
 
     /**
-     * Execute the stored procedure
+     * Execute the stored procedure.
      *
-     * @return response
-     * @param params input parameters
+     * @return response.
+     * @param params input parameters.
      */
     @Override
     public java.util.Map execute(java.util.Map params) {

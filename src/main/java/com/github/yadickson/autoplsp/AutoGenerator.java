@@ -197,7 +197,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] Driver: " + driver);
         getLog().info("[AutoGenerator] ConnectionString: " + connectionString);
         getLog().info("[AutoGenerator] User: " + user);
-        getLog().info("[AutoGenerator] Pass: " + pass);
+        getLog().info("[AutoGenerator] Pass: ****");
         getLog().info("[AutoGenerator] OutputDirectory: " + outputDirectory.getPath());
         getLog().info("[AutoGenerator] OutputDirectoryResource: " + outputDirectoryResource.getPath());
         getLog().info("[AutoGenerator] OutputConfigFileName: " + outputConfigFileName);

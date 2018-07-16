@@ -128,6 +128,7 @@ public class AutoGenerator extends AbstractMojo {
      * Datasource name
      */
     @Parameter(
+            property = "autoplsp.javaDataSourceName",
             readonly = true,
             required = true)
     private String javaDataSourceName;
@@ -136,6 +137,7 @@ public class AutoGenerator extends AbstractMojo {
      * JdbcTemplate name
      */
     @Parameter(
+            property = "autoplsp.javaJdbcTemplateName",
             defaultValue = "jdbcTemplate",
             readonly = true,
             required = false)
@@ -145,6 +147,7 @@ public class AutoGenerator extends AbstractMojo {
      * JNDI datasource name
      */
     @Parameter(
+            property = "autoplsp.jndiDataSourceName",
             readonly = true,
             required = true)
     private String jndiDataSourceName;

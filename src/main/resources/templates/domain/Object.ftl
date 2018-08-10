@@ -71,7 +71,7 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
      *
      * @param ${parameter2.fieldName} ${parameter2.fieldName}
      */
-    public void set${parameter2.propertyName}(${parameter2.javaTypeName} ${parameter2.fieldName}) {
+    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} ${parameter2.fieldName}) {
         this.${parameter2.fieldName} = ${parameter2.fieldName};
     }
 
@@ -87,7 +87,15 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
 <#if driverName == 'oracle' >
 <#if driverVersion == '11' >
         oracle.sql.StructDescriptor descriptor = oracle.sql.StructDescriptor.createDescriptor("${parameter.realObjectName}", connection);
-        return new oracle.sql.STRUCT(descriptor, connection, new Object[]{<#list parameter.parameters as parameter>get${parameter.propertyName}()<#sep>, </#sep></#list>});
+<#list parameter.parameters as parameter>        <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);
+        clob${parameter.propertyName}.setString(1, get${parameter.propertyName}());</#if>
+</#list>
+
+        Object[] objs = new Object[]{
+<#list parameter.parameters as parameter>            <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>clob${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
+</#list>        };
+
+        return new oracle.sql.STRUCT(descriptor, connection, objs);
 <#else>
         return connection.createStruct("${parameter.realObjectName}", input);
 </#if>

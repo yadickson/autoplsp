@@ -48,12 +48,12 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
      * Class constructor ${parameter.javaTypeName}.
      *
     <#list parameter.parameters as parameter2>
-     * @param _${parameter2.fieldName} set value of ${parameter2.fieldName}
+     * @param p${parameter2.fieldName} set value of ${parameter2.fieldName}
     </#list>
      */
-    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} _${parameter2.fieldName}<#sep>, </#sep></#list>) {
+    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} p${parameter2.fieldName}<#sep>, </#sep></#list>) {
         <#list parameter.parameters as parameter2>
-        this.${parameter2.fieldName} = _${parameter2.fieldName};
+        this.${parameter2.fieldName} = p${parameter2.fieldName};
         </#list>
     }
 
@@ -70,10 +70,10 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
     /**
      * Setter for ${parameter2.fieldName}.
      *
-     * @param _${parameter2.fieldName} ${parameter2.fieldName}
+     * @param p${parameter2.fieldName} ${parameter2.fieldName}
      */
-    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} _${parameter2.fieldName}) {
-        this.${parameter2.fieldName} = _${parameter2.fieldName};
+    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} p${parameter2.fieldName}) {
+        this.${parameter2.fieldName} = p${parameter2.fieldName};
     }
 
     </#list>

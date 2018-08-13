@@ -53,20 +53,20 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
     /**
      * Setter for jdbcTemplate.
      *
-     * @param _jdbcTemplate jdbcTemplate
+     * @param pjdbcTemplate jdbcTemplate
      */
     @Resource(name="${jdbcTemplate}")
-    public void setJdbcTemplate(final org.springframework.jdbc.core.JdbcTemplate _jdbcTemplate) {
+    public void setJdbcTemplate(final org.springframework.jdbc.core.JdbcTemplate pjdbcTemplate) {
         <#if proc.hasObject || proc.hasArray>
-        this.jdbcTemplate = _jdbcTemplate;
+        this.jdbcTemplate = pjdbcTemplate;
         </#if>
-        this.sp = new ${proc.className}SP(_jdbcTemplate);
+        this.sp = new ${proc.className}SP(pjdbcTemplate);
     }
 
     /**
      * Execute stored procedure.
      *
-     * <#if proc.hasInput>@param _params input parameters</#if>
+     * <#if proc.hasInput>@param params input parameters</#if>
      * <#if proc.hasOutput>@return output parameters</#if>
      * @throws java.sql.SQLException if error.
      */

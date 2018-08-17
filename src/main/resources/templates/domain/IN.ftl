@@ -47,12 +47,12 @@ public final class ${proc.className}IN implements java.io.Serializable {
      * Class constructor ${proc.className}IN.
      *
     <#list proc.inputParameters as parameter>
-     * @param p${parameter.fieldName} set value of ${parameter.fieldName}
+     * @param p${parameter.propertyName} set value of ${parameter.fieldName}
     </#list>
      */
-    public ${proc.className}IN(<#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.fieldName}<#sep>, </#sep></#list>) {
+    public ${proc.className}IN(<#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.propertyName}<#sep>, </#sep></#list>) {
         <#list proc.inputParameters as parameter>
-        this.${parameter.fieldName} = p${parameter.fieldName};
+        this.${parameter.fieldName} = p${parameter.propertyName};
         </#list>
     }
 
@@ -69,10 +69,10 @@ public final class ${proc.className}IN implements java.io.Serializable {
     /**
      * Setter for ${parameter.fieldName}.
      *
-     * @param p${parameter.fieldName} ${parameter.fieldName}
+     * @param p${parameter.propertyName} ${parameter.fieldName} to set
      */
-    public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.fieldName}) {
-        this.${parameter.fieldName} = p${parameter.fieldName};
+    public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
+        this.${parameter.fieldName} = p${parameter.propertyName};
     }
 
     </#list>

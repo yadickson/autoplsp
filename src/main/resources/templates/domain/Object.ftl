@@ -47,12 +47,12 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
      * Class Constructor ${parameter.javaTypeName}.
      *
     <#list parameter.parameters as parameter2>
-     * @param p${parameter2.fieldName} set value of ${parameter2.fieldName}
+     * @param p${parameter2.propertyName} set value of ${parameter2.fieldName}
     </#list>
      */
-    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} p${parameter2.fieldName}<#sep>, </#sep></#list>) {
+    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} p${parameter2.propertyName}<#sep>, </#sep></#list>) {
         <#list parameter.parameters as parameter2>
-        this.${parameter2.fieldName} = p${parameter2.fieldName};
+        this.${parameter2.fieldName} = p${parameter2.propertyName};
         </#list>
     }
 
@@ -69,10 +69,10 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
     /**
      * Setter for ${parameter2.fieldName}.
      *
-     * @param ${parameter2.fieldName} ${parameter2.fieldName}
+     * @param p${parameter2.propertyName} ${parameter2.fieldName} to set
      */
-    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} ${parameter2.fieldName}) {
-        this.${parameter2.fieldName} = ${parameter2.fieldName};
+    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} p${parameter2.propertyName}) {
+        this.${parameter2.fieldName} = p${parameter2.propertyName};
     }
 
     </#list>
@@ -87,12 +87,18 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
 <#if driverName == 'oracle' >
 <#if driverVersion == '11' >
         oracle.sql.StructDescriptor descriptor = oracle.sql.StructDescriptor.createDescriptor("${parameter.realObjectName}", connection);
-<#list parameter.parameters as parameter>        <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATIONpSESSION);
-        clob${parameter.propertyName}.setString(1, get${parameter.propertyName}());</#if>
+
+<#list parameter.parameters as parameter>
+<#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>
+        oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);
+        clob${parameter.propertyName}.setString(1, get${parameter.propertyName}());
+<#elseif parameter.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
+        oracle.sql.DATE date${parameter.propertyName} = get${parameter.propertyName}() == null ? null : new oracle.sql.DATE(new java.sql.Date(get${parameter.propertyName}().getTime()));
+</#if>
 </#list>
 
         Object[] objs = new Object[]{
-<#list parameter.parameters as parameter>            <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>clob${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
+<#list parameter.parameters as parameter>            <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>clob${parameter.propertyName}<#elseif parameter.sqlTypeName == 'java.sql.Types.TIMESTAMP'>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
 </#list>        };
 
         return new oracle.sql.STRUCT(descriptor, connection, objs);

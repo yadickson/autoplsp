@@ -117,22 +117,22 @@ public class OracleTableParameterTest {
 */
     @Test
     public void testGetJavaTypeName() throws BusinessException {
-        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
+        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "TableSuffix");
         String javaType = parameter.getJavaTypeName();
         assertNotNull(javaType);
-        assertEquals("TypeValueTable", javaType);
+        assertEquals("TypeValueTableSuffix", javaType);
     }
 
     @Test
     public void testGetSqlType() throws BusinessException {
-        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
+        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
         int sqlType = parameter.getSqlType();
         assertEquals(oracle.jdbc.OracleTypes.ARRAY, sqlType);
     }
 
     @Test
     public void testGetSqlTypeName() throws BusinessException {
-        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
+        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
         String sqlType = parameter.getSqlTypeName();
         assertNotNull(sqlType);
         assertEquals("oracle.jdbc.OracleTypes.ARRAY", sqlType);
@@ -140,19 +140,19 @@ public class OracleTableParameterTest {
 
     @Test
     public void testResultSetFalse() throws BusinessException {
-        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
+        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
         assertFalse(parameter.isResultSet());
     }
 
     @Test
     public void testObjectFalse() throws BusinessException {
-        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
+        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
         assertFalse(parameter.isObject());
     }
 
     @Test
     public void tesArrayTrue() throws BusinessException {
-        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value");
+        OracleTableParameter parameter = new OracleTableParameter(1, "tableObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
         assertTrue(parameter.isArray());
     }
 

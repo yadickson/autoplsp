@@ -44,10 +44,21 @@ public abstract class MakeParameter {
      * @param connection Database connection
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
      * @return the new parameter
      * @throws BusinessException If create parameter process throws an error
      */
-    public Parameter create(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException {
+    public Parameter create(
+            final String type,
+            final int position,
+            final String name,
+            final Direction direction,
+            final Connection connection,
+            final String typeName,
+            final Procedure procedure,
+            final String objectSuffix,
+            final String arraySuffix) throws BusinessException {
 
         if (type == null) {
             throw new BusinessException("Parameter type is null");
@@ -69,7 +80,7 @@ public abstract class MakeParameter {
             return new DateParameter(position, name, direction, procedure);
         }
 
-        return getOwnerParameter(type, position, name, direction, connection, typeName, procedure);
+        return getOwnerParameter(type, position, name, direction, connection, typeName, procedure, objectSuffix, arraySuffix);
     }
 
     /**
@@ -82,8 +93,20 @@ public abstract class MakeParameter {
      * @param connection Database connection
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
      * @return the new parameter
      * @throws BusinessException If create parameter process throws an error
      */
-    public abstract Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException;
+    public abstract Parameter getOwnerParameter(
+            final String type,
+            final int position,
+            final String name,
+            final Direction direction,
+            final Connection connection,
+            final String typeName,
+            final Procedure procedure,
+            final String objectSuffix,
+            final String arraySuffix)
+            throws BusinessException;
 }

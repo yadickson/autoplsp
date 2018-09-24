@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import org.apache.commons.lang.StringUtils;
 import com.github.yadickson.autoplsp.db.MakeDirection;
+import com.github.yadickson.autoplsp.db.util.FindParameter;
 import com.github.yadickson.autoplsp.util.ParameterSort;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
@@ -64,7 +65,7 @@ public class OracleSPGenerator extends SPGenerator {
      */
     @Override
     public String getProcedureQuery() {
-        return "SELECT OBJECT_NAME as PKG, PROCEDURE_NAME as NAME, case when (SELECT count(position) as type FROM all_arguments WHERE OWNER=USER AND object_name = allp.PROCEDURE_NAME AND package_name = allp.OBJECT_NAME and position = 0) = 0 then 'PROCEDURE' else 'FUNCTION' end as type FROM SYS.ALL_PROCEDURES allp WHERE OWNER=USER and OBJECT_TYPE ='PACKAGE' and PROCEDURE_NAME is not null union SELECT null as PKG, OBJECT_NAME AS NAME, OBJECT_TYPE as TYPE FROM SYS.ALL_PROCEDURES WHERE OWNER=USER and (OBJECT_TYPE = 'FUNCTION' or OBJECT_TYPE='PROCEDURE')";
+        return "SELECT OBJECT_NAME as PKG, PROCEDURE_NAME as NAME, case when (SELECT count(position) as type FROM all_arguments WHERE OWNER=USER AND object_name = allp.PROCEDURE_NAME AND package_name = allp.OBJECT_NAME and position = 0) = 0 then 'PROCEDURE' else 'FUNCTION' end as type FROM ALL_PROCEDURES allp WHERE OWNER=USER and OBJECT_TYPE ='PACKAGE' and PROCEDURE_NAME is not null union SELECT null as PKG, OBJECT_NAME AS NAME, OBJECT_TYPE as TYPE FROM ALL_PROCEDURES WHERE OWNER=USER and (OBJECT_TYPE = 'FUNCTION' or OBJECT_TYPE='PROCEDURE')";
     }
 
     /**
@@ -72,16 +73,25 @@ public class OracleSPGenerator extends SPGenerator {
      *
      * @param connection Database connection
      * @param procedure procedure
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
      * @throws BusinessException If error
      */
     @Override
-    public void fillProcedure(Connection connection, Procedure procedure) throws BusinessException {
+    public void fillProcedure(
+            final Connection connection,
+            final Procedure procedure,
+            final String objectSuffix,
+            final String arraySuffix) throws BusinessException {
         LoggerManager.getInstance().info("[OracleSPGenerator] Create store procedure " + procedure.getFullName());
 
         Map<Integer, Parameter> mparameters = new TreeMap<Integer, Parameter>();
+        String pkg = procedure.getPackageName() == null ? "" : "AND package_name = ?";
+        String sql = "SELECT argument_name as name, position, in_out as direction, data_type as dtype, type_name as ntype FROM all_arguments WHERE OWNER=USER AND object_name = ? " + pkg + " order by position asc, argument_name asc nulls first";
 
-        String sql = "SELECT argument_name as name, position, in_out as direction, data_type as dtype, type_name as ntype FROM all_arguments WHERE OWNER=USER AND object_name = ? AND (? is null OR package_name = ?) order by position asc, argument_name asc nulls first";
-        List<ParameterBean> parameters = new FindParameterImpl().getParameters(connection, sql, procedure.getName(), procedure.getPackageName(), procedure.getPackageName());
+        FindParameter find = new FindParameterImpl();
+
+        List<ParameterBean> parameters = procedure.getPackageName() == null ? find.getParameters(connection, sql, procedure.getName()) : find.getParameters(connection, sql, procedure.getName(), procedure.getPackageName());
 
         for (ParameterBean p : parameters) {
 
@@ -93,7 +103,7 @@ public class OracleSPGenerator extends SPGenerator {
             Direction direction = new MakeDirection().getDirection(p.getDirection());
 
             LoggerManager.getInstance().info("[OracleSPGenerator] Process (" + position + ") " + parameterName + " " + direction + " " + dataType + " " + typeName);
-            Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, direction, connection, typeName, procedure);
+            Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, direction, connection, typeName, procedure, objectSuffix, arraySuffix);
             LoggerManager.getInstance().info("[OracleSPGenerator] Parameter (" + param.getPosition() + ") " + param.getName() + " " + param.getDirection() + " [" + param.getSqlTypeName() + "]");
 
             mparameters.put(position, param);
@@ -103,12 +113,17 @@ public class OracleSPGenerator extends SPGenerator {
         procedure.setParameters(list);
 
         if (procedure.getHasResultSet()) {
-            findOracleDataSetParameter(connection, procedure, list);
+            findOracleDataSetParameter(connection, procedure, list, objectSuffix, arraySuffix);
         }
 
     }
 
-    private void findOracleDataSetParameter(Connection connection, Procedure procedure, List<Parameter> parameters) throws BusinessException {
+    private void findOracleDataSetParameter(
+            final Connection connection,
+            final Procedure procedure,
+            final List<Parameter> parameters,
+            final String objectSuffix,
+            final String arraySuffix) throws BusinessException {
 
         boolean isFunction = procedure.isFunction();
 
@@ -147,7 +162,7 @@ public class OracleSPGenerator extends SPGenerator {
                     throw new BusinessException("[OracleSPGenerator] ResultSet null");
                 }
 
-                parameters.get(i).setParameters(getParameters(procedure, connection, result));
+                parameters.get(i).setParameters(getParameters(procedure, connection, result, objectSuffix, arraySuffix));
             }
 
         } catch (SQLException ex) {
@@ -187,7 +202,7 @@ public class OracleSPGenerator extends SPGenerator {
         return sql;
     }
 
-    private List<Parameter> getParameters(Procedure procedure, Connection connection, ResultSet result) throws BusinessException, SQLException {
+    private List<Parameter> getParameters(Procedure procedure, Connection connection, ResultSet result, String objectSuffix, String arraySuffix) throws BusinessException, SQLException {
 
         ResultSetMetaData metadata = result.getMetaData();
 
@@ -196,7 +211,7 @@ public class OracleSPGenerator extends SPGenerator {
 
         try {
             for (int j = 0; j < metadata.getColumnCount(); j++) {
-                Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.OUTPUT, connection, null, procedure);
+                Parameter p = new OracleMakeParameter().create(metadata.getColumnTypeName(j + 1), j + 1, metadata.getColumnName(j + 1), Direction.OUTPUT, connection, null, procedure, objectSuffix, arraySuffix);
 
                 if (pNames.contains(p.getName())) {
                     throw new BusinessException("Parameter name [" + p.getName() + "] is duplicated");

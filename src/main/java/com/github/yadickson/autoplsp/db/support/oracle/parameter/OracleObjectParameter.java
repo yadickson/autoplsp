@@ -39,6 +39,8 @@ public class OracleObjectParameter extends Parameter {
 
     private final List<Parameter> parameters = new ArrayList<Parameter>();
     private final String objectName;
+    private final String objectSuffix;
+    private final String arraySuffix;
 
     /**
      * Class constructor.
@@ -49,11 +51,24 @@ public class OracleObjectParameter extends Parameter {
      * @param procedure Procedure
      * @param connection Database connection
      * @param typeName Particular parameter type name
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
      * @throws BusinessException If create parameter process throws an error
      */
-    public OracleObjectParameter(int position, String name, Direction direction, Procedure procedure, Connection connection, String typeName) throws BusinessException {
+    public OracleObjectParameter(
+            final int position,
+            final String name,
+            final Direction direction,
+            final Procedure procedure,
+            final Connection connection,
+            final String typeName,
+            final String objectSuffix,
+            final String arraySuffix)
+            throws BusinessException {
         super(position, name, direction, procedure);
         this.objectName = typeName;
+        this.objectSuffix = objectSuffix;
+        this.arraySuffix = arraySuffix;
         addParameters(procedure, connection, typeName);
     }
 
@@ -74,7 +89,7 @@ public class OracleObjectParameter extends Parameter {
      */
     @Override
     public String getJavaTypeName() {
-        return getObjectName() + "Object";
+        return getObjectName() + objectSuffix;
     }
 
     /**
@@ -128,7 +143,7 @@ public class OracleObjectParameter extends Parameter {
 
     private void addParameters(Procedure procedure, Connection connection, String typeName) throws BusinessException {
 
-        String sql = "SELECT ATTR_NAME as name, ATTR_TYPE_NAME as dtype, ATTR_NO as position from SYS.ALL_TYPE_ATTRS WHERE OWNER=USER AND TYPE_NAME = ? ORDER BY ATTR_NO";
+        String sql = "SELECT ATTR_NAME as name, ATTR_TYPE_NAME as dtype, ATTR_NO as position from ALL_TYPE_ATTRS WHERE OWNER=USER AND TYPE_NAME = ? ORDER BY ATTR_NO";
         List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, typeName);
 
         for (ParameterBean p : list) {
@@ -137,7 +152,7 @@ public class OracleObjectParameter extends Parameter {
             Integer position = p.getPosition();
             String parameterName = p.getName();
 
-            Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, Direction.INPUT, connection, null, procedure);
+            Parameter param = new OracleMakeParameter().create(dataType, position, parameterName, Direction.INPUT, connection, null, procedure, objectSuffix, arraySuffix);
             LoggerManager.getInstance().info("[OracleObjectParameter] (" + param.getPosition() + ") " + param.getName() + " [" + param.getSqlTypeName() + "]");
             parameters.add(param);
         }

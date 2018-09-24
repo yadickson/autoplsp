@@ -84,26 +84,31 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
      * @throws Exception
      */
     public Object getObject(final java.sql.Connection connection) throws Exception {
-<#if driverName == 'oracle' >
-<#if driverVersion == '11' >
-        oracle.sql.StructDescriptor descriptor = oracle.sql.StructDescriptor.createDescriptor("${parameter.realObjectName}", connection);
-
 <#list parameter.parameters as parameter>
 <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>
         oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);
-        clob${parameter.propertyName}.setString(1, get${parameter.propertyName}());
+        java.io.Writer clobWriter${parameter.propertyName} = clob${parameter.propertyName}.getCharacterOutputStream();
+        clobWriter${parameter.propertyName}.write(get${parameter.propertyName}().toCharArray(););
+        clobWriter${parameter.propertyName}.flush();
+        clobWriter${parameter.propertyName}.close();
+<#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB'>
+        oracle.sql.BLOB blob${parameter.propertyName} = oracle.sql.BLOB.createTemporary(connection, false, oracle.sql.BLOB.DURATION_SESSION);
+        blob${parameter.propertyName}.getBinaryOutputStream().write(get${parameter.propertyName}());
 <#elseif parameter.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
         oracle.sql.DATE date${parameter.propertyName} = get${parameter.propertyName}() == null ? null : new oracle.sql.DATE(new java.sql.Date(get${parameter.propertyName}().getTime()));
 </#if>
 </#list>
 
         Object[] objs = new Object[]{
-<#list parameter.parameters as parameter>            <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>clob${parameter.propertyName}<#elseif parameter.sqlTypeName == 'java.sql.Types.TIMESTAMP'>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
+<#list parameter.parameters as parameter>            <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>clob${parameter.propertyName}<#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB'>blob${parameter.propertyName}<#elseif parameter.sqlTypeName == 'java.sql.Types.TIMESTAMP'>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
 </#list>        };
 
+<#if driverName == 'oracle' >
+<#if driverVersion == '11' >
+        oracle.sql.StructDescriptor descriptor = oracle.sql.StructDescriptor.createDescriptor("${parameter.realObjectName}", connection);
         return new oracle.sql.STRUCT(descriptor, connection, objs);
 <#else>
-        return connection.createStruct("${parameter.realObjectName}", input);
+        return connection.createStruct("${parameter.realObjectName}", objs);
 </#if>
 <#else>
         return throw new Exception("driver ${driverName} not supported");

@@ -41,7 +41,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 /**
- * Maven plugin to java classes and config spring file generator from database
+ * Maven plugin to java classes and config spring file generator from database.
  *
  * @author Yadickson Soto
  */
@@ -52,13 +52,13 @@ import org.apache.maven.plugins.annotations.Parameter;
 public class AutoGenerator extends AbstractMojo {
 
     /**
-     * Maven projeck link
+     * Maven projeck link.
      */
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
     /**
-     * Database driver
+     * Database driver.
      */
     @Parameter(
             property = "autoplsp.driver",
@@ -66,7 +66,7 @@ public class AutoGenerator extends AbstractMojo {
     private String driver;
 
     /**
-     * Database url connection string
+     * Database url connection string.
      */
     @Parameter(
             property = "autoplsp.connectionString",
@@ -74,7 +74,7 @@ public class AutoGenerator extends AbstractMojo {
     private String connectionString;
 
     /**
-     * Database username
+     * Database username.
      */
     @Parameter(
             property = "autoplsp.user",
@@ -82,7 +82,7 @@ public class AutoGenerator extends AbstractMojo {
     private String user;
 
     /**
-     * Database password
+     * Database password.
      */
     @Parameter(
             property = "autoplsp.pass",
@@ -90,7 +90,7 @@ public class AutoGenerator extends AbstractMojo {
     private String pass;
 
     /**
-     * Output source directory
+     * Output source directory.
      */
     @Parameter(
             defaultValue = "${project.build.directory}/generated-sources",
@@ -99,7 +99,7 @@ public class AutoGenerator extends AbstractMojo {
     private File outputDirectory;
 
     /**
-     * Output resource directory
+     * Output resource directory.
      */
     @Parameter(
             defaultValue = "${project.build.directory}/generated-resources",
@@ -108,7 +108,7 @@ public class AutoGenerator extends AbstractMojo {
     private File outputDirectoryResource;
 
     /**
-     * Spring configuration file name
+     * Spring configuration file name.
      */
     @Parameter(
             defaultValue = "${project.artifactId}.xml",
@@ -117,7 +117,7 @@ public class AutoGenerator extends AbstractMojo {
     private String outputConfigFileName;
 
     /**
-     * Java package name
+     * Java package name.
      */
     @Parameter(
             readonly = true,
@@ -125,7 +125,7 @@ public class AutoGenerator extends AbstractMojo {
     private String javaPackageName;
 
     /**
-     * Datasource name
+     * Datasource name.
      */
     @Parameter(
             property = "autoplsp.javaDataSourceName",
@@ -134,7 +134,7 @@ public class AutoGenerator extends AbstractMojo {
     private String javaDataSourceName;
 
     /**
-     * JdbcTemplate name
+     * JdbcTemplate name.
      */
     @Parameter(
             property = "autoplsp.javaJdbcTemplateName",
@@ -144,7 +144,27 @@ public class AutoGenerator extends AbstractMojo {
     private String javaJdbcTemplateName;
 
     /**
-     * JNDI datasource name
+     * Array suffix name.
+     */
+    @Parameter(
+            property = "autoplsp.arraySuffix",
+            defaultValue = "Table",
+            readonly = true,
+            required = false)
+    private String arraySuffix;
+
+    /**
+     * Object suffix name.
+     */
+    @Parameter(
+            property = "autoplsp.objectSuffix",
+            defaultValue = "Object",
+            readonly = true,
+            required = false)
+    private String objectSuffix;
+
+    /**
+     * JNDI datasource name.
      */
     @Parameter(
             property = "autoplsp.jndiDataSourceName",
@@ -153,7 +173,7 @@ public class AutoGenerator extends AbstractMojo {
     private String jndiDataSourceName;
 
     /**
-     * Regular expression to include procedure names
+     * Regular expression to include procedure names.
      */
     @Parameter(
             alias = "includes",
@@ -162,7 +182,7 @@ public class AutoGenerator extends AbstractMojo {
     private String[] mIncludes;
 
     /**
-     * Regular expression to exclude procedure names
+     * Regular expression to exclude procedure names.
      */
     @Parameter(
             alias = "excludes",
@@ -171,7 +191,7 @@ public class AutoGenerator extends AbstractMojo {
     private String[] mExcludes;
 
     /**
-     * Output parameter code to evaluate process
+     * Output parameter code to evaluate process.
      */
     @Parameter(
             defaultValue = "OUT_RETURN_CODE",
@@ -180,7 +200,7 @@ public class AutoGenerator extends AbstractMojo {
     private String outParameterCode;
 
     /**
-     * Output parameter message
+     * Output parameter message.
      */
     @Parameter(
             defaultValue = "OUT_RETURN_MSG",
@@ -189,7 +209,7 @@ public class AutoGenerator extends AbstractMojo {
     private String outParameterMessage;
 
     /**
-     * Maven execute method
+     * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
      * error
@@ -208,6 +228,8 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] JavaDataSourceName: " + javaDataSourceName);
         getLog().info("[AutoGenerator] JavaJdbcTemplateName: " + javaJdbcTemplateName);
         getLog().info("[AutoGenerator] JNDIDataSourceName: " + jndiDataSourceName);
+        getLog().info("[AutoGenerator] ArraySuffix: " + arraySuffix);
+        getLog().info("[AutoGenerator] ObjectSuffix: " + objectSuffix);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
@@ -276,7 +298,7 @@ public class AutoGenerator extends AbstractMojo {
 
                 if (match) {
                     LoggerManager.getInstance().info("[AutoGenerator] Process store procedure name: " + procedure.getFullName());
-                    generator.fillProcedure(connection, procedure);
+                    generator.fillProcedure(connection, procedure, objectSuffix, arraySuffix);
                     spList.add(procedure);
                     LoggerManager.getInstance().info("[AutoGenerator] Process procedure success");
                 }

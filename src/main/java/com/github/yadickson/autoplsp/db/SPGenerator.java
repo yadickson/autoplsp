@@ -90,7 +90,13 @@ public abstract class SPGenerator {
      *
      * @param connection Database connection
      * @param procedure procedure
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
      * @throws BusinessException If error
      */
-    public abstract void fillProcedure(Connection connection, Procedure procedure) throws BusinessException;
+    public abstract void fillProcedure(
+            final Connection connection,
+            final Procedure procedure,
+            final String objectSuffix,
+            final String arraySuffix) throws BusinessException;
 }

@@ -43,11 +43,23 @@ public class OracleMakeParameter extends MakeParameter {
      * @param connection Database connection
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
      * @return the new parameter
      * @throws BusinessException If create psrameter process throws an error
      */
     @Override
-    public Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException {
+    public Parameter getOwnerParameter(
+            final String type,
+            final int position,
+            final String name,
+            final Direction direction,
+            final Connection connection,
+            final String typeName,
+            final Procedure procedure,
+            final String objectSuffix,
+            final String arraySuffix)
+            throws BusinessException {
         if (type.equalsIgnoreCase("VARCHAR2")) {
             return new CharParameter(position, name, direction, procedure);
         }
@@ -67,7 +79,7 @@ public class OracleMakeParameter extends MakeParameter {
                 throw new BusinessException("Output OBJECT not supported");
             }
 
-            return new OracleObjectParameter(position, name, direction, procedure, connection, typeName);
+            return new OracleObjectParameter(position, name, direction, procedure, connection, typeName, objectSuffix, arraySuffix);
         }
 
         if (type.equalsIgnoreCase("TABLE")) {
@@ -75,7 +87,7 @@ public class OracleMakeParameter extends MakeParameter {
                 throw new BusinessException("Output TABLE not supported");
             }
 
-            return new OracleTableParameter(position, name, direction, procedure, connection, typeName);
+            return new OracleTableParameter(position, name, direction, procedure, connection, typeName, objectSuffix, arraySuffix);
         }
 
         throw new BusinessException("Type [" + type + " " + name + "] not supported");

@@ -42,11 +42,22 @@ public class PostgreSqlMakeParameter extends MakeParameter {
      * @param connection Database connection
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
      * @return the new parameter
      * @throws BusinessException If create parameter process throws an error
      */
     @Override
-    public Parameter getOwnerParameter(String type, int position, String name, Direction direction, Connection connection, String typeName, Procedure procedure) throws BusinessException {
+    public Parameter getOwnerParameter(
+            final String type,
+            final int position,
+            final String name,
+            final Direction direction,
+            final Connection connection,
+            final String typeName,
+            final Procedure procedure,
+            final String objectSuffix,
+            final String arraySuffix) throws BusinessException {
         if (type.equalsIgnoreCase("TEXT") || type.equalsIgnoreCase("character varying")) {
             return new CharParameter(position, name, direction, procedure);
         }

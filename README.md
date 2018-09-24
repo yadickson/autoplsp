@@ -75,6 +75,13 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
     <version>2.6</version>
     <scope>provided</scope>
 </dependency>
+        
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.5</version>
+    <scope>provided</scope>
+</dependency>
 
 <dependency>
     <groupId>com.jslsolucoes</groupId>
@@ -104,6 +111,8 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
                 <javaDataSourceName>...DataSource</javaDataSourceName>
                 <javaJdbcTemplateName>...JdbcTemplate</javaJdbcTemplateName>
                 <jndiDataSourceName>JDBC/...</jndiDataSourceName>
+                <objectSuffix>Object</objectSuffix>
+                <arraySuffix>Array</arraySuffix>
                 <outputConfigFileName>...</outputConfigFileName>
                 <outParameterCode>...</outParameterCode>
                 <outParameterMessage>...</outParameterMessage>

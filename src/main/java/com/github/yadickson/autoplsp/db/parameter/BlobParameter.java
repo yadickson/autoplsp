@@ -48,7 +48,7 @@ public class BlobParameter extends Parameter {
      */
     @Override
     public String getJavaTypeName() {
-        return "java.sql.Blob";
+        return "byte []";
     }
 
     /**

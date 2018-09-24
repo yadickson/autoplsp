@@ -39,7 +39,9 @@ public class OracleTableParameter extends Parameter {
 
     private final List<Parameter> parameters = new ArrayList<Parameter>();
     private final String objectName;
-
+    private final String objectSuffix;
+    private final String arraySuffix;
+    
     /**
      * Class constructor.
      *
@@ -49,11 +51,24 @@ public class OracleTableParameter extends Parameter {
      * @param procedure Procedure
      * @param connection Database connection
      * @param typeName Particular parameter type name
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
      * @throws BusinessException If create parameter process throws an error
      */
-    public OracleTableParameter(int position, String name, Direction direction, Procedure procedure, Connection connection, String typeName) throws BusinessException {
+    public OracleTableParameter(
+            final int position,
+            final String name,
+            final Direction direction,
+            final Procedure procedure,
+            final Connection connection,
+            final String typeName,
+            final String objectSuffix,
+            final String arraySuffix)
+            throws BusinessException {
         super(position, name, direction, procedure);
         this.objectName = typeName;
+        this.objectSuffix = objectSuffix;
+        this.arraySuffix = arraySuffix;
         addParameters(procedure, connection, typeName);
     }
 
@@ -123,12 +138,12 @@ public class OracleTableParameter extends Parameter {
      */
     @Override
     public String getJavaTypeName() {
-        return getObjectName() + "Table";
+        return getObjectName() + arraySuffix;
     }
 
     private void addParameters(Procedure procedure, Connection connection, String typeName) throws BusinessException {
 
-        String sql = "select (CASE WHEN ELEM_TYPE_OWNER IS NOT NULL THEN 'OBJECT' ELSE ELEM_TYPE_NAME END) AS DTYPE, ELEM_TYPE_NAME AS NAME from SYS.ALL_COLL_TYPES WHERE OWNER=USER and TYPE_NAME = ?";
+        String sql = "select (CASE WHEN ELEM_TYPE_OWNER IS NOT NULL THEN 'OBJECT' ELSE ELEM_TYPE_NAME END) AS DTYPE, ELEM_TYPE_NAME AS NAME from ALL_COLL_TYPES WHERE OWNER=USER and TYPE_NAME = ?";
         List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, typeName);
 
         for (ParameterBean p : list) {
@@ -137,7 +152,7 @@ public class OracleTableParameter extends Parameter {
             String parameterName = p.getName();
 
             LoggerManager.getInstance().info("[OracleArrayParameter] type: " + dataType + " name: " + parameterName);
-            parameters.add(new OracleMakeParameter().create(dataType, 0, "Value", Direction.INPUT, connection, parameterName, procedure));
+            parameters.add(new OracleMakeParameter().create(dataType, 0, "Value", Direction.INPUT, connection, parameterName, procedure, objectSuffix, arraySuffix));
         }
     }
 }

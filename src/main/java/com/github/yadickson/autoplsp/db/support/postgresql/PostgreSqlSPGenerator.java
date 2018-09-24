@@ -63,10 +63,16 @@ public class PostgreSqlSPGenerator extends SPGenerator {
      *
      * @param connection Database connection
      * @param procedure procedure
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
      * @throws BusinessException If error
      */
     @Override
-    public void fillProcedure(Connection connection, Procedure procedure) throws BusinessException {
+    public void fillProcedure(
+            final Connection connection,
+            final Procedure procedure,
+            final String objectSuffix,
+            final String arraySuffix) throws BusinessException {
         LoggerManager.getInstance().info("[PostgreSqlSPGenerator] Create store procedure " + procedure.getFullName());
 
         Map<Integer, Parameter> mparameters = new TreeMap<Integer, Parameter>();
@@ -135,7 +141,7 @@ public class PostgreSqlSPGenerator extends SPGenerator {
             Direction direction = new MakeDirection().getDirection(p.getDirection());
 
             LoggerManager.getInstance().info("[PostgreSqlSPGenerator] Process (" + position + ") " + parameterName + " " + direction + " " + dataType + " " + typeName);
-            Parameter param = new PostgreSqlMakeParameter().create(dataType, position, parameterName, direction, connection, typeName, procedure);
+            Parameter param = new PostgreSqlMakeParameter().create(dataType, position, parameterName, direction, connection, typeName, procedure, objectSuffix, arraySuffix);
             LoggerManager.getInstance().info("[PostgreSqlSPGenerator] Parameter (" + param.getPosition() + ") " + param.getName() + " " + param.getDirection() + " [" + param.getSqlTypeName() + "]");
 
             mparameters.put(position, param);

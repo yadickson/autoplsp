@@ -104,17 +104,38 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 
         try {
         <#list proc.outputParameters as parameter>
-        <#if parameter.sqlTypeName != 'java.sql.Types.CLOB'>
+        <#if parameter.sqlTypeName != 'java.sql.Types.CLOB' && parameter.sqlTypeName != 'java.sql.Types.BLOB' >
         <#if parameter.resultSet >
             result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>)m.get("${parameter.name}"));
         <#else>
             result.set${parameter.propertyName}((${parameter.javaTypeName})m.get("${parameter.name}"));
         </#if>
-        <#else>
-            java.sql.Clob clob${parameter.name} = ( java.sql.Clob ) m.get("${parameter.name}");
-            String string${parameter.name};
-            string${parameter.name} = clob${parameter.name} == null ? null : clob${parameter.name}.getSubString( 1 , (int) clob${parameter.name}.length() );
-            result.set${parameter.propertyName}( string${parameter.name} );
+        <#elseif parameter.sqlTypeName == 'java.sql.Types.CLOB' >
+            java.sql.Clob clob${parameter.propertyName} = ( java.sql.Clob ) m.get("${parameter.name}");
+            String string${parameter.propertyName} = null;
+
+            if (clob${parameter.propertyName} != null) {
+                java.io.Reader reader${parameter.propertyName} = clob${parameter.propertyName}.getCharacterStream();
+                java.io.StringWriter writer${parameter.propertyName} = new java.io.StringWriter();
+                org.apache.commons.io.IOUtils.copy(reader${parameter.propertyName}, writer${parameter.propertyName});
+                string${parameter.propertyName} = writer${parameter.propertyName}.toString();
+                clob${parameter.propertyName}.free();
+            }
+
+            result.set${parameter.propertyName}( string${parameter.propertyName} );
+        <#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
+            java.sql.Blob blob${parameter.propertyName} = ( java.sql.Blob ) m.get("${parameter.name}");
+            byte [] bytes${parameter.propertyName} = null;
+
+            if (blob${parameter.propertyName} != null) {
+                java.io.InputStream input${parameter.propertyName} = blob${parameter.propertyName}.getBinaryStream();
+                java.io.ByteArrayOutputStream output${parameter.propertyName} = new java.io.ByteArrayOutputStream();
+                org.apache.commons.io.IOUtils.copy(input${parameter.propertyName}, output${parameter.propertyName});
+                bytes${parameter.propertyName} = output${parameter.propertyName}.toByteArray();
+                blob${parameter.propertyName}.free();
+            }
+
+            result.set${parameter.propertyName}( bytes${parameter.propertyName} );
         </#if>
         </#list>
         } catch ( Exception ex ) {

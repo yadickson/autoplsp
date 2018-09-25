@@ -48,43 +48,13 @@ public class ${parameter.javaTypeName}RowMapper implements org.springframework.j
         
         <#list parameter.parameters as paramrs>
         <#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName})resultSet.getTimestamp("${paramrs.name}"));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getTimestamp("${paramrs.name}"));
         <#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
-        java.sql.Clob clob${paramrs.propertyName} = (java.sql.Clob) resultSet.getObject("${paramrs.name}");
-        String string${paramrs.propertyName} = null;
-
-        if (clob${paramrs.propertyName} != null) {
-            try {
-                java.io.Reader reader${paramrs.propertyName} = clob${paramrs.propertyName}.getCharacterStream();
-                java.io.StringWriter writer${paramrs.propertyName} = new java.io.StringWriter();
-                org.apache.commons.io.IOUtils.copy(reader${paramrs.propertyName}, writer${paramrs.propertyName});
-                string${paramrs.propertyName} = writer${paramrs.propertyName}.toString();
-                clob${paramrs.propertyName}.free();
-            } catch (java.io.IOException ex) {
-                throw new java.sql.SQLException(ex);
-            }
-        }
-
-        result.set${paramrs.propertyName} (string${paramrs.propertyName});
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getString("${paramrs.name}"));
         <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
-        java.sql.Blob blob${paramrs.propertyName} = (java.sql.Blob) resultSet.getObject("${paramrs.name}");
-        byte [] bytes${paramrs.propertyName} = null;
-
-        if (blob${paramrs.propertyName} != null) {
-            try {
-                java.io.InputStream input${paramrs.propertyName} = blob${paramrs.propertyName}.getBinaryStream();
-                java.io.ByteArrayOutputStream output${paramrs.propertyName} = new java.io.ByteArrayOutputStream();
-                org.apache.commons.io.IOUtils.copy(input${paramrs.propertyName}, output${paramrs.propertyName});
-                bytes${paramrs.propertyName} = output${paramrs.propertyName}.toByteArray();
-                blob${paramrs.propertyName}.free();
-            } catch (java.io.IOException ex) {
-                throw new java.sql.SQLException(ex);
-            }
-        }
-
-        result.set${paramrs.propertyName} (bytes${paramrs.propertyName});
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getBytes("${paramrs.name}"));
         <#else>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName})resultSet.getObject("${paramrs.name}"));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getObject("${paramrs.name}"));
         </#if>
         </#list>
 

@@ -104,13 +104,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 
         try {
         <#list proc.outputParameters as parameter>
-        <#if parameter.sqlTypeName != 'java.sql.Types.CLOB' && parameter.sqlTypeName != 'java.sql.Types.BLOB' >
-        <#if parameter.resultSet >
-            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>)m.get("${parameter.name}"));
-        <#else>
-            result.set${parameter.propertyName}((${parameter.javaTypeName})m.get("${parameter.name}"));
-        </#if>
-        <#elseif parameter.sqlTypeName == 'java.sql.Types.CLOB' >
+        <#if parameter.sqlTypeName == 'java.sql.Types.CLOB' >
             java.sql.Clob clob${parameter.propertyName} = ( java.sql.Clob ) m.get("${parameter.name}");
             String string${parameter.propertyName} = null;
 
@@ -136,6 +130,10 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
             }
 
             result.set${parameter.propertyName}( bytes${parameter.propertyName} );
+        <#elseif parameter.resultSet >
+            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>)m.get("${parameter.name}"));
+        <#else>
+            result.set${parameter.propertyName}((${parameter.javaTypeName})m.get("${parameter.name}"));
         </#if>
         </#list>
         } catch ( Exception ex ) {

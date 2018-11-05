@@ -22,6 +22,7 @@ import com.github.yadickson.autoplsp.db.parameter.CharParameter;
 import com.github.yadickson.autoplsp.db.MakeParameter;
 import java.sql.Connection;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.db.parameter.NumberParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
@@ -60,10 +61,13 @@ public class OracleMakeParameter extends MakeParameter {
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        if (type.equalsIgnoreCase("VARCHAR2")) {
+        if (type.equalsIgnoreCase("NCHAR") || type.equalsIgnoreCase("VARCHAR") || type.equalsIgnoreCase("VARCHAR2") || type.equalsIgnoreCase("NVARCHAR2")) {
             return new CharParameter(position, name, direction, procedure);
         }
-        if (type.equalsIgnoreCase("ROWID")) {
+        if (type.equalsIgnoreCase("DEC") || type.equalsIgnoreCase("INT") || type.equalsIgnoreCase("SMALLINT") || type.equalsIgnoreCase("BINARY_DOUBLE") || type.equalsIgnoreCase("BINARY_FLOAT")) {
+            return new NumberParameter(position, name, direction, procedure);
+        }
+        if (type.equalsIgnoreCase("ROWID") || type.equalsIgnoreCase("UROWID")) {
             return new OracleRowIdParameter(position, name, direction, procedure);
         }
         if (type.equalsIgnoreCase("REF CURSOR")) {

@@ -67,10 +67,10 @@ public abstract class MakeParameter {
         if (type.equalsIgnoreCase("CHAR")) {
             return new CharParameter(position, name, direction, procedure);
         }
-        if (type.equalsIgnoreCase("NUMBER") || type.equalsIgnoreCase("DECIMAL") || type.equalsIgnoreCase("FLOAT")) {
+        if (type.equalsIgnoreCase("NUMBER") || type.equalsIgnoreCase("DECIMAL") || type.equalsIgnoreCase("FLOAT") || type.equalsIgnoreCase("INTEGER") || type.equalsIgnoreCase("REAL")) {
             return new NumberParameter(position, name, direction, procedure);
         }
-        if (type.equalsIgnoreCase("CLOB")) {
+        if (type.equalsIgnoreCase("CLOB") || type.equalsIgnoreCase("NCLOB")) {
             return new ClobParameter(position, name, direction, procedure);
         }
         if (type.equalsIgnoreCase("BLOB")) {

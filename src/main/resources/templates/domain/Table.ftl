@@ -52,11 +52,7 @@ public final class ${parameter.javaTypeName} extends java.util.ArrayList<${param
         }
 
 <#if driverName == 'oracle' >
-<#if driverVersion == '11' >
         return ((oracle.jdbc.OracleConnection)(connection)).createARRAY("${parameter.realObjectName}", input);
-<#else>
-        return ((oracle.jdbc.OracleConnection)(connection)).createOracleArray("${parameter.realObjectName}", input);
-</#if>
 <#else>
         return throw new Exception("driver ${driverName} not supported");
 </#if>

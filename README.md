@@ -23,16 +23,11 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 ## Native type support
 
-- NUMERIC
-- DECIMAL
-- FLOAT
-- CHAR
-- VARCHAR2
-- CLOB
-- BLOB
-- DATE
-- TIMESTAMP
-- ROWID
+- Numerics (NUMBER, DECIMAL, INTEGER, FLOAT, REAL, DEC, INT, SMALLINT, BINARY_DOUBLE, BINARY_FLOAT)
+- Texts (CHAR, NCHAR, VARCHAR, VARCHAR2, NVARCHAR2)
+- Lobs (CLOB, NCLOB, BLOB)
+- Time (DATE, TIMESTAMP)
+- ROWID and UROWID
 
 ## Complex type support
 
@@ -128,13 +123,6 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
             </configuration>
         </execution>
     </executions>
-    <dependencies>
-        <dependency>
-            <groupId>com.jslsolucoes</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.1.0</version>
-        </dependency>
-    </dependencies>
 </plugin>
 ```
 
@@ -222,13 +210,6 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
-    <dependencies>
-        <dependency>
-            <groupId>com.jslsolucoes</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.1.0</version>
-        </dependency>
-    </dependencies>
 </plugin>
 ```
 
@@ -259,13 +240,6 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
-    <dependencies>
-        <dependency>
-            <groupId>com.jslsolucoes</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.1.0</version>
-        </dependency>
-    </dependencies>
 </plugin>
 ```
 
@@ -297,13 +271,6 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
-    <dependencies>
-        <dependency>
-            <groupId>com.jslsolucoes</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.1.0</version>
-        </dependency>
-    </dependencies>
 </plugin>
 ```
 
@@ -334,13 +301,6 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
-    <dependencies>
-        <dependency>
-            <groupId>com.jslsolucoes</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.1.0</version>
-        </dependency>
-    </dependencies>
 </plugin>
 ```
 

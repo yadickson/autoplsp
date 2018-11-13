@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
+import com.github.yadickson.autoplsp.db.ConstantTypes;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.handler.BusinessException;
@@ -52,7 +53,7 @@ public class OracleDataSetParameterTest {
     @Test
     public void testGetSqlType() throws BusinessException {
         int sqlType = parameter.getSqlType();
-        assertEquals(oracle.jdbc.OracleTypes.CURSOR, sqlType);
+        assertEquals(ConstantTypes.ORACLE_CURSOR, sqlType);
     }
 
     @Test

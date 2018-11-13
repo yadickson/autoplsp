@@ -48,13 +48,13 @@ public class ${parameter.javaTypeName}RowMapper implements org.springframework.j
         
         <#list parameter.parameters as paramrs>
         <#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getTimestamp("${paramrs.name}"));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getTimestamp("${paramrs.prefix}${paramrs.name}"));
         <#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getString("${paramrs.name}"));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getString("${paramrs.prefix}${paramrs.name}"));
         <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getBytes("${paramrs.name}"));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getBytes("${paramrs.prefix}${paramrs.name}"));
         <#else>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getObject("${paramrs.name}"));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getObject("${paramrs.prefix}${paramrs.name}"));
         </#if>
         </#list>
 

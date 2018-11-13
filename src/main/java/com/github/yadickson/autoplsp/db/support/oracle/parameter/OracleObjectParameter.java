@@ -99,7 +99,7 @@ public class OracleObjectParameter extends Parameter {
      */
     @Override
     public int getSqlType() {
-        return oracle.jdbc.OracleTypes.STRUCT;
+        return java.sql.Types.STRUCT;
     }
 
     /**

@@ -56,7 +56,7 @@ public class CapitalizeUtilTest {
         String result = CapitalizeUtil.capitalize(null);
 
         assertNotNull(result);
-        assertEquals("null", result);
+        assertEquals("Null", result);
 
     }
 
@@ -67,6 +67,16 @@ public class CapitalizeUtilTest {
 
         assertNotNull(result);
         assertEquals("CommonClass25", result);
+
+    }
+
+    @Test
+    public void testCapitalizeFromUpperCaseMssqlNames() {
+
+        String result = CapitalizeUtil.capitalize("FunctionGetNames");
+
+        assertNotNull(result);
+        assertEquals("FunctionGetNames", result);
 
     }
 }

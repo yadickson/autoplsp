@@ -89,7 +89,7 @@ public class OracleTableParameter extends Parameter {
      */
     @Override
     public int getSqlType() {
-        return oracle.jdbc.OracleTypes.ARRAY;
+        return java.sql.Types.ARRAY;
     }
 
     /**

@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
+import com.github.yadickson.autoplsp.db.ConstantTypes;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
@@ -71,7 +72,7 @@ public class OracleDataSetParameter extends DataSetParameter {
      */
     @Override
     public int getSqlType() {
-        return oracle.jdbc.OracleTypes.CURSOR;
+        return ConstantTypes.ORACLE_CURSOR;
     }
 
     /**

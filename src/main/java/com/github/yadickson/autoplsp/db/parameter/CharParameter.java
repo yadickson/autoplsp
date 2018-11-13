@@ -42,6 +42,19 @@ public class CharParameter extends Parameter {
     }
 
     /**
+     * Class constructor
+     *
+     * @param position The parameter position
+     * @param name The parameter name
+     * @param direction The parameter direction
+     * @param prefix The parameter prefix
+     * @param procedure the procedure
+     */
+    public CharParameter(int position, String name, Direction direction, String prefix, Procedure procedure) {
+        super(position, name, direction, prefix, procedure);
+    }
+
+    /**
      * Getter the java type name
      *
      * @return the java type name

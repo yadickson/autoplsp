@@ -14,23 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db;
+package com.github.yadickson.autoplsp.db.support.mssql.parameter;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.db.parameter.CharParameter;
+import com.github.yadickson.autoplsp.db.MakeParameter;
 import java.sql.Connection;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.db.parameter.NumberParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
- * Make parameter class
+ * Microsoft SQL parameter create class
  *
  * @author Yadickson Soto
  */
-public abstract class MakeParameter {
+public class MsSqlMakeParameter extends MakeParameter {
 
     /**
-     * Generic method to create parameter class from database information
+     * Prefix
+     */
+    private static final String PREFIX = "@";
+    
+    /**
+     * Microsoft SQL method to create parameter class from database information
      *
      * @param type Parameter type
      * @param position Parameter position
@@ -44,7 +52,8 @@ public abstract class MakeParameter {
      * @return the new parameter
      * @throws BusinessException If create parameter process throws an error
      */
-    public Parameter create(
+    @Override
+    public Parameter getOwnerParameter(
             final String type,
             final int position,
             final String name,
@@ -54,38 +63,14 @@ public abstract class MakeParameter {
             final Procedure procedure,
             final String objectSuffix,
             final String arraySuffix) throws BusinessException {
-
-        if (type == null) {
-            throw new BusinessException("Parameter type is null");
+        
+        if (type.equalsIgnoreCase("varchar") || type.equalsIgnoreCase("nvarchar")) {
+            return new CharParameter(position, name, direction, PREFIX, procedure);
+        }
+        if (type.equalsIgnoreCase("INT")  || type.equalsIgnoreCase("BIGINT") ) {
+            return new NumberParameter(position, name, direction, PREFIX, procedure);
         }
 
-        return getOwnerParameter(type, position, name, direction, connection, typeName, procedure, objectSuffix, arraySuffix);
+        throw new BusinessException("Type [" + type + " " + name + "] not supported");
     }
-
-    /**
-     * Custom method to create parameter class from database information
-     *
-     * @param type Parameter type
-     * @param position Parameter position
-     * @param name Parameter name
-     * @param direction Parameter direction
-     * @param connection Database connection
-     * @param typeName Particular parameter type name
-     * @param procedure The procedure owner
-     * @param objectSuffix Object suffix name
-     * @param arraySuffix Array suffix name
-     * @return the new parameter
-     * @throws BusinessException If create parameter process throws an error
-     */
-    public abstract Parameter getOwnerParameter(
-            final String type,
-            final int position,
-            final String name,
-            final Direction direction,
-            final Connection connection,
-            final String typeName,
-            final Procedure procedure,
-            final String objectSuffix,
-            final String arraySuffix)
-            throws BusinessException;
 }

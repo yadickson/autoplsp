@@ -35,8 +35,10 @@ public class CapitalizeUtil {
      * @param value value to capitalize
      * @return capitalize fully
      */
-    public static String capitalize(String value) {
-        return value == null ? "null" : WordUtils.capitalizeFully(value, new char[]{'_'}).replaceAll("_", "");
+    public static String capitalize(final String value) {
+        String[] array = value == null ? new String[]{"null"} : value.split("(?<=[a-z])(?=[A-Z])");
+        String str = String.join("_", array);
+        return WordUtils.capitalizeFully(str, new char[]{'_'}).replaceAll("_", "");
     }
 
     /**

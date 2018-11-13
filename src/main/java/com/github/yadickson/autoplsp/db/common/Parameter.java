@@ -34,9 +34,10 @@ public abstract class Parameter implements Serializable {
     private final String name;
     private final Integer position;
     private final String parent;
+    private final String prefix;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param position The parameter position
      * @param name The parameter name
@@ -47,11 +48,29 @@ public abstract class Parameter implements Serializable {
         this.position = position;
         this.name = name;
         this.direction = direction;
+        this.prefix = "";
         this.parent = procedure.getFullName();
     }
 
     /**
-     * Getter direction
+     * Class constructor.
+     *
+     * @param position The parameter position
+     * @param name The parameter name
+     * @param direction The parameter direction
+     * @param prefix prefix value
+     * @param procedure The procedure parent
+     */
+    public Parameter(Integer position, String name, Direction direction, String prefix, Procedure procedure) {
+        this.position = position;
+        this.name = name;
+        this.direction = direction;
+        this.prefix = prefix;
+        this.parent = procedure.getFullName();
+    }
+
+    /**
+     * Getter direction.
      *
      * @return the direction
      */
@@ -60,7 +79,7 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
-     * Getter field name
+     * Getter field name.
      *
      * @return the field name
      */
@@ -69,7 +88,7 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
-     * Getter parameter name
+     * Getter parameter name.
      *
      * @return the parameter name
      */
@@ -78,7 +97,7 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
-     * Getter parameter list
+     * Getter parameter list.
      *
      * @return the parameter list
      * @throws BusinessException error if not supported
@@ -88,7 +107,7 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
-     * Setter parameter list
+     * Setter parameter list.
      *
      * @param params The new parameter list
      * @throws BusinessException error if not supported
@@ -98,7 +117,7 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
-     * Getter position
+     * Getter position.
      *
      * @return the parameter position
      */
@@ -107,7 +126,7 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
-     * Getter property name (The name capitalized)
+     * Getter property name (The name capitalized).
      *
      * @return the property name
      */
@@ -116,6 +135,8 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Getter parent name.
+     *
      * @return the parent
      */
     public String getParent() {
@@ -195,7 +216,7 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
-     * Getter the object database name
+     * Getter the object database name.
      *
      * @return the object name
      * @throws BusinessException error if not supported
@@ -205,21 +226,30 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
-     * Getter the java type name
+     * Getter prefix variable name.
+     *
+     * @return
+     */
+    public String getPrefix() {
+        return prefix;
+    }
+
+    /**
+     * Getter the java type name.
      *
      * @return The java type name
      */
     public abstract String getJavaTypeName();
 
     /**
-     * Getter the sql type
+     * Getter the sql type.
      *
      * @return The sql type
      */
     public abstract int getSqlType();
 
     /**
-     * Getter the sql type name
+     * Getter the sql type name.
      *
      * @return the sql type name
      */

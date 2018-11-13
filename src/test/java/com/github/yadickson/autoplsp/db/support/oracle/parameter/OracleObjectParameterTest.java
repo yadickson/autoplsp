@@ -125,7 +125,7 @@ public class OracleObjectParameterTest {
     public void testGetSqlType() throws BusinessException {
         OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
         int sqlType = parameter.getSqlType();
-        assertEquals(oracle.jdbc.OracleTypes.STRUCT, sqlType);
+        assertEquals(java.sql.Types.STRUCT, sqlType);
     }
 
     @Test

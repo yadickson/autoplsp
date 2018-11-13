@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp.db;
 
+import com.github.yadickson.autoplsp.db.support.mssql.MsSqlSPGenerator;
 import com.github.yadickson.autoplsp.db.support.oracle.OracleSPGenerator;
 import com.github.yadickson.autoplsp.db.support.postgresql.PostgreSqlSPGenerator;
 import com.github.yadickson.autoplsp.handler.BusinessException;
@@ -47,6 +48,10 @@ public class SPGeneratorFactory {
 
         if (Pattern.compile(".*PostgreSQL.*", Pattern.CASE_INSENSITIVE).matcher(driver).matches()) {
             return new PostgreSqlSPGenerator("potsgresql");
+        }
+
+        if (Pattern.compile(".*Jtds.*", Pattern.CASE_INSENSITIVE).matcher(driver).matches()) {
+            return new MsSqlSPGenerator("mssql");
         }
 
         throw new BusinessException("Driver [" + driver + "] not supported");

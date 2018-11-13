@@ -22,6 +22,9 @@ import com.github.yadickson.autoplsp.db.parameter.CharParameter;
 import com.github.yadickson.autoplsp.db.MakeParameter;
 import java.sql.Connection;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.db.parameter.BlobParameter;
+import com.github.yadickson.autoplsp.db.parameter.ClobParameter;
+import com.github.yadickson.autoplsp.db.parameter.DateParameter;
 import com.github.yadickson.autoplsp.db.parameter.NumberParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 
@@ -61,11 +64,21 @@ public class OracleMakeParameter extends MakeParameter {
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        if (type.equalsIgnoreCase("NCHAR") || type.equalsIgnoreCase("VARCHAR") || type.equalsIgnoreCase("VARCHAR2") || type.equalsIgnoreCase("NVARCHAR2")) {
+        
+        if (type.equalsIgnoreCase("CHAR") || type.equalsIgnoreCase("NCHAR") || type.equalsIgnoreCase("VARCHAR") || type.equalsIgnoreCase("VARCHAR2") || type.equalsIgnoreCase("NVARCHAR2")) {
             return new CharParameter(position, name, direction, procedure);
         }
-        if (type.equalsIgnoreCase("DEC") || type.equalsIgnoreCase("INT") || type.equalsIgnoreCase("SMALLINT") || type.equalsIgnoreCase("BINARY_DOUBLE") || type.equalsIgnoreCase("BINARY_FLOAT")) {
+        if (type.equalsIgnoreCase("NUMBER") || type.equalsIgnoreCase("DECIMAL") || type.equalsIgnoreCase("FLOAT") || type.equalsIgnoreCase("INTEGER") || type.equalsIgnoreCase("REAL") || type.equalsIgnoreCase("DEC") || type.equalsIgnoreCase("INT") || type.equalsIgnoreCase("SMALLINT") || type.equalsIgnoreCase("BINARY_DOUBLE") || type.equalsIgnoreCase("BINARY_FLOAT")) {
             return new NumberParameter(position, name, direction, procedure);
+        }
+        if (type.equalsIgnoreCase("CLOB") || type.equalsIgnoreCase("NCLOB")) {
+            return new ClobParameter(position, name, direction, procedure);
+        }
+        if (type.equalsIgnoreCase("BLOB")) {
+            return new BlobParameter(position, name, direction, procedure);
+        }
+        if (type.equalsIgnoreCase("DATE") || type.equalsIgnoreCase("TIMESTAMP")) {
+            return new DateParameter(position, name, direction, procedure);
         }
         if (type.equalsIgnoreCase("ROWID") || type.equalsIgnoreCase("UROWID")) {
             return new OracleRowIdParameter(position, name, direction, procedure);

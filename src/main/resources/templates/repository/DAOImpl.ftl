@@ -105,7 +105,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
         try {
         <#list proc.outputParameters as parameter>
         <#if parameter.sqlTypeName == 'java.sql.Types.CLOB' >
-            java.sql.Clob clob${parameter.propertyName} = ( java.sql.Clob ) m.get("${parameter.name}");
+            java.sql.Clob clob${parameter.propertyName} = ( java.sql.Clob ) m.get("${parameter.prefix}${parameter.name}");
             String string${parameter.propertyName} = null;
 
             if (clob${parameter.propertyName} != null) {
@@ -118,7 +118,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 
             result.set${parameter.propertyName}( string${parameter.propertyName} );
         <#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
-            java.sql.Blob blob${parameter.propertyName} = ( java.sql.Blob ) m.get("${parameter.name}");
+            java.sql.Blob blob${parameter.propertyName} = ( java.sql.Blob ) m.get("${parameter.prefix}${parameter.name}");
             byte [] bytes${parameter.propertyName} = null;
 
             if (blob${parameter.propertyName} != null) {
@@ -131,9 +131,9 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 
             result.set${parameter.propertyName}( bytes${parameter.propertyName} );
         <#elseif parameter.resultSet >
-            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>)m.get("${parameter.name}"));
+            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>)m.get(${parameter.prefix}"${parameter.name}"));
         <#else>
-            result.set${parameter.propertyName}((${parameter.javaTypeName})m.get("${parameter.name}"));
+            result.set${parameter.propertyName}((${parameter.javaTypeName})m.get("${parameter.prefix}${parameter.name}"));
         </#if>
         </#list>
         } catch ( Exception ex ) {

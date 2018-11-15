@@ -107,7 +107,7 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
         oracle.sql.StructDescriptor descriptor = oracle.sql.StructDescriptor.createDescriptor("${parameter.realObjectName}", connection);
         return new oracle.sql.STRUCT(descriptor, connection, objs);
 <#else>
-        return throw new Exception("driver ${driverName} not supported");
+        throw new Exception("driver ${driverName} not supported");
 </#if>
     }
 

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.support.oracle.parameter;
+package com.github.yadickson.autoplsp.db.support.oracle;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
@@ -83,7 +83,7 @@ public class OracleMakeParameter extends MakeParameter {
         if (type.equalsIgnoreCase("ROWID") || type.equalsIgnoreCase("UROWID")) {
             return new OracleRowIdParameter(position, name, direction, procedure);
         }
-        if (type.equalsIgnoreCase("REF CURSOR")) {
+        if (type.equalsIgnoreCase("CURSOR")) {
             if (direction != Direction.OUTPUT) {
                 throw new BusinessException("Input REF CURSOR not supported");
             }

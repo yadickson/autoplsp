@@ -23,4 +23,6 @@ package com.github.yadickson.autoplsp.db;
 public final class ConstantTypes {
     
     public static final int ORACLE_CURSOR = -10;
+    public static final int MSSQL_CURSOR = java.sql.Types.REF;
+
 }

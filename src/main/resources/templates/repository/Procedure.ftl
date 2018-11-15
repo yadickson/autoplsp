@@ -48,13 +48,9 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.StoredP
      */
     public ${proc.className}SP(final org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate.getDataSource(), SPROC_NAME);
-        <#if proc.function>
-        setFunction(true);
-        <#else>
-        setFunction(false);
-        </#if>
+        setFunction(<#if proc.function>true<#else>false</#if>);
         <#list proc.parameters as parameter>
-        declareParameter(new org.springframework.jdbc.core.Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter ("${parameter.prefix}${parameter.name}", ${parameter.sqlTypeName}<#if parameter.resultSet>, new ${parameter.javaTypeName}RowMapper ()</#if>));
+        declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet>, ${parameter.sqlTypeName}</#if><#if parameter.resultSet>, new ${parameter.javaTypeName}RowMapper ()</#if>));
         </#list>
         compile();
     }

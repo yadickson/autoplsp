@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.support.oracle.parameter;
+package com.github.yadickson.autoplsp.db.support.oracle;
 
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
@@ -144,7 +144,7 @@ public class OracleObjectParameter extends Parameter {
     private void addParameters(Procedure procedure, Connection connection, String typeName) throws BusinessException {
 
         String sql = "SELECT ATTR_NAME as name, ATTR_TYPE_NAME as dtype, ATTR_NO as position from ALL_TYPE_ATTRS WHERE OWNER=USER AND TYPE_NAME = ? ORDER BY ATTR_NO";
-        List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, typeName);
+        List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, new Object[]{typeName});
 
         for (ParameterBean p : list) {
 

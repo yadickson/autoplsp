@@ -20,6 +20,8 @@ import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Dataset parameter class
@@ -32,6 +34,8 @@ public abstract class DataSetParameter extends Parameter {
 
     private final String className;
 
+    private List<Parameter> parameters = new ArrayList<Parameter>();
+
     /**
      * Class constructor
      *
@@ -42,6 +46,20 @@ public abstract class DataSetParameter extends Parameter {
      */
     public DataSetParameter(int position, String name, Direction direction, Procedure procedure) {
         super(position, name, direction, procedure);
+        this.className = procedure.getClassName();
+    }
+
+    /**
+     * Class constructor
+     *
+     * @param position The parameter position
+     * @param name The parameter name
+     * @param direction The parameter direction
+     * @param prefix The prefix
+     * @param procedure The procedure
+     */
+    public DataSetParameter(int position, String name, Direction direction, String prefix, Procedure procedure) {
+        super(position, name, direction, prefix, procedure);
         this.className = procedure.getClassName();
     }
 
@@ -63,6 +81,26 @@ public abstract class DataSetParameter extends Parameter {
     @Override
     public String getJavaTypeName() {
         return className + CapitalizeUtil.capitalize(getName()) + "RS";
+    }
+
+    /**
+     * Getter parameter list
+     *
+     * @return the parameter list
+     */
+    @Override
+    public List<Parameter> getParameters() {
+        return this.parameters;
+    }
+
+    /**
+     * Setter parameter list
+     *
+     * @param params The new parameter list
+     */
+    @Override
+    public void setParameters(List<Parameter> params) {
+        this.parameters = params;
     }
 
 }

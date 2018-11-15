@@ -16,6 +16,6 @@ import java.util.List;
  */
 public interface FindParameter {
 
-    List<ParameterBean> getParameters(Connection connection, String sql, Object ... parameters) throws BusinessException;
+    List<ParameterBean> getParameters(Connection connection, String sql, Object[] parameters) throws BusinessException;
 
 }

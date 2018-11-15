@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
+import com.github.yadickson.autoplsp.db.support.oracle.OracleObjectParameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.handler.BusinessException;

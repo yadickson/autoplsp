@@ -50,7 +50,7 @@ public class ParameterBean implements Serializable {
     }
 
     public void setDtype(String dtype) {
-        this.dtype = dtype;
+        this.dtype = dtype.split(" ")[0];
     }
 
     public String getNtype() {

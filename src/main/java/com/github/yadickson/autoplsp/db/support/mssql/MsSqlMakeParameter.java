@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.support.mssql.parameter;
+package com.github.yadickson.autoplsp.db.support.mssql;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
@@ -36,7 +36,7 @@ public class MsSqlMakeParameter extends MakeParameter {
      * Prefix
      */
     private static final String PREFIX = "@";
-    
+
     /**
      * Microsoft SQL method to create parameter class from database information
      *
@@ -67,10 +67,39 @@ public class MsSqlMakeParameter extends MakeParameter {
         if (type.equalsIgnoreCase("varchar") || type.equalsIgnoreCase("nvarchar")) {
             return new CharParameter(position, name, direction, PREFIX, procedure);
         }
-        if (type.equalsIgnoreCase("INT")  || type.equalsIgnoreCase("BIGINT") ) {
+        if (type.equalsIgnoreCase("INT") || type.equalsIgnoreCase("BIGINT")) {
             return new NumberParameter(position, name, direction, PREFIX, procedure);
         }
-
+        if (type.equalsIgnoreCase("return_table")) {
+            return new MsSqlResultTableParameter("table_return_value", PREFIX, procedure, connection, objectSuffix, arraySuffix);
+        }
+        if (type.equalsIgnoreCase("REF CURSOR")) {
+            if (direction != Direction.OUTPUT) {
+                throw new BusinessException("Input REF CURSOR not supported");
+            }
+            
+            return new MsSqlDataSetParameter(position, name, PREFIX, procedure);
+        }
+        
         throw new BusinessException("Type [" + type + " " + name + "] not supported");
+    }
+
+    /**
+     * Getter return result set parameter.
+     *
+     * @param procedure The procedure owner
+     * @param connection Database connection
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
+     * @return the new parameter
+     * @throws BusinessException If create parameter process throws an error
+     */
+    @Override
+    public Parameter getReturnResultSet(final Procedure procedure,
+            final Connection connection,
+            final String objectSuffix,
+            final String arraySuffix)
+            throws BusinessException {
+        return new MsSqlResultSetParameter("return_value", PREFIX, procedure, connection, objectSuffix, arraySuffix);
     }
 }

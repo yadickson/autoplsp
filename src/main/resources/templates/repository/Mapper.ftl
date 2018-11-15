@@ -26,7 +26,7 @@ import ${javaPackage}.domain.${parameter.javaTypeName};
  * @version @GENERATOR.VERSION@
  */
 @SuppressWarnings({"rawtypes","unchecked"})
-public class ${parameter.javaTypeName}RowMapper implements org.springframework.jdbc.core.RowMapper, java.io.Serializable {
+public class ${parameter.javaTypeName}RowMapper implements org.springframework.jdbc.core.RowMapper<${parameter.javaTypeName}>, java.io.Serializable {
 
     /**
      * Serialization.
@@ -42,19 +42,19 @@ public class ${parameter.javaTypeName}RowMapper implements org.springframework.j
      * @return object
      */
     @Override
-    public Object mapRow (java.sql.ResultSet resultSet, int i) throws java.sql.SQLException
+    public ${parameter.javaTypeName} mapRow (java.sql.ResultSet resultSet, int i) throws java.sql.SQLException
     {
         ${parameter.javaTypeName} result = new ${parameter.javaTypeName}();
         
         <#list parameter.parameters as paramrs>
         <#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getTimestamp("${paramrs.prefix}${paramrs.name}"));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getTimestamp("${paramrs.name}"));
         <#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getString("${paramrs.prefix}${paramrs.name}"));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getString("${paramrs.name}"));
         <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getBytes("${paramrs.prefix}${paramrs.name}"));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getBytes("${paramrs.name}"));
         <#else>
-        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getObject("${paramrs.prefix}${paramrs.name}"));
+        result.set${paramrs.propertyName} ((${paramrs.javaTypeName}) resultSet.getObject("${paramrs.name}"));
         </#if>
         </#list>
 

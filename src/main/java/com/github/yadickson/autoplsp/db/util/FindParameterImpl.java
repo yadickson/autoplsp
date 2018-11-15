@@ -22,7 +22,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 public class FindParameterImpl implements FindParameter {
 
     @Override
-    public List<ParameterBean> getParameters(Connection connection, String sql, Object ... parameters) throws BusinessException {
+    public List<ParameterBean> getParameters(Connection connection, String sql, Object[] parameters) throws BusinessException {
 
         if (connection == null) {
             return new ArrayList<ParameterBean>();

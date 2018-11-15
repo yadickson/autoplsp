@@ -172,7 +172,7 @@ public class JavaGenerator extends TemplateGenerator {
         String parameterPath = getDomainOutputPath("");
 
         for (Parameter param : procedure.getParameters()) {
-            if (param.isOutput() && param.isResultSet()) {
+            if (param.isResultSet()) {
                 input.put(PARAMETER_NAME, param);
                 createTemplate(input, DOMAIN_PATH + "DataSet.ftl", getFileNamePath(parameterPath, procedure, param, "RS"));
             }
@@ -192,7 +192,7 @@ public class JavaGenerator extends TemplateGenerator {
         String parameterPath = getRepositoryOutputPath("mapper");
 
         for (Parameter param : procedure.getParameters()) {
-            if (param.isOutput() && param.isResultSet()) {
+            if (param.isResultSet()) {
 
                 DataSetParameter dataSetParameter = (DataSetParameter) param;
                 input.put(PARAMETER_NAME, dataSetParameter);

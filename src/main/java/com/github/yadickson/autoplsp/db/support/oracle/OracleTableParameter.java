@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.support.oracle.parameter;
+package com.github.yadickson.autoplsp.db.support.oracle;
 
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
@@ -144,7 +144,7 @@ public class OracleTableParameter extends Parameter {
     private void addParameters(Procedure procedure, Connection connection, String typeName) throws BusinessException {
 
         String sql = "select (CASE WHEN ELEM_TYPE_OWNER IS NOT NULL THEN 'OBJECT' ELSE ELEM_TYPE_NAME END) AS DTYPE, ELEM_TYPE_NAME AS NAME from ALL_COLL_TYPES WHERE OWNER=USER and TYPE_NAME = ?";
-        List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, typeName);
+        List<ParameterBean> list = new FindParameterImpl().getParameters(connection, sql, new Object[]{typeName});
 
         for (ParameterBean p : list) {
 

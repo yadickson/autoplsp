@@ -33,9 +33,9 @@ public class Procedure implements Serializable {
     private final String name;
     private final String packageName;
     private List<Parameter> parameters;
-    private List<Parameter> inputParameters;
-    private List<Parameter> outputParameters;
-
+    private final List<Parameter> inputParameters;
+    private final List<Parameter> outputParameters;
+    
     /**
      * Class constructor
      *
@@ -45,7 +45,7 @@ public class Procedure implements Serializable {
     public Procedure(String packageName, String procedureName) {
         this.packageName = packageName;
         this.name = procedureName;
-
+        
         parameters = new ArrayList<Parameter>();
         inputParameters = new ArrayList<Parameter>();
         outputParameters = new ArrayList<Parameter>();
@@ -154,6 +154,21 @@ public class Procedure implements Serializable {
     }
 
     /**
+     * Getter is procedure has return result set parameter
+     *
+     * @return true is has return result set parameter
+     */
+    public boolean getReturnResultSet() {
+        for (Parameter param : this.getParameters()) {
+            if (param.isReturnResultSet()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Getter procedure name
      *
      * @return the name
@@ -223,4 +238,5 @@ public class Procedure implements Serializable {
     public int getOutputParameterSize() {
         return outputParameters.size();
     }
+
 }

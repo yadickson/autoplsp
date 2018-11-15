@@ -30,7 +30,7 @@ public class ProcedureTest {
     }
 
     @Test
-    public void testFunctionTrue() {
+    public void testProcedure() {
 
         Procedure procedure = new Procedure("packageName", "procedureName");
 

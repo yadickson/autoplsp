@@ -16,8 +16,8 @@
  */
 package com.github.yadickson.autoplsp.db.common;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Class Function test
@@ -30,7 +30,7 @@ public class FunctionTest {
     }
 
     @Test
-    public void testFunctionTrue() {
+    public void testFunction() {
 
         Function function = new Function("packageName", "functionName");
 

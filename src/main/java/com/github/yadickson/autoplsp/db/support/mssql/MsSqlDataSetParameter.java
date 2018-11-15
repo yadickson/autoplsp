@@ -14,74 +14,54 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.support.oracle.parameter;
+package com.github.yadickson.autoplsp.db.support.mssql;
 
-import com.github.yadickson.autoplsp.db.ConstantTypes;
-import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.parameter.DataSetParameter;
-import java.util.List;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
- * Oracle Dataset parameter class
+ * Microsoft SQL Dataset parameter class
  *
  * @author Yadickson Soto
  */
-public class OracleDataSetParameter extends DataSetParameter {
+public class MsSqlDataSetParameter extends DataSetParameter {
 
     static final long serialVersionUID = 1;
-
-    private List<Parameter> parameters;
 
     /**
      * Class constructor
      *
      * @param position The parameter position
      * @param name The parameter name
+     * @param prefix The prefix
      * @param procedure The procedure
      */
-    public OracleDataSetParameter(int position, String name, Procedure procedure) {
-        super(position, name, Direction.OUTPUT, procedure);
+    public MsSqlDataSetParameter(int position, String name, String prefix, Procedure procedure) {
+        super(position, name, Direction.OUTPUT, prefix, procedure);
     }
 
     /**
-     * Getter parameter list
-     *
-     * @return the parameter list
-     */
-    @Override
-    public List<Parameter> getParameters() {
-        return this.parameters;
-    }
-
-    /**
-     * Setter parameter list
-     *
-     * @param params The new parameter list
-     */
-    @Override
-    public void setParameters(List<Parameter> params) {
-        this.parameters = params;
-    }
-
-    /**
-     * Getter the sql type
+     * Getter the sql type.
      *
      * @return The sql type
+     * @throws BusinessException if error
      */
     @Override
-    public int getSqlType() {
-        return ConstantTypes.ORACLE_CURSOR;
+    public int getSqlType() throws BusinessException {
+        return java.sql.Types.OTHER;
     }
 
     /**
-     * Getter the sql type name
+     * Getter the sql type name.
      *
      * @return the sql type name
+     * @throws BusinessException if error
      */
     @Override
-    public String getSqlTypeName() {
-        return "oracle.jdbc.OracleTypes.CURSOR";
+    public String getSqlTypeName() throws BusinessException {
+        return "java.sql.Types.OTHER";
     }
+
 }

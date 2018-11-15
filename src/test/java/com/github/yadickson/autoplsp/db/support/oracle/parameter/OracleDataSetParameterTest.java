@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
+import com.github.yadickson.autoplsp.db.support.oracle.OracleDataSetParameter;
 import com.github.yadickson.autoplsp.db.ConstantTypes;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;

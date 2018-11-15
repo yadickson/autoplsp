@@ -93,7 +93,7 @@ public abstract class Parameter implements Serializable {
      * @return the parameter name
      */
     public String getName() {
-        return (this.name == null) ? "out_return" : this.name;
+        return this.name;
     }
 
     /**
@@ -235,24 +235,45 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Getter if parameter use SqlInOut or ResultSet.
+     *
+     * @return always false
+     */
+    public boolean isReturnResultSet() {
+        return false;
+    }
+
+    /**
+     * Getter if parameter use ResultTable.
+     *
+     * @return always false
+     */
+    public boolean isReturnResultTable() {
+        return false;
+    }
+
+    /**
      * Getter the java type name.
      *
      * @return The java type name
+     * @throws BusinessException if exist error
      */
-    public abstract String getJavaTypeName();
+    public abstract String getJavaTypeName() throws BusinessException;
 
     /**
      * Getter the sql type.
      *
      * @return The sql type
+     * @throws BusinessException if exist error
      */
-    public abstract int getSqlType();
+    public abstract int getSqlType() throws BusinessException;
 
     /**
      * Getter the sql type name.
      *
      * @return the sql type name
+     * @throws BusinessException if exist error
      */
-    public abstract String getSqlTypeName();
+    public abstract String getSqlTypeName() throws BusinessException;
 
 }

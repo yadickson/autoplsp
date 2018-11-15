@@ -16,6 +16,11 @@
  */
 package com.github.yadickson.autoplsp.db.support.oracle.parameter;
 
+import com.github.yadickson.autoplsp.db.support.oracle.OracleMakeParameter;
+import com.github.yadickson.autoplsp.db.support.oracle.OracleDataSetParameter;
+import com.github.yadickson.autoplsp.db.support.oracle.OracleRowIdParameter;
+import com.github.yadickson.autoplsp.db.support.oracle.OracleObjectParameter;
+import com.github.yadickson.autoplsp.db.support.oracle.OracleTableParameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.parameter.BlobParameter;
@@ -144,12 +149,12 @@ public class OracleMakeParameterTest {
 
     @Test(expected = Exception.class)
     public void testRefCursorInputError() throws BusinessException {
-        maker.create("ref cursor", 1, "rcName", Direction.INPUT, null, null, new Procedure("", ""), "", "");
+        maker.create("cursor", 1, "rcName", Direction.INPUT, null, null, new Procedure("", ""), "", "");
     }
 
     @Test
     public void testRefCursor() throws BusinessException {
-        Parameter parameter = maker.create("ref cursor", 1, "rc_name", Direction.OUTPUT, null, null, new Procedure("package", "test"), "", "");
+        Parameter parameter = maker.create("cursor", 1, "rc_name", Direction.OUTPUT, null, null, new Procedure("package", "test"), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleDataSetParameter);
         assertEquals(new Integer(1), parameter.getPosition());

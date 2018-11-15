@@ -131,7 +131,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 
             result.set${parameter.propertyName}( bytes${parameter.propertyName} );
         <#elseif parameter.resultSet >
-            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>)m.get(${parameter.prefix}"${parameter.name}"));
+            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>)m.get("${parameter.prefix}${parameter.name}"));
         <#else>
             result.set${parameter.propertyName}((${parameter.javaTypeName})m.get("${parameter.prefix}${parameter.name}"));
         </#if>

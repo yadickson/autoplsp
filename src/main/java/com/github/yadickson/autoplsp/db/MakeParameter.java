@@ -53,7 +53,8 @@ public abstract class MakeParameter {
             final String typeName,
             final Procedure procedure,
             final String objectSuffix,
-            final String arraySuffix) throws BusinessException {
+            final String arraySuffix)
+            throws BusinessException {
 
         if (type == null) {
             throw new BusinessException("Parameter type is null");
@@ -88,4 +89,22 @@ public abstract class MakeParameter {
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException;
+
+    /**
+     * Getter return result set parameter.
+     *
+     * @param procedure The procedure owner
+     * @param connection Database connection
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
+     * @return the new parameter
+     * @throws BusinessException If create parameter process throws an error
+     */
+    public Parameter getReturnResultSet(final Procedure procedure,
+            final Connection connection,
+            final String objectSuffix,
+            final String arraySuffix)
+            throws BusinessException {
+        throw new BusinessException("ReturnResultSet not support");
+    }
 }

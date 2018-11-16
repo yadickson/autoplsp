@@ -20,6 +20,6 @@ public class ParameterSort implements Comparator<Parameter>, Serializable {
 
     @Override
     public int compare(Parameter a, Parameter b) {
-        return a.getName().compareToIgnoreCase(b.getName());
+        return a.getPosition().compareTo(b.getPosition());
     }
 }

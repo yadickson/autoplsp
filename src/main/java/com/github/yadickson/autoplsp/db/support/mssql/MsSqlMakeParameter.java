@@ -26,7 +26,7 @@ import com.github.yadickson.autoplsp.db.parameter.NumberParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
- * Microsoft SQL parameter create class
+ * SQL Server parameter create class
  *
  * @author Yadickson Soto
  */

@@ -18,21 +18,18 @@ package com.github.yadickson.autoplsp.db.support.mssql;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
-import com.github.yadickson.autoplsp.db.parameter.DataSetParameter;
+import com.github.yadickson.autoplsp.db.parameter.ReturnResultSetParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.sql.Connection;
 
 /**
- * Microsoft Table parameter class
+ * SQL Server Table parameter class
  *
  * @author Yadickson Soto
  */
-public class MsSqlResultSetParameter extends DataSetParameter {
+public class MsSqlResultSetParameter extends ReturnResultSetParameter {
 
     static final long serialVersionUID = 1;
-
-    private final String objectSuffix;
-    private final String arraySuffix;
 
     /**
      * Class constructor.
@@ -53,9 +50,7 @@ public class MsSqlResultSetParameter extends DataSetParameter {
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        super(0, name, Direction.OUTPUT, prefix, procedure);
-        this.objectSuffix = objectSuffix;
-        this.arraySuffix = arraySuffix;
+        super(-1, name, Direction.OUTPUT, prefix, procedure);
     }
 
     /**
@@ -66,7 +61,7 @@ public class MsSqlResultSetParameter extends DataSetParameter {
      */
     @Override
     public int getSqlType() throws BusinessException {
-        throw new BusinessException("SqlType not supported");
+        return java.sql.Types.OTHER;
     }
 
     /**
@@ -77,17 +72,7 @@ public class MsSqlResultSetParameter extends DataSetParameter {
      */
     @Override
     public String getSqlTypeName() throws BusinessException {
-        return "Others";
-    }
-
-    /**
-     * Getter if parameter use SqlInOut or ResultSet.
-     *
-     * @return always false
-     */
-    @Override
-    public boolean isReturnResultSet() {
-        return true;
+        return "java.sql.Types.OTHER";
     }
 
 }

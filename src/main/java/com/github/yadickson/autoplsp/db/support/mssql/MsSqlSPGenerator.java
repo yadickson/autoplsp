@@ -21,7 +21,7 @@ import com.github.yadickson.autoplsp.db.SPGenerator;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 
 /**
- * Microsoft SQL procedure and function generator class
+ * SQL Server procedure and function generator class
  *
  * @author Yadickson Soto
  */
@@ -63,20 +63,20 @@ public class MsSqlSPGenerator extends SPGenerator {
      */
     @Override
     public String getParameterQuery(final Procedure procedure) {
-        String sql = "select  \n"
+        String sql = "( select  \n"
                 + "   'name' = case when parameter_id = 0 then 'out_return' else name end,  \n"
                 + "   'dtype'   = case when is_cursor_ref = 1 then 'cursor' else type_name(user_type_id) end,  \n"
                 + "   'position'  = parameter_id,\n"
                 + "   'direction' = case when is_output = 0 then 'IN' else 'OUT' end\n"
-                + "  from sys.parameters where object_id = object_id(?)";
-        /* + "union\n" +
-"  (\n" +
-"  SELECT\n" +
-"  'name' = name,\n" +
-"  'dtype' = type_name(user_type_id),\n" +
-"  'position' = column_id\n" +
-"  FROM sys.columns\n" +
-"  WHERE object_id=object_id(?)";*/
+                + "  from sys.parameters where object_id = object_id(?) )\n";
+               /* + "  union\n"
+                + "  ( SELECT distinct\n"
+                + "  'name' = 'return_table',\n"
+                + "  'dtype' = 'return_table',\n"
+                + "  'position' = 0,\n"
+                + "  'direction' = 'OUT'\n"
+                + "  FROM sys.columns\n"
+                + "  WHERE object_id=object_id(?) )";*/
 
         return sql;
     }
@@ -119,7 +119,7 @@ public class MsSqlSPGenerator extends SPGenerator {
      */
     @Override
     public Boolean findReturnResultSet(final Procedure procedure) {
-        return !procedure.isFunction();
+        return true;
     }
 
 }

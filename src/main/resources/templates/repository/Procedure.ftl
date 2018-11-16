@@ -17,7 +17,7 @@
 package ${javaPackage}.repository.sp;
 
 <#list proc.parameters as parameter>
-<#if parameter.resultSet>
+<#if parameter.resultSet || parameter.returnResultSet || parameter.returnResultTable>
 import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
 </#if>
 </#list>
@@ -50,7 +50,7 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.StoredP
         super(jdbcTemplate.getDataSource(), SPROC_NAME);
         setFunction(<#if proc.function>true<#else>false</#if>);
         <#list proc.parameters as parameter>
-        declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet>, ${parameter.sqlTypeName}</#if><#if parameter.resultSet>, new ${parameter.javaTypeName}RowMapper ()</#if>));
+        declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet || parameter.returnResultTable>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet && ! parameter.returnResultTable >, ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet || parameter.returnResultTable >, new ${parameter.javaTypeName}RowMapper ()</#if>));
         </#list>
         compile();
     }

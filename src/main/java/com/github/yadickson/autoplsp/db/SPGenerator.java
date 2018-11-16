@@ -199,6 +199,7 @@ public abstract class SPGenerator {
             findRetunResultSet(maker, connection, procedure, list, objectSuffix, arraySuffix);
         }
 
+        Collections.sort(procedure.getParameters(), new ParameterSort());
     }
 
     public void findDataSetParameter(

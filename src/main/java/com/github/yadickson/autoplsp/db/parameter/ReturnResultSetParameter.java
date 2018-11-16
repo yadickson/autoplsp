@@ -14,19 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.support.mssql;
+package com.github.yadickson.autoplsp.db.parameter;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
-import com.github.yadickson.autoplsp.db.parameter.DataSetParameter;
-import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
- * SQL Server Dataset parameter class
+ * Dataset parameter class
  *
  * @author Yadickson Soto
  */
-public class MsSqlDataSetParameter extends DataSetParameter {
+public abstract class ReturnResultSetParameter extends DataSetParameter {
 
     static final long serialVersionUID = 1;
 
@@ -35,33 +33,44 @@ public class MsSqlDataSetParameter extends DataSetParameter {
      *
      * @param position The parameter position
      * @param name The parameter name
+     * @param direction The parameter direction
+     * @param procedure The procedure
+     */
+    public ReturnResultSetParameter(int position, String name, Direction direction, Procedure procedure) {
+        super(position, name, direction, procedure);
+    }
+
+    /**
+     * Class constructor
+     *
+     * @param position The parameter position
+     * @param name The parameter name
+     * @param direction The parameter direction
      * @param prefix The prefix
      * @param procedure The procedure
      */
-    public MsSqlDataSetParameter(int position, String name, String prefix, Procedure procedure) {
-        super(position, name, Direction.OUTPUT, prefix, procedure);
+    public ReturnResultSetParameter(int position, String name, Direction direction, String prefix, Procedure procedure) {
+        super(position, name, direction, prefix, procedure);
     }
 
     /**
-     * Getter the sql type.
+     * Method to know if parameter is result set or cursor.
      *
-     * @return The sql type
-     * @throws BusinessException if error
+     * @return true if result set
      */
     @Override
-    public int getSqlType() throws BusinessException {
-        return java.sql.Types.OTHER;
+    public boolean isResultSet() {
+        return false;
     }
 
     /**
-     * Getter the sql type name.
+     * Getter if parameter use SqlInOut or ResultSet.
      *
-     * @return the sql type name
-     * @throws BusinessException if error
+     * @return always false
      */
     @Override
-    public String getSqlTypeName() throws BusinessException {
-        return "java.sql.Types.OTHER";
+    public boolean isReturnResultSet() {
+        return true;
     }
 
 }

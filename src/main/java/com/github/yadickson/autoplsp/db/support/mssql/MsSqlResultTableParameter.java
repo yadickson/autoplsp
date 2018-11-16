@@ -20,7 +20,7 @@ import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
-import com.github.yadickson.autoplsp.db.parameter.DataSetParameter;
+import com.github.yadickson.autoplsp.db.parameter.ReturnResultSetParameter;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
@@ -28,16 +28,13 @@ import java.sql.Connection;
 import java.util.List;
 
 /**
- * Microsoft Table parameter class
+ * SQL Server Table parameter class
  *
  * @author Yadickson Soto
  */
-public class MsSqlResultTableParameter extends DataSetParameter {
+public class MsSqlResultTableParameter extends ReturnResultSetParameter {
 
     static final long serialVersionUID = 1;
-
-    private final String objectSuffix;
-    private final String arraySuffix;
 
     /**
      * Class constructor.
@@ -59,8 +56,6 @@ public class MsSqlResultTableParameter extends DataSetParameter {
             final String arraySuffix)
             throws BusinessException {
         super(0, name, Direction.OUTPUT, prefix, procedure);
-        this.objectSuffix = objectSuffix;
-        this.arraySuffix = arraySuffix;
         addParameters(procedure, connection);
     }
 
@@ -75,7 +70,7 @@ public class MsSqlResultTableParameter extends DataSetParameter {
             Integer position = p.getPosition();
             String parameterName = p.getName();
 
-            Parameter param = new MsSqlMakeParameter().create(dataType, position, parameterName, Direction.INPUT, connection, null, procedure, objectSuffix, arraySuffix);
+            Parameter param = new MsSqlMakeParameter().create(dataType, position, parameterName, Direction.INPUT, connection, null, procedure, "", "");
             LoggerManager.getInstance().info("[MsSqlResultTableParameter] (" + param.getPosition() + ") " + param.getName() + " [" + param.getSqlTypeName() + "]");
             getParameters().add(param);
         }
@@ -112,6 +107,16 @@ public class MsSqlResultTableParameter extends DataSetParameter {
     @Override
     public boolean isReturnResultTable() {
         return true;
+    }
+
+    /**
+     * Method to know if parameter is result set or cursor.
+     *
+     * @return true if result set
+     */
+    @Override
+    public boolean isResultSet() {
+        return false;
     }
 
 }

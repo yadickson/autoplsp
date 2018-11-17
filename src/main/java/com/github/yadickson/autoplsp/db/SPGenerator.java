@@ -43,6 +43,7 @@ import com.github.yadickson.autoplsp.db.util.FindProcedureImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import com.github.yadickson.autoplsp.util.ParameterSort;
+import java.sql.PreparedStatement;
 
 /**
  * Store procedure and function generator interface
@@ -102,25 +103,6 @@ public abstract class SPGenerator {
     public abstract MakeParameter getMakeParameter();
 
     /**
-     * Method getter remove character.
-     *
-     * @return string to remove
-     */
-    public String getRemoveParamCharacter() {
-        return "";
-    }
-
-    /**
-     * Method getter force find return result set.
-     *
-     * @param procedure procedure
-     * @return always false
-     */
-    public Boolean findReturnResultSet(final Procedure procedure) {
-        return false;
-    }
-
-    /**
      * Find all procedure from database
      *
      * @param connection Database connection
@@ -135,7 +117,7 @@ public abstract class SPGenerator {
         List<ProcedureBean> procedures = new FindProcedureImpl().getProcedures(connection, getProcedureQuery());
 
         for (ProcedureBean p : procedures) {
-            Procedure procedure = p.getType().equalsIgnoreCase("PROCEDURE") ? new Procedure(p.getPkg(), p.getName()) : new Function(p.getPkg(), p.getName());
+            Procedure procedure = p.getType().equalsIgnoreCase("PROCEDURE") ? new Procedure(p.getPkg(), p.getName()) : new Function(p.getPkg(), p.getName(), p.getType().equalsIgnoreCase("FUNCTION_INLINE"));
             LoggerManager.getInstance().info("[SPGenerator] Found (" + p.getType() + ") " + procedure.getFullName());
             list.add(procedure);
         }
@@ -178,7 +160,7 @@ public abstract class SPGenerator {
             String typeName = p.getNtype();
 
             Integer position = p.getPosition();
-            String parameterName = p.getName().replaceAll(getRemoveParamCharacter(), "");
+            String parameterName = p.getName().replaceAll("^@", "");
             Direction direction = new MakeDirection().getDirection(p.getDirection());
 
             LoggerManager.getInstance().info("[SPGenerator] Process (" + position + ") " + parameterName + " " + direction + " " + dataType + " " + typeName);
@@ -191,12 +173,18 @@ public abstract class SPGenerator {
         List<Parameter> list = new ArrayList<Parameter>(mparameters.values());
         procedure.setParameters(list);
 
-        if (procedure.getHasResultSet()) {
-            findDataSetParameter(maker, connection, procedure, list, objectSuffix, arraySuffix);
+        boolean found = false;
+
+        if (!procedure.isFunction()) {
+            found = findRetunResultSet(maker, connection, procedure, list, objectSuffix, arraySuffix);
         }
 
-        if (findReturnResultSet(procedure)) {
-            findRetunResultSet(maker, connection, procedure, list, objectSuffix, arraySuffix);
+        if (!found && procedure.isFunctionInline() && !procedure.getHasOutput()) {
+            found = findRetunResultTable(maker, connection, procedure, list, objectSuffix, arraySuffix);
+        }
+
+        if (!found && procedure.getHasResultSet()) {
+            findDataSetParameter(maker, connection, procedure, list, objectSuffix, arraySuffix);
         }
 
         Collections.sort(procedure.getParameters(), new ParameterSort());
@@ -214,8 +202,6 @@ public abstract class SPGenerator {
 
         String sql = getProcedureSql(procedure, parameters);
 
-        LoggerManager.getInstance().info(sql);
-
         CallableStatement statement = null;
 
         try {
@@ -230,7 +216,8 @@ public abstract class SPGenerator {
                 }
             }
 
-            statement.execute();
+            boolean isResult = statement.execute();
+            LoggerManager.getInstance().info("Has result set [" + isResult + "]");
 
             for (int i = 0; i < parameters.size(); i++) {
 
@@ -264,7 +251,7 @@ public abstract class SPGenerator {
         }
     }
 
-    public void findRetunResultSet(
+    public boolean findRetunResultSet(
             final MakeParameter maker,
             final Connection connection,
             final Procedure procedure,
@@ -274,13 +261,11 @@ public abstract class SPGenerator {
 
         String sql = getProcedureSql(procedure, parameters);
 
-        LoggerManager.getInstance().info(sql);
-
         CallableStatement statement = null;
 
         try {
 
-            statement = connection.prepareCall(sql);
+            statement = connection.prepareCall(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
             for (int i = 0; i < parameters.size(); i++) {
                 if (parameters.get(i).isInput()) {
@@ -290,19 +275,35 @@ public abstract class SPGenerator {
                 }
             }
 
-            ResultSet result = (ResultSet) statement.executeQuery();
+            boolean isResult = statement.execute();
+            LoggerManager.getInstance().info("Has result set [" + isResult + "]");
 
-            if (result == null) {
-                return;
+            if (isResult) {
+
+                int position = Integer.MIN_VALUE;
+                boolean first = true;
+                int index = 1;
+                String pname = "return_value";
+
+                do {
+
+                    ResultSet result = (ResultSet) statement.getResultSet();
+
+                    Parameter rs = maker.getReturnResultSet(position++, first ? pname : pname + "_" + index, procedure, connection, objectSuffix, arraySuffix);
+                    rs.setParameters(getParameters(maker, procedure, connection, result, objectSuffix, arraySuffix));
+                    parameters.add(rs);
+                    procedure.setParameters(parameters);
+                    first = false;
+                    index++;
+
+                } while (statement.getMoreResults());
+
             }
 
-            Parameter rs = maker.getReturnResultSet(procedure, connection, objectSuffix, arraySuffix);
-            rs.setParameters(getParameters(maker, procedure, connection, result, objectSuffix, arraySuffix));
-            parameters.add(rs);
-            procedure.setParameters(parameters);
+            return isResult;
 
         } catch (SQLException ex) {
-            //throw new BusinessException("", ex);
+            LoggerManager.getInstance().info(ex.getMessage());
         } finally {
             try {
                 if (statement != null) {
@@ -313,22 +314,78 @@ public abstract class SPGenerator {
                 LoggerManager.getInstance().error(ex);
             }
         }
+
+        return false;
+    }
+
+    public boolean findRetunResultTable(
+            final MakeParameter maker,
+            final Connection connection,
+            final Procedure procedure,
+            final List<Parameter> parameters,
+            final String objectSuffix,
+            final String arraySuffix) throws BusinessException {
+
+        String sql = getProcedureSql(procedure, parameters);
+
+        PreparedStatement statement = null;
+
+        try {
+
+            statement = connection.prepareStatement(sql);
+
+            for (int i = 0; i < parameters.size(); i++) {
+                if (parameters.get(i).isInput()) {
+                    statement.setObject(i + 1, null);
+                }
+            }
+
+            ResultSet result = statement.executeQuery();
+            LoggerManager.getInstance().info("Has result set [true]");
+
+            if (result == null) {
+                return false;
+            }
+
+            Parameter rs = maker.getReturnResultSet(0, "return_value", procedure, connection, objectSuffix, arraySuffix);
+            rs.setParameters(getParameters(maker, procedure, connection, result, objectSuffix, arraySuffix));
+            parameters.add(rs);
+            procedure.setParameters(parameters);
+
+            return true;
+
+        } catch (SQLException ex) {
+            LoggerManager.getInstance().info(ex.getMessage());
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                    statement = null;
+                }
+            } catch (SQLException ex) {
+                LoggerManager.getInstance().error(ex);
+            }
+        }
+
+        return false;
     }
 
     public String getProcedureSql(
             final Procedure procedure,
             final List<Parameter> parameters) {
         boolean isFunction = procedure.isFunction();
+        boolean isFunctionInline = procedure.isFunctionInline();
 
-        String sql = "{ call ";
-        if (isFunction) {
+        String sql = isFunctionInline ? "select * from " : "{ call ";
+
+        if (isFunction && !isFunctionInline) {
             sql += "?:= ";
         }
 
         sql += procedure.getFullName();
         sql += "(";
 
-        int args = isFunction ? parameters.size() - 1 : parameters.size();
+        int args = isFunction && !isFunctionInline ? parameters.size() - 1 : parameters.size();
         List<String> argv = new ArrayList<String>();
 
         for (int i = 0; i < args; i++) {
@@ -336,7 +393,10 @@ public abstract class SPGenerator {
         }
 
         sql += StringUtils.join(argv, ",");
-        sql += ") }";
+        sql += ")";
+        sql += isFunctionInline ? ";" : " }";
+
+        LoggerManager.getInstance().info(sql);
 
         return sql;
     }

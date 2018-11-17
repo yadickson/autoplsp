@@ -43,12 +43,12 @@ public class MsSqlSPGenerator extends SPGenerator {
      */
     @Override
     public String getProcedureQuery() {
-        return "SELECT pkg = null, name, case when type = 'P' then 'PROCEDURE' else 'FUNCTION' end as type\n"
+        return "SELECT pkg = null, name, case when type = 'P' then 'PROCEDURE' when type = 'IF' then 'FUNCTION_INLINE' else 'FUNCTION' end as type\n"
                 + "FROM sysobjects\n"
                 + "WHERE type IN (\n"
                 + "    'P', -- stored procedures\n"
                 + "    'FN', -- scalar functions \n"
-                + "    'IF', -- inline table-valued functions\n"
+                // + "    'IF', -- inline table-valued functions\n"
                 + "    'TF', -- table-valued functions\n"
                 + "    'FT'"
                 + ")\n"
@@ -69,14 +69,6 @@ public class MsSqlSPGenerator extends SPGenerator {
                 + "   'position'  = parameter_id,\n"
                 + "   'direction' = case when is_output = 0 then 'IN' else 'OUT' end\n"
                 + "  from sys.parameters where object_id = object_id(?) )\n";
-               /* + "  union\n"
-                + "  ( SELECT distinct\n"
-                + "  'name' = 'return_table',\n"
-                + "  'dtype' = 'return_table',\n"
-                + "  'position' = 0,\n"
-                + "  'direction' = 'OUT'\n"
-                + "  FROM sys.columns\n"
-                + "  WHERE object_id=object_id(?) )";*/
 
         return sql;
     }
@@ -89,7 +81,7 @@ public class MsSqlSPGenerator extends SPGenerator {
      */
     @Override
     public Object[] getParameterObjects(final Procedure procedure) {
-        return new Object[]{procedure.getName()/*, procedure.getName()*/};
+        return new Object[]{procedure.getName()};
     }
 
     /**
@@ -100,26 +92,6 @@ public class MsSqlSPGenerator extends SPGenerator {
     @Override
     public MakeParameter getMakeParameter() {
         return new MsSqlMakeParameter();
-    }
-
-    /**
-     * Method getter remove character.
-     *
-     * @return string to remove
-     */
-    @Override
-    public String getRemoveParamCharacter() {
-        return "^@";
-    }
-
-    /**
-     * Method getter force find return result set.
-     *
-     * @return string to remove
-     */
-    @Override
-    public Boolean findReturnResultSet(final Procedure procedure) {
-        return true;
     }
 
 }

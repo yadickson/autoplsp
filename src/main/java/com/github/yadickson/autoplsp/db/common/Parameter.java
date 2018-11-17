@@ -244,15 +244,6 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
-     * Getter if parameter use ResultTable.
-     *
-     * @return always false
-     */
-    public boolean isReturnResultTable() {
-        return false;
-    }
-
-    /**
      * Getter the java type name.
      *
      * @return The java type name

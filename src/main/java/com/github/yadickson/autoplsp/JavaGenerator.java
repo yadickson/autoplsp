@@ -165,14 +165,14 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
 
-        if (!procedure.getHasResultSet() && !procedure.getReturnResultSet() && !procedure.getReturnResultTable()) {
+        if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
         }
 
         String parameterPath = getDomainOutputPath("");
 
         for (Parameter param : procedure.getParameters()) {
-            if (param.isResultSet() || param.isReturnResultSet() || param.isReturnResultTable()) {
+            if (param.isResultSet() || param.isReturnResultSet()) {
                 input.put(PARAMETER_NAME, param);
                 createTemplate(input, DOMAIN_PATH + "DataSet.ftl", getFileNamePath(parameterPath, procedure, param, "RS"));
             }
@@ -185,14 +185,14 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
 
-        if (!procedure.getHasResultSet() && !procedure.getReturnResultSet() && !procedure.getReturnResultTable()) {
+        if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
         }
 
         String parameterPath = getRepositoryOutputPath("mapper");
 
         for (Parameter param : procedure.getParameters()) {
-            if (param.isResultSet() || param.isReturnResultSet() || param.isReturnResultTable()) {
+            if (param.isResultSet() || param.isReturnResultSet()) {
 
                 DataSetParameter dataSetParameter = (DataSetParameter) param;
                 input.put(PARAMETER_NAME, dataSetParameter);

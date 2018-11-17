@@ -33,7 +33,7 @@ public final class ${proc.className}OUT implements java.io.Serializable {
     /**
      * Output parameter ${parameter.fieldName}.
      */
-    private <#if parameter.resultSet || parameter.returnResultSet || parameter.returnResultTable>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName} = null;
+    private <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName} = null;
     </#list>
 
     /**
@@ -49,7 +49,7 @@ public final class ${proc.className}OUT implements java.io.Serializable {
      * @param p${parameter.propertyName} set value of ${parameter.fieldName}
     </#list>
      */
-    public ${proc.className}OUT(<#list proc.outputParameters as parameter>final <#if parameter.resultSet || parameter.returnResultSet || parameter.returnResultTable>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}<#sep>, </#sep></#list>) {
+    public ${proc.className}OUT(<#list proc.outputParameters as parameter>final <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}<#sep>, </#sep></#list>) {
         <#list proc.outputParameters as parameter>
         this.${parameter.fieldName} = p${parameter.propertyName};
         </#list>
@@ -61,7 +61,7 @@ public final class ${proc.className}OUT implements java.io.Serializable {
      *
      * @return ${parameter.fieldName}
      */
-    public <#if parameter.resultSet || parameter.returnResultSet || parameter.returnResultTable>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
+    public <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
         return this.${parameter.fieldName};
     }
 
@@ -70,7 +70,7 @@ public final class ${proc.className}OUT implements java.io.Serializable {
      *
      * @param p${parameter.propertyName} ${parameter.fieldName} to set
      */
-    public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet || parameter.returnResultTable>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
+    public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
         this.${parameter.fieldName} = p${parameter.propertyName};
     }
 

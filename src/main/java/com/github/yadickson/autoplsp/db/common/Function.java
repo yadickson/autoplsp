@@ -25,14 +25,18 @@ public class Function extends Procedure {
 
     static final long serialVersionUID = 1;
 
+    private final Boolean functionInline;
+
     /**
      * Class constructor
      *
      * @param packageName The package name
      * @param functionName The function name
+     * @param functionInline The flag to function inline
      */
-    public Function(String packageName, String functionName) {
+    public Function(String packageName, String functionName, Boolean functionInline) {
         super(packageName, functionName);
+        this.functionInline = functionInline;
     }
 
     /**
@@ -43,6 +47,16 @@ public class Function extends Procedure {
     @Override
     public boolean isFunction() {
         return true;
+    }
+
+    /**
+     * Method to get function inline definition condition
+     *
+     * @return false
+     */
+    @Override
+    public boolean isFunctionInline() {
+        return functionInline;
     }
 
     @Override

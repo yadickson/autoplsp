@@ -23,7 +23,7 @@ import ${javaPackage}.domain.${proc.className}IN;
 import ${javaPackage}.domain.${proc.className}OUT;
 </#if>
 <#list proc.parameters as parameter>
-<#if parameter.resultSet || parameter.returnResultSet || parameter.returnResultTable>
+<#if parameter.resultSet || parameter.returnResultSet>
 import ${javaPackage}.domain.${parameter.javaTypeName};
 </#if>
 </#list>
@@ -130,7 +130,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
             }
 
             result.set${parameter.propertyName}( bytes${parameter.propertyName} );
-        <#elseif parameter.resultSet || parameter.returnResultSet || parameter.returnResultTable>
+        <#elseif parameter.resultSet || parameter.returnResultSet>
             result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>)m.get("${parameter.prefix}${parameter.name}"));
         <#else>
             result.set${parameter.propertyName}((${parameter.javaTypeName})m.get("${parameter.prefix}${parameter.name}"));

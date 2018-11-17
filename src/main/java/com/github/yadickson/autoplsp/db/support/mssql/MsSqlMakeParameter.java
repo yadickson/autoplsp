@@ -70,10 +70,7 @@ public class MsSqlMakeParameter extends MakeParameter {
         if (type.equalsIgnoreCase("INT") || type.equalsIgnoreCase("BIGINT")) {
             return new NumberParameter(position, name, direction, PREFIX, procedure);
         }
-        if (type.equalsIgnoreCase("return_table")) {
-            return new MsSqlResultTableParameter("table_return_value", PREFIX, procedure, connection, objectSuffix, arraySuffix);
-        }
-        if (type.equalsIgnoreCase("REF CURSOR")) {
+        if (type.equalsIgnoreCase("CURSOR")) {
             if (direction != Direction.OUTPUT) {
                 throw new BusinessException("Input REF CURSOR not supported");
             }
@@ -87,6 +84,8 @@ public class MsSqlMakeParameter extends MakeParameter {
     /**
      * Getter return result set parameter.
      *
+     * @param position The position
+     * @param name The name
      * @param procedure The procedure owner
      * @param connection Database connection
      * @param objectSuffix Object suffix name
@@ -95,11 +94,14 @@ public class MsSqlMakeParameter extends MakeParameter {
      * @throws BusinessException If create parameter process throws an error
      */
     @Override
-    public Parameter getReturnResultSet(final Procedure procedure,
+    public Parameter getReturnResultSet(
+            final int position,
+            final String name,
+            final Procedure procedure,
             final Connection connection,
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        return new MsSqlResultSetParameter("return_value", PREFIX, procedure, connection, objectSuffix, arraySuffix);
+        return new MsSqlResultSetParameter(position, name, "#", procedure, connection, objectSuffix, arraySuffix);
     }
 }

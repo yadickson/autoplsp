@@ -93,6 +93,8 @@ public abstract class MakeParameter {
     /**
      * Getter return result set parameter.
      *
+     * @param position The position
+     * @param name The name
      * @param procedure The procedure owner
      * @param connection Database connection
      * @param objectSuffix Object suffix name
@@ -100,7 +102,10 @@ public abstract class MakeParameter {
      * @return the new parameter
      * @throws BusinessException If create parameter process throws an error
      */
-    public Parameter getReturnResultSet(final Procedure procedure,
+    public Parameter getReturnResultSet(
+            final int position,
+            final String name,
+            final Procedure procedure,
             final Connection connection,
             final String objectSuffix,
             final String arraySuffix)

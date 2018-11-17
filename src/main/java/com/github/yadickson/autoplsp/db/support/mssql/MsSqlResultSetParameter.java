@@ -34,6 +34,7 @@ public class MsSqlResultSetParameter extends ReturnResultSetParameter {
     /**
      * Class constructor.
      *
+     * @param position The position
      * @param name The parameter name
      * @param prefix The prefix
      * @param procedure Procedure
@@ -43,6 +44,7 @@ public class MsSqlResultSetParameter extends ReturnResultSetParameter {
      * @throws BusinessException If create parameter process throws an error
      */
     public MsSqlResultSetParameter(
+            final int position,
             final String name,
             final String prefix,
             final Procedure procedure,
@@ -50,7 +52,7 @@ public class MsSqlResultSetParameter extends ReturnResultSetParameter {
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        super(-1, name, Direction.OUTPUT, prefix, procedure);
+        super(position, name, Direction.OUTPUT, prefix, procedure);
     }
 
     /**

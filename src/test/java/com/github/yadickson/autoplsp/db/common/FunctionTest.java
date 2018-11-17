@@ -32,7 +32,7 @@ public class FunctionTest {
     @Test
     public void testFunction() {
 
-        Function function = new Function("packageName", "functionName");
+        Function function = new Function("packageName", "functionName", true);
 
         assertNotNull(function.getPackageName());
         assertNotNull(function.getName());

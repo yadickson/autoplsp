@@ -169,21 +169,6 @@ public class Procedure implements Serializable {
     }
 
     /**
-     * Getter is procedure has result table parameter
-     *
-     * @return true is has result table parameter
-     */
-    public boolean getReturnResultTable() {
-        for (Parameter param : this.getParameters()) {
-            if (param.isReturnResultTable()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Getter procedure name
      *
      * @return the name
@@ -243,6 +228,15 @@ public class Procedure implements Serializable {
      * @return false
      */
     public boolean isFunction() {
+        return false;
+    }
+
+    /**
+     * Method to get function inline definition condition
+     *
+     * @return false
+     */
+    public boolean isFunctionInline() {
         return false;
     }
 

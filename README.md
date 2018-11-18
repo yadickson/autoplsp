@@ -13,6 +13,8 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 ## Support
 
 - Oracle DataBase 11g and 12c
+- Basic PostgresSQL
+- Basic SQL Server (Tested 2017, Driver jTDS)
 - Java >= 1.6
 - Spring Framework 4
 - Auto package name detection
@@ -21,21 +23,40 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 - Transaction annotation
 - Command line for driver, user, pass and connectionString parameters
 
-## Native type support
+[Examples](https://github.com/yadickson/autoplsp-examples)
 
+#Oracle
+
+- Procedures
+- Functions
 - Numerics (NUMBER, DECIMAL, INTEGER, FLOAT, REAL, DEC, INT, SMALLINT, BINARY_DOUBLE, BINARY_FLOAT)
 - Texts (CHAR, NCHAR, VARCHAR, VARCHAR2, NVARCHAR2)
 - Lobs (CLOB, NCLOB, BLOB)
 - Time (DATE, TIMESTAMP)
 - ROWID and UROWID
-
-## Complex type support
-
 - REF CURSOR (only output)
 - TYPE OBJECT (only input)
 - TYPE TABLE [NATIVE] (only input)
 - TYPE TABLE [TYPE OBJECT] (only input)
 
+#PostgresSQL
+
+- Procedures
+- Functions
+- Numerics (INTEGER, REAL)
+- Texts (TEXT, CHARACTER)
+- Working in progress
+
+#SQL Server
+
+- Procedures
+- Functions
+- Numerics (INT, BIGINT)
+- Texts (VARCHAR, NVARCHAR)
+- Lobs (CLOB, NCLOB, BLOB)
+- Time (DATE, TIMESTAMP)
+- REF CURSOR (Not supported)
+- Working in progress
 
 ## POM properties
 
@@ -77,11 +98,31 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
     <version>2.5</version>
     <scope>provided</scope>
 </dependency>
-
+```
+##Oracle
+```
 <dependency>
     <groupId>com.jslsolucoes</groupId>
     <artifactId>ojdbc6</artifactId>
     <version>11.2.0.1.0</version>
+    <scope>provided</scope>
+</dependency>
+```
+##PostgreSQL
+```
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>42.1.4</version>
+    <scope>provided</scope>
+</dependency>
+```
+##SQL Server
+```
+<dependency>
+    <groupId>net.sourceforge.jtds</groupId>
+    <artifactId>jtds</artifactId>
+    <version>1.3.1</version>
     <scope>provided</scope>
 </dependency>
 ```

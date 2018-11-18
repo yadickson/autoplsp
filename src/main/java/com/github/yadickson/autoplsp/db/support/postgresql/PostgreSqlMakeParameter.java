@@ -32,6 +32,9 @@ import com.github.yadickson.autoplsp.handler.BusinessException;
  */
 public class PostgreSqlMakeParameter extends MakeParameter {
 
+    static final long serialVersionUID = 1;
+    static final String PREFIX = "";
+
     /**
      * PostgreSQL method to create parameter class from database information
      *
@@ -59,10 +62,10 @@ public class PostgreSqlMakeParameter extends MakeParameter {
             final String objectSuffix,
             final String arraySuffix) throws BusinessException {
         if (type.equalsIgnoreCase("TEXT") || type.equalsIgnoreCase("character varying")) {
-            return new CharParameter(position, name, direction, procedure);
+            return new CharParameter(position, name, direction, PREFIX, procedure);
         }
         if (type.equalsIgnoreCase("INTEGER")  || type.equalsIgnoreCase("REAL") ) {
-            return new NumberParameter(position, name, direction, procedure);
+            return new NumberParameter(position, name, direction, PREFIX, procedure);
         }
 
         throw new BusinessException("Type [" + type + " " + name + "] not supported");

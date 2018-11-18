@@ -22,6 +22,9 @@ import com.github.yadickson.autoplsp.db.parameter.CharParameter;
 import com.github.yadickson.autoplsp.db.MakeParameter;
 import java.sql.Connection;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.db.parameter.BlobParameter;
+import com.github.yadickson.autoplsp.db.parameter.ClobParameter;
+import com.github.yadickson.autoplsp.db.parameter.DateParameter;
 import com.github.yadickson.autoplsp.db.parameter.NumberParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 
@@ -32,9 +35,7 @@ import com.github.yadickson.autoplsp.handler.BusinessException;
  */
 public class MsSqlMakeParameter extends MakeParameter {
 
-    /**
-     * Prefix
-     */
+    static final long serialVersionUID = 1;
     private static final String PREFIX = "@";
 
     /**
@@ -70,6 +71,15 @@ public class MsSqlMakeParameter extends MakeParameter {
         if (type.equalsIgnoreCase("INT") || type.equalsIgnoreCase("BIGINT")) {
             return new NumberParameter(position, name, direction, PREFIX, procedure);
         }
+        if (type.equalsIgnoreCase("CLOB") || type.equalsIgnoreCase("NCLOB")) {
+            return new ClobParameter(position, name, direction, PREFIX, procedure);
+        }
+        if (type.equalsIgnoreCase("BLOB")) {
+            return new BlobParameter(position, name, direction, PREFIX, procedure);
+        }
+        if (type.equalsIgnoreCase("DATE") || type.equalsIgnoreCase("TIMESTAMP")) {
+            return new DateParameter(position, name, direction, PREFIX, procedure);
+        }
         if (type.equalsIgnoreCase("CURSOR")) {
             if (direction != Direction.OUTPUT) {
                 throw new BusinessException("Input REF CURSOR not supported");
@@ -102,6 +112,6 @@ public class MsSqlMakeParameter extends MakeParameter {
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        return new MsSqlResultSetParameter(position, name, "#", procedure, connection, objectSuffix, arraySuffix);
+        return new MsSqlResultSetParameter(position, name, PREFIX, procedure, connection, objectSuffix, arraySuffix);
     }
 }

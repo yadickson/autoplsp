@@ -37,10 +37,11 @@ public class OracleDataSetParameter extends DataSetParameter {
      *
      * @param position The parameter position
      * @param name The parameter name
+     * @param prefix The prefix
      * @param procedure The procedure
      */
-    public OracleDataSetParameter(int position, String name, Procedure procedure) {
-        super(position, name, Direction.OUTPUT, procedure);
+    public OracleDataSetParameter(int position, String name, String prefix, Procedure procedure) {
+        super(position, name, Direction.OUTPUT, prefix, procedure);
     }
 
     /**

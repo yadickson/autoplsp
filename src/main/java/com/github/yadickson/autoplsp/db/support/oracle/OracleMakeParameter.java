@@ -36,6 +36,7 @@ import com.github.yadickson.autoplsp.handler.BusinessException;
 public class OracleMakeParameter extends MakeParameter {
 
     static final long serialVersionUID = 1;
+    static final String PREFIX = "";
 
     /**
      * Oracle method to create parameter class from database information
@@ -64,31 +65,31 @@ public class OracleMakeParameter extends MakeParameter {
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        
+
         if (type.equalsIgnoreCase("CHAR") || type.equalsIgnoreCase("NCHAR") || type.equalsIgnoreCase("VARCHAR") || type.equalsIgnoreCase("VARCHAR2") || type.equalsIgnoreCase("NVARCHAR2")) {
-            return new CharParameter(position, name, direction, procedure);
+            return new CharParameter(position, name, direction, PREFIX, procedure);
         }
         if (type.equalsIgnoreCase("NUMBER") || type.equalsIgnoreCase("DECIMAL") || type.equalsIgnoreCase("FLOAT") || type.equalsIgnoreCase("INTEGER") || type.equalsIgnoreCase("REAL") || type.equalsIgnoreCase("DEC") || type.equalsIgnoreCase("INT") || type.equalsIgnoreCase("SMALLINT") || type.equalsIgnoreCase("BINARY_DOUBLE") || type.equalsIgnoreCase("BINARY_FLOAT")) {
-            return new NumberParameter(position, name, direction, procedure);
+            return new NumberParameter(position, name, direction, PREFIX, procedure);
         }
         if (type.equalsIgnoreCase("CLOB") || type.equalsIgnoreCase("NCLOB")) {
-            return new ClobParameter(position, name, direction, procedure);
+            return new ClobParameter(position, name, direction, PREFIX, procedure);
         }
         if (type.equalsIgnoreCase("BLOB")) {
-            return new BlobParameter(position, name, direction, procedure);
+            return new BlobParameter(position, name, direction, PREFIX, procedure);
         }
         if (type.equalsIgnoreCase("DATE") || type.equalsIgnoreCase("TIMESTAMP")) {
-            return new DateParameter(position, name, direction, procedure);
+            return new DateParameter(position, name, direction, PREFIX, procedure);
         }
         if (type.equalsIgnoreCase("ROWID") || type.equalsIgnoreCase("UROWID")) {
-            return new OracleRowIdParameter(position, name, direction, procedure);
+            return new OracleRowIdParameter(position, name, direction, PREFIX, procedure);
         }
         if (type.equalsIgnoreCase("CURSOR")) {
             if (direction != Direction.OUTPUT) {
                 throw new BusinessException("Input REF CURSOR not supported");
             }
 
-            return new OracleDataSetParameter(position, name, procedure);
+            return new OracleDataSetParameter(position, name, PREFIX, procedure);
         }
 
         if (type.equalsIgnoreCase("OBJECT")) {
@@ -96,7 +97,7 @@ public class OracleMakeParameter extends MakeParameter {
                 throw new BusinessException("Output OBJECT not supported");
             }
 
-            return new OracleObjectParameter(position, name, direction, procedure, connection, typeName, objectSuffix, arraySuffix);
+            return new OracleObjectParameter(position, name, direction, PREFIX, procedure, connection, typeName, objectSuffix, arraySuffix);
         }
 
         if (type.equalsIgnoreCase("TABLE")) {
@@ -104,7 +105,7 @@ public class OracleMakeParameter extends MakeParameter {
                 throw new BusinessException("Output TABLE not supported");
             }
 
-            return new OracleTableParameter(position, name, direction, procedure, connection, typeName, objectSuffix, arraySuffix);
+            return new OracleTableParameter(position, name, direction, PREFIX, procedure, connection, typeName, objectSuffix, arraySuffix);
         }
 
         throw new BusinessException("Type [" + type + " " + name + "] not supported");

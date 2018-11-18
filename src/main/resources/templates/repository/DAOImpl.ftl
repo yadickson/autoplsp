@@ -93,7 +93,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
         }
         </#if>
         <#if proc.hasOutput>
-            r = this.sp.execute(mparams);
+            r = this.sp.runExecute(mparams);
         } catch ( Exception ex ) {
             throw new java.sql.SQLException(ex);
         }

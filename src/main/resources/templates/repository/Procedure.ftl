@@ -29,7 +29,7 @@ import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
  * @version @GENERATOR.VERSION@
  */
 @SuppressWarnings({"rawtypes","unchecked"})
-public class ${proc.className}SP extends org.springframework.jdbc.object.StoredProcedure implements java.io.Serializable {
+public class ${proc.className}SP extends org.springframework.jdbc.object.<#if !proc.functionInline>StoredProcedure<#else>GenericSqlQuery</#if> implements java.io.Serializable {
 
     /**
      * Serialization.
@@ -47,11 +47,28 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.StoredP
      * @param jdbcTemplate jdbcTemplate
      */
     public ${proc.className}SP(final org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
+        <#if !proc.functionInline>
         super(jdbcTemplate.getDataSource(), SPROC_NAME);
-        setFunction(<#if proc.functionInline>false<#else><#if proc.function>true<#else>false</#if></#if>);
+        setFunction(<#if proc.function>true<#else>false</#if>);
         <#list proc.parameters as parameter>
-        declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >, ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >, new ${parameter.javaTypeName}RowMapper ()</#if>));
+        declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >, ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >, new ${parameter.javaTypeName}RowMapper()</#if>));
         </#list>
+        <#else>
+        super();
+        setDataSource(jdbcTemplate.getDataSource());
+        setSql("select * from ${proc.fullName}(<#list proc.inputParameters as parameter>?<#sep>, </#sep></#list>)");
+        <#list proc.parameters as parameter>
+        <#if !parameter.returnResultSet>
+        declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >, ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >, new ${parameter.javaTypeName}RowMapper()</#if>));
+        <#else>
+        try {
+            setRowMapperClass(new ${parameter.javaTypeName}RowMapper().getClass());
+        } catch (Exception ex) {
+
+        }
+        </#if>
+        </#list>
+        </#if>
         compile();
     }
 
@@ -61,8 +78,9 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.StoredP
      * @return response.
      * @param params input parameters.
      */
-    @Override
-    public java.util.Map execute(java.util.Map params) {
-        return super.execute(params);
+    public java.util.Map runExecute(java.util.Map params) {
+        <#if !proc.functionInline>return super.execute(params);<#else>java.util.Map map = new java.util.HashMap<Object, Object>();
+        <#list proc.parameters as parameter><#if parameter.returnResultSet>map.put("${parameter.prefix}${parameter.name}", super.execute(params.values().toArray()));</#if></#list>
+        return map;</#if>
     }
 }

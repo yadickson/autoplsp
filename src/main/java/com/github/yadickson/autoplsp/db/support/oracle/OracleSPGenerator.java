@@ -55,7 +55,7 @@ public class OracleSPGenerator extends SPGenerator {
     @Override
     public String getParameterQuery(final Procedure procedure) {
         String pkg = procedure.getPackageName() == null ? "" : "AND package_name = ?";
-        String sql = "SELECT NVL(argument_name, 'out_return') as name, position, in_out as direction, DECODE(data_type, 'REF CURSOR', 'CURSOR', data_type) as dtype, type_name as ntype FROM all_arguments WHERE OWNER=USER AND object_name = ? " + pkg + " order by position asc, argument_name asc nulls first";
+        String sql = "SELECT NVL(argument_name, 'return_value') as name, position, in_out as direction, DECODE(data_type, 'REF CURSOR', 'CURSOR', data_type) as dtype, type_name as ntype FROM all_arguments WHERE OWNER=USER AND object_name = ? " + pkg + " order by position asc, argument_name asc nulls first";
         return sql;
     }
 

@@ -42,22 +42,6 @@ public abstract class Parameter implements Serializable {
      * @param position The parameter position
      * @param name The parameter name
      * @param direction The parameter direction
-     * @param procedure The procedure parent
-     */
-    public Parameter(Integer position, String name, Direction direction, Procedure procedure) {
-        this.position = position;
-        this.name = name;
-        this.direction = direction;
-        this.prefix = "";
-        this.parent = procedure.getFullName();
-    }
-
-    /**
-     * Class constructor.
-     *
-     * @param position The parameter position
-     * @param name The parameter name
-     * @param direction The parameter direction
      * @param prefix prefix value
      * @param procedure The procedure parent
      */

@@ -48,7 +48,7 @@ public class MsSqlSPGenerator extends SPGenerator {
                 + "WHERE type IN (\n"
                 + "    'P', -- stored procedures\n"
                 + "    'FN', -- scalar functions \n"
-                // + "    'IF', -- inline table-valued functions\n"
+                + "    'IF', -- inline table-valued functions\n"
                 + "    'TF', -- table-valued functions\n"
                 + "    'FT'"
                 + ")\n"
@@ -64,7 +64,7 @@ public class MsSqlSPGenerator extends SPGenerator {
     @Override
     public String getParameterQuery(final Procedure procedure) {
         String sql = "( select  \n"
-                + "   'name' = case when parameter_id = 0 then 'out_return' else name end,  \n"
+                + "   'name' = case when parameter_id = 0 then 'return_value' else name end,  \n"
                 + "   'dtype'   = case when is_cursor_ref = 1 then 'cursor' else type_name(user_type_id) end,  \n"
                 + "   'position'  = parameter_id,\n"
                 + "   'direction' = case when is_output = 0 then 'IN' else 'OUT' end\n"

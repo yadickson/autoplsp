@@ -35,18 +35,6 @@ public class NumberParameter extends Parameter {
      * @param position The parameter position
      * @param name The parameter name
      * @param direction The parameter direction
-     * @param procedure The procedure
-     */
-    public NumberParameter(int position, String name, Direction direction, Procedure procedure) {
-        super(position, name, direction, procedure);
-    }
-
-    /**
-     * Class constructor
-     *
-     * @param position The parameter position
-     * @param name The parameter name
-     * @param direction The parameter direction
      * @param prefix The prameter prefix
      * @param procedure The procedure
      */

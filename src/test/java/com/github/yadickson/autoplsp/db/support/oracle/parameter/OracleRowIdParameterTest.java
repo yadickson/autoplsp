@@ -35,7 +35,7 @@ public class OracleRowIdParameterTest {
 
     @Before
     public void setup() {
-        parameter = new OracleRowIdParameter(0, null, Direction.INPUT, new Procedure("", ""));
+        parameter = new OracleRowIdParameter(0, null, Direction.INPUT, "", new Procedure("", ""));
     }
 
     @Test(expected = Exception.class)

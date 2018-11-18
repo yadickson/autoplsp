@@ -35,10 +35,11 @@ public class DateParameter extends Parameter {
      * @param position The parameter position
      * @param name The parameter name
      * @param direction The parameter direction
+     * @param prefix The prefix
      * @param procedure The procedure
      */
-    public DateParameter(int position, String name, Direction direction, Procedure procedure) {
-        super(position, name, direction, procedure);
+    public DateParameter(int position, String name, Direction direction, String prefix, Procedure procedure) {
+        super(position, name, direction, prefix, procedure);
     }
 
     /**

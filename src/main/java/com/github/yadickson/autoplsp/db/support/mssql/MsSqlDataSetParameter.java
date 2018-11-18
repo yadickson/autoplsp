@@ -50,7 +50,7 @@ public class MsSqlDataSetParameter extends DataSetParameter {
      */
     @Override
     public int getSqlType() throws BusinessException {
-        return java.sql.Types.OTHER;
+        throw new BusinessException("Input REF CURSOR not supported yet");
     }
 
     /**

@@ -116,7 +116,7 @@ public class OracleObjectParameterTest {
 */
     @Test
     public void testGetJavaTypeName() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "ObjectSuffix", "");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, "", new Procedure("", ""), null, "type_value", "ObjectSuffix", "");
         String javaType = parameter.getJavaTypeName();
         assertNotNull(javaType);
         assertEquals("TypeValueObjectSuffix", javaType);
@@ -124,14 +124,14 @@ public class OracleObjectParameterTest {
 
     @Test
     public void testGetSqlType() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, "", new Procedure("", ""), null, "type_value", "", "");
         int sqlType = parameter.getSqlType();
         assertEquals(java.sql.Types.STRUCT, sqlType);
     }
 
     @Test
     public void testGetSqlTypeName() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, "", new Procedure("", ""), null, "type_value", "", "");
         String sqlType = parameter.getSqlTypeName();
         assertNotNull(sqlType);
         assertEquals("oracle.jdbc.OracleTypes.STRUCT", sqlType);
@@ -139,19 +139,19 @@ public class OracleObjectParameterTest {
 
     @Test
     public void testResultSetFalse() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, "", new Procedure("", ""), null, "type_value", "", "");
         assertFalse(parameter.isResultSet());
     }
 
     @Test
     public void testObjectTrue() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, "", new Procedure("", ""), null, "type_value", "", "");
         assertTrue(parameter.isObject());
     }
 
     @Test
     public void tesArrayFalse() throws BusinessException {
-        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, new Procedure("", ""), null, "type_value", "", "");
+        OracleObjectParameter parameter = new OracleObjectParameter(1, "nameObject", Direction.INPUT, "", new Procedure("", ""), null, "type_value", "", "");
         assertFalse(parameter.isArray());
     }
 

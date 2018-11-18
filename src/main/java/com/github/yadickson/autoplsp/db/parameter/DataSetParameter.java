@@ -42,19 +42,6 @@ public abstract class DataSetParameter extends Parameter {
      * @param position The parameter position
      * @param name The parameter name
      * @param direction The parameter direction
-     * @param procedure The procedure
-     */
-    public DataSetParameter(int position, String name, Direction direction, Procedure procedure) {
-        super(position, name, direction, procedure);
-        this.className = procedure.getClassName();
-    }
-
-    /**
-     * Class constructor
-     *
-     * @param position The parameter position
-     * @param name The parameter name
-     * @param direction The parameter direction
      * @param prefix The prefix
      * @param procedure The procedure
      */

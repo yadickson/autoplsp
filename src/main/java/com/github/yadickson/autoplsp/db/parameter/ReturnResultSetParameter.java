@@ -18,6 +18,7 @@ package com.github.yadickson.autoplsp.db.parameter;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
  * Dataset parameter class
@@ -27,18 +28,6 @@ import com.github.yadickson.autoplsp.db.common.Procedure;
 public abstract class ReturnResultSetParameter extends DataSetParameter {
 
     static final long serialVersionUID = 1;
-
-    /**
-     * Class constructor
-     *
-     * @param position The parameter position
-     * @param name The parameter name
-     * @param direction The parameter direction
-     * @param procedure The procedure
-     */
-    public ReturnResultSetParameter(int position, String name, Direction direction, Procedure procedure) {
-        super(position, name, direction, procedure);
-    }
 
     /**
      * Class constructor
@@ -71,6 +60,28 @@ public abstract class ReturnResultSetParameter extends DataSetParameter {
     @Override
     public boolean isReturnResultSet() {
         return true;
+    }
+
+    /**
+     * Getter the sql type.
+     *
+     * @return The sql type
+     * @throws BusinessException if error
+     */
+    @Override
+    public int getSqlType() throws BusinessException {
+        return java.sql.Types.OTHER;
+    }
+
+    /**
+     * Getter the sql type name.
+     *
+     * @return the sql type name
+     * @throws BusinessException if error
+     */
+    @Override
+    public String getSqlTypeName() throws BusinessException {
+        return "java.sql.Types.OTHER";
     }
 
 }

@@ -48,6 +48,7 @@ public class OracleObjectParameter extends Parameter {
      * @param position The parameter position
      * @param name The parameter name
      * @param direction Parameter direction
+     * @param prefix The prefix
      * @param procedure Procedure
      * @param connection Database connection
      * @param typeName Particular parameter type name
@@ -59,13 +60,14 @@ public class OracleObjectParameter extends Parameter {
             final int position,
             final String name,
             final Direction direction,
+            final String prefix,
             final Procedure procedure,
             final Connection connection,
             final String typeName,
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        super(position, name, direction, procedure);
+        super(position, name, direction, prefix, procedure);
         this.objectName = typeName;
         this.objectSuffix = objectSuffix;
         this.arraySuffix = arraySuffix;

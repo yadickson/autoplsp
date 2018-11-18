@@ -55,26 +55,4 @@ public class MsSqlResultSetParameter extends ReturnResultSetParameter {
         super(position, name, Direction.OUTPUT, prefix, procedure);
     }
 
-    /**
-     * Getter the sql type.
-     *
-     * @return The sql type
-     * @throws BusinessException if error
-     */
-    @Override
-    public int getSqlType() throws BusinessException {
-        return java.sql.Types.OTHER;
-    }
-
-    /**
-     * Getter the sql type name.
-     *
-     * @return the sql type name
-     * @throws BusinessException if error
-     */
-    @Override
-    public String getSqlTypeName() throws BusinessException {
-        return "java.sql.Types.OTHER";
-    }
-
 }

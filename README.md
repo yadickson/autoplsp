@@ -25,7 +25,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 [Examples](https://github.com/yadickson/autoplsp-examples)
 
-# Oracle
+## Oracle
 
 - Procedures
 - Functions
@@ -39,7 +39,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 - TYPE TABLE [NATIVE] (only input)
 - TYPE TABLE [TYPE OBJECT] (only input)
 
-# PostgresSQL
+## PostgresSQL
 
 - Procedures
 - Functions
@@ -47,7 +47,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 - Texts (TEXT, CHARACTER)
 - Working in progress
 
-# SQL Server
+## SQL Server
 
 - Procedures
 - Functions
@@ -178,17 +178,29 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 JDBC Driver class name, examples:
 
-> oracle.jdbc.driver.OracleDriver
-> org.postgresql.Driver
-> net.sourceforge.jtds.jdbc.Driver
+```
+oracle.jdbc.driver.OracleDriver
+```
+```
+org.postgresql.Driver
+```
+```
+net.sourceforge.jtds.jdbc.Driver\
+```
 
 ### connectionString (required)
 
 Database connection string, examples:
 
-> jdbc:oracle:thin:@${host}:${port}:${db}
-> jdbc:postgresql://${host}:${port}/${db}
-> jdbc:jtds:sqlserver://${host}:${port}/${db}
+```
+jdbc:oracle:thin:@${host}:${port}:${db}
+```
+```
+jdbc:postgresql://${host}:${port}/${db}
+```
+```
+jdbc:jtds:sqlserver://${host}:${port}/${db}
+```
 
 ### user (required)
 

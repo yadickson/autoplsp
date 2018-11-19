@@ -16,12 +16,13 @@
  */
 package com.github.yadickson.autoplsp.db.support.postgresql;
 
+import java.sql.Connection;
+
+import com.github.yadickson.autoplsp.db.MakeParameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
-import com.github.yadickson.autoplsp.db.parameter.CharParameter;
-import com.github.yadickson.autoplsp.db.MakeParameter;
-import java.sql.Connection;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.db.parameter.CharParameter;
 import com.github.yadickson.autoplsp.db.parameter.NumberParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 
@@ -61,10 +62,10 @@ public class PostgreSqlMakeParameter extends MakeParameter {
             final Procedure procedure,
             final String objectSuffix,
             final String arraySuffix) throws BusinessException {
-        if (type.equalsIgnoreCase("TEXT") || type.equalsIgnoreCase("character varying")) {
+        if (findParameterType(type, "TEXT", "CHARACTER")) {
             return new CharParameter(position, name, direction, PREFIX, procedure);
         }
-        if (type.equalsIgnoreCase("INTEGER")  || type.equalsIgnoreCase("REAL") ) {
+        if (findParameterType(type, "INTEGER", "REAL") ) {
             return new NumberParameter(position, name, direction, PREFIX, procedure);
         }
 

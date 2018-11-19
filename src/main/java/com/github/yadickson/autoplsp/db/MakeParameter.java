@@ -112,4 +112,22 @@ public abstract class MakeParameter {
             throws BusinessException {
         throw new BusinessException("ReturnResultSet not support");
     }
+
+    /**
+     * Find type parameter from list.
+     *
+     * @param type Type to find
+     * @param types Type list
+     * @return true is found
+     */
+    public boolean findParameterType(final String type, String... types) {
+        boolean result = false;
+
+        for (String t : types) {
+            if (type.equalsIgnoreCase(t)) {
+                return true;
+            }
+        }
+        return result;
+    }
 }

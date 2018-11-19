@@ -173,6 +173,15 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Method to know if parameter is boolean.
+     *
+     * @return true if boolean
+     */
+    public boolean isBoolean() {
+        return false;
+    }
+
+    /**
      * Method to know if parameter is result set or cursor.
      *
      * @return true if result set

@@ -16,14 +16,15 @@
  */
 package com.github.yadickson.autoplsp.db.support.mssql;
 
+import java.sql.Connection;
+
+import com.github.yadickson.autoplsp.db.MakeParameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
-import com.github.yadickson.autoplsp.db.parameter.CharParameter;
-import com.github.yadickson.autoplsp.db.MakeParameter;
-import java.sql.Connection;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.parameter.BlobParameter;
-import com.github.yadickson.autoplsp.db.parameter.ClobParameter;
+import com.github.yadickson.autoplsp.db.parameter.BooleanParameter;
+import com.github.yadickson.autoplsp.db.parameter.CharParameter;
 import com.github.yadickson.autoplsp.db.parameter.DateParameter;
 import com.github.yadickson.autoplsp.db.parameter.NumberParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
@@ -65,22 +66,22 @@ public class MsSqlMakeParameter extends MakeParameter {
             final String objectSuffix,
             final String arraySuffix) throws BusinessException {
         
-        if (type.equalsIgnoreCase("varchar") || type.equalsIgnoreCase("nvarchar")) {
+        if (findParameterType(type, "CHAR", "NCHAR", "TEXT", "NTEXT", "VARCHAR", "NVARCHAR")) {
             return new CharParameter(position, name, direction, PREFIX, procedure);
         }
-        if (type.equalsIgnoreCase("INT") || type.equalsIgnoreCase("BIGINT")) {
+        if (findParameterType(type, "INT", "BIGINT", "SMALLINT", "TINYINT", "DECIMAL", "NUMERIC", "FLOAT", "REAL", "MONEY", "SMALLMONEY")) {
             return new NumberParameter(position, name, direction, PREFIX, procedure);
         }
-        if (type.equalsIgnoreCase("CLOB") || type.equalsIgnoreCase("NCLOB")) {
-            return new ClobParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(type, "BIT")) {
+            return new BooleanParameter(position, name, direction, PREFIX, procedure);
         }
-        if (type.equalsIgnoreCase("BLOB")) {
+        if (findParameterType(type, "BINARY", "VARBINARY", "IMAGE")) {
             return new BlobParameter(position, name, direction, PREFIX, procedure);
         }
-        if (type.equalsIgnoreCase("DATE") || type.equalsIgnoreCase("TIMESTAMP")) {
+        if (findParameterType(type, "DATE", "TIME", "DATETIME", "DATETIME2", "DATETIMEOFFSET", "SMALLDATETIME")) {
             return new DateParameter(position, name, direction, PREFIX, procedure);
         }
-        if (type.equalsIgnoreCase("CURSOR")) {
+        if (findParameterType(type, "CURSOR")) {
             if (direction != Direction.OUTPUT) {
                 throw new BusinessException("Input REF CURSOR not supported");
             }

@@ -79,4 +79,5 @@ public class CapitalizeUtilTest {
         assertEquals("FunctionGetNames", result);
 
     }
+
 }

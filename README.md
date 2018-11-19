@@ -25,7 +25,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 [Examples](https://github.com/yadickson/autoplsp-examples)
 
-#Oracle
+# Oracle
 
 - Procedures
 - Functions
@@ -39,7 +39,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 - TYPE TABLE [NATIVE] (only input)
 - TYPE TABLE [TYPE OBJECT] (only input)
 
-#PostgresSQL
+# PostgresSQL
 
 - Procedures
 - Functions
@@ -47,14 +47,14 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 - Texts (TEXT, CHARACTER)
 - Working in progress
 
-#SQL Server
+# SQL Server
 
 - Procedures
 - Functions
-- Numerics (INT, BIGINT)
-- Texts (VARCHAR, NVARCHAR)
-- Lobs (CLOB, NCLOB, BLOB)
-- Time (DATE, TIMESTAMP)
+- Numerics (INT, BIGINT, SMALLINT, TINYINT, DECIMAL, NUMERIC, FLOAT, REAL, BIT, MONEY, SMALLMONEY)
+- Texts (CHAR, NCHAR, VARCHAR, NVARCHAR, TEXT, NTEXT)
+- Binaries (BINARY, VARBINARY, IMAGE)
+- Time (DATE, TIME, DATETIME, DATETIME2, DATETIMEOFFSET, SMALLDATETIME)
 - REF CURSOR (Not supported)
 - Working in progress
 
@@ -99,7 +99,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
     <scope>provided</scope>
 </dependency>
 ```
-##Oracle
+## Oracle
 ```
 <dependency>
     <groupId>com.jslsolucoes</groupId>
@@ -108,7 +108,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
     <scope>provided</scope>
 </dependency>
 ```
-##PostgreSQL
+## PostgreSQL
 ```
 <dependency>
     <groupId>org.postgresql</groupId>
@@ -117,7 +117,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
     <scope>provided</scope>
 </dependency>
 ```
-##SQL Server
+## SQL Server
 ```
 <dependency>
     <groupId>net.sourceforge.jtds</groupId>
@@ -164,16 +164,31 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
             </configuration>
         </execution>
     </executions>
+    <dependencies>
+        <dependency>
+            <groupId>...driver..</groupId>
+            <artifactId>..driver..</artifactId>
+            <version>..version..</version>
+        </dependency>
+    </dependencies>
 </plugin>
 ```
 
 ### driver (required)
 
-JDBC Driver class name, example **oracle.jdbc.driver.OracleDriver**
+JDBC Driver class name, examples:
+
+> oracle.jdbc.driver.OracleDriver
+> org.postgresql.Driver
+> net.sourceforge.jtds.jdbc.Driver
 
 ### connectionString (required)
 
-Database connection string, example **jdbc:oracle:thin:@host:port:service**
+Database connection string, examples:
+
+> jdbc:oracle:thin:@${host}:${port}:${db}
+> jdbc:postgresql://${host}:${port}/${db}
+> jdbc:jtds:sqlserver://${host}:${port}/${db}
 
 ### user (required)
 
@@ -251,6 +266,13 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
+    <dependencies>
+        <dependency>
+            <groupId>...driver..</groupId>
+            <artifactId>..driver..</artifactId>
+            <version>..version..</version>
+        </dependency>
+    </dependencies>
 </plugin>
 ```
 
@@ -281,6 +303,13 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
+    <dependencies>
+        <dependency>
+            <groupId>...driver..</groupId>
+            <artifactId>..driver..</artifactId>
+            <version>..version..</version>
+        </dependency>
+    </dependencies>
 </plugin>
 ```
 
@@ -312,6 +341,13 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
+    <dependencies>
+        <dependency>
+            <groupId>...driver..</groupId>
+            <artifactId>..driver..</artifactId>
+            <version>..version..</version>
+        </dependency>
+    </dependencies>
 </plugin>
 ```
 
@@ -342,6 +378,13 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
             </configuration>
         </execution>
     </executions>
+    <dependencies>
+        <dependency>
+            <groupId>...driver..</groupId>
+            <artifactId>..driver..</artifactId>
+            <version>..version..</version>
+        </dependency>
+    </dependencies>
 </plugin>
 ```
 

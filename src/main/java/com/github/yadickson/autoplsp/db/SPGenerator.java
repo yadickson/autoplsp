@@ -160,7 +160,7 @@ public abstract class SPGenerator {
             String typeName = p.getNtype();
 
             Integer position = p.getPosition();
-            String parameterName = p.getName().replaceAll("^@", "");
+            String parameterName = p.getName().replaceAll("^[@\\$]", "");
             Direction direction = new MakeDirection().getDirection(p.getDirection());
 
             LoggerManager.getInstance().info("[SPGenerator] Process (" + position + ") " + parameterName + " " + direction + " " + dataType + " " + typeName);
@@ -370,22 +370,41 @@ public abstract class SPGenerator {
         return false;
     }
 
+    /**
+     * Getter Sql open and close keys.
+     *
+     * @return keys
+     */
+    public String[] getSqlKeys() {
+        return new String[]{"{", "}"};
+    }
+
+    /**
+     * Getter Sql open and close keys.
+     *
+     * @return keys
+     */
+    public String getSqlSelect() {
+        return "select * from ";
+    }
+
     public String getProcedureSql(
             final Procedure procedure,
             final List<Parameter> parameters) {
         boolean isFunction = procedure.isFunction();
         boolean isFunctionInline = procedure.isFunctionInline();
+        boolean hasReturnVoid = procedure.getReturVoid();
+        
+        String sql = isFunctionInline ? getSqlSelect() : getSqlKeys()[0] + " call ";
 
-        String sql = isFunctionInline ? "select * from " : "{ call ";
-
-        if (isFunction && !isFunctionInline) {
+        if (isFunction && !isFunctionInline && !hasReturnVoid) {
             sql += "?:= ";
         }
 
         sql += procedure.getFullName();
         sql += "(";
 
-        int args = isFunction && !isFunctionInline ? parameters.size() - 1 : parameters.size();
+        int args = isFunction && !isFunctionInline && !hasReturnVoid ? parameters.size() - 1 : parameters.size();
         List<String> argv = new ArrayList<String>();
 
         for (int i = 0; i < args; i++) {
@@ -394,7 +413,7 @@ public abstract class SPGenerator {
 
         sql += StringUtils.join(argv, ",");
         sql += ")";
-        sql += isFunctionInline ? ";" : " }";
+        sql += isFunctionInline ? ";" : " " + getSqlKeys()[1];
 
         LoggerManager.getInstance().info(sql);
 

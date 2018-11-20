@@ -22,8 +22,11 @@ import com.github.yadickson.autoplsp.db.MakeParameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.db.parameter.BooleanParameter;
 import com.github.yadickson.autoplsp.db.parameter.CharParameter;
 import com.github.yadickson.autoplsp.db.parameter.NumberParameter;
+import com.github.yadickson.autoplsp.db.parameter.ReturnResultSetParameter;
+import com.github.yadickson.autoplsp.db.parameter.VoidParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
@@ -65,10 +68,40 @@ public class PostgreSqlMakeParameter extends MakeParameter {
         if (findParameterType(type, "TEXT", "CHARACTER")) {
             return new CharParameter(position, name, direction, PREFIX, procedure);
         }
-        if (findParameterType(type, "INTEGER", "REAL") ) {
+        if (findParameterType(type, "INT4", "FLOAT4", "INTEGER", "REAL")) {
             return new NumberParameter(position, name, direction, PREFIX, procedure);
+        }
+        if (findParameterType(type, "BOOLEAN")) {
+            return new BooleanParameter(position, name, direction, PREFIX, procedure);
+        }
+        if (findParameterType(type, "VOID")) {
+            return new VoidParameter(position, name, direction, PREFIX, procedure);
         }
 
         throw new BusinessException("Type [" + type + " " + name + "] not supported");
+    }
+
+    /**
+     * Getter return result set parameter.
+     *
+     * @param position The position
+     * @param name The name
+     * @param procedure The procedure owner
+     * @param connection Database connection
+     * @param objectSuffix Object suffix name
+     * @param arraySuffix Array suffix name
+     * @return the new parameter
+     * @throws BusinessException If create parameter process throws an error
+     */
+    @Override
+    public Parameter getReturnResultSet(
+            final int position,
+            final String name,
+            final Procedure procedure,
+            final Connection connection,
+            final String objectSuffix,
+            final String arraySuffix)
+            throws BusinessException {
+        return new ReturnResultSetParameter(position, name, PREFIX, procedure);
     }
 }

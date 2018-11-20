@@ -16,9 +16,10 @@
  */
 package com.github.yadickson.autoplsp.db;
 
+import java.sql.Connection;
+
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Parameter;
-import java.sql.Connection;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 

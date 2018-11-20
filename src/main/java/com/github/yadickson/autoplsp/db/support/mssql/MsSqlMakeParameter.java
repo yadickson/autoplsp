@@ -27,6 +27,7 @@ import com.github.yadickson.autoplsp.db.parameter.BooleanParameter;
 import com.github.yadickson.autoplsp.db.parameter.CharParameter;
 import com.github.yadickson.autoplsp.db.parameter.DateParameter;
 import com.github.yadickson.autoplsp.db.parameter.NumberParameter;
+import com.github.yadickson.autoplsp.db.parameter.ReturnResultSetParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
@@ -82,11 +83,7 @@ public class MsSqlMakeParameter extends MakeParameter {
             return new DateParameter(position, name, direction, PREFIX, procedure);
         }
         if (findParameterType(type, "CURSOR")) {
-            if (direction != Direction.OUTPUT) {
-                throw new BusinessException("Input REF CURSOR not supported");
-            }
-            
-            return new MsSqlDataSetParameter(position, name, PREFIX, procedure);
+            throw new BusinessException("Input REF CURSOR not supported yet");
         }
         
         throw new BusinessException("Type [" + type + " " + name + "] not supported");
@@ -113,6 +110,6 @@ public class MsSqlMakeParameter extends MakeParameter {
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        return new MsSqlResultSetParameter(position, name, PREFIX, procedure, connection, objectSuffix, arraySuffix);
+        return new ReturnResultSetParameter(position, name, PREFIX, procedure);
     }
 }

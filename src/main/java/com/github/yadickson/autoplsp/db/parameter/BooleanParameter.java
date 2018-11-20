@@ -21,7 +21,7 @@ import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 
 /**
- * Char Parameter class
+ * Boolean Parameter class
  *
  * @author Yadickson Soto
  */

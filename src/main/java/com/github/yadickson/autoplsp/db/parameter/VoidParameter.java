@@ -14,19 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.support.mssql;
+package com.github.yadickson.autoplsp.db.parameter;
 
 import com.github.yadickson.autoplsp.db.common.Direction;
+import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
-import com.github.yadickson.autoplsp.db.parameter.DataSetParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 
 /**
- * SQL Server Dataset parameter class
+ * Void Parameter class
  *
  * @author Yadickson Soto
  */
-public class MsSqlDataSetParameter extends DataSetParameter {
+public class VoidParameter extends Parameter {
 
     static final long serialVersionUID = 1;
 
@@ -35,33 +35,53 @@ public class MsSqlDataSetParameter extends DataSetParameter {
      *
      * @param position The parameter position
      * @param name The parameter name
-     * @param prefix The prefix
-     * @param procedure The procedure
+     * @param direction The parameter direction
+     * @param prefix The parameter prefix
+     * @param procedure the procedure
      */
-    public MsSqlDataSetParameter(int position, String name, String prefix, Procedure procedure) {
-        super(position, name, Direction.OUTPUT, prefix, procedure);
+    public VoidParameter(int position, String name, Direction direction, String prefix, Procedure procedure) {
+        super(position, name, direction, prefix, procedure);
     }
 
     /**
-     * Getter the sql type.
+     * Getter the java type name
      *
-     * @return The sql type
-     * @throws BusinessException if error
+     * @return the java type name
+     * @throws BusinessException if error exists
      */
     @Override
-    public int getSqlType() throws BusinessException {
-        throw new BusinessException("Input REF CURSOR not supported yet");
+    public String getJavaTypeName() throws BusinessException {
+        throw new BusinessException("Java type name not supported");
     }
 
     /**
-     * Getter the sql type name.
+     * Getter the sql type
+     *
+     * @return the sql type
+     */
+    @Override
+    public int getSqlType() {
+        return java.sql.Types.OTHER;
+    }
+
+    /**
+     * Getter the sql type name
      *
      * @return the sql type name
-     * @throws BusinessException if error
+     * @throws BusinessException if error exists
      */
     @Override
     public String getSqlTypeName() throws BusinessException {
         return "java.sql.Types.OTHER";
     }
 
+    /**
+     * Method to know if parameter is void.
+     *
+     * @return true if void
+     */
+    @Override
+    public boolean isVoid() {
+        return true;
+    }
 }

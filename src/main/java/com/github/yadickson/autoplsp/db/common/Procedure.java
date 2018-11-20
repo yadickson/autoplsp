@@ -169,6 +169,21 @@ public class Procedure implements Serializable {
     }
 
     /**
+     * Getter is procedure has return void parameter
+     *
+     * @return true is has return void parameter
+     */
+    public boolean getReturVoid() {
+        for (Parameter param : this.getParameters()) {
+            if (param.isOutput() && param.isVoid()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Getter procedure name
      *
      * @return the name

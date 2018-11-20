@@ -25,7 +25,7 @@ import com.github.yadickson.autoplsp.handler.BusinessException;
  *
  * @author Yadickson Soto
  */
-public abstract class ReturnResultSetParameter extends DataSetParameter {
+public class ReturnResultSetParameter extends DataSetParameter {
 
     static final long serialVersionUID = 1;
 
@@ -34,12 +34,11 @@ public abstract class ReturnResultSetParameter extends DataSetParameter {
      *
      * @param position The parameter position
      * @param name The parameter name
-     * @param direction The parameter direction
      * @param prefix The prefix
      * @param procedure The procedure
      */
-    public ReturnResultSetParameter(int position, String name, Direction direction, String prefix, Procedure procedure) {
-        super(position, name, direction, prefix, procedure);
+    public ReturnResultSetParameter(int position, String name, String prefix, Procedure procedure) {
+        super(position, name, Direction.OUTPUT, prefix, procedure);
     }
 
     /**

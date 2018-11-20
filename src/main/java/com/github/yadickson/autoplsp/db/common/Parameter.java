@@ -182,6 +182,15 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Method to know if parameter is void.
+     *
+     * @return true if boolean
+     */
+    public boolean isVoid() {
+        return false;
+    }
+
+    /**
      * Method to know if parameter is result set or cursor.
      *
      * @return true if result set

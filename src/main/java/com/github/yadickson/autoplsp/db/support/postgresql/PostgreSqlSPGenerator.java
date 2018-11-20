@@ -43,7 +43,9 @@ public class PostgreSqlSPGenerator extends SPGenerator {
      */
     @Override
     public String getProcedureQuery() {
-        return "SELECT null as PKG, CASE WHEN pg_catalog.format_type(p.prorettype, NULL) = 'void' or pg_catalog.format_type(p.prorettype, NULL) = 'record' THEN 'PROCEDURE' ELSE 'FUNCTION' END as type, p.proname as name FROM pg_catalog.pg_namespace n JOIN pg_catalog.pg_proc p ON pronamespace = n.oid WHERE nspname = 'public' AND pg_catalog.pg_function_is_visible(p.oid)";
+        return "SELECT null as PKG, CASE WHEN p.prokind = 'p' THEN 'PROCEDURE' ELSE 'FUNCTION' END as type, p.proname as name"
+                + " FROM pg_catalog.pg_namespace n JOIN pg_catalog.pg_proc p ON pronamespace = n.oid"
+                + " WHERE nspname = 'public' AND pg_catalog.pg_function_is_visible(p.oid)";
     }
 
     /**
@@ -55,57 +57,17 @@ public class PostgreSqlSPGenerator extends SPGenerator {
     @Override
     public String getParameterQuery(final Procedure procedure) {
 
-        String sql = "select p[1] as position, p[2] as direction, p[3] as name, p[4] as dtype\n"
+        String sql = "select px[1] as position, px[4] as direction, px[2] as name, px[3] as dtype\n"
                 + "from (\n"
                 + "SELECT regexp_split_to_array(param, ':') from \n"
                 + "(\n"
-                + "SELECT\n"
-                + "CASE WHEN p.proretset THEN 'setof ' ELSE '' END ||\n"
-                + "pg_catalog.format_type(p.prorettype, NULL) as \"out\",\n"
-                + "CASE WHEN proallargtypes IS NOT NULL THEN\n"
-                + "pg_catalog.array_to_string(ARRAY(\n"
-                + "SELECT\n"
-                + "s.i || ':' ||\n"
-                + "CASE\n"
-                + "WHEN p.proargmodes[s.i] = 'i' THEN 'IN:'\n"
-                + "WHEN p.proargmodes[s.i] = 'o' THEN 'OUT:'\n"
-                + "WHEN p.proargmodes[s.i] = 'b' THEN 'INOUT:'\n"
-                + "END ||\n"
-                + "CASE\n"
-                + "WHEN COALESCE(p.proargnames[s.i], '') = '' THEN ''\n"
-                + "ELSE p.proargnames[s.i] || ':'\n"
-                + "END ||\n"
-                + "pg_catalog.format_type(p.proallargtypes[s.i], NULL)\n"
-                + "FROM\n"
-                + "pg_catalog.generate_series(1,\n"
-                + "pg_catalog.array_upper(p.proallargtypes, 1)) AS s(i)\n"
-                + "), ',')\n"
-                + "ELSE\n"
-                + "pg_catalog.array_to_string(ARRAY(\n"
-                + "SELECT\n"
-                + "s.i+1 || ':IN:' ||\n"
-                + "CASE\n"
-                + "WHEN COALESCE(p.proargnames[s.i+1], '') = '' THEN ''\n"
-                + "ELSE p.proargnames[s.i+1] || ':'\n"
-                + "END ||\n"
-                + "pg_catalog.format_type(p.proargtypes[s.i], NULL)\n"
-                + "FROM\n"
-                + "pg_catalog.generate_series(0,\n"
-                + "pg_catalog.array_upper(p.proargtypes, 1)) AS s(i)\n"
-                + "), ', ')\n"
-                + "END AS \"input\"\n"
+                + "select pg_catalog.array_to_string(ARRAY(select s.i+1 || ':' || case when p.proargnames[s.i+1] is null or p.proargnames[s.i+1] = '' then '$p' || s.i+1 else p.proargnames[s.i+1] end || ':' || pg_catalog.format_type(p.proargtypes[s.i], NULL) || ':' || case WHEN p.proargmodes[s.i] = 'o' THEN 'OUT' WHEN p.proargmodes[s.i] = 'b' THEN 'IN/OUT' ELSE 'IN' END from pg_catalog.generate_series(0, pg_catalog.array_upper(p.proargtypes, 1)) AS s(i)), ',') || case when p.pronargs > 0 and p.prokind = 'f' and pg_catalog.format_type(p.prorettype, NULL) != 'void' then ',' else '' end || case when p.prokind = 'f' and pg_catalog.format_type(p.prorettype, NULL) != 'void' then '0:return_value:' || pg_catalog.format_type(p.prorettype, NULL) || ':OUT' else '' end as input\n"
                 + "FROM pg_catalog.pg_proc p\n"
                 + "LEFT JOIN pg_catalog.pg_namespace n ON n.oid = p.pronamespace\n"
-                + "LEFT JOIN pg_catalog.pg_language l ON l.oid = p.prolang\n"
-                + "JOIN pg_catalog.pg_roles r ON r.oid = p.proowner\n"
-                + "WHERE p.prorettype <> 'pg_catalog.cstring'::pg_catalog.regtype\n"
-                + "AND (p.proargtypes[0] IS NULL\n"
-                + "OR p.proargtypes[0] <> 'pg_catalog.cstring'::pg_catalog.regtype)\n"
-                + "AND NOT p.proisagg\n"
-                + "AND pg_catalog.pg_function_is_visible(p.oid)\n"
-                + "AND p.proname ilike ?\n"
+                + "where p.proname ilike ?\n"
                 + ") as t, unnest(string_to_array(input, ',')) s(param)\n"
-                + ") as dt(p)";
+                + ") as dt(px)\n"
+                + "order by 1 asc";
 
         return sql;
     }
@@ -129,6 +91,16 @@ public class PostgreSqlSPGenerator extends SPGenerator {
     @Override
     public MakeParameter getMakeParameter() {
         return new PostgreSqlMakeParameter();
+    }
+
+    /**
+     * Getter Sql open and close keys.
+     *
+     * @return keys
+     */
+    @Override
+    public String[] getSqlKeys() {
+        return new String[]{"", ""};
     }
 
 }

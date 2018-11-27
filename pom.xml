@@ -196,7 +196,7 @@
                 <executions>
                     <execution>
                         <id>cobertura</id>
-                        <phase>post-integration-test</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>check</goal>
                             <goal>cobertura</goal>
@@ -218,7 +218,7 @@
                 <executions>
                     <execution>
                         <id>checkstyle</id>
-                        <phase>test</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
@@ -229,38 +229,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.9.0</version>
+                <version>3.8</version>
                 <configuration>
                     <failOnViolation>false</failOnViolation>
                 </configuration>
                 <executions>
                     <execution>
                         <id>pmd</id>
-                        <phase>test</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>check</goal>
                             <goal>cpd-check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${maven.spotbugs.plugin.version}</version>
-                <configuration>
-                    <effort>Max</effort>
-                    <threshold>Low</threshold>
-                    <xmlOutput>true</xmlOutput>
-                    <failOnError>false</failOnError>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>spotbugs</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -280,7 +259,7 @@
                 <executions>
                     <execution>
                         <id>findbugs</id>
-                        <phase>compile</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>

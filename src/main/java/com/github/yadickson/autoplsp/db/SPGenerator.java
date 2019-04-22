@@ -217,7 +217,7 @@ public abstract class SPGenerator {
             }
 
             boolean isResult = statement.execute();
-            LoggerManager.getInstance().info("Has result set [" + isResult + "]");
+            LoggerManager.getInstance().info("(findDataSetParameter) Has result set [" + isResult + "]");
 
             for (int i = 0; i < parameters.size(); i++) {
 
@@ -276,7 +276,7 @@ public abstract class SPGenerator {
             }
 
             boolean isResult = statement.execute();
-            LoggerManager.getInstance().info("Has result set [" + isResult + "]");
+            LoggerManager.getInstance().info("(findRetunResultSet) Has result set [" + isResult + "]");
 
             if (isResult) {
 
@@ -287,7 +287,7 @@ public abstract class SPGenerator {
 
                 do {
 
-                    ResultSet result = (ResultSet) statement.getResultSet();
+                    ResultSet result = statement.getResultSet();
 
                     Parameter rs = maker.getReturnResultSet(position++, first ? pname : pname + "_" + index, procedure, connection, objectSuffix, arraySuffix);
                     rs.setParameters(getParameters(maker, procedure, connection, result, objectSuffix, arraySuffix));
@@ -335,13 +335,11 @@ public abstract class SPGenerator {
             statement = connection.prepareStatement(sql);
 
             for (int i = 0; i < parameters.size(); i++) {
-                if (parameters.get(i).isInput()) {
-                    statement.setObject(i + 1, null);
-                }
+                statement.setObject(i + 1, null);
             }
 
             ResultSet result = statement.executeQuery();
-            LoggerManager.getInstance().info("Has result set [true]");
+            LoggerManager.getInstance().info("(findRetunResultTable) Has result set [true]");
 
             if (result == null) {
                 return false;

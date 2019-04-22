@@ -43,14 +43,15 @@ public class MsSqlSPGenerator extends SPGenerator {
      */
     @Override
     public String getProcedureQuery() {
-        return "SELECT pkg = null, name, case when type = 'P' then 'PROCEDURE' when type = 'IF' then 'FUNCTION_INLINE' else 'FUNCTION' end as type\n"
-                + "FROM sysobjects\n"
-                + "WHERE type IN (\n"
+        return "SELECT sys.objects.name as name, case when sys.objects.type = 'P' then 'PROCEDURE' when type = 'IF' then 'FUNCTION_INLINE' else 'FUNCTION' end as type, sys.schemas.name as pkg\n"
+                + "FROM sys.objects\n"
+                + "INNER JOIN sys.schemas ON sys.objects.schema_id = sys.schemas.schema_id\n"
+                + "WHERE sys.objects.type IN (\n"
                 + "    'P', -- stored procedures\n"
-                + "    'FN', -- scalar functions \n"
+                + "    'FN', -- scalar functions\n"
                 + "    'IF', -- inline table-valued functions\n"
                 + "    'TF', -- table-valued functions\n"
-                + "    'FT'"
+                + "    'FT'\n"
                 + ")\n"
                 + "ORDER BY type, name";
     }
@@ -81,7 +82,7 @@ public class MsSqlSPGenerator extends SPGenerator {
      */
     @Override
     public Object[] getParameterObjects(final Procedure procedure) {
-        return new Object[]{procedure.getName()};
+        return new Object[]{procedure.getFullName()};
     }
 
     /**

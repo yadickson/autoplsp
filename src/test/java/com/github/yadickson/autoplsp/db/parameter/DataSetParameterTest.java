@@ -16,6 +16,7 @@ import org.junit.Test;
  *
  * @author debian
  */
+@SuppressWarnings({"serial"})
 public class DataSetParameterTest {
 
     private DataSetParameter parameter;

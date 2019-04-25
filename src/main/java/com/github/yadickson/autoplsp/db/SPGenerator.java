@@ -392,7 +392,7 @@ public abstract class SPGenerator {
         boolean isFunction = procedure.isFunction();
         boolean isFunctionInline = procedure.isFunctionInline();
         boolean hasReturnVoid = procedure.getReturVoid();
-        
+
         String sql = isFunctionInline ? getSqlSelect() : getSqlKeys()[0] + " call ";
 
         if (isFunction && !isFunctionInline && !hasReturnVoid) {
@@ -434,7 +434,16 @@ public abstract class SPGenerator {
         try {
             for (int j = 0; j < metadata.getColumnCount(); j++) {
 
-                Parameter p = maker.create(metadata.getColumnTypeName(j + 1).split(" ")[0], j + 1, metadata.getColumnName(j + 1), Direction.OUTPUT, connection, null, procedure, objectSuffix, arraySuffix);
+                String cName = metadata.getColumnName(j + 1);
+                String cType = metadata.getColumnTypeName(j + 1);
+
+                LoggerManager.getInstance().info("ResultSet: type [" + cType + "] name [" + cName + "]");
+
+                if (cName == null || cName.isEmpty()) {
+                    throw new BusinessException("Parameter type [" + cType + "] in position [" + (j + 1) + "] has not name");
+                }
+
+                Parameter p = maker.create(cType.split(" ")[0], j + 1, cName, Direction.OUTPUT, connection, null, procedure, objectSuffix, arraySuffix);
 
                 if (pNames.contains(p.getName())) {
                     throw new BusinessException("Parameter name [" + p.getName() + "] is duplicated");

@@ -66,7 +66,7 @@ public class MsSqlSPGenerator extends SPGenerator {
     public String getParameterQuery(final Procedure procedure) {
         String sql = "( select  \n"
                 + "   'name' = case when parameter_id = 0 then 'return_value' else name end,  \n"
-                + "   'dtype'   = case when is_cursor_ref = 1 then 'cursor' else type_name(user_type_id) end,  \n"
+                + "   'dtype'   = case when is_cursor_ref = 1 then 'cursor' else type_name(system_type_id) end,  \n"
                 + "   'position'  = parameter_id,\n"
                 + "   'direction' = case when is_output = 0 then 'IN' else 'OUT' end\n"
                 + "  from sys.parameters where object_id = object_id(?) )\n";

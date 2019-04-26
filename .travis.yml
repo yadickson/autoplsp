@@ -13,8 +13,7 @@ after_success:
 deploy:
 - provider: script
   script:
-  - mvn versions:set -DnewVersion=${TRAVIS_TAG}
-  - mvn clean deploy --settings .maven.xml -Dmaven.test.skip=true -B -U -Prelease
+    - mvn versions:set -DnewVersion=${TRAVIS_TAG} && mvn clean deploy --settings .maven.xml -Dmaven.test.skip=true -B -U -Prelease
   skip_cleanup: true
   on:
     tags: true

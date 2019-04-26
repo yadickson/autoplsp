@@ -3,7 +3,6 @@
 [![TravisCI Status][travis-image]][travis-url]
 [![Quality Gate][sonar-status-image]][sonar-url]
 [![Codecov Status][codecov-image]][codecov-url]
-[![Dependency Status][versioneye-image]][versioneye-url]
 [![Central OSSRH][oss-nexus-image]][oss-nexus-url]
 [![Central Maven][central-image]][central-url]
 
@@ -513,20 +512,11 @@ public class CustomServiceImpl implements CustomService {
 }
 ```
 
-[travis-image]: https://travis-ci.org/yadickson/autoplsp.svg
+[travis-image]: https://travis-ci.org/yadickson/autoplsp.svg?branch=master
 [travis-url]: https://travis-ci.org/yadickson/autoplsp
 
-[codecov-image]: https://codecov.io/gh/yadickson/autoplsp/branch/master/graph/badge.svg
+[codecov-image]: https://codecov.io/gh/yadickson/autoplsp/branch/master/graph/badge.svg?branch=master
 [codecov-url]: https://codecov.io/gh/yadickson/autoplsp
-
-[versioneye-image]: https://www.versioneye.com/user/projects/5a1b294d0fb24f0354ff94b2/badge.svg
-[versioneye-url]: https://www.versioneye.com/user/projects/5a1b294d0fb24f0354ff94b2
-
-[vulnerabilities-image]: https://snyk.io/test/github/yadickson/autoplsp/badge.svg
-[vulnerabilities-url]: https://snyk.io/test/github/yadickson/autoplsp
-
-[jitpack-image]: https://jitpack.io/v/yadickson/autoplsp.svg
-[jitpack-url]: https://jitpack.io/#yadickson/autoplsp
 
 [oss-nexus-image]: https://img.shields.io/nexus/r/https/oss.sonatype.org/com.github.yadickson/autoplsp.svg
 [oss-nexus-url]: https://oss.sonatype.org/#nexus-search;quick~autoplsp

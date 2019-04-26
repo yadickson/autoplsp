@@ -23,9 +23,8 @@ deploy:
     secure: AC9exoz3i/RRZgRO5B3ssQYAM9vgSnJCsR94Dzwo8+89Ib7wOfe82uMOO64bYIThHErjhInZlsioE7iCDZS9zcF6poLLsjCpw1W3JHbHQXhbiRrpCg/TlPx6nWRAvkI1tNenlgo/lCT43kkMjlY9DsAw4TPRTrQcnFk6ObzkafWaCKJh9e1yIQXYlRDmwyNtPGc3kzv2E1nnqFdVFALpmHxWT0Z/gKD/vLeK+Ys3YRRSJvZsB4FXRmlHw9vWyYJ7uoICDwPBqv/qn5j3pNzdys0GIFKHUwmasPVoXYNH7RW4g7sEsX2aH87Ea+cT7GP2qae9FaU/lYQJ2V/v/Fd+G+noQI2l/g7PtQn6xic1XKVjnqS1FL+jwt/9cugUPWsLIG+L3s/lBw8RJ1UXyCZ397TZzpucUJIAfb10zssI4IGd8JJVXkG9SXfzixlDLmi+3cr8LTvzHBJs7W83NvTZ6mHbOWKpz0vnbP6MEJXpCCKXfFgkRyaO0bk5pHpvhsgEvUuZiKFfQocuOrq7yOMlBE/+bkFIvsWkg39ga+18XOgVmEqJG7NbG9HWk+jQsdsi28D/F6H9fmVLC1BKdKgROHw9e7hu1bwuI+Uzt57BzC4Gx6u3z4Q1pZX1oPPL/b7WEqbV1xuudz8idhqUQd9OISfEeOy7a9e8ykM6dvBBHn4=
   file_glob: true
   file:
-  - "../*.orig.tar.*"
-  - "../*.debian.tar.*"
-  - "../*.dsc"
+  - "target/*.jar"
+  - "pom.xml"
   skip_cleanup: true
   on:
     tags: true

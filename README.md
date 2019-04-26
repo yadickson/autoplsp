@@ -185,7 +185,7 @@ oracle.jdbc.driver.OracleDriver
 org.postgresql.Driver
 ```
 ```
-net.sourceforge.jtds.jdbc.Driver\
+net.sourceforge.jtds.jdbc.Driver
 ```
 
 ### connectionString (required)

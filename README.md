@@ -1,7 +1,6 @@
 # Maven Auto PLSQL/SP Generator Plugin
 
 [![TravisCI Status][travis-image]][travis-url]
-[![Quality Gate][sonar-status-image]][sonar-url]
 [![Codecov Status][codecov-image]][codecov-url]
 [![Central OSSRH][oss-nexus-image]][oss-nexus-url]
 [![Central Maven][central-image]][central-url]
@@ -523,18 +522,3 @@ public class CustomServiceImpl implements CustomService {
 
 [central-image]: https://maven-badges.herokuapp.com/maven-central/com.github.yadickson/autoplsp/badge.svg
 [central-url]: https://maven-badges.herokuapp.com/maven-central/com.github.yadickson/autoplsp
-
-[sonar-status-image]: https://sonarcloud.io/api/badges/gate?key=com.github.yadickson:autoplsp
-[sonar-lines-image]: https://sonarcloud.io/api/badges/measure?key=com.github.yadickson:autoplsp&metric=ncloc
-[sonar-duplicate-lines-image]: https://sonarcloud.io/api/badges/measure?key=com.github.yadickson:autoplsp&metric=duplicated_lines_density
-[sonar-coverage-image]: https://sonarcloud.io/api/badges/measure?key=com.github.yadickson:autoplsp&metric=coverage
-[sonar-bugs-image]: https://sonarcloud.io/api/badges/measure?key=com.github.yadickson:autoplsp&metric=bugs
-[sonar-vulnerabilities-image]: https://sonarcloud.io/api/badges/measure?key=com.github.yadickson:autoplsp&metric=vulnerabilities
-[sonar-code-smells-image]: https://sonarcloud.io/api/badges/measure?key=com.github.yadickson:autoplsp&metric=code_smells
-[sonar-blocker-image]: https://sonarcloud.io/api/badges/measure?key=com.github.yadickson:autoplsp&metric=blocker_violations
-[sonar-critical-image]: https://sonarcloud.io/api/badges/measure?key=com.github.yadickson:autoplsp&metric=critical_violations
-[sonar-major-image]: https://sonarcloud.io/api/badges/measure?key=com.github.yadickson:autoplsp&metric=major_violations
-[sonar-minor-image]: https://sonarcloud.io/api/badges/measure?key=com.github.yadickson:autoplsp&metric=minor_violations
-
-
-[sonar-url]: https://sonarcloud.io/dashboard/index/com.github.yadickson:autoplsp

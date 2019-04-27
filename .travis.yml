@@ -8,8 +8,6 @@ before_install:
 - shred --remove .travis.gpg
 after_success:
 - bash <(curl -s https://codecov.io/bash)
-- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=https://sonarcloud.io
-  -Dsonar.organization=${SONAR_ORG} -Dsonar.login=${SONAR_TOKEN}
 deploy:
 - provider: script
   script:

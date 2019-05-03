@@ -88,7 +88,7 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
 <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>
         oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);
         java.io.Writer clobWriter${parameter.propertyName} = clob${parameter.propertyName}.getCharacterOutputStream();
-        clobWriter${parameter.propertyName}.write(get${parameter.propertyName}().toCharArray(););
+        clobWriter${parameter.propertyName}.write(get${parameter.propertyName}().toCharArray());
         clobWriter${parameter.propertyName}.flush();
         clobWriter${parameter.propertyName}.close();
 <#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB'>

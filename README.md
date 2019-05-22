@@ -96,6 +96,12 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
     <version>2.5</version>
     <scope>provided</scope>
 </dependency>
+<dependency>
+    <groupId>javax.annotation</groupId>
+    <artifactId>javax.annotation-api</artifactId>
+    <version>1.3.2</version>
+    <scope>provided</scope>
+</dependency>
 ```
 ## Oracle
 ```

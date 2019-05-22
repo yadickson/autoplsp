@@ -69,7 +69,8 @@ public class TemplateGenerator {
         LoggerManager.getInstance().info("[TemplateGenerator] Create template: from " + templateFileName + " to " + outputFileNamePath);
 
         try {
-            Template template = getCfg().getTemplate(templateFileName);
+            String templatePath = templateFileName.replace(File.separatorChar, '/');
+            Template template = getCfg().getTemplate(templatePath);
             File file = new File(outputFileNamePath);
             Writer out = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8"));
             template.process(input, out);

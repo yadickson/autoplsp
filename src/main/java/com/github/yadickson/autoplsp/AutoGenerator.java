@@ -306,13 +306,34 @@ public class AutoGenerator extends AbstractMojo {
 
             Collections.sort(spList, new ProcedureSort());
 
-            JavaGenerator template = new JavaGenerator(outputDirectory.getPath(),
-                    javaPackageName, javaDataSourceName, javaJdbcTemplateName,
-                    outParameterCode, outParameterMessage, generator.getName(), connManager.getVersion());
+            JavaGenerator template;
+            template = new JavaGenerator(
+                    outputDirectory.getPath(),
+                    javaPackageName,
+                    javaDataSourceName,
+                    javaJdbcTemplateName,
+                    outParameterCode,
+                    outParameterMessage,
+                    generator.getName(),
+                    connManager.getVersion()
+            );
 
-            template.process(spList);
+            List<com.github.yadickson.autoplsp.db.common.Parameter> objects;
+            objects = generator.findObjects(connection, objectSuffix, arraySuffix);
 
-            ConfigGenerator config = new ConfigGenerator(outputDirectoryResource.getPath(), javaPackageName, javaDataSourceName, javaJdbcTemplateName, jndiDataSourceName, outputConfigFileName);
+            template.processProcedures(spList);
+            template.processParameters(objects);
+
+            ConfigGenerator config;
+            config = new ConfigGenerator(
+                    outputDirectoryResource.getPath(),
+                    javaPackageName,
+                    javaDataSourceName,
+                    javaJdbcTemplateName,
+                    jndiDataSourceName,
+                    outputConfigFileName
+            );
+            
             config.process();
 
         } catch (RuntimeException ex) {

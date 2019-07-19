@@ -50,7 +50,7 @@ public abstract class Parameter implements Serializable {
         this.name = name;
         this.direction = direction;
         this.prefix = prefix;
-        this.parent = procedure.getFullName();
+        this.parent = procedure == null ? "" : procedure.getFullName();
     }
 
     /**

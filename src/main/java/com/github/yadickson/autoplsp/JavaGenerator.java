@@ -96,7 +96,7 @@ public class JavaGenerator extends TemplateGenerator {
      * @throws BusinessException Launch if the generation process throws an
      * error
      */
-    public void process(List<Procedure> procedures) throws BusinessException {
+    public void processProcedures(List<Procedure> procedures) throws BusinessException {
         LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedures.size() + " procedures");
 
         for (Procedure procedure : procedures) {
@@ -104,8 +104,6 @@ public class JavaGenerator extends TemplateGenerator {
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedure.getFullName());
 
             processStoredProcedureParameterRS(procedure);
-            processStoredProcedureParameterObject(procedure);
-            processStoredProcedureParameterArray(procedure);
             processStoredProcedureMapperRS(procedure);
             processStoredProcedureParameter(procedure);
             processStoredProcedure(procedure);
@@ -203,53 +201,27 @@ public class JavaGenerator extends TemplateGenerator {
         }
     }
 
-    private void processStoredProcedureParameterObject(Procedure procedure) throws BusinessException {
-        Map<String, Object> input = new HashMap<String, Object>();
+    public void processParameters(List<Parameter> objects) throws BusinessException {
 
-        input.put(PROCEDURE_NAME, procedure);
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-        input.put(DRIVER_NAME, driverName);
-        input.put(DRIVER_VERSION, driverVersion);
+        for (Parameter param : objects) {
+            LoggerManager.getInstance().info("[JavaGenerator] Process template for " + param.getName());
 
-        if (!procedure.getHasObject()) {
-            return;
-        }
+            Map<String, Object> input = new HashMap<String, Object>();
 
-        String parameterPath = getDomainOutputPath("");
+            input.put(JAVA_PACKAGE_NAME, javaPackage);
+            input.put(DRIVER_NAME, driverName);
+            input.put(DRIVER_VERSION, driverVersion);
 
-        for (Parameter param : procedure.getParameters()) {
+            String parameterPath = getDomainOutputPath("");
+
             if (param.isObject()) {
                 input.put(PARAMETER_NAME, param);
                 createTemplate(input, DOMAIN_PATH + "Object.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
             }
-        }
-    }
 
-    private void processStoredProcedureParameterArray(Procedure procedure) throws BusinessException {
-        Map<String, Object> input = new HashMap<String, Object>();
-
-        input.put(PROCEDURE_NAME, procedure);
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-        input.put(DRIVER_NAME, driverName);
-        input.put(DRIVER_VERSION, driverVersion);
-
-        if (!procedure.getHasArray()) {
-            return;
-        }
-
-        String parameterPath = getDomainOutputPath("");
-
-        for (Parameter param : procedure.getParameters()) {
             if (param.isArray()) {
                 input.put(PARAMETER_NAME, param);
                 createTemplate(input, DOMAIN_PATH + "Table.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
-
-                for (Parameter p : param.getParameters()) {
-                    if (p.isObject()) {
-                        input.put(PARAMETER_NAME, p);
-                        createTemplate(input, DOMAIN_PATH + "Object.ftl", getFileNameObjectPath(parameterPath, p.getJavaTypeName()));
-                    }
-                }
             }
         }
     }

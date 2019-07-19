@@ -37,7 +37,7 @@ public final class ${parameter.javaTypeName} extends java.util.ArrayList<${param
      * @return object
      * @throws Exception
      */
-    public Object getObject(final java.sql.Connection connection) throws Exception {
+    public Object processObject(final java.sql.Connection connection) throws Exception {
 
         Object[] input = new Object[size()];
 
@@ -45,7 +45,7 @@ public final class ${parameter.javaTypeName} extends java.util.ArrayList<${param
 
         for (${parameter.parameters[parameter.parameters?size - 1].javaTypeName} obj : this) {
             <#if parameter.parameters[parameter.parameters?size - 1].object>
-            input[i++] = obj.getObject(connection);
+            input[i++] = obj.processObject(connection);
             <#else>
             input[i++] = obj;
             </#if>

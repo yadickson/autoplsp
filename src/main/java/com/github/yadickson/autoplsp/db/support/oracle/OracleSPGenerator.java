@@ -60,6 +60,16 @@ public class OracleSPGenerator extends SPGenerator {
     }
 
     /**
+     * Method getter sql objects and tableObjets.
+     *
+     * @return sql to find parameters
+     */
+    @Override
+    public String getObjetsQuery() {
+        return "SELECT distinct data_type as dtype, type_name as ntype FROM all_arguments WHERE OWNER=USER AND data_type in ('OBJECT', 'TABLE') order by dtype asc, ntype asc";
+    }
+
+    /**
      * Method getter all sql parameters objects
      *
      * @param procedure procedure

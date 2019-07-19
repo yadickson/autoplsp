@@ -26,12 +26,7 @@ import ${javaPackage}.domain.${parameter.javaTypeName};
  * @version @GENERATOR.VERSION@
  */
 @SuppressWarnings({"rawtypes","unchecked"})
-public class ${parameter.javaTypeName}RowMapper implements org.springframework.jdbc.core.RowMapper<${parameter.javaTypeName}>, java.io.Serializable {
-
-    /**
-     * Serialization.
-     */
-    static final long serialVersionUID = 1L;
+public class ${parameter.javaTypeName}RowMapper implements org.springframework.jdbc.core.RowMapper<${parameter.javaTypeName}> {
 
     /**
      * Resultset mapper.

@@ -29,12 +29,7 @@ import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
  * @version @GENERATOR.VERSION@
  */
 @SuppressWarnings({"rawtypes","unchecked"})
-public class ${proc.className}SP extends org.springframework.jdbc.object.<#if !proc.functionInline>StoredProcedure<#else>GenericSqlQuery</#if> implements java.io.Serializable {
-
-    /**
-     * Serialization.
-     */
-    static final long serialVersionUID = 1L;
+public class ${proc.className}SP extends org.springframework.jdbc.object.<#if !proc.functionInline>StoredProcedure<#else>GenericSqlQuery</#if> {
 
     /**
      * Full procedure name.

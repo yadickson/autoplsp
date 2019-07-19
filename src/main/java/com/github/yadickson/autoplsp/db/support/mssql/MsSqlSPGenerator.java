@@ -75,6 +75,16 @@ public class MsSqlSPGenerator extends SPGenerator {
     }
 
     /**
+     * Method getter sql objects and tableObjets.
+     *
+     * @return sql to find parameters
+     */
+    @Override
+    public String getObjetsQuery() {
+        return null;
+    }
+
+    /**
      * Method getter all sql parameters objects
      *
      * @param procedure procedure

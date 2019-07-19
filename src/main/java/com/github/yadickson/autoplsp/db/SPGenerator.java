@@ -88,6 +88,13 @@ public abstract class SPGenerator {
     public abstract String getParameterQuery(final Procedure procedure);
 
     /**
+     * Method getter sql objects and tableObjets.
+     *
+     * @return sql to find parameters
+     */
+    public abstract String getObjetsQuery();
+
+    /**
      * Method getter all sql parameters objects
      *
      * @param procedure procedure
@@ -460,6 +467,43 @@ public abstract class SPGenerator {
         }
 
         Collections.sort(list, new ParameterSort());
+
+        return list;
+    }
+
+    /**
+     * Find all objects and tableObjects from database.
+     *
+     * @param connection Database connection.
+     * @param objectSuffix object suffix
+     * @param arraySuffix array suffix
+     * @return objects and tableObjects list.
+     * @throws BusinessException If error.
+     */
+    public final List<Parameter> findObjects(
+            final Connection connection,
+            final String objectSuffix,
+            final String arraySuffix) throws BusinessException, SQLException {
+
+        String sql = getObjetsQuery();
+        
+        List<Parameter> list = new ArrayList<Parameter>();
+
+        if (sql == null) {
+            return list;
+        }
+        
+        LoggerManager.getInstance().info("[SPGenerator] Find all objects");
+
+        List<ParameterBean> parameters = new FindParameterImpl().getParameters(connection, sql, new String[]{});
+
+        for (ParameterBean p : parameters) {
+            Parameter parameter = getMakeParameter().getOwnerParameter(p.getDtype(), 0, p.getNtype(), Direction.INPUT, connection, p.getNtype(), null, objectSuffix, arraySuffix);
+            LoggerManager.getInstance().info("[SPGenerator] Found (" + p.getDtype() + " - " + p.getNtype() + ")");
+            list.add(parameter);
+        }
+
+        LoggerManager.getInstance().info("[SPGenerator] Found " + list.size() + " objects");
 
         return list;
     }

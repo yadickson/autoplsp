@@ -83,7 +83,7 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
      * @return object
      * @throws Exception
      */
-    public Object getObject(final java.sql.Connection connection) throws Exception {
+    public Object processObject(final java.sql.Connection connection) throws Exception {
 <#list parameter.parameters as parameter>
 <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>
         oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);

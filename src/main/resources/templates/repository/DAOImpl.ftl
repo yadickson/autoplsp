@@ -41,10 +41,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings({"rawtypes","unchecked"})
 public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 
-    /**
-     * Serialization.
-     */
-    static final long serialVersionUID = 1L;
     <#if proc.hasObject || proc.hasArray>
     private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
     </#if>
@@ -81,7 +77,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
         try {
         <#list proc.inputParameters as parameter>
         <#if parameter.object || parameter.array>
-            mparams.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}().getObject(org.springframework.jdbc.datasource.DataSourceUtils.getConnection(jdbcTemplate.getDataSource())));
+            mparams.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}().processObject(org.springframework.jdbc.datasource.DataSourceUtils.getConnection(jdbcTemplate.getDataSource())));
         <#else>
             mparams.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName} ());
         </#if>

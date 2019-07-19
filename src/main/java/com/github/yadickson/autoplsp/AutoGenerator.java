@@ -32,7 +32,9 @@ import com.github.yadickson.autoplsp.logger.LoggerManager;
 import com.github.yadickson.autoplsp.util.ProcedureSort;
 import java.sql.Connection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.maven.model.Resource;
 
@@ -209,6 +211,15 @@ public class AutoGenerator extends AbstractMojo {
     private String outParameterMessage;
 
     /**
+     * List sp and ids to group.
+     */
+    @Parameter(
+            alias = "groups",
+            readonly = true,
+            required = false)
+    private String[] mGroups;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -249,6 +260,7 @@ public class AutoGenerator extends AbstractMojo {
 
         List<String> includes = new ArrayList<String>();
         List<String> excludes = new ArrayList<String>();
+        Map<String, Group> groups = new HashMap<String, Group>();
 
         String regexInclude = ".*";
         String regexExclude = "";
@@ -262,6 +274,35 @@ public class AutoGenerator extends AbstractMojo {
         if (mExcludes != null) {
             for (String exclude : mExcludes) {
                 excludes.add("(" + exclude.toUpperCase(Locale.ENGLISH) + ")");
+            }
+        }
+
+        if (mGroups != null) {
+            for (String group : mGroups) {
+                String[] parts = StringUtils.split(group, ",");
+
+                if (parts.length < 2) {
+                    continue;
+                }
+
+                int i = 0;
+                Group objectGroup = new Group();
+
+                for (String part : parts) {
+                    switch (i++) {
+                        case 0:
+                            objectGroup.setProcedureName(part.toUpperCase().trim());
+                            break;
+                        case 1:
+                            objectGroup.setKey(part.toUpperCase().trim());
+                            break;
+                        default:
+                            objectGroup.getKeys().add(part.toUpperCase().trim());
+                            break;
+                    }
+                }
+
+                groups.put(objectGroup.getProcedureName(), objectGroup);
             }
         }
 
@@ -333,7 +374,7 @@ public class AutoGenerator extends AbstractMojo {
                     jndiDataSourceName,
                     outputConfigFileName
             );
-            
+
             config.process();
 
         } catch (RuntimeException ex) {
@@ -363,5 +404,14 @@ public class AutoGenerator extends AbstractMojo {
      */
     public void setExcludes(String[] excludes) {
         mExcludes = excludes == null ? null : excludes.clone();
+    }
+
+    /**
+     * Setter the groups from configuracion
+     *
+     * @param groups The groups from configuracion
+     */
+    public void setGroups(String[] groups) {
+        mGroups = groups == null ? null : groups.clone();
     }
 }

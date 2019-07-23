@@ -14,17 +14,47 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.common;
+
+package ${javaPackage}.table.column;
+
+import ${javaPackage}.table.column.type.FieldType;
 
 /**
- * Enum parameter direction
+ * Class definition for ${table.name} - ${field.name}.
  *
- * @author Yadickson Soto
+ * @author @GENERATOR.NAME@
+ * @version @GENERATOR.VERSION@
  */
-public enum Direction {
+public interface ${table.propertyName}${field.propertyName} {
 
-    INPUT,
-    OUTPUT,
-    INPUT_OUTPUT
+    /**
+     * @return the type
+     */
+    FieldType getType();
+
+    /**
+     * @return the position
+     */
+    int getPosition();
+
+    /**
+     * @return the minSize
+     */
+    int getMinSize();
+
+    /**
+     * @return the maxSize
+     */
+    int getMaxSize();
+
+    /**
+     * @return the notNull
+     */
+    Boolean getNotNull();
+
+    /**
+     * @return the defaultValue
+     */
+    String getDefaultValue();
 
 }

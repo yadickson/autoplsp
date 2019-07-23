@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Yadickson Soto
+ * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ package com.github.yadickson.autoplsp;
 
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.DriverConnection;
-import com.github.yadickson.autoplsp.db.SPGeneratorFactory;
+import com.github.yadickson.autoplsp.db.GeneratorFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -27,7 +27,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
-import com.github.yadickson.autoplsp.db.SPGenerator;
+import com.github.yadickson.autoplsp.db.Generator;
+import com.github.yadickson.autoplsp.db.common.Table;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import com.github.yadickson.autoplsp.util.ProcedureSort;
 import java.sql.Connection;
@@ -166,6 +167,16 @@ public class AutoGenerator extends AbstractMojo {
     private String objectSuffix;
 
     /**
+     * Table definition suffix name.
+     */
+    @Parameter(
+            property = "autoplsp.tableSuffix",
+            defaultValue = "Td",
+            readonly = true,
+            required = false)
+    private String tableSuffix;
+
+    /**
      * JNDI datasource name.
      */
     @Parameter(
@@ -211,13 +222,13 @@ public class AutoGenerator extends AbstractMojo {
     private String outParameterMessage;
 
     /**
-     * List sp and ids to group.
+     * List sp and ids to mapper.
      */
     @Parameter(
-            alias = "groups",
+            alias = "mappers",
             readonly = true,
             required = false)
-    private String[] mGroups;
+    private String[] mMappers;
 
     /**
      * Maven execute method.
@@ -241,6 +252,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] JNDIDataSourceName: " + jndiDataSourceName);
         getLog().info("[AutoGenerator] ArraySuffix: " + arraySuffix);
         getLog().info("[AutoGenerator] ObjectSuffix: " + objectSuffix);
+        getLog().info("[AutoGenerator] TableSuffix: " + tableSuffix);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
@@ -260,49 +272,58 @@ public class AutoGenerator extends AbstractMojo {
 
         List<String> includes = new ArrayList<String>();
         List<String> excludes = new ArrayList<String>();
-        Map<String, Group> groups = new HashMap<String, Group>();
+        Map<String, ConfigMapper> mappers = new HashMap<String, ConfigMapper>();
 
         String regexInclude = ".*";
         String regexExclude = "";
 
         if (mIncludes != null) {
             for (String include : mIncludes) {
-                includes.add("(" + include.toUpperCase(Locale.ENGLISH) + ")");
+                if (include != null) {
+                    includes.add("(" + include.toUpperCase(Locale.ENGLISH) + ")");
+                }
             }
         }
 
         if (mExcludes != null) {
             for (String exclude : mExcludes) {
-                excludes.add("(" + exclude.toUpperCase(Locale.ENGLISH) + ")");
+                if (exclude != null) {
+                    excludes.add("(" + exclude.toUpperCase(Locale.ENGLISH) + ")");
+                }
             }
         }
 
-        if (mGroups != null) {
-            for (String group : mGroups) {
-                String[] parts = StringUtils.split(group, ",");
+        if (mMappers != null) {
+            for (String mapper : mMappers) {
+                String[] parts = StringUtils.split(mapper, ",");
 
-                if (parts.length < 2) {
+                if (parts.length < 3) {
                     continue;
                 }
 
                 int i = 0;
-                Group objectGroup = new Group();
+                ConfigMapper objMapper = new ConfigMapper();
 
                 for (String part : parts) {
                     switch (i++) {
                         case 0:
-                            objectGroup.setProcedureName(part.toUpperCase().trim());
+                            objMapper.setProcedureName(part.toUpperCase().trim());
                             break;
                         case 1:
-                            objectGroup.setKey(part.toUpperCase().trim());
+                            objMapper.setCursorName(part.toUpperCase().trim());
                             break;
                         default:
-                            objectGroup.getKeys().add(part.toUpperCase().trim());
+                            objMapper.getKeys().add(part.toUpperCase().trim());
                             break;
                     }
                 }
 
-                groups.put(objectGroup.getProcedureName(), objectGroup);
+                mappers.put(
+                        objMapper.getProcedureName()
+                        + ":"
+                        + objMapper.getCursorName(),
+                        objMapper
+                );
             }
         }
 
@@ -323,8 +344,13 @@ public class AutoGenerator extends AbstractMojo {
 
         try {
 
-            SPGenerator generator = SPGeneratorFactory.getGenarator(driver);
+            Generator generator = GeneratorFactory.getGenarator(driver);
             Connection connection = connManager.getConnection();
+
+            List<com.github.yadickson.autoplsp.db.common.Parameter> objects;
+            objects = generator.findObjects(connection, objectSuffix, arraySuffix);
+
+            List<Table> tables = generator.findTables(connection, tableSuffix);
 
             List<Procedure> list = generator.findProcedures(connection);
             List<Procedure> spList = new ArrayList<Procedure>();
@@ -359,11 +385,13 @@ public class AutoGenerator extends AbstractMojo {
                     connManager.getVersion()
             );
 
-            List<com.github.yadickson.autoplsp.db.common.Parameter> objects;
-            objects = generator.findObjects(connection, objectSuffix, arraySuffix);
+            //List<com.github.yadickson.autoplsp.db.common.Parameter> mList;
+            //mList = generator.processMapper(spList, mappers);
 
+            template.processObjects(objects);
+            template.processTables(tables);
             template.processProcedures(spList);
-            template.processParameters(objects);
+            //template.processMappers(mList);
 
             ConfigGenerator config;
             config = new ConfigGenerator(
@@ -407,11 +435,11 @@ public class AutoGenerator extends AbstractMojo {
     }
 
     /**
-     * Setter the groups from configuracion
+     * Setter the mappers from configuracion
      *
-     * @param groups The groups from configuracion
+     * @param mappers The mapper from configuracion
      */
-    public void setGroups(String[] groups) {
-        mGroups = groups == null ? null : groups.clone();
+    public void setMappers(String[] mappers) {
+        mMappers = mappers == null ? null : mappers.clone();
     }
 }

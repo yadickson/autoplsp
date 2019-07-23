@@ -39,7 +39,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @SuppressWarnings({"rawtypes","unchecked"})
-public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
+public final class ${proc.className}MapperImpl implements ${proc.className}Mapper {
 
     <#if proc.hasObject || proc.hasArray>
     private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;

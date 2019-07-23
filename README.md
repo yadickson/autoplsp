@@ -158,13 +158,17 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
                 <outParameterMessage>...</outParameterMessage>
                 <javaPackageName>...</javaPackageName>
                 <includes>
-                    <include>...</include>
-                    <include>...</include>
+                    <param>...</param>
+                    <param>...</param>
                 </includes>
                 <excludes>
-                    <exculde>...</exculde>
-                    <exculde>...</exculde>
+                    <param>...</param>
+                    <param>...</param>
                 </excludes>
+                <mappers>
+                    <param>...</param>
+                    <param>...</param>
+                </mappers>
             </configuration>
         </execution>
     </executions>
@@ -314,7 +318,7 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
                 <outputDirectory>...</outputDirectory>
                 <javaPackageName>...</javaPackageName>
                 <includes>
-                    <include>SP_ADD_VALUES</include>
+                    <param>SP_ADD_VALUES</param>
                 </includes>
             </configuration>
         </execution>
@@ -351,8 +355,8 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
                 <outputDirectory>...</outputDirectory>
                 <javaPackageName>...</javaPackageName>
                 <includes>
-                    <include>SP_ADD_VALUES</include>
-                    <include>SP_SUB_VALUES</include>
+                    <param>SP_ADD_VALUES</param>
+                    <param>SP_SUB_VALUES</param>
                 </includes>
             </configuration>
         </execution>

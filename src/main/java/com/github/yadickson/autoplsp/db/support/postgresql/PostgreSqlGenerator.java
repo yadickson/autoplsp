@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Yadickson Soto
+ * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 package com.github.yadickson.autoplsp.db.support.postgresql;
 
 import com.github.yadickson.autoplsp.db.MakeParameter;
-import com.github.yadickson.autoplsp.db.SPGenerator;
+import com.github.yadickson.autoplsp.db.Generator;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 
 /**
@@ -25,14 +25,14 @@ import com.github.yadickson.autoplsp.db.common.Procedure;
  *
  * @author Yadickson Soto
  */
-public class PostgreSqlSPGenerator extends SPGenerator {
+public class PostgreSqlGenerator extends Generator {
 
     /**
      * Class constructor
      *
      * @param name sp generator
      */
-    public PostgreSqlSPGenerator(String name) {
+    public PostgreSqlGenerator(String name) {
         super(name);
     }
 
@@ -79,6 +79,16 @@ public class PostgreSqlSPGenerator extends SPGenerator {
      */
     @Override
     public String getObjetsQuery() {
+        return null;
+    }
+
+    /**
+     * Method getter sql tables.
+     *
+     * @return sql to find tables
+     */
+    @Override
+    public String getTablesQuery() {
         return null;
     }
 

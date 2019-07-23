@@ -12,10 +12,10 @@ import java.util.List;
  *
  * @author Yadickson Soto
  */
-public final class Group {
+public final class ConfigMapper {
 
     private String procedureName;
-    private String key;
+    private String cursorName;
     private final List<String> keys = new ArrayList<String>();
 
     /**
@@ -33,17 +33,17 @@ public final class Group {
     }
 
     /**
-     * @return the key
+     * @return the cursorName
      */
-    public String getKey() {
-        return key;
+    public String getCursorName() {
+        return cursorName;
     }
 
     /**
-     * @param key the key to set
+     * @param cursorName the cursorName to set
      */
-    public void setKey(String key) {
-        this.key = key;
+    public void setCursorName(String cursorName) {
+        this.cursorName = cursorName;
     }
 
     /**

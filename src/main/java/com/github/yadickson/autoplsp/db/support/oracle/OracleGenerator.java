@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Yadickson Soto
+ * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 package com.github.yadickson.autoplsp.db.support.oracle;
 
 import com.github.yadickson.autoplsp.db.MakeParameter;
-import com.github.yadickson.autoplsp.db.SPGenerator;
+import com.github.yadickson.autoplsp.db.Generator;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 
 /**
@@ -25,14 +25,14 @@ import com.github.yadickson.autoplsp.db.common.Procedure;
  *
  * @author Yadickson Soto
  */
-public class OracleSPGenerator extends SPGenerator {
+public class OracleGenerator extends Generator {
 
     /**
      * Class constructor.
      *
      * @param name sp generator
      */
-    public OracleSPGenerator(String name) {
+    public OracleGenerator(String name) {
         super(name);
     }
 
@@ -67,6 +67,36 @@ public class OracleSPGenerator extends SPGenerator {
     @Override
     public String getObjetsQuery() {
         return "SELECT distinct data_type as dtype, type_name as ntype FROM all_arguments WHERE OWNER=USER AND data_type in ('OBJECT', 'TABLE') order by dtype asc, ntype asc";
+    }
+
+    /**
+     * Method getter sql tables.
+     *
+     * @return sql to find tables
+     */
+    @Override
+    public String getTablesQuery() {
+        return "SELECT ut.table_name name,\n"
+                + "utc.column_name fieldname,\n"
+                + "CASE WHEN utc.data_type = 'CHAR' OR utc.data_type = 'NCHAR' OR utc.data_type = 'VARCHAR2' OR utc.data_type = 'VARCHAR' OR utc.data_type = 'NVARCHAR2' OR utc.data_type = 'CLOB' OR utc.data_type = 'NCLOB' OR utc.data_type = 'LONG'\n"
+                + "     THEN 'String'\n"
+                + "     WHEN utc.data_type = 'BLOB' OR utc.data_type = 'BFILE' OR utc.data_type = 'RAW' OR utc.data_type = 'LONG RAW'\n"
+                + "     THEN 'Binary'\n"
+                + "     WHEN utc.data_type = 'NUMBER' OR utc.data_type = 'DECIMAL' OR utc.data_type = 'FLOAT' OR utc.data_type = 'INTEGER' OR utc.data_type = 'REAL' OR utc.data_type = 'DEC' OR utc.data_type = 'INT' OR utc.data_type = 'SMALLINT' OR utc.data_type = 'BINARY_DOUBLE' OR utc.data_type = 'BINARY_FLOAT'\n"
+                + "     THEN 'Numeric'\n"
+                + "     WHEN utc.data_type = 'DATE' OR utc.data_type = 'TIMESTAMP'\n"
+                + "     THEN 'Date'\n"
+                + "     ELSE\n"
+                + "     'Unknown'\n"
+                + "     END fieldtype,\n"
+                + "utc.column_id fieldposition,\n"
+                + "DECODE(utc.nullable, 'Y', 0, 1) fieldminsize,\n"
+                + "trunc(utc.data_length) fieldmaxsize,\n"
+                + "DECODE(utc.nullable, 'N', 1, 0) fieldnotnull,\n"
+                + "utc.data_default fielddefauldvalue\n"
+                + "FROM user_tables ut\n"
+                + "inner join USER_TAB_COLUMNS utc on (ut.table_name = utc.table_name)\n"
+                + "order by ut.table_name asc, utc.column_id asc";
     }
 
     /**

@@ -27,6 +27,6 @@
         <property name="dataSource" ref="${dataSource}" />
     </bean>
 
-    <context:component-scan base-package="${javaPackage}.repository"/>
+    <context:component-scan base-package="${javaPackage}.repository, ${javaPackage}.table, ${javaPackage}.table.column, ${javaPackage}.mapper"/>
 
 </beans>

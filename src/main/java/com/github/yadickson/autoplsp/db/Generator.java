@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Yadickson Soto
+ * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp.db;
 
+import com.github.yadickson.autoplsp.ConfigMapper;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -33,24 +34,29 @@ import org.apache.commons.lang.StringUtils;
 
 import com.github.yadickson.autoplsp.db.bean.ParameterBean;
 import com.github.yadickson.autoplsp.db.bean.ProcedureBean;
+import com.github.yadickson.autoplsp.db.bean.TableBean;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Function;
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.db.common.Table;
+import com.github.yadickson.autoplsp.db.common.TableField;
 import com.github.yadickson.autoplsp.db.util.FindParameter;
 import com.github.yadickson.autoplsp.db.util.FindParameterImpl;
 import com.github.yadickson.autoplsp.db.util.FindProcedureImpl;
+import com.github.yadickson.autoplsp.db.util.FindTableImpl;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import com.github.yadickson.autoplsp.util.ParameterSort;
 import java.sql.PreparedStatement;
+import java.util.HashMap;
 
 /**
  * Store procedure and function generator interface
  *
  * @author Yadickson Soto
  */
-public abstract class SPGenerator {
+public abstract class Generator {
 
     private final String name;
 
@@ -59,7 +65,7 @@ public abstract class SPGenerator {
      *
      * @param name sp generator name
      */
-    public SPGenerator(String name) {
+    public Generator(String name) {
         this.name = name;
     }
 
@@ -93,6 +99,13 @@ public abstract class SPGenerator {
      * @return sql to find parameters
      */
     public abstract String getObjetsQuery();
+
+    /**
+     * Method getter sql tables.
+     *
+     * @return sql to find tables
+     */
+    public abstract String getTablesQuery();
 
     /**
      * Method getter all sql parameters objects
@@ -486,13 +499,13 @@ public abstract class SPGenerator {
             final String arraySuffix) throws BusinessException, SQLException {
 
         String sql = getObjetsQuery();
-        
+
         List<Parameter> list = new ArrayList<Parameter>();
 
         if (sql == null) {
             return list;
         }
-        
+
         LoggerManager.getInstance().info("[SPGenerator] Find all objects");
 
         List<ParameterBean> parameters = new FindParameterImpl().getParameters(connection, sql, new String[]{});
@@ -506,6 +519,80 @@ public abstract class SPGenerator {
         LoggerManager.getInstance().info("[SPGenerator] Found " + list.size() + " objects");
 
         return list;
+    }
+
+    /**
+     * Find all table definitions from database.
+     *
+     * @param connection Database connection.
+     * @param tableSuffix table definition suffix.
+     * @return table definitions list.
+     * @throws BusinessException If error.
+     */
+    public final List<Table> findTables(
+            final Connection connection,
+            final String tableSuffix
+    ) throws BusinessException, SQLException {
+
+        String sql = getTablesQuery();
+
+        List<Table> list = new ArrayList<Table>();
+
+        if (sql == null) {
+            return list;
+        }
+
+        LoggerManager.getInstance().info("[SPGenerator] Find all tables");
+
+        List<TableBean> tables = new FindTableImpl().getTables(connection, sql);
+        Map<String, Table> mapTables = new HashMap<String, Table>();
+
+        for (TableBean t : tables) {
+
+            String tname = t.getName();
+
+            if (!mapTables.containsKey(tname)) {
+                LoggerManager.getInstance().info("[SPGenerator] Found (" + tname + ")");
+                mapTables.put(tname, new Table(tname, tableSuffix));
+            }
+
+            Table table = mapTables.get(tname);
+
+            TableField field = new TableField(
+                    t.getFieldname(),
+                    t.getFieldtype(),
+                    t.getFieldposition(),
+                    t.getFieldminsize(),
+                    t.getFieldmaxsize(),
+                    t.getFieldnotnull(),
+                    t.getFielddefaultvalue()
+            );
+
+            table.getFields().add(field);
+
+            LoggerManager.getInstance().info("[SPGenerator]  - Field " + field.getName());
+            LoggerManager.getInstance().info("[SPGenerator]          Type: " + field.getType());
+            LoggerManager.getInstance().info("[SPGenerator]          Position: " + field.getPosition());
+            LoggerManager.getInstance().info("[SPGenerator]          MinSize: " + field.getMinSize());
+            LoggerManager.getInstance().info("[SPGenerator]          MaxSize: " + field.getMaxSize());
+            LoggerManager.getInstance().info("[SPGenerator]          NotNull: " + field.getNotNull());
+            LoggerManager.getInstance().info("[SPGenerator]          DefaultValue: " + field.getDefaultValue());
+
+            list.add(table);
+        }
+
+        LoggerManager.getInstance().info("[SPGenerator] Found " + list.size() + " tables");
+
+        return list;
+    }
+
+    public List<Parameter> processMapper(
+            final List<Procedure> spList,
+            final Map<String, ConfigMapper> mappers) {
+
+        List<Parameter> parameters = new ArrayList<Parameter>();
+
+        return parameters;
     }
 
 }

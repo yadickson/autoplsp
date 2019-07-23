@@ -14,17 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.common;
+
+package ${javaPackage}.table.column.type;
 
 /**
- * Enum parameter direction
+ * Field type.
  *
- * @author Yadickson Soto
+ * @author @GENERATOR.NAME@
+ * @version @GENERATOR.VERSION@
  */
-public enum Direction {
+public enum FieldType {
 
-    INPUT,
-    OUTPUT,
-    INPUT_OUTPUT
+    /**
+     * Field string type.
+     */
+    STRING,
+
+    /**
+     * Field numeric type.
+     */
+    NUMERIC,
+
+    /**
+     * Field binary type.
+     */
+    BINARY,
+
+    /**
+     * Field date type.
+     */
+    DATE,
+
+    /**
+     * Field unknown type.
+     */
+    UNKNOWN
 
 }

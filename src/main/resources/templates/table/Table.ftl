@@ -14,17 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.common;
+
+package ${javaPackage}.table;
+
+<#list table.fields as field>
+import ${javaPackage}.table.column.${table.propertyName}${field.propertyName};
+</#list>
 
 /**
- * Enum parameter direction
+ * Table definitions for ${table.name}.
  *
- * @author Yadickson Soto
+ * @author @GENERATOR.NAME@
+ * @version @GENERATOR.VERSION@
  */
-public enum Direction {
+public interface ${table.propertyName} {
+<#list table.fields as field>
+    /**
+     * Getter field name definination for ${field.name}.
+     */
+    ${table.propertyName}${field.propertyName} get${field.propertyName}();
 
-    INPUT,
-    OUTPUT,
-    INPUT_OUTPUT
-
+</#list>
 }

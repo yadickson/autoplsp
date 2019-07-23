@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Yadickson Soto
+ * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
  */
 package com.github.yadickson.autoplsp.db;
 
-import com.github.yadickson.autoplsp.db.support.mssql.MsSqlSPGenerator;
-import com.github.yadickson.autoplsp.db.support.oracle.OracleSPGenerator;
-import com.github.yadickson.autoplsp.db.support.postgresql.PostgreSqlSPGenerator;
+import com.github.yadickson.autoplsp.db.support.mssql.MsSqlGenerator;
+import com.github.yadickson.autoplsp.db.support.oracle.OracleGenerator;
+import com.github.yadickson.autoplsp.db.support.postgresql.PostgreSqlGenerator;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.util.regex.Pattern;
 
@@ -27,9 +27,9 @@ import java.util.regex.Pattern;
  *
  * @author Yadickson Soto
  */
-public class SPGeneratorFactory {
+public class GeneratorFactory {
 
-    private SPGeneratorFactory() {
+    private GeneratorFactory() {
         throw new IllegalStateException("Utility class");
     }
 
@@ -40,18 +40,18 @@ public class SPGeneratorFactory {
      * @return the sp generator
      * @throws BusinessException If driver not supported
      */
-    public static SPGenerator getGenarator(String driver) throws BusinessException {
+    public static Generator getGenarator(String driver) throws BusinessException {
 
         if (Pattern.compile(".*Oracle.*", Pattern.CASE_INSENSITIVE).matcher(driver).matches()) {
-            return new OracleSPGenerator("oracle");
+            return new OracleGenerator("oracle");
         }
 
         if (Pattern.compile(".*PostgreSQL.*", Pattern.CASE_INSENSITIVE).matcher(driver).matches()) {
-            return new PostgreSqlSPGenerator("potsgresql");
+            return new PostgreSqlGenerator("potsgresql");
         }
 
         if (Pattern.compile(".*Jtds.*", Pattern.CASE_INSENSITIVE).matcher(driver).matches()) {
-            return new MsSqlSPGenerator("mssql");
+            return new MsSqlGenerator("mssql");
         }
 
         throw new BusinessException("Driver [" + driver + "] not supported");

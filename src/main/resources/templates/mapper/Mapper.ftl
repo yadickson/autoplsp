@@ -14,17 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.yadickson.autoplsp.db.common;
+package ${javaPackage}.repository;
+
+<#if proc.hasInput>
+import ${javaPackage}.domain.${proc.className}IN;
+</#if>
+<#if proc.hasOutput>
+import ${javaPackage}.domain.${proc.className}OUT;
+</#if>
 
 /**
- * Enum parameter direction
+ * Mapper interface to stored procedure ${proc.fullName}.
  *
- * @author Yadickson Soto
+ * @author @GENERATOR.NAME@
+ * @version @GENERATOR.VERSION@
  */
-public enum Direction {
+public interface ${map.className}Mapper {
 
-    INPUT,
-    OUTPUT,
-    INPUT_OUTPUT
-
+    /**
+     * Process mapper for stored procedure.
+     *
+     * <#if proc.hasInput>@param params input parameters</#if>
+     * <#if proc.hasOutput>@return output parameters</#if>
+     */
+    ${map.className}OUT process(<#if proc.hasInput>final ${proc.className}IN params</#if>);
 }

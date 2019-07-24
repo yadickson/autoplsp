@@ -26,9 +26,15 @@ public final class TableField implements Serializable {
 
     private final String maxSize;
 
+    private final String scale;
+
+    private final String maxNumberValue;
+
     private final Boolean notNull;
 
     private final String defaultValue;
+
+    private final String charUsed;
 
     /**
      * Class constructor.
@@ -38,8 +44,11 @@ public final class TableField implements Serializable {
      * @param position field position.
      * @param minSize min size of filed.
      * @param maxSize max size of filed.
+     * @param scale precision.
+     * @param maxNumberValue max number value.
      * @param notNull not null flag.
      * @param defaultValue default value.
+     * @param charUsed char used.
      */
     public TableField(
             final String name,
@@ -47,16 +56,40 @@ public final class TableField implements Serializable {
             final String position,
             final String minSize,
             final String maxSize,
+            final String scale,
+            final String maxNumberValue,
             final String notNull,
-            final String defaultValue
+            final String defaultValue,
+            final String charUsed
     ) {
         this.name = name;
         this.type = type.toUpperCase();
         this.position = position;
         this.minSize = minSize;
         this.maxSize = maxSize;
+        this.scale = scale;
+        this.maxNumberValue = maxNumberValue;
         this.notNull = "1".equals(notNull);
         this.defaultValue = defaultValue;
+        this.charUsed = charUsed == null ? null : charUsed.toUpperCase();
+    }
+
+    /**
+     * Getter field name.
+     *
+     * @return the field name
+     */
+    public String getFieldName() {
+        return CapitalizeUtil.uncapitalize(getName());
+    }
+
+    /**
+     * Getter property name (The name capitalized).
+     *
+     * @return the property name
+     */
+    public String getPropertyName() {
+        return CapitalizeUtil.capitalize(getName());
     }
 
     /**
@@ -95,6 +128,20 @@ public final class TableField implements Serializable {
     }
 
     /**
+     * @return the scale
+     */
+    public String getScale() {
+        return scale;
+    }
+
+    /**
+     * @return the maxNumberValue
+     */
+    public String getMaxNumberValue() {
+        return maxNumberValue;
+    }
+
+    /**
      * @return the notNull
      */
     public Boolean getNotNull() {
@@ -109,21 +156,10 @@ public final class TableField implements Serializable {
     }
 
     /**
-     * Getter field name.
-     *
-     * @return the field name
+     * @return the charUsed
      */
-    public String getFieldName() {
-        return CapitalizeUtil.uncapitalize(getName());
-    }
-
-    /**
-     * Getter property name (The name capitalized).
-     *
-     * @return the property name
-     */
-    public String getPropertyName() {
-        return CapitalizeUtil.capitalize(getName());
+    public String getCharUsed() {
+        return charUsed;
     }
 
 }

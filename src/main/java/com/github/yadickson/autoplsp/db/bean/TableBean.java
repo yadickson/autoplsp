@@ -27,9 +27,15 @@ public final class TableBean implements Serializable {
 
     private String fieldmaxsize;
 
+    private String fieldscale;
+
+    private String fieldmaxnumbervalue;
+
     private String fieldnotnull;
 
     private String fielddefaultvalue;
+
+    private String fieldcharused;
 
     /**
      * @return the name
@@ -116,6 +122,34 @@ public final class TableBean implements Serializable {
     }
 
     /**
+     * @return the fieldscale
+     */
+    public String getFieldscale() {
+        return fieldscale;
+    }
+
+    /**
+     * @param fieldscale the fieldscale to set
+     */
+    public void setFieldscale(String fieldscale) {
+        this.fieldscale = fieldscale;
+    }
+
+    /**
+     * @return the fieldmaxnumbervalue
+     */
+    public String getFieldmaxnumbervalue() {
+        return fieldmaxnumbervalue;
+    }
+
+    /**
+     * @param fieldmaxnumbervalue the fieldmaxnumbervalue to set
+     */
+    public void setFieldmaxnumbervalue(String fieldmaxnumbervalue) {
+        this.fieldmaxnumbervalue = fieldmaxnumbervalue;
+    }
+
+    /**
      * @return the fieldnotnull
      */
     public String getFieldnotnull() {
@@ -141,6 +175,20 @@ public final class TableBean implements Serializable {
      */
     public void setFielddefaultvalue(String fielddefaultvalue) {
         this.fielddefaultvalue = fielddefaultvalue;
+    }
+
+    /**
+     * @return the fieldcharused
+     */
+    public String getFieldcharused() {
+        return fieldcharused;
+    }
+
+    /**
+     * @param fieldcharused the fieldcharused to set
+     */
+    public void setFieldcharused(String fieldcharused) {
+        this.fieldcharused = fieldcharused;
     }
 
 }

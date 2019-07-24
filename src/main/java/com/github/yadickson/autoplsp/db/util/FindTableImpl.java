@@ -26,11 +26,11 @@ public class FindTableImpl implements FindTable {
     @Override
     public List<TableBean> getTables(Connection connection, String sql) throws BusinessException {
 
-        if (connection == null) {
-            return new ArrayList<TableBean>();
-        }
+        List<TableBean> list = new ArrayList<TableBean>();
 
-        List<TableBean> list = null;
+        if (connection == null) {
+            return list;
+        }
 
         QueryRunner run = new QueryRunner();
         ResultSetHandler<List<TableBean>> h = new BeanListHandler<TableBean>(TableBean.class);

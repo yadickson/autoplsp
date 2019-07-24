@@ -38,6 +38,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
      * Field position.
      */
     private final int position = ${field.position};
+<#if field.maxSize??>
 
     /**
      * Field minSize.
@@ -48,16 +49,32 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
      * Field maxSize.
      */
     private final int maxSize = ${field.maxSize};
+</#if>
+<#if field.type == 'NUMERIC'>
+<#if field.maxNumberValue??>
+    /**
+     * Field scale.
+     */
+    private final int scale = ${field.scale};
+
+    /**
+     * Field maxNumberValue.
+     */
+    private final Long maxNumberValue = ${field.maxNumberValue}L;
+</#if>
+</#if>
 
     /**
      * Field notNull.
      */
     private final Boolean notNull = ${field.notNull?c};
+<#if field.defaultValue?? && field.type == 'STRING' && field.type == 'NUMERIC'>
 
     /**
      * Field defaultValue.
      */
-    private final String defaultValue = <#if field.defaultValue??>"${field.defaultValue}"<#else>null</#if>;
+    private final <#if field.type == 'STRING'>String<#elseif field.type == 'NUMERIC'>Number<#elseif field.type == 'DATE'>java.lang.Date<#else>Object</#if> defaultValue = <#if field.type == 'STRING'>"${field.defaultValue}"<#elseif field.type == 'NUMERIC'>${field.defaultValue}<#elseif field.type == 'DATE'>new java.lang.Date()<#else>null</#if>;
+</#if>
 
     /**
      * @return the type
@@ -74,6 +91,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
     public int getPosition() {
         return position;
     }
+<#if field.maxSize??>
 
     /**
      * @return the minSize
@@ -82,7 +100,27 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
     public int getMinSize() {
         return minSize;
     }
+<#if field.charUsed??>
+<#if field.charUsed == 'BYTE' >
 
+    /**
+     * @return the maxByteSize
+     */
+    @Override
+    public int getMaxByteSize() {
+        return maxSize;
+    }
+<#elseif field.charUsed == 'CHAR'>
+
+    /**
+     * @return the maxCharSize
+     */
+    public int getMaxCharSize() {
+        return maxSize;
+    }
+</#if>
+<#elseif field.type == 'NUMERIC'>
+<#if field.maxNumberValue??>
     /**
      * @return the maxSize
      */
@@ -92,19 +130,40 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
     }
 
     /**
+     * @return the maxNumberValue
+     */
+    @Override
+    public Long getMaxNumberValue() {
+        return maxNumberValue;
+    }
+
+    /**
+     * @return the scale
+     */
+    @Override
+    public int getScale() {
+        return scale;
+    }
+</#if>
+</#if>
+</#if>
+
+    /**
      * @return the notNull
      */
     @Override
     public Boolean getNotNull() {
         return notNull;
     }
+<#if field.defaultValue?? && field.type == 'STRING' && field.type == 'NUMERIC'>
 
     /**
      * @return the defaultValue
      */
     @Override
-    public String getDefaultValue() {
+    public <#if field.type == 'STRING'>String<#elseif field.type == 'NUMERIC'>Number<#elseif field.type == 'DATE'>java.lang.Date<#else>Object</#if> getDefaultValue() {
         return defaultValue;
     }
+</#if>
 
 }

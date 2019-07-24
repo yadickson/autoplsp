@@ -36,11 +36,27 @@ public interface ${table.propertyName}${field.propertyName} {
      * @return the position
      */
     int getPosition();
+<#if field.maxSize??>
 
     /**
      * @return the minSize
      */
     int getMinSize();
+<#if field.charUsed??>
+<#if field.charUsed == 'BYTE' >
+
+    /**
+     * @return the maxByteSize
+     */
+    int getMaxByteSize();
+<#elseif field.charUsed == 'CHAR'>
+
+    /**
+     * @return the maxCharSize
+     */
+    int getMaxCharSize();
+</#if>
+<#elseif field.type == 'NUMERIC'>
 
     /**
      * @return the maxSize
@@ -48,13 +64,26 @@ public interface ${table.propertyName}${field.propertyName} {
     int getMaxSize();
 
     /**
+     * @return the maxNumberValue
+     */
+    Long getMaxNumberValue();
+
+    /**
+     * @return the scale
+     */
+    int getScale();
+</#if>
+</#if>
+
+    /**
      * @return the notNull
      */
     Boolean getNotNull();
+<#if field.defaultValue?? && field.type == 'STRING' && field.type == 'NUMERIC'>
 
     /**
      * @return the defaultValue
      */
-    String getDefaultValue();
-
+    <#if field.type == 'STRING'>String<#elseif field.type == 'NUMERIC'>Number<#elseif field.type == 'DATE'>java.lang.Date<#else>Object</#if> getDefaultValue();
+</#if>
 }

@@ -506,17 +506,17 @@ public abstract class Generator {
             return list;
         }
 
-        LoggerManager.getInstance().info("[SPGenerator] Find all objects");
+        LoggerManager.getInstance().info("[FindObjects] Find all objects");
 
         List<ParameterBean> parameters = new FindParameterImpl().getParameters(connection, sql, new String[]{});
 
         for (ParameterBean p : parameters) {
             Parameter parameter = getMakeParameter().getOwnerParameter(p.getDtype(), 0, p.getNtype(), Direction.INPUT, connection, p.getNtype(), null, objectSuffix, arraySuffix);
-            LoggerManager.getInstance().info("[SPGenerator] Found (" + p.getDtype() + " - " + p.getNtype() + ")");
+            LoggerManager.getInstance().info("[FindObjects] Found (" + p.getDtype() + " - " + p.getNtype() + ")");
             list.add(parameter);
         }
 
-        LoggerManager.getInstance().info("[SPGenerator] Found " + list.size() + " objects");
+        LoggerManager.getInstance().info("[FindObjects] Found " + list.size() + " objects");
 
         return list;
     }
@@ -542,7 +542,7 @@ public abstract class Generator {
             return list;
         }
 
-        LoggerManager.getInstance().info("[SPGenerator] Find all tables");
+        LoggerManager.getInstance().info("[FindTables] Find all tables");
 
         List<TableBean> tables = new FindTableImpl().getTables(connection, sql);
         Map<String, Table> mapTables = new HashMap<String, Table>();
@@ -550,10 +550,12 @@ public abstract class Generator {
         for (TableBean t : tables) {
 
             String tname = t.getName();
-
+            
             if (!mapTables.containsKey(tname)) {
-                LoggerManager.getInstance().info("[SPGenerator] Found (" + tname + ")");
-                mapTables.put(tname, new Table(tname, tableSuffix));
+                LoggerManager.getInstance().info("[FindTables] Found (" + tname + ")");
+                Table table = new Table(tname, tableSuffix);
+                mapTables.put(tname, table);
+                list.add(table);
             }
 
             Table table = mapTables.get(tname);
@@ -564,24 +566,27 @@ public abstract class Generator {
                     t.getFieldposition(),
                     t.getFieldminsize(),
                     t.getFieldmaxsize(),
+                    t.getFieldscale(),
+                    t.getFieldmaxnumbervalue(),
                     t.getFieldnotnull(),
-                    t.getFielddefaultvalue()
+                    t.getFielddefaultvalue(),
+                    t.getFieldcharused()
             );
 
             table.getFields().add(field);
 
-            LoggerManager.getInstance().info("[SPGenerator]  - Field " + field.getName());
-            LoggerManager.getInstance().info("[SPGenerator]          Type: " + field.getType());
-            LoggerManager.getInstance().info("[SPGenerator]          Position: " + field.getPosition());
-            LoggerManager.getInstance().info("[SPGenerator]          MinSize: " + field.getMinSize());
-            LoggerManager.getInstance().info("[SPGenerator]          MaxSize: " + field.getMaxSize());
-            LoggerManager.getInstance().info("[SPGenerator]          NotNull: " + field.getNotNull());
-            LoggerManager.getInstance().info("[SPGenerator]          DefaultValue: " + field.getDefaultValue());
-
-            list.add(table);
+            LoggerManager.getInstance().info("[FindTables]  - Field " + field.getName());
+            LoggerManager.getInstance().info("[FindTables]          Type: " + field.getType());
+            LoggerManager.getInstance().info("[FindTables]          Position: " + field.getPosition());
+            LoggerManager.getInstance().info("[FindTables]          MinSize: " + field.getMinSize());
+            LoggerManager.getInstance().info("[FindTables]          MaxSize: " + field.getMaxSize());
+            LoggerManager.getInstance().info("[FindTables]          Scale: " + field.getScale());
+            LoggerManager.getInstance().info("[FindTables]          NotNull: " + field.getNotNull());
+            LoggerManager.getInstance().info("[FindTables]          DefaultValue: " + field.getDefaultValue());
+            LoggerManager.getInstance().info("[FindTables]          CharUsed: " + field.getCharUsed());
         }
 
-        LoggerManager.getInstance().info("[SPGenerator] Found " + list.size() + " tables");
+        LoggerManager.getInstance().info("[FindTables] Found " + list.size() + " tables");
 
         return list;
     }

@@ -245,6 +245,10 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(DRIVER_NAME, driverName);
         input.put(DRIVER_VERSION, driverVersion);
 
+        String typePath = getTypeOutputPath("");
+
+        createTemplate(input, TYPE_PATH + "FieldType.ftl", getFileNameTypePath(typePath, "FieldType"));
+
         String tablePath = getTableOutputPath("");
         String tableFieldPath = getTableOutputPath(COLUMN_NAME);
 
@@ -265,10 +269,6 @@ public class JavaGenerator extends TemplateGenerator {
             }
 
         }
-
-        String typePath = getTypeOutputPath("");
-
-        createTemplate(input, TYPE_PATH + "FieldType.ftl", getFileNameTypePath(typePath, "FieldType"));
     }
 
     public void processMappers(final List<Parameter> mappers) throws BusinessException {

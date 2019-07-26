@@ -31,6 +31,8 @@ public interface ${table.propertyName} {
 <#list table.fields as field>
     /**
      * Getter field name definination for ${field.name}.
+     *
+     * @return the ${table.propertyName}${field.propertyName}
      */
     ${table.propertyName}${field.propertyName} get${field.propertyName}();
 

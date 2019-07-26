@@ -43,6 +43,7 @@ public final class ${table.propertyName}Impl implements ${table.propertyName} {
 <#list table.fields as field>
     /**
      * Getter field name definination for ${field.name}.
+     *
      * @return the ${field.name}.
      */
     @Override

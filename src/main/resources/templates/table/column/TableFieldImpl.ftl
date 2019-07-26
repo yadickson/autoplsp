@@ -115,6 +115,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
     /**
      * @return the maxCharSize
      */
+    @Override
     public int getMaxCharSize() {
         return maxSize;
     }

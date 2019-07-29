@@ -23,6 +23,7 @@ package ${javaPackage}.domain;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+@SuppressWarnings({"deprecated"})
 public final class ${parameter.javaTypeName} implements java.io.Serializable {
 
     /**

@@ -15,31 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ${javaPackage}.table.column;
-
-import ${javaPackage}.table.column.type.FieldType;
+package ${javaPackage}.table.column.type;
 
 /**
- * Class definition for ${table.name} - ${field.name}.
+ * Numeric Field.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface ${table.propertyName}${field.propertyName} <#if field.charUsed??><#if field.charUsed == 'BYTE' >extends ${javaPackage}.table.column.type.BinaryField <#elseif field.charUsed == 'CHAR'>extends ${javaPackage}.table.column.type.CharacterField </#if><#elseif field.type == 'NUMERIC'>extends ${javaPackage}.table.column.type.NumericField <#elseif field.type == 'DATE'>extends ${javaPackage}.table.column.type.DateField </#if>{
+public interface NumericField {
 
     /**
-     * @return the type
+     * @return the minSize
      */
-    FieldType getType();
+    int getMinSize();
 
     /**
-     * @return the position
+     * @return the maxSize
      */
-    int getPosition();
+    int getMaxSize();
 
     /**
-     * @return the notNull
+     * @return the defaultValue
      */
-    Boolean getNotNull();
+    Number getDefaultValue();
 
 }

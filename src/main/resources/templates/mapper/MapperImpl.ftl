@@ -38,7 +38,7 @@ import org.springframework.stereotype.Repository;
  * @version @GENERATOR.VERSION@
  */
 @Repository
-@SuppressWarnings({"rawtypes","unchecked"})
+@SuppressWarnings({"rawtypes","unchecked","deprecated"})
 public final class ${proc.className}MapperImpl implements ${proc.className}Mapper {
 
     <#if proc.hasObject || proc.hasArray>
@@ -121,7 +121,7 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
                 java.io.InputStream input${parameter.propertyName} = blob${parameter.propertyName}.getBinaryStream();
                 java.io.ByteArrayOutputStream output${parameter.propertyName} = new java.io.ByteArrayOutputStream();
                 org.apache.commons.io.IOUtils.copy(input${parameter.propertyName}, output${parameter.propertyName});
-                bytes${parameter.propertyName} = output${parameter.propertyName}.toByteArray();
+                bytes${parameter.propertyName} = output${parameter.propertyName}.toByteArray("${encode}");
                 blob${parameter.propertyName}.free();
             }
 

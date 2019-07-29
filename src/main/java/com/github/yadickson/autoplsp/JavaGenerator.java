@@ -39,6 +39,7 @@ public class JavaGenerator extends TemplateGenerator {
     private final String javaPackage;
     private final String dataSource;
     private final String jdbcTemplate;
+    private final String encode;
     private final String outParameterCode;
     private final String outParameterMessage;
     private final String driverName;
@@ -54,6 +55,7 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String JAVA_PACKAGE_NAME = "javaPackage";
     private static final String DATA_SOURCE_NAME = "dataSource";
     private static final String JDBC_TEMPLATE_NAME = "jdbcTemplate";
+    private static final String ENCODE = "encode";
     private static final String OUT_CODE_NAME = "outParameterCode";
     private static final String OUT_MESSAGE_NAME = "outParameterMessage";
     private static final String EXT_FILE = ".java";
@@ -76,24 +78,27 @@ public class JavaGenerator extends TemplateGenerator {
      * @param packageName Java package name
      * @param dataSource Datasource name
      * @param jdbcTemplate JdbcTemplate name
+     * @param encode encode data base.
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
      * @param driverName driver name
      * @param driverVersion driver version
      */
     public JavaGenerator(String outputDir,
-            String packageName,
-            String dataSource,
-            String jdbcTemplate,
-            String outParameterCode,
-            String outParameterMessage,
-            String driverName,
-            String driverVersion) {
+            final String packageName,
+            final String dataSource,
+            final String jdbcTemplate,
+            final String encode,
+            final String outParameterCode,
+            final String outParameterMessage,
+            final String driverName,
+            final String driverVersion) {
 
         super(outputDir);
         this.javaPackage = packageName;
         this.dataSource = dataSource;
         this.jdbcTemplate = jdbcTemplate;
+        this.encode = encode;
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
         this.driverName = driverName;
@@ -127,6 +132,7 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(ENCODE, encode);
 
         createTemplate(input, REPOSITORY_PATH + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath("sp"), procedure, "SP"));
     }
@@ -138,6 +144,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(DATA_SOURCE_NAME, dataSource);
         input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
+        input.put(ENCODE, encode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
@@ -152,6 +159,7 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(ENCODE, encode);
 
         if (!procedure.getHasInput() && !procedure.getHasOutput()) {
             return;
@@ -173,6 +181,7 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(ENCODE, encode);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -193,6 +202,7 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(ENCODE, encode);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -219,6 +229,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(DRIVER_NAME, driverName);
         input.put(DRIVER_VERSION, driverVersion);
+        input.put(ENCODE, encode);
 
         String parameterPath = getDomainOutputPath("");
 
@@ -244,10 +255,15 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(DRIVER_NAME, driverName);
         input.put(DRIVER_VERSION, driverVersion);
+        input.put(ENCODE, encode);
 
         String typePath = getTypeOutputPath("");
 
         createTemplate(input, TYPE_PATH + "FieldType.ftl", getFileNameTypePath(typePath, "FieldType"));
+        createTemplate(input, TYPE_PATH + "BinaryField.ftl", getFileNameTypePath(typePath, "BinaryField"));
+        createTemplate(input, TYPE_PATH + "CharacterField.ftl", getFileNameTypePath(typePath, "CharacterField"));
+        createTemplate(input, TYPE_PATH + "NumericField.ftl", getFileNameTypePath(typePath, "NumericField"));
+        createTemplate(input, TYPE_PATH + "DateField.ftl", getFileNameTypePath(typePath, "DateField"));
 
         String tablePath = getTableOutputPath("");
         String tableFieldPath = getTableOutputPath(COLUMN_NAME);
@@ -278,6 +294,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(DRIVER_NAME, driverName);
         input.put(DRIVER_VERSION, driverVersion);
+        input.put(ENCODE, encode);
 
         String parameterPath = getMapperOutputPath("");
 

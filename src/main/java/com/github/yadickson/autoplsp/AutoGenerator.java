@@ -231,6 +231,16 @@ public class AutoGenerator extends AbstractMojo {
     private String[] mMappers;
 
     /**
+     * Encode.
+     */
+    @Parameter(
+            property = "autoplsp.encode",
+            defaultValue = "UTF-8",
+            readonly = true,
+            required = false)
+    private String encode;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -253,6 +263,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] ArraySuffix: " + arraySuffix);
         getLog().info("[AutoGenerator] ObjectSuffix: " + objectSuffix);
         getLog().info("[AutoGenerator] TableSuffix: " + tableSuffix);
+        getLog().info("[AutoGenerator] Encode: " + encode);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
@@ -379,6 +390,7 @@ public class AutoGenerator extends AbstractMojo {
                     javaPackageName,
                     javaDataSourceName,
                     javaJdbcTemplateName,
+                    encode,
                     outParameterCode,
                     outParameterMessage,
                     generator.getName(),

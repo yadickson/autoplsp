@@ -40,4 +40,9 @@ public interface BinaryField {
      */
     byte[] getDefaultValue();
 
+    /**
+     * @return the notNull
+     */
+    Boolean getNotNull();
+
 }

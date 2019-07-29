@@ -37,9 +37,4 @@ public interface ${table.propertyName}${field.propertyName} <#if field.charUsed?
      */
     int getPosition();
 
-    /**
-     * @return the notNull
-     */
-    Boolean getNotNull();
-
 }

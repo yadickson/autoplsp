@@ -40,4 +40,9 @@ public interface CharacterField {
      */
     String getDefaultValue();
 
+    /**
+     * @return the notNull
+     */
+    Boolean getNotNull();
+
 }

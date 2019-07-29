@@ -30,4 +30,9 @@ public interface DateField {
      */
     java.util.Date getDefaultValue();
 
+    /**
+     * @return the notNull
+     */
+    Boolean getNotNull();
+
 }

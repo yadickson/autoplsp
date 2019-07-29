@@ -40,4 +40,9 @@ public interface NumericField {
      */
     Number getDefaultValue();
 
+    /**
+     * @return the notNull
+     */
+    Boolean getNotNull();
+
 }

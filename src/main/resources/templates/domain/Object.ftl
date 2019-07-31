@@ -17,13 +17,17 @@
 <#if parameter.object>
 package ${javaPackage}.domain;
 
+<#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
+
+</#if>
 /**
  * Bean object for datatype ${parameter.realObjectName}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings({"deprecated"})
+<#if jsonNonNull>@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+@SuppressWarnings({"deprecation"})
 public final class ${parameter.javaTypeName} implements java.io.Serializable {
 
     /**
@@ -89,7 +93,9 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
 <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>
         oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);
         java.io.Writer clobWriter${parameter.propertyName} = clob${parameter.propertyName}.getCharacterOutputStream();
-        clobWriter${parameter.propertyName}.write(get${parameter.propertyName}().toCharArray());
+        if (get${parameter.propertyName}() != null) {
+            clobWriter${parameter.propertyName}.write(get${parameter.propertyName}().toCharArray());
+        }
         clobWriter${parameter.propertyName}.flush();
         clobWriter${parameter.propertyName}.close();
 <#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB'>

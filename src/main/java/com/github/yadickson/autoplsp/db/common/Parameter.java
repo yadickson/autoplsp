@@ -230,7 +230,7 @@ public abstract class Parameter implements Serializable {
     /**
      * Getter prefix variable name.
      *
-     * @return
+     * @return prefix
      */
     public String getPrefix() {
         return prefix;

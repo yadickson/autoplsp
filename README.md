@@ -14,12 +14,13 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 - Basic PostgresSQL
 - Basic SQL Server (Tested 2017, Driver jTDS)
 - Java >= 1.6
-- Spring Framework 4
+- Spring Framework >= 4
 - Auto package name detection
 - Configuration file generation for Spring
 - Use output parameters to evaluate process
 - Transaction annotation
 - Command line for driver, user, pass and connectionString parameters
+- JsonNonNull support
 
 [Examples](https://github.com/yadickson/autoplsp-examples)
 
@@ -96,10 +97,18 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
     <version>2.5</version>
     <scope>provided</scope>
 </dependency>
+
 <dependency>
     <groupId>javax.annotation</groupId>
     <artifactId>javax.annotation-api</artifactId>
     <version>1.3.2</version>
+    <scope>provided</scope>
+</dependency>
+
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.5.0</version>
     <scope>provided</scope>
 </dependency>
 ```
@@ -157,6 +166,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
                 <outParameterCode>...</outParameterCode>
                 <outParameterMessage>...</outParameterMessage>
                 <javaPackageName>...</javaPackageName>
+                <jsonNonNull>...</jsonNonNull>
                 <includes>
                     <param>...</param>
                     <param>...</param>
@@ -249,6 +259,10 @@ Output parameter message.
 ### javaPackageName (required)
 
 Package name for Java classes
+
+### jsonNonNull (optional - default value false) (since 1.7.12)
+
+Add @JsonInclude(JsonInclude.Include.NON_NULL) annotation.
 
 ### includes -> include (optional)
 

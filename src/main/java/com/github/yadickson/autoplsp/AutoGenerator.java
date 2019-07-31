@@ -241,6 +241,16 @@ public class AutoGenerator extends AbstractMojo {
     private String encode;
 
     /**
+     * Json non-null support.
+     */
+    @Parameter(
+            property = "autoplsp.jsonNonNull",
+            defaultValue = "false",
+            readonly = true,
+            required = true)
+    private String jsonNonNull;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -264,6 +274,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] ObjectSuffix: " + objectSuffix);
         getLog().info("[AutoGenerator] TableSuffix: " + tableSuffix);
         getLog().info("[AutoGenerator] Encode: " + encode);
+        getLog().info("[AutoGenerator] JsonNonNull: " + jsonNonNull);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
@@ -391,6 +402,7 @@ public class AutoGenerator extends AbstractMojo {
                     javaDataSourceName,
                     javaJdbcTemplateName,
                     encode,
+                    jsonNonNull.equalsIgnoreCase("true"),
                     outParameterCode,
                     outParameterMessage,
                     generator.getName(),
@@ -400,9 +412,9 @@ public class AutoGenerator extends AbstractMojo {
             //List<com.github.yadickson.autoplsp.db.common.Parameter> mList;
             //mList = generator.processMapper(spList, mappers);
 
+            template.processProcedures(spList);
             template.processObjects(objects);
             template.processTables(tables);
-            template.processProcedures(spList);
             //template.processMappers(mList);
 
             ConfigGenerator config;

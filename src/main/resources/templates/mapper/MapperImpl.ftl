@@ -127,9 +127,9 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
 
             result.set${parameter.propertyName}( bytes${parameter.propertyName} );
         <#elseif parameter.resultSet || parameter.returnResultSet>
-            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>)m.get("${parameter.prefix}${parameter.name}"));
+            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>) m.get("${parameter.prefix}${parameter.name}"));
         <#else>
-            result.set${parameter.propertyName}((${parameter.javaTypeName})m.get("${parameter.prefix}${parameter.name}"));
+            result.set${parameter.propertyName}(<#if parameter.javaTypeName != 'String'>(${parameter.javaTypeName}) </#if>m.get("${parameter.prefix}${parameter.name}"));
         </#if>
         </#list>
         } catch ( Exception ex ) {

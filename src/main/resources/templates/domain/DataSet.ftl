@@ -17,12 +17,16 @@
 <#if parameter.resultSet || parameter.returnResultSet>
 package ${javaPackage}.domain;
 
+<#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
+
+</#if>
 /**
  * DataSet parameter ${parameter.name} in ${proc.fullName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+<#if jsonNonNull>@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
 public final class ${parameter.javaTypeName} implements java.io.Serializable {
 
     /**

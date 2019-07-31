@@ -17,13 +17,17 @@
 <#if parameter.array>
 package ${javaPackage}.domain;
 
+<#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
+
+</#if>
 /**
  * Bean object for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings({"deprecated"})
+<#if jsonNonNull>@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+@SuppressWarnings({"deprecation"})
 public final class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}> implements java.io.Serializable {
 
     /**

@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 public final class TableField implements Serializable {
 
-    static long serialVersionUID = 1;
+    static final long serialVersionUID = 1;
 
     private final String name;
 

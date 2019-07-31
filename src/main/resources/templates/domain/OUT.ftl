@@ -16,12 +16,17 @@
  */
 package ${javaPackage}.domain;
 
+<#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
+
+</#if>
 /**
  * Output parameters for stored procedure ${proc.fullName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+<#if jsonNonNull>@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+@SuppressWarnings({"deprecation"})
 public final class ${proc.className}OUT implements java.io.Serializable {
 
     /**

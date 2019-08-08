@@ -50,6 +50,7 @@ import com.github.yadickson.autoplsp.logger.LoggerManager;
 import com.github.yadickson.autoplsp.util.ParameterSort;
 import java.sql.PreparedStatement;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 /**
  * Store procedure and function generator interface
@@ -152,6 +153,7 @@ public abstract class Generator {
      *
      * @param connection Database connection
      * @param procedure procedure
+     * @param patternRs force execute to get resultset
      * @param objectSuffix Object suffix name
      * @param arraySuffix Array suffix name
      * @throws BusinessException If error
@@ -159,6 +161,7 @@ public abstract class Generator {
     public void fillProcedure(
             final Connection connection,
             final Procedure procedure,
+            final Pattern patternRs,
             final String objectSuffix,
             final String arraySuffix) throws BusinessException {
         LoggerManager.getInstance().info("[SPGenerator] Create store procedure " + procedure.getFullName());
@@ -195,11 +198,15 @@ public abstract class Generator {
 
         boolean found = false;
 
-        if (!procedure.isFunction()) {
+        boolean rs = patternRs.matcher(procedure.getName()).matches();
+
+        LoggerManager.getInstance().info("[SPGenerator] Force find resultset (" + rs + ") " + procedure.getName());
+
+        if (!procedure.isFunction() && rs) {
             found = findRetunResultSet(maker, connection, procedure, list, objectSuffix, arraySuffix);
         }
 
-        if (!found && procedure.isFunctionInline() && !procedure.getHasOutput()) {
+        if (!found && procedure.isFunctionInline() && !procedure.getHasOutput() && rs) {
             found = findRetunResultTable(maker, connection, procedure, list, objectSuffix, arraySuffix);
         }
 
@@ -550,7 +557,7 @@ public abstract class Generator {
         for (TableBean t : tables) {
 
             String tname = t.getName();
-            
+
             if (!mapTables.containsKey(tname)) {
                 LoggerManager.getInstance().info("[FindTables] Found (" + tname + ")");
                 Table table = new Table(tname, tableSuffix);

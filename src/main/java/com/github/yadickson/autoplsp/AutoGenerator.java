@@ -251,6 +251,15 @@ public class AutoGenerator extends AbstractMojo {
     private String jsonNonNull;
 
     /**
+     * List sp and resultset.
+     */
+    @Parameter(
+            alias = "resultset",
+            readonly = true,
+            required = false)
+    private String[] mResultSet;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -294,10 +303,13 @@ public class AutoGenerator extends AbstractMojo {
 
         List<String> includes = new ArrayList<String>();
         List<String> excludes = new ArrayList<String>();
+        List<String> resultset = new ArrayList<String>();
+
         Map<String, ConfigMapper> mappers = new HashMap<String, ConfigMapper>();
 
         String regexInclude = ".*";
         String regexExclude = "";
+        String regexResultSet = ".*";
 
         if (mIncludes != null) {
             for (String include : mIncludes) {
@@ -349,6 +361,14 @@ public class AutoGenerator extends AbstractMojo {
             }
         }
 
+        if (mResultSet != null) {
+            for (String rs : mResultSet) {
+                if (rs != null) {
+                    resultset.add("(" + rs.toUpperCase(Locale.ENGLISH) + ")");
+                }
+            }
+        }
+
         if (!includes.isEmpty()) {
             regexInclude = StringUtils.join(includes, "|");
         }
@@ -357,10 +377,15 @@ public class AutoGenerator extends AbstractMojo {
             regexExclude = StringUtils.join(excludes, "|");
         }
 
+        if (!resultset.isEmpty()) {
+            regexResultSet = StringUtils.join(resultset, "|");
+        }
+
         LoggerManager.getInstance().configure(getLog());
 
         LoggerManager.getInstance().info("[AutoGenerator] RegexInclude: " + regexInclude);
         LoggerManager.getInstance().info("[AutoGenerator] RegexExclude: " + regexExclude);
+        LoggerManager.getInstance().info("[AutoGenerator] RegexResultSet: " + regexResultSet);
 
         DriverConnection connManager = new DriverConnection(driver, connectionString, user, pass);
 
@@ -377,9 +402,11 @@ public class AutoGenerator extends AbstractMojo {
             List<Procedure> list = generator.findProcedures(connection);
             List<Procedure> spList = new ArrayList<Procedure>();
 
+            Pattern patternI = Pattern.compile(regexInclude, Pattern.CASE_INSENSITIVE);
+            Pattern patternE = Pattern.compile(regexExclude, Pattern.CASE_INSENSITIVE);
+            Pattern patternRs = Pattern.compile(regexResultSet, Pattern.CASE_INSENSITIVE);
+
             for (Procedure procedure : list) {
-                Pattern patternI = Pattern.compile(regexInclude, Pattern.CASE_INSENSITIVE);
-                Pattern patternE = Pattern.compile(regexExclude, Pattern.CASE_INSENSITIVE);
 
                 String name = procedure.getName();
 
@@ -387,7 +414,7 @@ public class AutoGenerator extends AbstractMojo {
 
                 if (match) {
                     LoggerManager.getInstance().info("[AutoGenerator] Process store procedure name: " + procedure.getFullName());
-                    generator.fillProcedure(connection, procedure, objectSuffix, arraySuffix);
+                    generator.fillProcedure(connection, procedure, patternRs, objectSuffix, arraySuffix);
                     spList.add(procedure);
                     LoggerManager.getInstance().info("[AutoGenerator] Process procedure success");
                 }
@@ -411,7 +438,6 @@ public class AutoGenerator extends AbstractMojo {
 
             //List<com.github.yadickson.autoplsp.db.common.Parameter> mList;
             //mList = generator.processMapper(spList, mappers);
-
             template.processProcedures(spList);
             template.processObjects(objects);
             template.processTables(tables);
@@ -465,5 +491,14 @@ public class AutoGenerator extends AbstractMojo {
      */
     public void setMappers(String[] mappers) {
         mMappers = mappers == null ? null : mappers.clone();
+    }
+
+    /**
+     * Setter the resultset from configuracion.
+     *
+     * @param resultset The resultset from configuracion
+     */
+    public void setResultset(String[] resultset) {
+        mResultSet = resultset == null ? null : resultset.clone();
     }
 }

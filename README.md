@@ -179,6 +179,10 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
                     <param>...</param>
                     <param>...</param>
                 </mappers>
+                <resultset>
+                    <param>...</param>
+                    <param>...</param>
+                </resultset>
             </configuration>
         </execution>
     </executions>
@@ -264,13 +268,17 @@ Package name for Java classes
 
 Add @JsonInclude(JsonInclude.Include.NON_NULL) annotation.
 
-### includes -> include (optional)
+### includes -> include sp (optional, default .*)
 
 Regular expression to include procedure and functions names, example SP_YES.*
 
-### excludes -> exclude (optional)
+### excludes -> exclude sp (optional, default none)
 
 Regular expression to exclude procedure and functions names, example SP_NOT.*
+
+### resultset -> resultset (optional, default .*)
+
+Regular expression to find resultset on procedure and functions names, example SP_YES.*
 
 
 # Command line support

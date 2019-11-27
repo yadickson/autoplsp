@@ -145,8 +145,8 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
 
-        createTemplate(input, REPOSITORY_PATH + File.separator + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
-        createTemplate(input, REPOSITORY_PATH + File.separator + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SP"));
+        createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
+        createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SP"));
     }
 
     private void processStoredProcedureService(Procedure procedure) throws BusinessException {
@@ -163,7 +163,7 @@ public class JavaGenerator extends TemplateGenerator {
 
         String procedurePath = getRepositoryOutputPath("");
 
-        createTemplate(input, REPOSITORY_PATH + "package-info-repository.ftl", getRepositoryOutputFilePath("package-info.java"));
+        createTemplate(input, REPOSITORY_PATH + "package-info.ftl", getRepositoryOutputFilePath("package-info.java"));
         createTemplate(input, REPOSITORY_PATH + "DAO.ftl", getFileNamePath(procedurePath, procedure, "DAO"));
         createTemplate(input, REPOSITORY_PATH + "DAOImpl.ftl", getFileNamePath(procedurePath, procedure, "DAOImpl"));
     }
@@ -237,8 +237,8 @@ public class JavaGenerator extends TemplateGenerator {
                 input.put(PARAMETER_NAME, dataSetParameter);
                 String fileName = getFileNamePath(parameterPath, procedure, param, "RSRowMapper");
 
-                createTemplate(input, REPOSITORY_PATH + File.separator + FOLDER_MAPPER_NAME + File.separator + "package-info.ftl", getRepositoryMapperOutputFilePath("package-info.java"));
-                createTemplate(input, REPOSITORY_PATH + File.separator + FOLDER_MAPPER_NAME + File.separator + "Mapper.ftl", fileName);
+                createTemplate(input, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "package-info.ftl", getRepositoryMapperOutputFilePath("package-info.java"));
+                createTemplate(input, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "Mapper.ftl", fileName);
             }
         }
     }

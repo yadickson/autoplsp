@@ -131,7 +131,7 @@ public final class ${proc.className}DAOImpl
                 clob${parameter.propertyName}.free();
             }
 
-            result.set${parameter.propertyName}( string${parameter.propertyName} );
+            result.set${parameter.propertyName}(string${parameter.propertyName});
         <#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
             java.sql.Blob blob${parameter.propertyName} = (java.sql.Blob) m.get("${parameter.prefix}${parameter.name}");
             byte [] bytes${parameter.propertyName} = null;
@@ -146,9 +146,9 @@ public final class ${proc.className}DAOImpl
 
             result.set${parameter.propertyName}(bytes${parameter.propertyName});
         <#elseif parameter.resultSet || parameter.returnResultSet>
-            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>)m.get("${parameter.prefix}${parameter.name}"));
+            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>) m.get("${parameter.prefix}${parameter.name}"));
         <#else>
-            result.set${parameter.propertyName}((${parameter.javaTypeName})m.get("${parameter.prefix}${parameter.name}"));
+            result.set${parameter.propertyName}((${parameter.javaTypeName}) m.get("${parameter.prefix}${parameter.name}"));
         </#if>
         </#list>
         } catch (Exception ex) {
@@ -182,7 +182,7 @@ public final class ${proc.className}DAOImpl
             code = (Number) result.get("${pCode}");
             description = (String) result.get("${pMessage}");
             val = code.intValue();
-        } catch ( Exception ex ) {
+        } catch (Exception ex) {
             throw new java.sql.SQLException(ex);
         }
 

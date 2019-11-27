@@ -83,22 +83,5 @@ public final class ${proc.className}IN
     }
 
     </#list>
-    /**
-     * Getter to string.
-     *
-     * @return to string
-     */
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-
-        str.append("[${proc.className}IN]");
-<#list proc.inputParameters as parameter>
-        str.append(" ${parameter.fieldName}=");
-        str.append(${parameter.fieldName});
-        <#sep>str.append(", ");</#sep></#list>
-
-        return str.toString();
-    }
 }
 </#if>

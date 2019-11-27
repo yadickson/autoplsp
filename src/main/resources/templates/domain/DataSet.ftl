@@ -83,22 +83,5 @@ public final class ${parameter.javaTypeName}
     }
 
     </#list>
-    /**
-     * Getter to string.
-     *
-     * @return to string
-     */
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-
-        str.append("[${parameter.javaTypeName}]");
-<#list parameter.parameters as parameter2>
-        str.append(" ${parameter2.fieldName}=");
-        str.append(${parameter2.fieldName});
-        <#sep>str.append(", ");</#sep></#list>
-
-        return str.toString();
-    }
 }
 </#if>

@@ -82,21 +82,4 @@ public final class ${proc.className}OUT
     }
 
     </#list>
-    /**
-     * Getter to string.
-     *
-     * @return to string
-     */
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-
-        str.append("[${proc.className}OUT]");
-<#list proc.outputParameters as parameter>
-        str.append(" ${parameter.fieldName}=");
-        str.append(${parameter.fieldName});
-        <#sep>str.append(", ");</#sep></#list>
-
-        return str.toString();
-    }
 }

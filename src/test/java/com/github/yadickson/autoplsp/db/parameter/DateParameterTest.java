@@ -34,7 +34,7 @@ public class DateParameterTest {
 
     @Before
     public void setup() {
-        parameter = new DateParameter(0, null, Direction.INPUT, "", new Procedure("", ""));
+        parameter = new DateParameter(0, null, Direction.INPUT, "", new Procedure(true, "", ""));
     }
 
     @Test(expected = Exception.class)

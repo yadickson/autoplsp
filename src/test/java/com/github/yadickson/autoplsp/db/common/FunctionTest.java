@@ -30,14 +30,58 @@ public class FunctionTest {
     }
 
     @Test
-    public void testFunction() {
+    public void testFunctionAddPackageName() {
 
-        Function function = new Function("packageName", "functionName", true);
+        Function function = new Function(true, "packageName", "functionName", true);
 
         assertNotNull(function.getPackageName());
         assertNotNull(function.getName());
         assertEquals("packageName", function.getPackageName());
         assertEquals("functionName", function.getName());
         assertTrue(function.isFunction());
+        assertEquals("packageName.functionName", function.getFullName());
+        assertEquals("PackageNameFunctionName", function.getClassName());
+    }
+
+    @Test
+    public void testFunctionDisableAddPackageName() {
+
+        Function function = new Function(false, "packageName", "functionName", true);
+
+        assertNotNull(function.getPackageName());
+        assertNotNull(function.getName());
+        assertEquals("packageName", function.getPackageName());
+        assertEquals("functionName", function.getName());
+        assertTrue(function.isFunction());
+        assertEquals("packageName.functionName", function.getFullName());
+        assertEquals("FunctionName", function.getClassName());
+    }
+
+    @Test
+    public void testFunctionWithoutPackageName() {
+
+        Function function = new Function(false, null, "functionName", true);
+
+        assertNull(function.getPackageName());
+        assertNotNull(function.getName());
+        assertNull(function.getPackageName());
+        assertEquals("functionName", function.getName());
+        assertTrue(function.isFunction());
+        assertEquals("functionName", function.getFullName());
+        assertEquals("FunctionName", function.getClassName());
+    }
+
+    @Test
+    public void testFunctionForceAddWithoutPackageName() {
+
+        Function function = new Function(true, null, "functionName", true);
+
+        assertNull(function.getPackageName());
+        assertNotNull(function.getName());
+        assertNull(function.getPackageName());
+        assertEquals("functionName", function.getName());
+        assertTrue(function.isFunction());
+        assertEquals("functionName", function.getFullName());
+        assertEquals("FunctionName", function.getClassName());
     }
 }

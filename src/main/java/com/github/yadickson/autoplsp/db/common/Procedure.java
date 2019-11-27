@@ -30,6 +30,7 @@ public class Procedure implements Serializable {
 
     static final long serialVersionUID = 1;
 
+    private final Boolean addPackageName;
     private final String name;
     private final String packageName;
     private List<Parameter> parameters;
@@ -39,10 +40,13 @@ public class Procedure implements Serializable {
     /**
      * Class constructor
      *
+     * @param addPackageName flag to add package name.
      * @param packageName The package name
      * @param procedureName The procedure name
      */
-    public Procedure(String packageName, String procedureName) {
+    public Procedure(Boolean addPackageName, String packageName, String procedureName) {
+        
+        this.addPackageName = addPackageName;
         this.packageName = packageName;
         this.name = procedureName;
 
@@ -87,7 +91,7 @@ public class Procedure implements Serializable {
      * @return the class name capitalized
      */
     public String getClassName() {
-        return CapitalizeUtil.capitalize(getFullName().replace(".", "_"));
+        return CapitalizeUtil.capitalize(this.addPackageName ? getFullName().replace(".", "_") : getName());
     }
 
     /**

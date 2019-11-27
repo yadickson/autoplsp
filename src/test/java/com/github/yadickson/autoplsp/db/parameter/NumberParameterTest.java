@@ -34,7 +34,7 @@ public class NumberParameterTest {
 
     @Before
     public void setup() {
-        parameter = new NumberParameter(0, null, Direction.INPUT, "", new Procedure("", ""));
+        parameter = new NumberParameter(0, null, Direction.INPUT, "", new Procedure(true, "", ""));
     }
 
     @Test(expected = Exception.class)

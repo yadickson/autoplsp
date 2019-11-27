@@ -287,6 +287,16 @@ public class AutoGenerator extends AbstractMojo {
     private String[] mTables;
 
     /**
+     * Add package name support.
+     */
+    @Parameter(
+            property = "autoplsp.addPackagename",
+            defaultValue = "true",
+            readonly = true,
+            required = true)
+    private String addPackagename;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -313,6 +323,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] TableSuffix: " + tableSuffix);
         getLog().info("[AutoGenerator] Encode: " + encode);
         getLog().info("[AutoGenerator] JsonNonNull: " + jsonNonNull);
+        getLog().info("[AutoGenerator] AddPackagename: " + addPackagename);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
@@ -441,7 +452,7 @@ public class AutoGenerator extends AbstractMojo {
             List<com.github.yadickson.autoplsp.db.common.Parameter> objects;
             objects = generator.findObjects(connection, objectSuffix, arraySuffix);
 
-            List<Procedure> list = generator.findProcedures(connection);
+            List<Procedure> list = generator.findProcedures(addPackagename.equalsIgnoreCase("true"), connection);
             List<Procedure> spList = new ArrayList<Procedure>();
 
             Pattern patternI = Pattern.compile(regexInclude, Pattern.CASE_INSENSITIVE);

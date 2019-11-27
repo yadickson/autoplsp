@@ -23,7 +23,7 @@ public class DataSetParameterTest {
 
     @Before
     public void setup() {
-        parameter = new DataSetParameter(0, "DataSet", Direction.INPUT, "", new Procedure("", "")) {
+        parameter = new DataSetParameter(0, "DataSet", Direction.INPUT, "", new Procedure(true, "", "")) {
 
             @Override
             public String getJavaTypeName() {

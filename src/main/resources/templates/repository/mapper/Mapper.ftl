@@ -39,7 +39,7 @@ public final class ${parameter.javaTypeName}RowMapper
      * @return object
      */
     @Override
-    public ${parameter.javaTypeName} mapRow (
+    public ${parameter.javaTypeName} mapRow(
             final java.sql.ResultSet resultSet,
             final int i
     ) throws java.sql.SQLException {

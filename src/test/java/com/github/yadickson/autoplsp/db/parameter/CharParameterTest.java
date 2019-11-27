@@ -34,7 +34,7 @@ public class CharParameterTest {
 
     @Before
     public void setup() {
-        parameter = new CharParameter(0, null, Direction.INPUT, "", new Procedure("", ""));
+        parameter = new CharParameter(0, null, Direction.INPUT, "", new Procedure(true, "", ""));
     }
 
     @Test(expected = Exception.class)

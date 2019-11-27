@@ -30,12 +30,13 @@ public class Function extends Procedure {
     /**
      * Class constructor
      *
+     * @param addPackageName Flag add package name.
      * @param packageName The package name
      * @param functionName The function name
      * @param functionInline The flag to function inline
      */
-    public Function(String packageName, String functionName, Boolean functionInline) {
-        super(packageName, functionName);
+    public Function(Boolean addPackageName, String packageName, String functionName, Boolean functionInline) {
+        super(addPackageName, packageName, functionName);
         this.functionInline = functionInline;
     }
 

@@ -33,10 +33,12 @@ public interface ${proc.className}DAO {
 
     /**
      * Execute stored procedure.
-     *
-     * <#if proc.hasInput>@param params input parameters</#if>
+     * <#if proc.hasInput>
+     * @param params input parameters</#if>
      * <#if proc.hasOutput>@return output parameters</#if>
-     * @throws java.sql.SQLException
+     * @throws java.sql.SQLException if error
      */
-    <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>final ${proc.className}IN params</#if>) throws java.sql.SQLException;
+    <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>
+            ${proc.className}IN params
+    </#if>) throws java.sql.SQLException;
 }

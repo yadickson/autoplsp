@@ -14,28 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ${javaPackage}.repository;
-
-<#if proc.hasInput>
-import ${javaPackage}.domain.${proc.className}IN;
-</#if>
-<#if proc.hasOutput>
-import ${javaPackage}.domain.${proc.className}OUT;
-</#if>
 
 /**
- * Mapper interface to stored procedure ${proc.fullName}.
- *
- * @author @GENERATOR.NAME@
- * @version @GENERATOR.VERSION@
+ * Resultset mapper package folder.
  */
-public interface ${map.className}Mapper {
-
-    /**
-     * Process mapper for stored procedure.
-     *
-     * <#if proc.hasInput>@param params input parameters</#if>
-     * <#if proc.hasOutput>@return output parameters</#if>
-     */
-    ${map.className}OUT process(<#if proc.hasInput>${proc.className}IN params</#if>);
-}
+package ${javaPackage}.repository.mapper;

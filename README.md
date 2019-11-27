@@ -162,6 +162,10 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
                 <jndiDataSourceName>JDBC/...</jndiDataSourceName>
                 <objectSuffix>Object</objectSuffix>
                 <arraySuffix>Array</arraySuffix>
+                <outputDirectory>...</outputDirectory>
+                <outputDirectoryResource>...</outputDirectoryResource>
+                <folderNameGenerator>...</folderNameGenerator>
+                <folderNameResourceGenerator>...</folderNameResourceGenerator>
                 <outputConfigFileName>...</outputConfigFileName>
                 <outParameterCode>...</outParameterCode>
                 <outParameterMessage>...</outParameterMessage>
@@ -183,6 +187,10 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
                     <param>...</param>
                     <param>...</param>
                 </resultset>
+                <tables>
+                    <param>...</param>
+                    <param>...</param>
+                </tables>
             </configuration>
         </execution>
     </executions>
@@ -246,7 +254,7 @@ Datasource JNDI name
 
 ### outputConfigFileName (optional)
 
-Default value **${project.artifactId}.xml**
+Default value **${project.artifactId}-context.xml**
 
 ### outParameterCode (optional - default value OUT_RETURN_CODE)
 

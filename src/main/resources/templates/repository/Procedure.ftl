@@ -20,16 +20,17 @@ package ${javaPackage}.repository.sp;
 <#if parameter.resultSet || parameter.returnResultSet>
 import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
 </#if>
-</#list>
+</#list>import org.springframework.jdbc.object.<#if !proc.functionInline>StoredProcedure<#else>GenericSqlQuery</#if>;
 
 /**
- * JDBC Stored Procedure ${proc.fullName}.
+ * JDBC to <#if proc.function>function<#else>stored procedure</#if> ${proc.fullName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings({"rawtypes","unchecked"})
-public class ${proc.className}SP extends org.springframework.jdbc.object.<#if !proc.functionInline>StoredProcedure<#else>GenericSqlQuery</#if> {
+@SuppressWarnings({"rawtypes", "unchecked"})
+public final class ${proc.className}SP
+        extends <#if !proc.functionInline>StoredProcedure<#else>GenericSqlQuery</#if> {
 
     /**
      * Full procedure name.
@@ -46,7 +47,7 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.<#if !p
         super(jdbcTemplate.getDataSource(), SPROC_NAME);
         setFunction(<#if proc.function>true<#else>false</#if>);
         <#list proc.parameters as parameter>
-        declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >, ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >, new ${parameter.javaTypeName}RowMapper()</#if>));
+        declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >, ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >, new ${parameter.javaTypeName}RowMapper()</#if>));
         </#list>
         <#else>
         super();
@@ -54,7 +55,7 @@ public class ${proc.className}SP extends org.springframework.jdbc.object.<#if !p
         setSql("select * from ${proc.fullName}(<#list proc.inputParameters as parameter>?<#sep>, </#sep></#list>)");
         <#list proc.parameters as parameter>
         <#if !parameter.returnResultSet>
-        declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >, ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >, new ${parameter.javaTypeName}RowMapper()</#if>));
+        declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >, ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >, new ${parameter.javaTypeName}RowMapper()</#if>));
         <#else>
         try {
             setRowMapperClass(new ${parameter.javaTypeName}RowMapper().getClass());

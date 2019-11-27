@@ -35,6 +35,7 @@ public class ConfigGenerator extends TemplateGenerator {
     private final String dataSource;
     private final String jdbcTemplate;
     private final String jndi;
+    private final String folderNameResourceGenerator;
 
     /**
      * Class constructor
@@ -44,20 +45,23 @@ public class ConfigGenerator extends TemplateGenerator {
      * @param dataSource Datasource name
      * @param jdbcTemplate JdbcTemplate name
      * @param jndi JNDI datasource name
+     * @param folderNameResourceGenerator folder name spring resource directory
      * @param outputFileName Spring configuration file name
      */
     public ConfigGenerator(String outputDir,
-            String packageName,
-            String dataSource,
-            String jdbcTemplate,
-            String jndi,
-            String outputFileName) {
+            final String packageName,
+            final String dataSource,
+            final String jdbcTemplate,
+            final String jndi,
+            final String folderNameResourceGenerator,
+            final String outputFileName) {
         super(outputDir);
         this.fileName = outputFileName;
         this.javaPackage = packageName;
         this.dataSource = dataSource;
         this.jdbcTemplate = jdbcTemplate;
         this.jndi = jndi;
+        this.folderNameResourceGenerator = folderNameResourceGenerator;
     }
 
     /**
@@ -75,7 +79,7 @@ public class ConfigGenerator extends TemplateGenerator {
         input.put("jdbcTemplate", jdbcTemplate);
         input.put("jndi", jndi);
 
-        createTemplate(input, "/config/Config.ftl", getFileNamePath("database", fileName));
+        createTemplate(input, "/config/Config.ftl", getFileNamePath(folderNameResourceGenerator, fileName));
     }
 
     /**

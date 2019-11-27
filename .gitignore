@@ -3,3 +3,9 @@ nbproject/
 nb-configuration.xml
 pom.xml.versionsBackup
 .travis.gpg
+nbactions.xml
+.settings
+.classpath
+.project
+.idea
+*.iml

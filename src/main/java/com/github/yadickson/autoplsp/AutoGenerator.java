@@ -111,10 +111,28 @@ public class AutoGenerator extends AbstractMojo {
     private File outputDirectoryResource;
 
     /**
+     * Output folder name directory.
+     */
+    @Parameter(
+            defaultValue = "autosp-generator",
+            readonly = true,
+            required = false)
+    private String folderNameGenerator;
+
+    /**
+     * Output folder name spring resource directory.
+     */
+    @Parameter(
+            defaultValue = "database",
+            readonly = true,
+            required = false)
+    private String folderNameResourceGenerator;
+
+    /**
      * Spring configuration file name.
      */
     @Parameter(
-            defaultValue = "${project.artifactId}.xml",
+            defaultValue = "${project.artifactId}-context.xml",
             readonly = true,
             required = false)
     private String outputConfigFileName;
@@ -260,6 +278,15 @@ public class AutoGenerator extends AbstractMojo {
     private String[] mResultSet;
 
     /**
+     * List tables to build.
+     */
+    @Parameter(
+            alias = "tables",
+            readonly = true,
+            required = false)
+    private String[] mTables;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -272,6 +299,8 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] ConnectionString: " + connectionString);
         getLog().info("[AutoGenerator] User: " + user);
         getLog().info("[AutoGenerator] Pass: ****");
+        getLog().info("[AutoGenerator] FolderNameGenerator: " + folderNameGenerator);
+        getLog().info("[AutoGenerator] FolderNameResourceGenerator: " + folderNameResourceGenerator);
         getLog().info("[AutoGenerator] OutputDirectory: " + outputDirectory.getPath());
         getLog().info("[AutoGenerator] OutputDirectoryResource: " + outputDirectoryResource.getPath());
         getLog().info("[AutoGenerator] OutputConfigFileName: " + outputConfigFileName);
@@ -301,20 +330,22 @@ public class AutoGenerator extends AbstractMojo {
         resource.setDirectory(outputDirectoryResource.getPath());
         project.addResource(resource);
 
-        List<String> includes = new ArrayList<String>();
-        List<String> excludes = new ArrayList<String>();
-        List<String> resultset = new ArrayList<String>();
+        List<String> fillIncludes = new ArrayList<String>();
+        List<String> fillExcludes = new ArrayList<String>();
+        List<String> fillResultset = new ArrayList<String>();
+        List<String> fillTables = new ArrayList<String>();
 
         Map<String, ConfigMapper> mappers = new HashMap<String, ConfigMapper>();
 
         String regexInclude = ".*";
         String regexExclude = "";
-        String regexResultSet = ".*";
+        String regexResultSet = "";
+        String regexTable = "";
 
         if (mIncludes != null) {
             for (String include : mIncludes) {
                 if (include != null) {
-                    includes.add("(" + include.toUpperCase(Locale.ENGLISH) + ")");
+                    fillIncludes.add("(" + include.toUpperCase(Locale.ENGLISH) + ")");
                 }
             }
         }
@@ -322,7 +353,7 @@ public class AutoGenerator extends AbstractMojo {
         if (mExcludes != null) {
             for (String exclude : mExcludes) {
                 if (exclude != null) {
-                    excludes.add("(" + exclude.toUpperCase(Locale.ENGLISH) + ")");
+                    fillExcludes.add("(" + exclude.toUpperCase(Locale.ENGLISH) + ")");
                 }
             }
         }
@@ -364,21 +395,33 @@ public class AutoGenerator extends AbstractMojo {
         if (mResultSet != null) {
             for (String rs : mResultSet) {
                 if (rs != null) {
-                    resultset.add("(" + rs.toUpperCase(Locale.ENGLISH) + ")");
+                    fillResultset.add("(" + rs.toUpperCase(Locale.ENGLISH) + ")");
                 }
             }
         }
 
-        if (!includes.isEmpty()) {
-            regexInclude = StringUtils.join(includes, "|");
+        if (mTables != null) {
+            for (String table : mTables) {
+                if (table != null) {
+                    fillTables.add("(" + table.toUpperCase(Locale.ENGLISH) + ")");
+                }
+            }
         }
 
-        if (!excludes.isEmpty()) {
-            regexExclude = StringUtils.join(excludes, "|");
+        if (!fillIncludes.isEmpty()) {
+            regexInclude = StringUtils.join(fillIncludes, "|");
         }
 
-        if (!resultset.isEmpty()) {
-            regexResultSet = StringUtils.join(resultset, "|");
+        if (!fillExcludes.isEmpty()) {
+            regexExclude = StringUtils.join(fillExcludes, "|");
+        }
+
+        if (!fillResultset.isEmpty()) {
+            regexResultSet = StringUtils.join(fillResultset, "|");
+        }
+
+        if (!fillTables.isEmpty()) {
+            regexTable = StringUtils.join(fillTables, "|");
         }
 
         LoggerManager.getInstance().configure(getLog());
@@ -386,6 +429,7 @@ public class AutoGenerator extends AbstractMojo {
         LoggerManager.getInstance().info("[AutoGenerator] RegexInclude: " + regexInclude);
         LoggerManager.getInstance().info("[AutoGenerator] RegexExclude: " + regexExclude);
         LoggerManager.getInstance().info("[AutoGenerator] RegexResultSet: " + regexResultSet);
+        LoggerManager.getInstance().info("[AutoGenerator] RegexTable: " + regexTable);
 
         DriverConnection connManager = new DriverConnection(driver, connectionString, user, pass);
 
@@ -397,14 +441,13 @@ public class AutoGenerator extends AbstractMojo {
             List<com.github.yadickson.autoplsp.db.common.Parameter> objects;
             objects = generator.findObjects(connection, objectSuffix, arraySuffix);
 
-            List<Table> tables = generator.findTables(connection, tableSuffix);
-
             List<Procedure> list = generator.findProcedures(connection);
             List<Procedure> spList = new ArrayList<Procedure>();
 
             Pattern patternI = Pattern.compile(regexInclude, Pattern.CASE_INSENSITIVE);
             Pattern patternE = Pattern.compile(regexExclude, Pattern.CASE_INSENSITIVE);
             Pattern patternRs = Pattern.compile(regexResultSet, Pattern.CASE_INSENSITIVE);
+            Pattern patternT = Pattern.compile(regexTable, Pattern.CASE_INSENSITIVE);
 
             for (Procedure procedure : list) {
 
@@ -425,6 +468,7 @@ public class AutoGenerator extends AbstractMojo {
             JavaGenerator template;
             template = new JavaGenerator(
                     outputDirectory.getPath(),
+                    folderNameGenerator,
                     javaPackageName,
                     javaDataSourceName,
                     javaJdbcTemplateName,
@@ -436,11 +480,26 @@ public class AutoGenerator extends AbstractMojo {
                     connManager.getVersion()
             );
 
+            List<Table> tables = generator.findTables(connection, tableSuffix);
+            List<Table> fullTables = new ArrayList<Table>();
+
+            for (Table table : tables) {
+
+                String name = table.getName();
+
+                boolean match = patternT.matcher(name).matches();
+
+                if (match) {
+                    LoggerManager.getInstance().info("[AutoGenerator] Process table name: " + table.getName());
+                    fullTables.add(table);
+                }
+            }
+
             //List<com.github.yadickson.autoplsp.db.common.Parameter> mList;
             //mList = generator.processMapper(spList, mappers);
             template.processProcedures(spList);
             template.processObjects(objects);
-            template.processTables(tables);
+            template.processTables(fullTables);
             //template.processMappers(mList);
 
             ConfigGenerator config;
@@ -450,6 +509,7 @@ public class AutoGenerator extends AbstractMojo {
                     javaDataSourceName,
                     javaJdbcTemplateName,
                     jndiDataSourceName,
+                    folderNameResourceGenerator,
                     outputConfigFileName
             );
 
@@ -500,5 +560,14 @@ public class AutoGenerator extends AbstractMojo {
      */
     public void setResultset(String[] resultset) {
         mResultSet = resultset == null ? null : resultset.clone();
+    }
+
+    /**
+     * Setter the tables from configuracion
+     *
+     * @param tables the tables to include from configuracion
+     */
+    public void setTables(String[] tables) {
+        mTables = tables == null ? null : tables.clone();
     }
 }

@@ -38,7 +38,7 @@ import org.springframework.stereotype.Repository;
  * @version @GENERATOR.VERSION@
  */
 @Repository
-@SuppressWarnings({"rawtypes","unchecked","deprecated"})
+@SuppressWarnings({"rawtypes", "unchecked", "deprecated"})
 public final class ${proc.className}MapperImpl implements ${proc.className}Mapper {
 
     <#if proc.hasObject || proc.hasArray>

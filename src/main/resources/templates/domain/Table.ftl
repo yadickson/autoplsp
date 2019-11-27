@@ -25,10 +25,12 @@ package ${javaPackage}.domain;
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */
-<#if jsonNonNull>@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+ */<#if jsonNonNull>
+@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
 @SuppressWarnings({"deprecation"})
-public final class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}> implements java.io.Serializable {
+public final class ${parameter.javaTypeName}
+        extends java.util.ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}>
+        implements java.io.Serializable {
 
     /**
      * Serialization.
@@ -42,7 +44,9 @@ public final class ${parameter.javaTypeName} extends java.util.ArrayList<${param
      * @return object
      * @throws Exception
      */
-    public Object processObject(final java.sql.Connection connection) throws Exception {
+    public Object processObject(
+            final java.sql.Connection connection
+    ) throws Exception {
 
         Object[] input = new Object[size()];
 
@@ -61,16 +65,6 @@ public final class ${parameter.javaTypeName} extends java.util.ArrayList<${param
 <#else>
         throw new Exception("driver ${driverName} not supported");
 </#if>
-    }
-
-    /**
-     * Getter to string.
-     *
-     * @return to string
-     */
-    @Override
-    public String toString() {
-        return org.apache.commons.lang.builder.ToStringBuilder.reflectionToString(this);
     }
 }
 </#if>

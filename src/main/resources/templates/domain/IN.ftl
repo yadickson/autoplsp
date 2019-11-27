@@ -25,10 +25,11 @@ package ${javaPackage}.domain;
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */
-<#if jsonNonNull>@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+ */<#if jsonNonNull>
+@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
 @SuppressWarnings({"deprecation"})
-public final class ${proc.className}IN implements java.io.Serializable {
+public final class ${proc.className}IN
+        implements java.io.Serializable {
 
     /**
      * Serialization.
@@ -55,7 +56,8 @@ public final class ${proc.className}IN implements java.io.Serializable {
      * @param p${parameter.propertyName} set value of ${parameter.fieldName}
     </#list>
      */
-    public ${proc.className}IN(<#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.propertyName}<#sep>, </#sep></#list>) {
+    public ${proc.className}IN(<#if proc.hasInput>${'\n'}            </#if><#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>
+    ) {
         <#list proc.inputParameters as parameter>
         this.${parameter.fieldName} = p${parameter.propertyName};
         </#list>
@@ -91,11 +93,10 @@ public final class ${proc.className}IN implements java.io.Serializable {
         StringBuilder str = new StringBuilder();
 
         str.append("[${proc.className}IN]");
-        <#list proc.inputParameters as parameter>
+<#list proc.inputParameters as parameter>
         str.append(" ${parameter.fieldName}=");
         str.append(${parameter.fieldName});
-        <#sep>str.append(", ");</#sep>
-        </#list>
+        <#sep>str.append(", ");</#sep></#list>
 
         return str.toString();
     }

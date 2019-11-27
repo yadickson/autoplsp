@@ -25,10 +25,11 @@ package ${javaPackage}.domain;
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */
-<#if jsonNonNull>@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+ */<#if jsonNonNull>
+@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
 @SuppressWarnings({"deprecation"})
-public final class ${parameter.javaTypeName} implements java.io.Serializable {
+public final class ${parameter.javaTypeName}
+        implements java.io.Serializable {
 
     /**
      * Serialization.
@@ -55,7 +56,8 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
      * @param p${parameter2.propertyName} set value of ${parameter2.fieldName}
     </#list>
      */
-    public ${parameter.javaTypeName}(<#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} p${parameter2.propertyName}<#sep>, </#sep></#list>) {
+    public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} p${parameter2.propertyName}<#sep>,${'\n'}            </#sep></#list>
+    ) {
         <#list parameter.parameters as parameter2>
         this.${parameter2.fieldName} = p${parameter2.propertyName};
         </#list>
@@ -128,11 +130,11 @@ public final class ${parameter.javaTypeName} implements java.io.Serializable {
         StringBuilder str = new StringBuilder();
 
         str.append("[${parameter.javaTypeName}]");
-        <#list parameter.parameters as parameter2>
+<#list parameter.parameters as parameter2>
         str.append(" ${parameter2.fieldName}=");
         str.append(${parameter2.fieldName});
-        <#sep>str.append(", ");</#sep>
-        </#list>
+        <#sep>str.append(", ");</#sep></#list>
+
         return str.toString();
     }
 }

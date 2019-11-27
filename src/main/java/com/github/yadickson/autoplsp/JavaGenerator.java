@@ -43,6 +43,7 @@ public class JavaGenerator extends TemplateGenerator {
     private final Boolean jsonNonNull;
     private final String outParameterCode;
     private final String outParameterMessage;
+    private final String folderNameGenerator;
     private final String driverName;
     private final String driverVersion;
 
@@ -51,7 +52,9 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String TABLE_NAME = "table";
     private static final String TABLE_FIELD_NAME = "field";
     private static final String COLUMN_NAME = "column";
-    private static final String MAPPER_NAME = "mapper";
+
+    private static final String FOLDER_MAPPER_NAME = "mapper";
+    private static final String FOLDER_SP_NAME = "sp";
 
     private static final String JAVA_PACKAGE_NAME = "javaPackage";
     private static final String DATA_SOURCE_NAME = "dataSource";
@@ -62,13 +65,12 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String OUT_MESSAGE_NAME = "outParameterMessage";
     private static final String EXT_FILE = ".java";
 
-    private static final String SOURCE_GENERATOR_PATH = File.separatorChar + "autosp-generator" + File.separatorChar;
     private static final String REPOSITORY_PATH = File.separatorChar + "repository" + File.separatorChar;
     private static final String DOMAIN_PATH = File.separatorChar + "domain" + File.separatorChar;
     private static final String TABLE_PATH = File.separatorChar + TABLE_NAME + File.separatorChar;
     private static final String TABLE_COLUMN_PATH = TABLE_PATH + COLUMN_NAME + File.separatorChar;
     private static final String TYPE_PATH = TABLE_COLUMN_PATH + "type" + File.separatorChar;
-    private static final String MAPPER_PATH = File.separatorChar + MAPPER_NAME + File.separatorChar;
+    private static final String MAPPER_PATH = File.separatorChar + FOLDER_MAPPER_NAME + File.separatorChar;
 
     private static final String DRIVER_NAME = "driverName";
     private static final String DRIVER_VERSION = "driverVersion";
@@ -77,6 +79,7 @@ public class JavaGenerator extends TemplateGenerator {
      * Class constructor
      *
      * @param outputDir Output resource directory
+     * @param folderNameGenerator folder name generator
      * @param packageName Java package name
      * @param dataSource Datasource name
      * @param jdbcTemplate JdbcTemplate name
@@ -88,6 +91,7 @@ public class JavaGenerator extends TemplateGenerator {
      * @param driverVersion driver version
      */
     public JavaGenerator(String outputDir,
+            final String folderNameGenerator,
             final String packageName,
             final String dataSource,
             final String jdbcTemplate,
@@ -99,6 +103,7 @@ public class JavaGenerator extends TemplateGenerator {
             final String driverVersion) {
 
         super(outputDir);
+        this.folderNameGenerator = folderNameGenerator;
         this.javaPackage = packageName;
         this.dataSource = dataSource;
         this.jdbcTemplate = jdbcTemplate;
@@ -140,7 +145,8 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
 
-        createTemplate(input, REPOSITORY_PATH + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath("sp"), procedure, "SP"));
+        createTemplate(input, REPOSITORY_PATH + "package-info-procedure.ftl", getRepositorySpOutputFilePath("package-info.java"));
+        createTemplate(input, REPOSITORY_PATH + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SP"));
     }
 
     private void processStoredProcedureService(Procedure procedure) throws BusinessException {
@@ -157,6 +163,7 @@ public class JavaGenerator extends TemplateGenerator {
 
         String procedurePath = getRepositoryOutputPath("");
 
+        createTemplate(input, REPOSITORY_PATH + "package-info-repository.ftl", getRepositoryOutputFilePath("package-info.java"));
         createTemplate(input, REPOSITORY_PATH + "DAO.ftl", getFileNamePath(procedurePath, procedure, "DAO"));
         createTemplate(input, REPOSITORY_PATH + "DAOImpl.ftl", getFileNamePath(procedurePath, procedure, "DAOImpl"));
     }
@@ -176,10 +183,12 @@ public class JavaGenerator extends TemplateGenerator {
         String parameterPath = getDomainOutputPath("");
 
         if (procedure.getHasInput()) {
+            createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
             createTemplate(input, DOMAIN_PATH + "IN.ftl", getFileNamePath(parameterPath, procedure, "IN"));
         }
 
         if (procedure.getHasOutput()) {
+            createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
             createTemplate(input, DOMAIN_PATH + "OUT.ftl", getFileNamePath(parameterPath, procedure, "OUT"));
         }
     }
@@ -201,6 +210,7 @@ public class JavaGenerator extends TemplateGenerator {
         for (Parameter param : procedure.getParameters()) {
             if (param.isResultSet() || param.isReturnResultSet()) {
                 input.put(PARAMETER_NAME, param);
+                createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
                 createTemplate(input, DOMAIN_PATH + "DataSet.ftl", getFileNamePath(parameterPath, procedure, param, "RS"));
             }
         }
@@ -218,7 +228,7 @@ public class JavaGenerator extends TemplateGenerator {
             return;
         }
 
-        String parameterPath = getRepositoryOutputPath("mapper");
+        String parameterPath = getRepositoryOutputPath(FOLDER_MAPPER_NAME);
 
         for (Parameter param : procedure.getParameters()) {
             if (param.isResultSet() || param.isReturnResultSet()) {
@@ -227,6 +237,7 @@ public class JavaGenerator extends TemplateGenerator {
                 input.put(PARAMETER_NAME, dataSetParameter);
                 String fileName = getFileNamePath(parameterPath, procedure, param, "RSRowMapper");
 
+                createTemplate(input, REPOSITORY_PATH + "package-info-mapper.ftl", getRepositoryMapperOutputFilePath("package-info.java"));
                 createTemplate(input, REPOSITORY_PATH + "Mapper.ftl", fileName);
             }
         }
@@ -249,17 +260,23 @@ public class JavaGenerator extends TemplateGenerator {
 
             if (param.isObject()) {
                 input.put(PARAMETER_NAME, param);
+                createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
                 createTemplate(input, DOMAIN_PATH + "Object.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
             }
 
             if (param.isArray()) {
                 input.put(PARAMETER_NAME, param);
+                createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
                 createTemplate(input, DOMAIN_PATH + "Table.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
             }
         }
     }
 
     public void processTables(final List<Table> tables) throws BusinessException {
+
+        if (tables.isEmpty()) {
+            return;
+        }
 
         Map<String, Object> input = new HashMap<String, Object>();
 
@@ -314,7 +331,7 @@ public class JavaGenerator extends TemplateGenerator {
         for (Parameter param : mappers) {
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + param.getName());
 
-            input.put(MAPPER_NAME, param);
+            input.put(FOLDER_MAPPER_NAME, param);
 
             createTemplate(input, MAPPER_PATH + "Mapper.ftl", getFileNameMapperPath(parameterPath, param));
             createTemplate(input, MAPPER_PATH + "MapperImpl.ftl", getFileNameMapperPath(parameterPath, param));
@@ -331,7 +348,7 @@ public class JavaGenerator extends TemplateGenerator {
      */
     @Override
     protected String getOutputPath(String path) throws BusinessException {
-        return super.getOutputPath(SOURCE_GENERATOR_PATH + getDirectoryPackage() + File.separatorChar + path);
+        return super.getOutputPath(File.separatorChar + folderNameGenerator + File.separatorChar + getDirectoryPackage() + File.separatorChar + path);
     }
 
     private String getTableOutputPath(String path) throws BusinessException {
@@ -350,8 +367,24 @@ public class JavaGenerator extends TemplateGenerator {
         return this.getOutputPath(REPOSITORY_PATH + path);
     }
 
+    private String getRepositoryOutputFilePath(String file) throws BusinessException {
+        return this.getRepositoryOutputPath("") + File.separatorChar + file;
+    }
+
+    private String getRepositorySpOutputFilePath(String file) throws BusinessException {
+        return this.getRepositoryOutputPath(FOLDER_SP_NAME) + File.separatorChar + file;
+    }
+
+    private String getRepositoryMapperOutputFilePath(String file) throws BusinessException {
+        return this.getRepositoryOutputPath(FOLDER_MAPPER_NAME) + File.separatorChar + file;
+    }
+
     private String getDomainOutputPath(String path) throws BusinessException {
         return this.getOutputPath(DOMAIN_PATH + path);
+    }
+
+    private String getDomainOutputFilePath(String file) throws BusinessException {
+        return this.getDomainOutputPath("") + File.separatorChar + file;
     }
 
     private String getFileNameObjectPath(String path, String name) {

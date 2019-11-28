@@ -34,7 +34,7 @@ public class ${parameter.javaTypeName}RowMapperTest {
 
 <#list parameter.parameters as paramrs>
 <#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        Mockito.when(resultSet.getTimestamp(Mockito.eq("${paramrs.name}"))).thenReturn(${paramrs.fieldName});
+        Mockito.when(resultSet.getTimestamp(Mockito.eq("${paramrs.name}"))).thenReturn(new java.sql.Timestamp(${paramrs.fieldName}.getTime()));
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
         Mockito.when(resultSet.getString(Mockito.eq("${paramrs.name}"))).thenReturn(${paramrs.fieldName});
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>

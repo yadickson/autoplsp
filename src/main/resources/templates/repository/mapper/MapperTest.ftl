@@ -25,6 +25,8 @@ public class ${parameter.javaTypeName}RowMapperTest {
         ${paramrs.javaTypeName} ${paramrs.fieldName} = new java.util.Date();
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
         ${paramrs.javaTypeName} ${paramrs.fieldName} = new ${paramrs.javaTypeName}[0];
+<#elseif paramrs.sqlTypeName == 'java.sql.Types.NUMERIC'>
+        ${paramrs.javaTypeName} ${paramrs.fieldName} = ${paramrs.position};
 <#else>
         ${paramrs.javaTypeName} ${paramrs.fieldName} = "${paramrs.name}";
 </#if>

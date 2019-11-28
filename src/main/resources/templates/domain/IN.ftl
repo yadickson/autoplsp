@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-<#if proc.hasInput>
 package ${javaPackage}.domain;
 
 <#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
@@ -30,13 +29,12 @@ import lombok.NoArgsConstructor;
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */
-<#if lombok>
+ */<#if lombok>
 <#if proc.hasInput>@AllArgsConstructor</#if>
 @Getter
 @Setter
-@NoArgsConstructor</#if>
-<#if jsonNonNull>@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+@NoArgsConstructor</#if><#if jsonNonNull>
+@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
 @SuppressWarnings({"deprecation"})
 public final class ${proc.className}IN
         implements java.io.Serializable {
@@ -73,8 +71,7 @@ public final class ${proc.className}IN
         <#list proc.inputParameters as parameter>
         this.${parameter.fieldName} = p${parameter.propertyName};
         </#list>
-    }</#if>
-<#list proc.inputParameters as parameter><#if !lombok || parameter.date>
+    }</#if><#list proc.inputParameters as parameter><#if !lombok || parameter.date>
 
     /**
      * Getter for ${parameter.fieldName}.
@@ -92,6 +89,4 @@ public final class ${proc.className}IN
      */
     public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
         this.${parameter.fieldName} = p${parameter.propertyName};
-    }</#if></#list>
-}
-</#if>
+    }</#if></#list>}

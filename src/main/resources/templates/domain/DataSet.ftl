@@ -14,10 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-<#if parameter.resultSet || parameter.returnResultSet>
 package ${javaPackage}.domain;
 
 <#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
+
+</#if><#if lombok>import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 </#if>
 /**
@@ -25,8 +29,13 @@ package ${javaPackage}.domain;
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */<#if jsonNonNull>
+ */<#if lombok>
+@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor</#if><#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+@SuppressWarnings({"deprecation"})
 public final class ${parameter.javaTypeName}
         implements java.io.Serializable {
 
@@ -34,14 +43,16 @@ public final class ${parameter.javaTypeName}
      * Serialization.
      */
     static final long serialVersionUID = 1L;
-    <#list parameter.parameters as parameter2>
 
+<#list parameter.parameters as parameter2>
     /**
      * Field parameter ${parameter2.fieldName}.
-     */
+     */<#if lombok && parameter2.date>
+    @Getter(lombok.AccessLevel.NONE)
+    @Setter(lombok.AccessLevel.NONE)</#if>
     private ${parameter2.javaTypeName} ${parameter2.fieldName} = null;
-    </#list>
 
+</#list><#if !lombok>
     /**
      * Class constructor ${parameter.javaTypeName}.
      */
@@ -61,9 +72,8 @@ public final class ${parameter.javaTypeName}
         <#list parameter.parameters as parameter2>
         this.${parameter2.fieldName} = p${parameter2.fieldName};
         </#list>
-    }
+    }</#if><#list parameter.parameters as parameter2><#if !lombok || parameter2.date>
 
-    <#list parameter.parameters as parameter2>
     /**
      * Getter for ${parameter2.fieldName}.
      *
@@ -80,8 +90,4 @@ public final class ${parameter.javaTypeName}
      */
     public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} p${parameter2.fieldName}) {
         this.${parameter2.fieldName} = p${parameter2.fieldName};
-    }
-
-    </#list>
-}
-</#if>
+    }</#if></#list>}

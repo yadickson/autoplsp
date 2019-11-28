@@ -18,13 +18,22 @@ package ${javaPackage}.domain;
 
 <#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
 
+</#if><#if lombok><#if proc.hasOutput>import lombok.AllArgsConstructor;</#if>
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+
 </#if>
 /**
  * Output parameters for stored procedure ${proc.fullName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */<#if jsonNonNull>
+ */<#if lombok>
+<#if proc.hasOutput>@AllArgsConstructor</#if>
+@Getter
+@Setter
+@NoArgsConstructor</#if><#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)</#if>
 @SuppressWarnings({"deprecation"})
 public final class ${proc.className}OUT
@@ -34,16 +43,18 @@ public final class ${proc.className}OUT
      * Serialization.
      */
     static final long serialVersionUID = 1L;
-    <#list proc.outputParameters as parameter>
 
+<#list proc.outputParameters as parameter>
     /**
      * Output parameter ${parameter.fieldName}.
-     */
+     */<#if lombok && parameter.date>
+    @Getter(lombok.AccessLevel.NONE)
+    @Setter(lombok.AccessLevel.NONE)</#if>
     private <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName} = null;
-    </#list>
 
+</#list><#if !lombok>
     /**
-     * Class constructor ${proc.className}IN.
+     * Class constructor ${proc.className}OUT.
      */
     public ${proc.className}OUT() {
     }
@@ -60,9 +71,8 @@ public final class ${proc.className}OUT
         <#list proc.outputParameters as parameter>
         this.${parameter.fieldName} = p${parameter.propertyName};
         </#list>
-    }
+    }</#if><#list proc.outputParameters as parameter><#if !lombok || parameter.date>
 
-    <#list proc.outputParameters as parameter>
     /**
      * Getter for ${parameter.fieldName}.
      *
@@ -79,7 +89,4 @@ public final class ${proc.className}OUT
      */
     public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
         this.${parameter.fieldName} = p${parameter.propertyName};
-    }
-
-    </#list>
-}
+    }</#if></#list>}

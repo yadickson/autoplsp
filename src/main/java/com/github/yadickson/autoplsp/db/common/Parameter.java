@@ -182,6 +182,15 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Method to know if parameter is date.
+     *
+     * @return true if date
+     */
+    public boolean isDate() {
+        return false;
+    }
+
+    /**
      * Method to know if parameter is void.
      *
      * @return true if boolean

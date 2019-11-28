@@ -297,6 +297,16 @@ public class AutoGenerator extends AbstractMojo {
     private String addPackagename;
 
     /**
+     * Add lombok support.
+     */
+    @Parameter(
+            property = "autoplsp.lombok",
+            defaultValue = "false",
+            readonly = true,
+            required = true)
+    private String lombok;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -324,6 +334,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] Encode: " + encode);
         getLog().info("[AutoGenerator] JsonNonNull: " + jsonNonNull);
         getLog().info("[AutoGenerator] AddPackagename: " + addPackagename);
+        getLog().info("[AutoGenerator] Lombok: " + lombok);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
@@ -489,6 +500,7 @@ public class AutoGenerator extends AbstractMojo {
                     javaJdbcTemplateName,
                     encode,
                     jsonNonNull.equalsIgnoreCase("true"),
+                    lombok.equalsIgnoreCase("true"),
                     outParameterCode,
                     outParameterMessage,
                     generator.getName(),

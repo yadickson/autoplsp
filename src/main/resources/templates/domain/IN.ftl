@@ -19,14 +19,24 @@ package ${javaPackage}.domain;
 
 <#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
 
+</#if><#if lombok><#if proc.hasInput>import lombok.AllArgsConstructor;</#if>
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+
 </#if>
 /**
  * Input parameters for stored procedure ${proc.fullName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */<#if jsonNonNull>
-@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+ */
+<#if lombok>
+<#if proc.hasInput>@AllArgsConstructor</#if>
+@Getter
+@Setter
+@NoArgsConstructor</#if>
+<#if jsonNonNull>@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
 @SuppressWarnings({"deprecation"})
 public final class ${proc.className}IN
         implements java.io.Serializable {
@@ -35,14 +45,16 @@ public final class ${proc.className}IN
      * Serialization.
      */
     static final long serialVersionUID = 1L;
-    <#list proc.inputParameters as parameter>
 
+<#list proc.inputParameters as parameter>
     /**
      * Input parameter ${parameter.fieldName}.
-     */
+     */<#if lombok && parameter.date>
+    @Getter(lombok.AccessLevel.NONE)
+    @Setter(lombok.AccessLevel.NONE)</#if>
     private ${parameter.javaTypeName} ${parameter.fieldName} = null;
-    </#list>
 
+</#list><#if !lombok>
     /**
      * Class constructor ${proc.className}IN.
      */
@@ -61,9 +73,9 @@ public final class ${proc.className}IN
         <#list proc.inputParameters as parameter>
         this.${parameter.fieldName} = p${parameter.propertyName};
         </#list>
-    }
+    }</#if>
+<#list proc.inputParameters as parameter><#if !lombok || parameter.date>
 
-    <#list proc.inputParameters as parameter>
     /**
      * Getter for ${parameter.fieldName}.
      *
@@ -80,8 +92,6 @@ public final class ${proc.className}IN
      */
     public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
         this.${parameter.fieldName} = p${parameter.propertyName};
-    }
-
-    </#list>
+    }</#if></#list>
 }
 </#if>

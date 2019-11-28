@@ -41,6 +41,7 @@ public class JavaGenerator extends TemplateGenerator {
     private final String jdbcTemplate;
     private final String encode;
     private final Boolean jsonNonNull;
+    private final Boolean lombok;
     private final String outParameterCode;
     private final String outParameterMessage;
     private final String folderNameGenerator;
@@ -61,6 +62,7 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String JDBC_TEMPLATE_NAME = "jdbcTemplate";
     private static final String ENCODE = "encode";
     private static final String JSON_NON_NULL = "jsonNonNull";
+    private static final String LOMBOK = "lombok";
     private static final String OUT_CODE_NAME = "outParameterCode";
     private static final String OUT_MESSAGE_NAME = "outParameterMessage";
     private static final String EXT_FILE = ".java";
@@ -77,6 +79,8 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String DRIVER_NAME = "driverName";
     private static final String DRIVER_VERSION = "driverVersion";
 
+    private boolean checkResult;
+    
     /**
      * Class constructor
      *
@@ -87,6 +91,7 @@ public class JavaGenerator extends TemplateGenerator {
      * @param jdbcTemplate JdbcTemplate name
      * @param encode encode data base.
      * @param jsonNonNull json non null support.
+     * @param lombok lombok support.
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
      * @param driverName driver name
@@ -99,6 +104,7 @@ public class JavaGenerator extends TemplateGenerator {
             final String jdbcTemplate,
             final String encode,
             final Boolean jsonNonNull,
+            final Boolean lombok,
             final String outParameterCode,
             final String outParameterMessage,
             final String driverName,
@@ -111,6 +117,7 @@ public class JavaGenerator extends TemplateGenerator {
         this.jdbcTemplate = jdbcTemplate;
         this.encode = encode;
         this.jsonNonNull = jsonNonNull;
+        this.lombok = lombok;
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
         this.driverName = driverName;
@@ -127,6 +134,8 @@ public class JavaGenerator extends TemplateGenerator {
     public void processProcedures(List<Procedure> procedures) throws BusinessException {
         LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedures.size() + " procedures");
 
+        checkResult = false;
+        
         for (Procedure procedure : procedures) {
 
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedure.getFullName());
@@ -146,8 +155,12 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
+        input.put(LOMBOK, lombok);
+        input.put(OUT_CODE_NAME, outParameterCode);
+        input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
-        if (procedure.isCheckResult()) {
+        if (procedure.isCheckResult() && !checkResult) {
+            checkResult = true;
             createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
             createTemplate(input, UTIL_PATH + "CheckResult.ftl", getUtilOutputFilePath("CheckResult.java"));
         }
@@ -165,6 +178,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
+        input.put(LOMBOK, lombok);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
@@ -182,6 +196,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
+        input.put(LOMBOK, lombok);
 
         if (!procedure.getHasInput() && !procedure.getHasOutput()) {
             return;
@@ -207,6 +222,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
+        input.put(LOMBOK, lombok);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -230,6 +246,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
+        input.put(LOMBOK, lombok);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -259,6 +276,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(DRIVER_VERSION, driverVersion);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
+        input.put(LOMBOK, lombok);
 
         String parameterPath = getDomainOutputPath("");
 
@@ -292,6 +310,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(DRIVER_VERSION, driverVersion);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
+        input.put(LOMBOK, lombok);
 
         String typePath = getTypeOutputPath("");
 
@@ -332,6 +351,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(DRIVER_VERSION, driverVersion);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
+        input.put(LOMBOK, lombok);
 
         String parameterPath = getMapperOutputPath("");
 

@@ -71,4 +71,14 @@ public class DateParameter extends Parameter {
     public String getSqlTypeName() {
         return "java.sql.Types.TIMESTAMP";
     }
+
+    /**
+     * Method to know if parameter is date.
+     *
+     * @return true if date
+     */
+    @Override
+    public boolean isDate() {
+        return true;
+    }
 }

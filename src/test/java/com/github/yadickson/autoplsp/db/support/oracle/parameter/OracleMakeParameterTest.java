@@ -62,7 +62,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("char", 1, "charName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof CharParameter);
-        assertEquals(new Integer(1), parameter.getPosition());
+        assertEquals((Integer) 1, parameter.getPosition());
         assertEquals("charName", parameter.getName());
         assertEquals(Direction.INPUT, parameter.getDirection());
     }
@@ -72,7 +72,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("varchar2", 2, "vcName", Direction.OUTPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof CharParameter);
-        assertEquals(new Integer(2), parameter.getPosition());
+        assertEquals((Integer) 2, parameter.getPosition());
         assertEquals("vcName", parameter.getName());
         assertEquals(Direction.OUTPUT, parameter.getDirection());
     }
@@ -82,7 +82,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("number", 1, "numberName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof NumberParameter);
-        assertEquals(new Integer(1), parameter.getPosition());
+        assertEquals((Integer) 1, parameter.getPosition());
         assertEquals("numberName", parameter.getName());
         assertEquals(Direction.INPUT, parameter.getDirection());
     }
@@ -92,7 +92,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("decimal", 2, "decimalName", Direction.OUTPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof NumberParameter);
-        assertEquals(new Integer(2), parameter.getPosition());
+        assertEquals((Integer) 2, parameter.getPosition());
         assertEquals("decimalName", parameter.getName());
         assertEquals(Direction.OUTPUT, parameter.getDirection());
     }
@@ -102,7 +102,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("clob", 1, "clobName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof ClobParameter);
-        assertEquals(new Integer(1), parameter.getPosition());
+        assertEquals((Integer) 1, parameter.getPosition());
         assertEquals("clobName", parameter.getName());
         assertEquals(Direction.INPUT, parameter.getDirection());
     }
@@ -112,7 +112,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("blob", 1, "blobName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof BlobParameter);
-        assertEquals(new Integer(1), parameter.getPosition());
+        assertEquals((Integer) 1, parameter.getPosition());
         assertEquals("blobName", parameter.getName());
         assertEquals(Direction.INPUT, parameter.getDirection());
     }
@@ -122,7 +122,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("date", 1, "dateName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof DateParameter);
-        assertEquals(new Integer(1), parameter.getPosition());
+        assertEquals((Integer) 1, parameter.getPosition());
         assertEquals("dateName", parameter.getName());
         assertEquals(Direction.INPUT, parameter.getDirection());
     }
@@ -132,7 +132,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("timestamp", 2, "tsName", Direction.OUTPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof DateParameter);
-        assertEquals(new Integer(2), parameter.getPosition());
+        assertEquals((Integer) 2, parameter.getPosition());
         assertEquals("tsName", parameter.getName());
         assertEquals(Direction.OUTPUT, parameter.getDirection());
     }
@@ -142,7 +142,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("rowid", 1, "rowName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleRowIdParameter);
-        assertEquals(new Integer(1), parameter.getPosition());
+        assertEquals((Integer) 1, parameter.getPosition());
         assertEquals("rowName", parameter.getName());
         assertEquals(Direction.INPUT, parameter.getDirection());
     }
@@ -157,7 +157,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("cursor", 1, "rc_name", Direction.OUTPUT, null, null, new Procedure(true, "package", "test", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleDataSetParameter);
-        assertEquals(new Integer(1), parameter.getPosition());
+        assertEquals((Integer) 1, parameter.getPosition());
         assertEquals("rc_name", parameter.getName());
         assertEquals("rcName", parameter.getFieldName());
         assertEquals(Direction.OUTPUT, parameter.getDirection());
@@ -169,7 +169,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("cursor", 1, "rc_name", Direction.OUTPUT, null, null, new Procedure(false, "package", "test", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleDataSetParameter);
-        assertEquals(new Integer(1), parameter.getPosition());
+        assertEquals((Integer) 1, parameter.getPosition());
         assertEquals("rc_name", parameter.getName());
         assertEquals("rcName", parameter.getFieldName());
         assertEquals(Direction.OUTPUT, parameter.getDirection());
@@ -186,7 +186,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("object", 1, "objName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleObjectParameter);
-        assertEquals(new Integer(1), parameter.getPosition());
+        assertEquals((Integer) 1, parameter.getPosition());
         assertEquals("objName", parameter.getName());
         assertEquals(Direction.INPUT, parameter.getDirection());
         assertNotNull(parameter.getParameters());
@@ -202,7 +202,7 @@ public class OracleMakeParameterTest {
         Parameter parameter = maker.create("table", 1, "tName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleTableParameter);
-        assertEquals(new Integer(1), parameter.getPosition());
+        assertEquals((Integer) 1, parameter.getPosition());
         assertEquals("tName", parameter.getName());
         assertEquals(Direction.INPUT, parameter.getDirection());
         assertNotNull(parameter.getParameters());

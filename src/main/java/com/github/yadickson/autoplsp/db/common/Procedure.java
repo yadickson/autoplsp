@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp.db.common;
 
+import com.github.yadickson.autoplsp.handler.BusinessException;
 import java.util.ArrayList;
 import java.util.List;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
@@ -164,6 +165,30 @@ public class Procedure implements Serializable {
         for (Parameter param : this.parameters) {
             if (param.isArray()) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Getter is procedure has date type parameter.
+     *
+     * @return true is has date type parameter
+     * @throws BusinessException if error
+     */
+    public boolean getHasDate() throws BusinessException {
+        for (Parameter param : this.parameters) {
+            if (param.isDate()) {
+                return true;
+            }
+
+            if (param.isResultSet() || param.isReturnResultSet()) {
+                for (Parameter param2 : param.getParameters()) {
+                    if (param2.isDate()) {
+                        return true;
+                    }
+                }
             }
         }
 

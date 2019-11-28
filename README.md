@@ -83,13 +83,6 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
     <version>4.x.x.RELEASE</version>
     <scope>provided</scope>
 </dependency> 
-
-<dependency>
-    <groupId>commons-lang</groupId>
-    <artifactId>commons-lang</artifactId>
-    <version>2.6</version>
-    <scope>provided</scope>
-</dependency>
         
 <dependency>
     <groupId>commons-io</groupId>

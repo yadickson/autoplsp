@@ -1,4 +1,4 @@
-/*
+<#if header>/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,14 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+</#if>
 package ${javaPackage}.domain;
 
-<#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
-
-</#if><#if lombok>import lombok.AllArgsConstructor;
+<#if lombok><#if proc.hasInput>import lombok.AllArgsConstructor;</#if>
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+</#if>
+<#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
 
 </#if>
 /**
@@ -30,29 +32,31 @@ import lombok.NoArgsConstructor;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */<#if lombok>
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
-@NoArgsConstructor</#if><#if jsonNonNull>
+@Setter</#if><#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)</#if>
 @SuppressWarnings({"deprecation"})
-public final class ${parameter.javaTypeName}
-        implements java.io.Serializable {
+public final class ${parameter.javaTypeName}<#if serialization> implements java.io.Serializable</#if> {
+<#if serialization> 
 
     /**
      * Serialization.
      */
     static final long serialVersionUID = 1L;
-
+</#if>
 <#list parameter.parameters as parameter2>
+
     /**
      * Field parameter ${parameter2.fieldName}.
      */<#if lombok && parameter2.date>
     @Getter(lombok.AccessLevel.NONE)
     @Setter(lombok.AccessLevel.NONE)</#if>
     private ${parameter2.javaTypeName} ${parameter2.fieldName} = null;
+</#list>
+<#if !lombok>
 
-</#list><#if !lombok>
     /**
      * Class constructor ${parameter.javaTypeName}.
      */
@@ -72,7 +76,10 @@ public final class ${parameter.javaTypeName}
         <#list parameter.parameters as parameter2>
         this.${parameter2.fieldName} = p${parameter2.fieldName};
         </#list>
-    }</#if><#list parameter.parameters as parameter2><#if !lombok || parameter2.date>
+    }
+</#if>
+<#list parameter.parameters as parameter2>
+<#if !lombok || parameter2.date>
 
     /**
      * Getter for ${parameter2.fieldName}.
@@ -80,7 +87,7 @@ public final class ${parameter.javaTypeName}
      * @return ${parameter2.fieldName}
      */
     public ${parameter2.javaTypeName} get${parameter2.propertyName}() {
-        return ${parameter2.fieldName};
+        return <#if parameter2.date>${javaPackage}.util.DateUtil.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
     }
 
     /**
@@ -89,5 +96,8 @@ public final class ${parameter.javaTypeName}
      * @param p${parameter2.fieldName} ${parameter2.fieldName}
      */
     public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} p${parameter2.fieldName}) {
-        this.${parameter2.fieldName} = p${parameter2.fieldName};
-    }</#if></#list>}
+        this.${parameter2.fieldName} = <#if parameter2.date>${javaPackage}.util.DateUtil.process(</#if>p${parameter2.fieldName}<#if parameter2.date>)</#if>;
+    }
+</#if>
+</#list>
+}

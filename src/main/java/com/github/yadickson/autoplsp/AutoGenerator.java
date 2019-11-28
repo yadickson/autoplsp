@@ -293,7 +293,7 @@ public class AutoGenerator extends AbstractMojo {
             property = "autoplsp.addPackagename",
             defaultValue = "true",
             readonly = true,
-            required = true)
+            required = false)
     private String addPackagename;
 
     /**
@@ -303,8 +303,28 @@ public class AutoGenerator extends AbstractMojo {
             property = "autoplsp.lombok",
             defaultValue = "false",
             readonly = true,
-            required = true)
+            required = false)
     private String lombok;
+
+    /**
+     * Add header support.
+     */
+    @Parameter(
+            property = "autoplsp.header",
+            defaultValue = "true",
+            readonly = true,
+            required = false)
+    private String header;
+
+    /**
+     * Add serialization support.
+     */
+    @Parameter(
+            property = "autoplsp.serialization",
+            defaultValue = "true",
+            readonly = true,
+            required = false)
+    private String serialization;
 
     /**
      * Maven execute method.
@@ -335,6 +355,8 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] JsonNonNull: " + jsonNonNull);
         getLog().info("[AutoGenerator] AddPackagename: " + addPackagename);
         getLog().info("[AutoGenerator] Lombok: " + lombok);
+        getLog().info("[AutoGenerator] Header: " + header);
+        getLog().info("[AutoGenerator] Serialization: " + serialization);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
@@ -501,6 +523,8 @@ public class AutoGenerator extends AbstractMojo {
                     encode,
                     jsonNonNull.equalsIgnoreCase("true"),
                     lombok.equalsIgnoreCase("true"),
+                    header.equalsIgnoreCase("true"),
+                    serialization.equalsIgnoreCase("true"),
                     outParameterCode,
                     outParameterMessage,
                     generator.getName(),

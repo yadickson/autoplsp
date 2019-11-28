@@ -1,4 +1,4 @@
-/*
+<#if header>/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-<#if parameter.array>
+</#if>
 package ${javaPackage}.domain;
 
 <#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,14 +28,14 @@ package ${javaPackage}.domain;
  */<#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)</#if>
 @SuppressWarnings({"deprecation"})
-public final class ${parameter.javaTypeName}
-        extends java.util.ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}>
-        implements java.io.Serializable {
+public final class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}><#if serialization> implements java.io.Serializable</#if> {
+<#if serialization> 
 
     /**
      * Serialization.
      */
     static final long serialVersionUID = 1L;
+</#if>
 
     /**
      * Getter data object type.
@@ -67,4 +67,3 @@ public final class ${parameter.javaTypeName}
 </#if>
     }
 }
-</#if>

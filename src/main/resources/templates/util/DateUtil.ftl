@@ -15,34 +15,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.table.column.type;
+package ${javaPackage}.util;
 
 /**
- * Binary Field.
+ * Utility to process date class.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface BinaryField {
+public final class DateUtil {
 
     /**
-     * @return the minSize
+     * Process date.
+     *
+     * @param input date to process.
+     * @return date.
      */
-    int getMinSize();
+    public static java.util.Date process(
+            final java.util.Date input
+    ) {
 
-    /**
-     * @return the maxByteSize
-     */
-    int getMaxByteSize();
+        if (input == null) {
+            return null;
+        }
 
-    /**
-     * @return the defaultValue
-     */
-    byte[] getDefaultValue();
-
-    /**
-     * @return the notNull
-     */
-    Boolean getNotNull();
+        return (java.util.Date) input.clone();
+    }
 
 }

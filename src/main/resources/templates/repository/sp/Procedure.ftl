@@ -1,4 +1,4 @@
-/*
+<#if header>/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+</#if>
 package ${javaPackage}.repository.sp;
 
 <#list proc.parameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
 import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
 </#if>
-</#list>import org.springframework.jdbc.object.<#if !proc.functionInline>StoredProcedure<#else>GenericSqlQuery</#if>;
+</#list>
 
 /**
  * JDBC to <#if proc.function>function<#else>stored procedure</#if> ${proc.fullName}.
@@ -29,8 +30,7 @@ import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
  * @version @GENERATOR.VERSION@
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public final class ${proc.className}SP
-        extends <#if !proc.functionInline>StoredProcedure<#else>GenericSqlQuery</#if> {
+public final class ${proc.className}SP extends org.springframework.jdbc.object.<#if !proc.functionInline>StoredProcedure<#else>GenericSqlQuery</#if> {
 
     /**
      * Full procedure name.
@@ -43,28 +43,34 @@ public final class ${proc.className}SP
      * @param jdbcTemplate jdbcTemplate
      */
     public ${proc.className}SP(final org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
-        <#if !proc.functionInline>
+<#if !proc.functionInline>
         super(jdbcTemplate.getDataSource(), SPROC_NAME);
+
         setFunction(<#if proc.function>true<#else>false</#if>);
-        <#list proc.parameters as parameter>
+
+<#list proc.parameters as parameter>
         declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >, ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >, new ${parameter.javaTypeName}RowMapper()</#if>));
-        </#list>
-        <#else>
+</#list>
+<#else>
         super();
+
         setDataSource(jdbcTemplate.getDataSource());
+
         setSql("select * from ${proc.fullName}(<#list proc.inputParameters as parameter>?<#sep>, </#sep></#list>)");
-        <#list proc.parameters as parameter>
-        <#if !parameter.returnResultSet>
+
+<#list proc.parameters as parameter>
+<#if !parameter.returnResultSet>
         declareParameter(new org.springframework.jdbc.core.<#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>("${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >, ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >, new ${parameter.javaTypeName}RowMapper()</#if>));
-        <#else>
+<#else>
         try {
             setRowMapperClass(new ${parameter.javaTypeName}RowMapper().getClass());
         } catch (Exception ex) {
 
         }
-        </#if>
-        </#list>
-        </#if>
+</#if>
+</#list>
+</#if>
+
         compile();
     }
 
@@ -74,9 +80,17 @@ public final class ${proc.className}SP
      * @return response.
      * @param params input parameters.
      */
-    public java.util.Map runExecute(java.util.Map params) {
-        <#if !proc.functionInline>return super.execute(params);<#else>java.util.Map map = new java.util.HashMap<Object, Object>();
-        <#list proc.parameters as parameter><#if parameter.returnResultSet>map.put("${parameter.prefix}${parameter.name}", super.execute(params.values().toArray()));</#if></#list>
-        return map;</#if>
+    public java.util.Map runExecute(final java.util.Map params) {
+<#if !proc.functionInline>
+        return super.execute(params);
+<#else>
+        java.util.Map map = new java.util.HashMap<Object, Object>();
+<#list proc.parameters as parameter>
+<#if parameter.returnResultSet>
+        map.put("${parameter.prefix}${parameter.name}", super.execute(params.values().toArray()));
+</#if>
+</#list>
+        return map;
+</#if>
     }
 }

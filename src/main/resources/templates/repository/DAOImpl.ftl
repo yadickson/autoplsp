@@ -1,4 +1,4 @@
-/*
+<#if header>/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+</#if>
 package ${javaPackage}.repository;
 
 <#if proc.hasInput>
@@ -39,12 +40,14 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @SuppressWarnings({"rawtypes", "unchecked"})
-public final class ${proc.className}DAOImpl
-        implements ${proc.className}DAO {
+public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 
-    <#if proc.hasObject || proc.hasArray>
+<#if proc.hasObject || proc.hasArray>
+    /**
+     * JDBC template to use.
+     */
     private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
-    </#if>
+</#if>
     /**
      * <#if proc.function>Function<#else>Stored procedure</#if> ${proc.fullName}.
      */
@@ -56,47 +59,47 @@ public final class ${proc.className}DAOImpl
      * @param pjdbcTemplate jdbcTemplate
      */
     @Resource(name="${jdbcTemplate}")
-    public void setJdbcTemplate(
-        final org.springframework.jdbc.core.JdbcTemplate pjdbcTemplate
-        ) {
-        <#if proc.hasObject || proc.hasArray>
+    public void setJdbcTemplate(final org.springframework.jdbc.core.JdbcTemplate pjdbcTemplate) {
+<#if proc.hasObject || proc.hasArray>
         this.jdbcTemplate = pjdbcTemplate;
-        </#if>
+</#if>
         this.sp = new ${proc.className}SP(pjdbcTemplate);
     }
 
     /**
      * Execute <#if proc.function>function<#else>stored procedure</#if> ${proc.fullName}.
      *
-     * <#if proc.hasInput>@param params input parameters</#if>
-     * <#if proc.hasOutput>@return output parameters</#if>
+<#if proc.hasInput>
+     * @param params input parameters
+</#if>
+<#if proc.hasOutput>
+     * @return output parameters
+</#if>
      * @throws java.sql.SQLException if error.
      */
     @Override
-    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>
-        final ${proc.className}IN params</#if>
-    ) throws java.sql.SQLException {
+    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>final ${proc.className}IN params</#if>) throws java.sql.SQLException {
 
         java.util.Map mparams = new java.util.HashMap();
-        <#if proc.hasOutput>
+<#if proc.hasOutput>
         java.util.Map r;
-        </#if>
+</#if>
 
         try {
-        <#list proc.inputParameters as parameter>
-        <#if parameter.object || parameter.array>
+<#list proc.inputParameters as parameter>
+<#if parameter.object || parameter.array>
             mparams.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}().processObject(org.springframework.jdbc.datasource.DataSourceUtils.getConnection(jdbcTemplate.getDataSource())));
-        <#else>
+<#else>
             mparams.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}());
-        </#if>
-        </#list>
-        <#if !proc.hasOutput>
+</#if>
+</#list>
+<#if !proc.hasOutput>
             this.sp.execute(mparams);
         } catch (Exception ex) {
             throw new java.sql.SQLException(ex);
         }
-        </#if>
-        <#if proc.hasOutput>
+</#if>
+<#if proc.hasOutput>
             r = this.sp.runExecute(mparams);
         } catch (Exception ex) {
             throw new java.sql.SQLException(ex);
@@ -107,8 +110,8 @@ public final class ${proc.className}DAOImpl
         ${proc.className}OUT result = new ${proc.className}OUT();
 
         try {
-        <#list proc.outputParameters as parameter>
-        <#if parameter.sqlTypeName == 'java.sql.Types.CLOB' >
+<#list proc.outputParameters as parameter>
+<#if parameter.sqlTypeName == 'java.sql.Types.CLOB' >
             java.sql.Clob clob${parameter.propertyName};
             clob${parameter.propertyName} = (java.sql.Clob) m.get("${parameter.prefix}${parameter.name}");
             String string${parameter.propertyName} = null;
@@ -122,7 +125,7 @@ public final class ${proc.className}DAOImpl
             }
 
             result.set${parameter.propertyName}(string${parameter.propertyName});
-        <#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
+<#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
             java.sql.Blob blob${parameter.propertyName} = (java.sql.Blob) m.get("${parameter.prefix}${parameter.name}");
             byte [] bytes${parameter.propertyName} = null;
 
@@ -135,18 +138,18 @@ public final class ${proc.className}DAOImpl
             }
 
             result.set${parameter.propertyName}(bytes${parameter.propertyName});
-        <#elseif parameter.resultSet || parameter.returnResultSet>
+<#elseif parameter.resultSet || parameter.returnResultSet>
             result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>) m.get("${parameter.prefix}${parameter.name}"));
-        <#else>
+<#else>
             result.set${parameter.propertyName}((${parameter.javaTypeName}) m.get("${parameter.prefix}${parameter.name}"));
-        </#if>
-        </#list>
+</#if>
+</#list>
         } catch (Exception ex) {
             throw new java.sql.SQLException(ex);
         }
 
         return result;
-        </#if>
+</#if>
     }
 
 }

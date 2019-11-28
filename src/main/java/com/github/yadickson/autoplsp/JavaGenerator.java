@@ -42,6 +42,8 @@ public class JavaGenerator extends TemplateGenerator {
     private final String encode;
     private final Boolean jsonNonNull;
     private final Boolean lombok;
+    private final Boolean header;
+    private final Boolean serialization;
     private final String outParameterCode;
     private final String outParameterMessage;
     private final String folderNameGenerator;
@@ -63,6 +65,8 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String ENCODE = "encode";
     private static final String JSON_NON_NULL = "jsonNonNull";
     private static final String LOMBOK = "lombok";
+    private static final String HEADER = "header";
+    private static final String SERIALIZATION = "serialization";
     private static final String OUT_CODE_NAME = "outParameterCode";
     private static final String OUT_MESSAGE_NAME = "outParameterMessage";
     private static final String EXT_FILE = ".java";
@@ -80,7 +84,9 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String DRIVER_VERSION = "driverVersion";
 
     private boolean checkResult;
-    
+    private boolean addTypeTable;
+    private boolean addDateUtil;
+
     /**
      * Class constructor
      *
@@ -92,6 +98,8 @@ public class JavaGenerator extends TemplateGenerator {
      * @param encode encode data base.
      * @param jsonNonNull json non null support.
      * @param lombok lombok support.
+     * @param header The header support.
+     * @param serialization The serialization support.
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
      * @param driverName driver name
@@ -105,6 +113,8 @@ public class JavaGenerator extends TemplateGenerator {
             final String encode,
             final Boolean jsonNonNull,
             final Boolean lombok,
+            final Boolean header,
+            final Boolean serialization,
             final String outParameterCode,
             final String outParameterMessage,
             final String driverName,
@@ -118,6 +128,8 @@ public class JavaGenerator extends TemplateGenerator {
         this.encode = encode;
         this.jsonNonNull = jsonNonNull;
         this.lombok = lombok;
+        this.header = header;
+        this.serialization = serialization;
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
         this.driverName = driverName;
@@ -135,7 +147,9 @@ public class JavaGenerator extends TemplateGenerator {
         LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedures.size() + " procedures");
 
         checkResult = false;
-        
+        addTypeTable = false;
+        addDateUtil = false;
+
         for (Procedure procedure : procedures) {
 
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedure.getFullName());
@@ -156,6 +170,8 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
+        input.put(HEADER, header);
+        input.put(SERIALIZATION, serialization);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
@@ -163,6 +179,12 @@ public class JavaGenerator extends TemplateGenerator {
             checkResult = true;
             createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
             createTemplate(input, UTIL_PATH + "CheckResult.ftl", getUtilOutputFilePath("CheckResult.java"));
+        }
+
+        if (procedure.getHasDate()&& !addDateUtil) {
+            addDateUtil = true;
+            createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(input, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath("DateUtil.java"));
         }
 
         createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
@@ -179,6 +201,8 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
+        input.put(HEADER, header);
+        input.put(SERIALIZATION, serialization);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
@@ -197,6 +221,8 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
+        input.put(HEADER, header);
+        input.put(SERIALIZATION, serialization);
 
         if (!procedure.getHasInput() && !procedure.getHasOutput()) {
             return;
@@ -223,6 +249,8 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
+        input.put(HEADER, header);
+        input.put(SERIALIZATION, serialization);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -247,6 +275,8 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
+        input.put(HEADER, header);
+        input.put(SERIALIZATION, serialization);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -277,6 +307,8 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
+        input.put(HEADER, header);
+        input.put(SERIALIZATION, serialization);
 
         String parameterPath = getDomainOutputPath("");
 
@@ -292,7 +324,7 @@ public class JavaGenerator extends TemplateGenerator {
             if (param.isArray()) {
                 input.put(PARAMETER_NAME, param);
                 createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
-                createTemplate(input, DOMAIN_PATH + "Table.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
+                createTemplate(input, DOMAIN_PATH + "Array.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
             }
         }
     }
@@ -311,14 +343,20 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
+        input.put(HEADER, header);
+        input.put(SERIALIZATION, serialization);
 
-        String typePath = getTypeOutputPath("");
+        if (!addTypeTable) {
 
-        createTemplate(input, TYPE_PATH + "FieldType.ftl", getFileNameTypePath(typePath, "FieldType"));
-        createTemplate(input, TYPE_PATH + "BinaryField.ftl", getFileNameTypePath(typePath, "BinaryField"));
-        createTemplate(input, TYPE_PATH + "CharacterField.ftl", getFileNameTypePath(typePath, "CharacterField"));
-        createTemplate(input, TYPE_PATH + "NumericField.ftl", getFileNameTypePath(typePath, "NumericField"));
-        createTemplate(input, TYPE_PATH + "DateField.ftl", getFileNameTypePath(typePath, "DateField"));
+            addTypeTable = true;
+            String typePath = getTypeOutputPath("");
+
+            createTemplate(input, TYPE_PATH + "FieldType.ftl", getFileNameTypePath(typePath, "FieldType"));
+            createTemplate(input, TYPE_PATH + "BinaryField.ftl", getFileNameTypePath(typePath, "BinaryField"));
+            createTemplate(input, TYPE_PATH + "CharacterField.ftl", getFileNameTypePath(typePath, "CharacterField"));
+            createTemplate(input, TYPE_PATH + "NumericField.ftl", getFileNameTypePath(typePath, "NumericField"));
+            createTemplate(input, TYPE_PATH + "DateField.ftl", getFileNameTypePath(typePath, "DateField"));
+        }
 
         String tablePath = getTableOutputPath("");
         String tableFieldPath = getTableOutputPath(COLUMN_NAME);
@@ -352,6 +390,8 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
+        input.put(HEADER, header);
+        input.put(SERIALIZATION, serialization);
 
         String parameterPath = getMapperOutputPath("");
 

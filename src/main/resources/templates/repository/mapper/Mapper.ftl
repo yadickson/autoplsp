@@ -1,4 +1,4 @@
-/*
+<#if header>/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-<#if parameter.resultSet || parameter.returnResultSet>
+</#if>
 package ${javaPackage}.repository.mapper;
 
 import ${javaPackage}.domain.${parameter.javaTypeName};
@@ -27,8 +27,7 @@ import org.springframework.jdbc.core.RowMapper;
  * @version @GENERATOR.VERSION@
  */
 @SuppressWarnings({"rawtypes", "unchecked", "cast"})
-public final class ${parameter.javaTypeName}RowMapper
-        implements RowMapper<${parameter.javaTypeName}> {
+public final class ${parameter.javaTypeName}RowMapper implements RowMapper<${parameter.javaTypeName}> {
 
     /**
      * Resultset mapper.
@@ -45,20 +44,19 @@ public final class ${parameter.javaTypeName}RowMapper
     ) throws java.sql.SQLException {
 
         ${parameter.javaTypeName} result = new ${parameter.javaTypeName}();
-        
-        <#list parameter.parameters as paramrs>
-        <#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
+
+<#list parameter.parameters as paramrs>
+<#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
         result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getTimestamp("${paramrs.name}"));
-        <#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
+<#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
         result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getString("${paramrs.name}"));
-        <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
+<#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
         result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getBytes("${paramrs.name}"));
-        <#else>
+<#else>
         result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getObject("${paramrs.name}"));
-        </#if>
-        </#list>
+</#if>
+</#list>
 
         return result;
     }
 }
-</#if>

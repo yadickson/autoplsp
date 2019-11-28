@@ -26,14 +26,19 @@ package ${javaPackage}.util;
 public final class DateUtil {
 
     /**
+     * Class constructor.
+     */
+    protected DateUtil() {
+
+    }
+
+    /**
      * Process date.
      *
      * @param input date to process.
      * @return date.
      */
-    public static java.util.Date process(
-            final java.util.Date input
-    ) {
+    public static java.util.Date process(final java.util.Date input) {
 
         if (input == null) {
             return null;

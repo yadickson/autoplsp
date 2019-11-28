@@ -55,7 +55,7 @@ public class ConfigGenerator extends TemplateGenerator {
             final String jndi,
             final String folderNameResourceGenerator,
             final String outputFileName) {
-        super(outputDir);
+        super(outputDir, null);
         this.fileName = outputFileName;
         this.javaPackage = packageName;
         this.dataSource = dataSource;

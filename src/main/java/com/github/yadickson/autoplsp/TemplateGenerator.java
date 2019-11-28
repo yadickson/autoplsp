@@ -38,15 +38,19 @@ import java.util.Map;
 public class TemplateGenerator {
 
     private final String outputDir;
+    private final String outputTestDir;
+
     private final Configuration cfg;
 
     /**
      * Class constructor
      *
      * @param outputDir Output directory path result
+     * @param outputTestDir Output directory test path result
      */
-    public TemplateGenerator(String outputDir) {
+    public TemplateGenerator(String outputDir, String outputTestDir) {
         this.outputDir = outputDir;
+        this.outputTestDir = outputTestDir;
 
         Version version = new Version(2, 3, 23);
         cfg = new Configuration(version);
@@ -86,12 +90,13 @@ public class TemplateGenerator {
     /**
      * Get output directory path and make directory if not exist
      *
+     * @param output output path
      * @param path path
      * @return full directory path
      * @exception BusinessException if error
      */
-    protected String getOutputPath(String path) throws BusinessException {
-        String result = outputDir + File.separatorChar + path + File.separatorChar;
+    private String getPath(String output, String path) throws BusinessException {
+        String result = output + File.separatorChar + path + File.separatorChar;
         File file = new File(result);
 
         if (!file.exists() && !file.mkdirs()) {
@@ -99,6 +104,28 @@ public class TemplateGenerator {
         }
 
         return result;
+    }
+
+    /**
+     * Get output directory path and make directory if not exist
+     *
+     * @param path path
+     * @return full directory path
+     * @exception BusinessException if error
+     */
+    protected String getOutputPath(String path) throws BusinessException {
+        return getPath(outputDir, path);
+    }
+
+    /**
+     * Get output directory test path and make directory if not exist
+     *
+     * @param path path
+     * @return full directory path
+     * @exception BusinessException if error
+     */
+    protected String getOutputTestPath(String path) throws BusinessException {
+        return getPath(outputTestDir, path);
     }
 
     /**
@@ -111,6 +138,18 @@ public class TemplateGenerator {
      */
     protected String getFileNamePath(String path, String fileName) throws BusinessException {
         return getOutputPath(path) + fileName;
+    }
+
+    /**
+     * Get full filename test path
+     *
+     * @param path directory path
+     * @param fileName filename
+     * @return full filename path
+     * @exception BusinessException if error
+     */
+    protected String getFileNameTestPath(String path, String fileName) throws BusinessException {
+        return getOutputTestPath(path) + fileName;
     }
 
     /**

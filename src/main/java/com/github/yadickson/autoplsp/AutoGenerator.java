@@ -102,6 +102,15 @@ public class AutoGenerator extends AbstractMojo {
     private File outputDirectory;
 
     /**
+     * Output test directory.
+     */
+    @Parameter(
+            defaultValue = "./src/test/java",
+            readonly = true,
+            required = false)
+    private File outputTestDirectory;
+
+    /**
      * Output resource directory.
      */
     @Parameter(
@@ -327,6 +336,16 @@ public class AutoGenerator extends AbstractMojo {
     private String serialization;
 
     /**
+     * Add serialization support.
+     */
+    @Parameter(
+            property = "autoplsp.test",
+            defaultValue = "false",
+            readonly = true,
+            required = false)
+    private String test;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -342,6 +361,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] FolderNameGenerator: " + folderNameGenerator);
         getLog().info("[AutoGenerator] FolderNameResourceGenerator: " + folderNameResourceGenerator);
         getLog().info("[AutoGenerator] OutputDirectory: " + outputDirectory.getPath());
+        getLog().info("[AutoGenerator] OutputTestDirectory: " + outputTestDirectory.getPath());
         getLog().info("[AutoGenerator] OutputDirectoryResource: " + outputDirectoryResource.getPath());
         getLog().info("[AutoGenerator] OutputConfigFileName: " + outputConfigFileName);
         getLog().info("[AutoGenerator] JavaPackageName: " + javaPackageName);
@@ -357,11 +377,16 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] Lombok: " + lombok);
         getLog().info("[AutoGenerator] Header: " + header);
         getLog().info("[AutoGenerator] Serialization: " + serialization);
+        getLog().info("[AutoGenerator] Test: " + test);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
         if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
             throw new MojoExecutionException("Fail make " + outputDirectory + " directory.");
+        }
+
+        if (test.equalsIgnoreCase("true") && !outputTestDirectory.exists() && !outputTestDirectory.mkdirs()) {
+            throw new MojoExecutionException("Fail make " + outputTestDirectory + " directory.");
         }
 
         if (!outputDirectoryResource.exists() && !outputDirectoryResource.mkdirs()) {
@@ -516,6 +541,7 @@ public class AutoGenerator extends AbstractMojo {
             JavaGenerator template;
             template = new JavaGenerator(
                     outputDirectory.getPath(),
+                    outputTestDirectory.getPath(),
                     folderNameGenerator,
                     javaPackageName,
                     javaDataSourceName,
@@ -525,6 +551,7 @@ public class AutoGenerator extends AbstractMojo {
                     lombok.equalsIgnoreCase("true"),
                     header.equalsIgnoreCase("true"),
                     serialization.equalsIgnoreCase("true"),
+                    test.equalsIgnoreCase("true"),
                     outParameterCode,
                     outParameterMessage,
                     generator.getName(),

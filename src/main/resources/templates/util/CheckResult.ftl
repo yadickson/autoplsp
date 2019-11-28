@@ -27,14 +27,20 @@ package ${javaPackage}.util;
 public final class CheckResult {
 
     /**
+     * Class constructor.
+     */
+    protected CheckResult() {
+
+    }
+
+    /**
      * Evaluate output parameters from database.
      *
      * @param result map to evaluate.
+     * @return same map.
      * @throws java.sql.SQLException if error.
      */
-    public static java.util.Map check(
-            final java.util.Map result
-    ) throws java.sql.SQLException {
+    public static java.util.Map check(final java.util.Map result) throws java.sql.SQLException {
 
         if (result == null) {
             return null;

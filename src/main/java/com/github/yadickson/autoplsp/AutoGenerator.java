@@ -452,7 +452,11 @@ public class AutoGenerator extends AbstractMojo {
             List<com.github.yadickson.autoplsp.db.common.Parameter> objects;
             objects = generator.findObjects(connection, objectSuffix, arraySuffix);
 
-            List<Procedure> list = generator.findProcedures(addPackagename.equalsIgnoreCase("true"), connection);
+            List<Procedure> list = generator.findProcedures(
+                    addPackagename.equalsIgnoreCase("true"),
+                    outParameterCode,
+                    outParameterMessage,
+                    connection);
             List<Procedure> spList = new ArrayList<Procedure>();
 
             Pattern patternI = Pattern.compile(regexInclude, Pattern.CASE_INSENSITIVE);

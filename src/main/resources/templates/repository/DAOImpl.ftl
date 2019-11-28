@@ -30,16 +30,6 @@ import ${javaPackage}.domain.${parameter.javaTypeName};
 import ${javaPackage}.repository.sp.${proc.className}SP;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Repository;
-<#list proc.outputParameters as parameter>
-  <#if parameter.number && (parameter.position > 0) && parameter.name == outParameterCode >
-  <#assign pCode="${parameter.name}">
-  </#if>
-</#list>
-<#list proc.outputParameters as parameter>
-  <#if parameter.string && (parameter.position > 0) && parameter.name == outParameterMessage >
-  <#assign pMessage="${parameter.name}">
-  </#if>
-</#list>
 
 /**
  * JDBCTemplate implementation for <#if proc.function>function<#else>stored procedure</#if> ${proc.fullName}.
@@ -112,7 +102,7 @@ public final class ${proc.className}DAOImpl
             throw new java.sql.SQLException(ex);
         }
 
-        java.util.Map m = <#if pCode?? && pMessage?? >evaluateResult(r)<#else>r</#if>;
+        java.util.Map m = <#if proc.checkResult >${javaPackage}.util.CheckResult.check(r)<#else>r</#if>;
 
         ${proc.className}OUT result = new ${proc.className}OUT();
 
@@ -158,39 +148,5 @@ public final class ${proc.className}DAOImpl
         return result;
         </#if>
     }
-<#if pCode?? && pMessage?? >
 
-    /**
-     * Evaluate output parameters from database.
-     *
-     * @param result map to evaluate.
-     * @throws java.sql.SQLException if error.
-     */
-    private java.util.Map evaluateResult(
-            final java.util.Map result
-    ) throws java.sql.SQLException {
-
-        if (result == null) {
-            return null;
-        }
-
-        Number code;
-        String description;
-        int val;
-
-        try {
-            code = (Number) result.get("${pCode}");
-            description = (String) result.get("${pMessage}");
-            val = code.intValue();
-        } catch (Exception ex) {
-            throw new java.sql.SQLException(ex);
-        }
-
-        if (val != 0) {
-            throw new java.sql.SQLException(description, null, val);
-        }
-
-        return result;
-    }
-</#if>
 }

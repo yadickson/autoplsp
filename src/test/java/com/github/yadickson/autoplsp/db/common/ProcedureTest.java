@@ -33,7 +33,7 @@ public class ProcedureTest {
     @Test
     public void testProcedureAddPackageName() {
 
-        Procedure procedure = new Procedure(true, "packageName", "procedureName");
+        Procedure procedure = new Procedure(true, "packageName", "procedureName", "code", "message");
 
         assertNotNull(procedure.getPackageName());
         assertNotNull(procedure.getName());
@@ -47,7 +47,7 @@ public class ProcedureTest {
     @Test
     public void testProcedureDisableAddPackageName() {
 
-        Procedure procedure = new Procedure(false, "packageName", "procedureName");
+        Procedure procedure = new Procedure(false, "packageName", "procedureName", "code", "message");
 
         assertNotNull(procedure.getPackageName());
         assertNotNull(procedure.getName());
@@ -61,7 +61,7 @@ public class ProcedureTest {
     @Test
     public void testProcedureWithoutPackageName() {
 
-        Procedure procedure = new Procedure(false, null, "procedureName");
+        Procedure procedure = new Procedure(false, null, "procedureName", "code", "message");
 
         assertNull(procedure.getPackageName());
         assertNotNull(procedure.getName());
@@ -75,7 +75,7 @@ public class ProcedureTest {
     @Test
     public void testProcedureForceAddWithoutPackageName() {
 
-        Procedure procedure = new Procedure(true, null, "procedureName");
+        Procedure procedure = new Procedure(true, null, "procedureName", "code", "message");
 
         assertNull(procedure.getPackageName());
         assertNotNull(procedure.getName());

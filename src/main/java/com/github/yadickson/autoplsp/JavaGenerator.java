@@ -67,6 +67,8 @@ public class JavaGenerator extends TemplateGenerator {
 
     private static final String REPOSITORY_PATH = File.separatorChar + "repository" + File.separatorChar;
     private static final String DOMAIN_PATH = File.separatorChar + "domain" + File.separatorChar;
+    private static final String UTIL_PATH = File.separatorChar + "util" + File.separatorChar;
+
     private static final String TABLE_PATH = File.separatorChar + TABLE_NAME + File.separatorChar;
     private static final String TABLE_COLUMN_PATH = TABLE_PATH + COLUMN_NAME + File.separatorChar;
     private static final String TYPE_PATH = TABLE_COLUMN_PATH + "type" + File.separatorChar;
@@ -144,6 +146,11 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
+
+        if (procedure.isCheckResult()) {
+            createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(input, UTIL_PATH + "CheckResult.ftl", getUtilOutputFilePath("CheckResult.java"));
+        }
 
         createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
         createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SP"));
@@ -373,6 +380,14 @@ public class JavaGenerator extends TemplateGenerator {
 
     private String getRepositorySpOutputFilePath(String file) throws BusinessException {
         return this.getRepositoryOutputPath(FOLDER_SP_NAME) + File.separatorChar + file;
+    }
+
+    private String getUtilOutputPath(String path) throws BusinessException {
+        return this.getOutputPath(UTIL_PATH + path);
+    }
+
+    private String getUtilOutputFilePath(String file) throws BusinessException {
+        return this.getUtilOutputPath("") + File.separatorChar + file;
     }
 
     private String getRepositoryMapperOutputFilePath(String file) throws BusinessException {

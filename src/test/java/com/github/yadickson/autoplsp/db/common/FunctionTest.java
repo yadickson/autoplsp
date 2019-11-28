@@ -32,7 +32,7 @@ public class FunctionTest {
     @Test
     public void testFunctionAddPackageName() {
 
-        Function function = new Function(true, "packageName", "functionName", true);
+        Function function = new Function(true, "packageName", "functionName", "code", "message", true);
 
         assertNotNull(function.getPackageName());
         assertNotNull(function.getName());
@@ -46,7 +46,7 @@ public class FunctionTest {
     @Test
     public void testFunctionDisableAddPackageName() {
 
-        Function function = new Function(false, "packageName", "functionName", true);
+        Function function = new Function(false, "packageName", "functionName", "code", "message", true);
 
         assertNotNull(function.getPackageName());
         assertNotNull(function.getName());
@@ -60,7 +60,7 @@ public class FunctionTest {
     @Test
     public void testFunctionWithoutPackageName() {
 
-        Function function = new Function(false, null, "functionName", true);
+        Function function = new Function(false, null, "functionName", "code", "message", true);
 
         assertNull(function.getPackageName());
         assertNotNull(function.getName());
@@ -74,7 +74,7 @@ public class FunctionTest {
     @Test
     public void testFunctionForceAddWithoutPackageName() {
 
-        Function function = new Function(true, null, "functionName", true);
+        Function function = new Function(true, null, "functionName", "code", "message", true);
 
         assertNull(function.getPackageName());
         assertNotNull(function.getName());

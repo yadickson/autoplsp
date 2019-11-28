@@ -31,6 +31,9 @@ public class Procedure implements Serializable {
     static final long serialVersionUID = 1;
 
     private final Boolean addPackageName;
+    private final String outParameterCode;
+    private final String outParameterMessage;
+
     private final String name;
     private final String packageName;
     private List<Parameter> parameters;
@@ -43,12 +46,22 @@ public class Procedure implements Serializable {
      * @param addPackageName flag to add package name.
      * @param packageName The package name
      * @param procedureName The procedure name
+     * @param outParameterCode The output parameter code name.
+     * @param outParameterMessage The output parameter message name.
      */
-    public Procedure(Boolean addPackageName, String packageName, String procedureName) {
-        
+    public Procedure(
+            final Boolean addPackageName,
+            final String packageName,
+            final String procedureName,
+            final String outParameterCode,
+            final String outParameterMessage
+    ) {
+
         this.addPackageName = addPackageName;
         this.packageName = packageName;
         this.name = procedureName;
+        this.outParameterCode = outParameterCode;
+        this.outParameterMessage = outParameterMessage;
 
         parameters = new ArrayList<Parameter>();
         inputParameters = new ArrayList<Parameter>();
@@ -267,4 +280,16 @@ public class Procedure implements Serializable {
         return outputParameters.size();
     }
 
+    public boolean isCheckResult() {
+
+        boolean hasCode = false;
+        boolean hasMessage = false;
+
+        for (Parameter parameter : outputParameters) {
+            hasCode |= parameter.isNumber() && parameter.getPosition() > 0 && parameter.getName().equalsIgnoreCase(outParameterCode);
+            hasMessage |= parameter.isString() && parameter.getPosition() > 0 && parameter.getName().equalsIgnoreCase(outParameterMessage);
+        }
+
+        return hasCode && hasMessage;
+    }
 }

@@ -22,9 +22,9 @@ package com.github.yadickson.autoplsp.db.common;
  * @author Yadickson Soto
  */
 public class Function extends Procedure {
-
+    
     static final long serialVersionUID = 1;
-
+    
     private final Boolean functionInline;
 
     /**
@@ -34,9 +34,17 @@ public class Function extends Procedure {
      * @param packageName The package name
      * @param functionName The function name
      * @param functionInline The flag to function inline
+     * @param outParameterCode The output parameter code name.
+     * @param outParameterMessage The output parameter message name.
      */
-    public Function(Boolean addPackageName, String packageName, String functionName, Boolean functionInline) {
-        super(addPackageName, packageName, functionName);
+    public Function(
+            final Boolean addPackageName,
+            final String packageName,
+            final String functionName,
+            final String outParameterCode,
+            final String outParameterMessage,
+            final Boolean functionInline) {
+        super(addPackageName, packageName, functionName, outParameterCode, outParameterMessage);
         this.functionInline = functionInline;
     }
 
@@ -59,7 +67,7 @@ public class Function extends Procedure {
     public boolean isFunctionInline() {
         return functionInline;
     }
-
+    
     @Override
     public int getOutputParameterSize() {
         return super.getOutputParameterSize() + 1;

@@ -127,11 +127,18 @@ public abstract class Generator {
      * Find all procedure from database
      *
      * @param addPackageName flag to add package name.
+     * @param outParameterCode The output parameter code name.
+     * @param outParameterMessage The output parameter message name.
      * @param connection Database connection
      * @return procedure list
      * @throws BusinessException If error
      */
-    public final List<Procedure> findProcedures(Boolean addPackageName, Connection connection) throws BusinessException {
+    public final List<Procedure> findProcedures(
+            final Boolean addPackageName,
+            final String outParameterCode,
+            final String outParameterMessage,
+            final Connection connection
+    ) throws BusinessException {
         LoggerManager.getInstance().info("[SPGenerator] Find all procedure by name");
 
         List<Procedure> list = new ArrayList<Procedure>();
@@ -139,7 +146,7 @@ public abstract class Generator {
         List<ProcedureBean> procedures = new FindProcedureImpl().getProcedures(connection, getProcedureQuery());
 
         for (ProcedureBean p : procedures) {
-            Procedure procedure = p.getType().equalsIgnoreCase("PROCEDURE") ? new Procedure(addPackageName, p.getPkg(), p.getName()) : new Function(addPackageName, p.getPkg(), p.getName(), p.getType().equalsIgnoreCase("FUNCTION_INLINE"));
+            Procedure procedure = p.getType().equalsIgnoreCase("PROCEDURE") ? new Procedure(addPackageName, p.getPkg(), p.getName(), outParameterCode, outParameterMessage) : new Function(addPackageName, p.getPkg(), p.getName(), outParameterCode, outParameterMessage, p.getType().equalsIgnoreCase("FUNCTION_INLINE"));
             LoggerManager.getInstance().info("[SPGenerator] Found (" + p.getType() + ") " + procedure.getFullName());
             list.add(procedure);
         }

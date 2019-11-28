@@ -34,7 +34,7 @@ public class ClobParameterTest {
 
     @Before
     public void setup() {
-        parameter = new ClobParameter(0, null, Direction.INPUT, "", new Procedure(true, "", ""));
+        parameter = new ClobParameter(0, null, Direction.INPUT, "", new Procedure(true, "", "", "", ""));
     }
 
     @Test(expected = Exception.class)

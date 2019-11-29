@@ -29,7 +29,6 @@ import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
 public final class ${proc.className}SP extends org.springframework.jdbc.object.<#if !proc.functionInline>StoredProcedure<#else>GenericSqlQuery</#if> {
 
     /**
@@ -80,11 +79,11 @@ public final class ${proc.className}SP extends org.springframework.jdbc.object.<
      * @return response.
      * @param params input parameters.
      */
-    public java.util.Map runExecute(final java.util.Map params) {
+    public java.util.Map<String, Object> runExecute(final java.util.Map<String, Object> params) {
 <#if !proc.functionInline>
         return super.execute(params);
 <#else>
-        java.util.Map map = new java.util.HashMap<Object, Object>();
+        java.util.Map map<String, Object> = new java.util.HashMap<String, Object>();
 <#list proc.parameters as parameter>
 <#if parameter.returnResultSet>
         map.put("${parameter.prefix}${parameter.name}", super.execute(params.values().toArray()));

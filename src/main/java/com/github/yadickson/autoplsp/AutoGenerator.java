@@ -346,6 +346,16 @@ public class AutoGenerator extends AbstractMojo {
     private String test;
 
     /**
+     * Use position instance name support.
+     */
+    @Parameter(
+            property = "autoplsp.position",
+            defaultValue = "true",
+            readonly = true,
+            required = false)
+    private String position;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -552,6 +562,7 @@ public class AutoGenerator extends AbstractMojo {
                     header.equalsIgnoreCase("true"),
                     serialization.equalsIgnoreCase("true"),
                     test.equalsIgnoreCase("true"),
+                    position.equalsIgnoreCase("true"),
                     outParameterCode,
                     outParameterMessage,
                     generator.getName(),

@@ -39,7 +39,6 @@ import org.springframework.stereotype.Repository;
  * @version @GENERATOR.VERSION@
  */
 @Repository
-@SuppressWarnings({"rawtypes", "unchecked"})
 public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 
 <#if proc.hasObject || proc.hasArray>
@@ -78,11 +77,12 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
      * @throws java.sql.SQLException if error.
      */
     @Override
+    @SuppressWarnings({"unchecked"})
     public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>final ${proc.className}IN params</#if>) throws java.sql.SQLException {
 
-        java.util.Map mparams = new java.util.HashMap();
+        java.util.Map<String, Object> mparams = new java.util.HashMap<String, Object>();
 <#if proc.hasOutput>
-        java.util.Map r;
+        java.util.Map<String, Object> r;
 </#if>
 
         try {
@@ -105,7 +105,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
             throw new java.sql.SQLException(ex);
         }
 
-        java.util.Map m = <#if proc.checkResult >${javaPackage}.util.CheckResult.check(r)<#else>r</#if>;
+        java.util.Map<String, Object> m = <#if proc.checkResult >${javaPackage}.util.CheckResult.check(r)<#else>r</#if>;
 
         ${proc.className}OUT result = new ${proc.className}OUT();
 

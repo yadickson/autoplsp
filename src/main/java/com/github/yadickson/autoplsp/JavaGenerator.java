@@ -45,6 +45,7 @@ public class JavaGenerator extends TemplateGenerator {
     private final Boolean header;
     private final Boolean serialization;
     private final Boolean test;
+    private final Boolean position;
     private final String outParameterCode;
     private final String outParameterMessage;
     private final String folderNameGenerator;
@@ -68,6 +69,7 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String LOMBOK = "lombok";
     private static final String HEADER = "header";
     private static final String SERIALIZATION = "serialization";
+    private static final String POSITION = "position";
     private static final String OUT_CODE_NAME = "outParameterCode";
     private static final String OUT_MESSAGE_NAME = "outParameterMessage";
     private static final String EXT_FILE = ".java";
@@ -103,6 +105,7 @@ public class JavaGenerator extends TemplateGenerator {
      * @param header The header support.
      * @param serialization The serialization support.
      * @param test The test support.
+     * @param position The support position.
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
      * @param driverName driver name
@@ -121,6 +124,7 @@ public class JavaGenerator extends TemplateGenerator {
             final Boolean header,
             final Boolean serialization,
             final Boolean test,
+            final Boolean position,
             final String outParameterCode,
             final String outParameterMessage,
             final String driverName,
@@ -137,6 +141,7 @@ public class JavaGenerator extends TemplateGenerator {
         this.header = header;
         this.serialization = serialization;
         this.test = test;
+        this.position = position;
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
         this.driverName = driverName;
@@ -179,6 +184,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
+        input.put(POSITION, position);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
@@ -222,6 +228,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
+        input.put(POSITION, position);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
@@ -242,6 +249,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
+        input.put(POSITION, position);
 
         if (!procedure.getHasInput() && !procedure.getHasOutput()) {
             return;
@@ -270,6 +278,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
+        input.put(POSITION, position);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -296,6 +305,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
+        input.put(POSITION, position);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -334,6 +344,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
+        input.put(POSITION, position);
 
         String parameterPath = getDomainOutputPath("");
 
@@ -370,6 +381,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
+        input.put(POSITION, position);
 
         if (!addTypeTable) {
 
@@ -417,6 +429,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
+        input.put(POSITION, position);
 
         String parameterPath = getMapperOutputPath("");
 

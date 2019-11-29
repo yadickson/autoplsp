@@ -37,7 +37,6 @@ import lombok.Setter;
 @Getter
 @Setter</#if><#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)</#if>
-@SuppressWarnings({"deprecation"})
 public final class ${proc.className}OUT<#if serialization> implements java.io.Serializable</#if> {
 <#if serialization> 
 

@@ -26,7 +26,6 @@ import org.springframework.jdbc.core.RowMapper;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings({"rawtypes", "unchecked", "cast"})
 public final class ${parameter.javaTypeName}RowMapper implements RowMapper<${parameter.javaTypeName}> {
 
     /**
@@ -47,13 +46,15 @@ public final class ${parameter.javaTypeName}RowMapper implements RowMapper<${par
 
 <#list parameter.parameters as paramrs>
 <#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getTimestamp("${paramrs.name}"));
+        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getTimestamp(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>));
+<#elseif paramrs.sqlTypeName == 'java.sql.Types.VARCHAR'>
+        result.set${paramrs.propertyName}(resultSet.getString(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>));
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
-        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getString("${paramrs.name}"));
+        result.set${paramrs.propertyName}(resultSet.getString(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>));
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
-        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getBytes("${paramrs.name}"));
+        result.set${paramrs.propertyName}(resultSet.getBytes(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>));
 <#else>
-        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getObject("${paramrs.name}"));
+        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getObject(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>));
 </#if>
 </#list>
 

@@ -23,7 +23,6 @@ package ${javaPackage}.util;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
 public final class CheckResult {
 
     /**
@@ -40,7 +39,8 @@ public final class CheckResult {
      * @return same map.
      * @throws java.sql.SQLException if error.
      */
-    public static java.util.Map check(final java.util.Map result) throws java.sql.SQLException {
+    public static java.util.Map<String, Object> check(final java.util.Map<String, Object> result)
+            throws java.sql.SQLException {
 
         if (result == null) {
             return null;

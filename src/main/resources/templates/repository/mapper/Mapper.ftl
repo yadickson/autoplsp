@@ -37,6 +37,13 @@ import org.springframework.jdbc.core.RowMapper;
 public final class ${parameter.javaTypeName}RowMapper
         implements RowMapper<${parameter.javaTypeName}> {
 
+<#list parameter.parameters as paramrs>
+    /**
+     * Paramater <#if position>position<#else>name</#if>.
+     */
+    private static final <#if position>int<#else>String</#if> ${paramrs.name} = <#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>;
+
+</#list>
     /**
      * Resultset mapper.
      *
@@ -56,15 +63,15 @@ public final class ${parameter.javaTypeName}RowMapper
 
 <#list parameter.parameters as paramrs>
 <#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getTimestamp(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>));
+        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getTimestamp(${paramrs.name}));
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.VARCHAR'>
-        result.set${paramrs.propertyName}(resultSet.getString(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>));
+        result.set${paramrs.propertyName}(resultSet.getString(${paramrs.name}));
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
-        result.set${paramrs.propertyName}(resultSet.getString(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>));
+        result.set${paramrs.propertyName}(resultSet.getString(${paramrs.name}));
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
-        result.set${paramrs.propertyName}(resultSet.getBytes(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>));
+        result.set${paramrs.propertyName}(resultSet.getBytes(${paramrs.name}));
 <#else>
-        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getObject(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>));
+        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name}));
 </#if>
 </#list>
 

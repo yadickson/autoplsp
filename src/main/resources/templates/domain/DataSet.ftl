@@ -17,7 +17,17 @@
 </#if>
 package ${javaPackage}.domain;
 
-<#if lombok><#if proc.hasInput>import lombok.AllArgsConstructor;</#if>
+<#list parameter.parameters as parameter2>
+<#if parameter2.date>
+<#assign importDateUtil = 1>
+</#if>
+</#list>
+<#if importDateUtil??>
+import ${javaPackage}.util.DateUtil;
+
+</#if>
+<#if lombok>
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -90,7 +100,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      * @return ${parameter2.fieldName}
      */
     public ${parameter2.javaTypeName} get${parameter2.propertyName}() {
-        return <#if parameter2.date>${javaPackage}.util.DateUtil.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
+        return <#if parameter2.date>DateUtil.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
     }
 
     /**
@@ -99,7 +109,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      * @param p${parameter2.fieldName} ${parameter2.fieldName}
      */
     public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} p${parameter2.fieldName}) {
-        this.${parameter2.fieldName} = <#if parameter2.date>${javaPackage}.util.DateUtil.process(</#if>p${parameter2.fieldName}<#if parameter2.date>)</#if>;
+        this.${parameter2.fieldName} = <#if parameter2.date>DateUtil.process(</#if>p${parameter2.fieldName}<#if parameter2.date>)</#if>;
     }
 </#if>
 </#list>

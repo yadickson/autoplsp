@@ -1,6 +1,5 @@
 package ${javaPackage}.util;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -17,7 +16,7 @@ public class CheckResultTest {
         checkResult.check(null);
     }
 
-    @Test(expected = java.sql.SQLException.class)
+    @Test
     public void testInputNotNullFail() throws java.sql.SQLException {
         java.util.Map<String, Object> map = new java.util.HashMap<<#if !diamond>String, Object</#if>>();
         checkResult.check(map);

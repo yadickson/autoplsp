@@ -42,7 +42,7 @@ public interface ${proc.className}DAO {
 
     /**
      * Execute stored procedure.
-     * 
+     *
 <#if proc.hasInput>
      * @param params input parameters
 </#if>

@@ -16,11 +16,13 @@
  */
 package com.github.yadickson.autoplsp;
 
+import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.io.File;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +38,7 @@ public class ConfigGenerator extends TemplateGenerator {
     private final String jdbcTemplate;
     private final String jndi;
     private final String folderNameResourceGenerator;
+    private final List<Procedure> procedures;
 
     /**
      * Class constructor
@@ -47,6 +50,7 @@ public class ConfigGenerator extends TemplateGenerator {
      * @param jndi JNDI datasource name
      * @param folderNameResourceGenerator folder name spring resource directory
      * @param outputFileName Spring configuration file name
+     * @param procedures procedure list
      */
     public ConfigGenerator(String outputDir,
             final String packageName,
@@ -54,7 +58,8 @@ public class ConfigGenerator extends TemplateGenerator {
             final String jdbcTemplate,
             final String jndi,
             final String folderNameResourceGenerator,
-            final String outputFileName) {
+            final String outputFileName,
+            final List<Procedure> procedures) {
         super(outputDir, null);
         this.fileName = outputFileName;
         this.javaPackage = packageName;
@@ -62,6 +67,7 @@ public class ConfigGenerator extends TemplateGenerator {
         this.jdbcTemplate = jdbcTemplate;
         this.jndi = jndi;
         this.folderNameResourceGenerator = folderNameResourceGenerator;
+        this.procedures = procedures;
     }
 
     /**
@@ -78,6 +84,7 @@ public class ConfigGenerator extends TemplateGenerator {
         input.put("dataSource", dataSource);
         input.put("jdbcTemplate", jdbcTemplate);
         input.put("jndi", jndi);
+        input.put("procedures", procedures);
 
         createTemplate(input, "/config/Config.ftl", getFileNamePath(folderNameResourceGenerator, fileName));
     }

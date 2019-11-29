@@ -240,6 +240,16 @@ public class AutoGenerator extends AbstractMojo {
     private String outParameterCode;
 
     /**
+     * Output parameter value success code.
+     */
+    @Parameter(
+            property = "autoplsp.successCode",
+            defaultValue = "0",
+            readonly = true,
+            required = true)
+    private String successCode;
+
+    /**
      * Output parameter message.
      */
     @Parameter(
@@ -388,6 +398,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] Header: " + header);
         getLog().info("[AutoGenerator] Serialization: " + serialization);
         getLog().info("[AutoGenerator] Test: " + test);
+        getLog().info("[AutoGenerator] SuccessCode: " + successCode);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
 
@@ -565,6 +576,7 @@ public class AutoGenerator extends AbstractMojo {
                     position.equalsIgnoreCase("true"),
                     outParameterCode,
                     outParameterMessage,
+                    successCode,
                     generator.getName(),
                     connManager.getVersion()
             );
@@ -599,7 +611,8 @@ public class AutoGenerator extends AbstractMojo {
                     javaJdbcTemplateName,
                     jndiDataSourceName,
                     folderNameResourceGenerator,
-                    outputConfigFileName
+                    outputConfigFileName,
+                    spList
             );
 
             config.process();

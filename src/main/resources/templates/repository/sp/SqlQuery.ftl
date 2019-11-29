@@ -35,6 +35,8 @@ import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
 <#if fillSpace??>
 
 </#if>
+import java.util.Map;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 <#if fillInOut??>
 import org.springframework.jdbc.core.SqlInOutParameter;
@@ -48,7 +50,7 @@ import org.springframework.jdbc.core.SqlParameter;
 <#if fillResultSet??>
 import org.springframework.jdbc.core.SqlReturnResultSet;
 </#if>
-import org.springframework.jdbc.object.StoredProcedure;
+import org.springframework.jdbc.object.GenericSqlQuery;
 
 /**
  * DAO for <#if proc.function>function<#else>stored procedure</#if>.
@@ -58,7 +60,7 @@ import org.springframework.jdbc.object.StoredProcedure;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public final class ${proc.className}SP extends StoredProcedure {
+public final class ${proc.className}SqlQuery extends GenericSqlQuery {
 
     /**
      * Full <#if proc.function>function<#else>stored procedure</#if> name.
@@ -71,27 +73,57 @@ public final class ${proc.className}SP extends StoredProcedure {
      *
      * @param jdbcTemplate jdbcTemplate
      */
-    public ${proc.className}SP(final JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate.getDataSource(), SPROC_NAME);
+    public ${proc.className}SqlQuery(final JdbcTemplate jdbcTemplate) {
+        super();
 
-        setFunction(<#if proc.function>true<#else>false</#if>);
+        setDataSource(jdbcTemplate.getDataSource());
+
+        setSql("select * from ${proc.fullName}(<#list proc.inputParameters as parameter>?<#sep>, </#sep></#list>)");
 
 <#list proc.parameters as parameter>
-        <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> sql${parameter.propertyName};
+<#if !parameter.returnResultSet>
+        Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter sql${parameter.propertyName};
+</#if>
 </#list>
 
 <#list proc.parameters as parameter>
-        sql${parameter.propertyName} = new <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>(
-                "${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >,
-                ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >,
-                new ${parameter.javaTypeName}RowMapper()</#if>
+<#if !parameter.returnResultSet>
+        sql${parameter.propertyName} = new Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter(
+                "${parameter.prefix}${parameter.name}",
+                ${parameter.sqlTypeName}
         );
 
+</#if>
 </#list>
+
 <#list proc.parameters as parameter>
+<#if !parameter.returnResultSet>
         declareParameter(sql${parameter.propertyName});
+<#else>
+        try {
+            setRowMapperClass(new ${parameter.javaTypeName}RowMapper().getClass());
+        } catch (Exception ex) {
+
+        }
+</#if>
 </#list>
 
         compile();
+    }
+
+    /**
+     * Execute the <#if proc.function>function<#else>stored procedure</#if>.
+     *
+     * @return response.
+     * @param params input parameters.
+     */
+    public Map<String, Object> execute(final Map<String, Object> params) {
+        Map map<String, Object> = new HashMap<String, Object>();
+<#list proc.parameters as parameter>
+<#if parameter.returnResultSet>
+        map.put("${parameter.prefix}${parameter.name}", super.execute(params.values().toArray()));
+</#if>
+</#list>
+        return map;
     }
 }

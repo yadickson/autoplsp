@@ -33,7 +33,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Repository;
 
 /**
- * JDBCTemplate implementation for stored procedure ${proc.fullName}.
+ * Mapper implementation for <#if proc.function>function<#else>stored procedure</#if>.
+ *
+ * ${proc.fullName}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@

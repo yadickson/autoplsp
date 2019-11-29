@@ -20,20 +20,42 @@ package ${javaPackage}.util;
 import java.sql.SQLException;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 /**
- * Interface to check result from store procedure or function.
+ * Check result from store procedure or function.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface CheckResult {
+@Component
+public final class CheckResultImpl implements CheckResult {
 
     /**
-     * Evaluate output parameters from database.
-     *
-     * @param map map to evaluate.
-     * @throws java.sql.SQLException if error.
+     * Success constant value.
      */
-    void check(Map<String, Object> map) throws SQLException;
+    private static final String SUCCESS_CODE = "${successCode}";
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void check(final Map<String, Object> map) throws SQLException {
+
+        if (map == null) {
+            return;
+        }
+
+        Number code = (Number) map.get("${outParameterCode}");
+
+        if (code == null) {
+            return;
+        }
+
+        if (!SUCCESS_CODE.equals(code.toString())) {
+            String description = (String) map.get("${outParameterMessage}");
+            throw new SQLException(description, null, code.intValue());
+        }
+    }
 
 }

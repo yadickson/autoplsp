@@ -27,7 +27,9 @@ import lombok.Setter;
 
 </#if>
 /**
- * Output parameters for stored procedure ${proc.fullName}.
+ * Output parameters for <#if proc.function>function<#else>stored procedure</#if>.
+ *
+ * ${proc.fullName}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@

@@ -48,6 +48,7 @@ public class JavaGenerator extends TemplateGenerator {
     private final Boolean position;
     private final String outParameterCode;
     private final String outParameterMessage;
+    private final String successCode;
     private final String folderNameGenerator;
     private final String driverName;
     private final String driverVersion;
@@ -72,6 +73,7 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String POSITION = "position";
     private static final String OUT_CODE_NAME = "outParameterCode";
     private static final String OUT_MESSAGE_NAME = "outParameterMessage";
+    private static final String SUCCESS_CODE = "successCode";
     private static final String EXT_FILE = ".java";
 
     private static final String REPOSITORY_PATH = File.separatorChar + "repository" + File.separatorChar;
@@ -108,6 +110,7 @@ public class JavaGenerator extends TemplateGenerator {
      * @param position The support position.
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
+     * @param successCode Output success code value.
      * @param driverName driver name
      * @param driverVersion driver version
      */
@@ -127,6 +130,7 @@ public class JavaGenerator extends TemplateGenerator {
             final Boolean position,
             final String outParameterCode,
             final String outParameterMessage,
+            final String successCode,
             final String driverName,
             final String driverVersion) {
 
@@ -144,6 +148,7 @@ public class JavaGenerator extends TemplateGenerator {
         this.position = position;
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
+        this.successCode = successCode;
         this.driverName = driverName;
         this.driverVersion = driverVersion;
     }
@@ -179,12 +184,15 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DATA_SOURCE_NAME, dataSource);
+        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
+        input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
@@ -192,6 +200,7 @@ public class JavaGenerator extends TemplateGenerator {
             checkResult = true;
             createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
             createTemplate(input, UTIL_PATH + "CheckResult.ftl", getUtilOutputFilePath("CheckResult.java"));
+            createTemplate(input, UTIL_PATH + "CheckResultImpl.ftl", getUtilOutputFilePath("CheckResultImpl.java"));
 
             if (test) {
                 createTemplate(input, UTIL_PATH + "CheckResultTest.ftl", getUtilOutputFileTestPath("CheckResultTest.java"));
@@ -208,11 +217,23 @@ public class JavaGenerator extends TemplateGenerator {
             }
         }
 
-        createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
-        createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SP"));
+        if (!procedure.isFunctionInline()) {
+            
+            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
+            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SP"));
 
-        if (test) {
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "ProcedureTest.ftl", getFileNamePath(getRepositoryOutputTestPath(FOLDER_SP_NAME), procedure, "SPTest"));
+            if (test) {
+                createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "ProcedureTest.ftl", getFileNamePath(getRepositoryOutputTestPath(FOLDER_SP_NAME), procedure, "SPTest"));
+            }
+
+        } else {
+
+            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
+            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQuery.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SqlQuery"));
+
+            if (test) {
+                createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQueryTest.ftl", getFileNamePath(getRepositoryOutputTestPath(FOLDER_SP_NAME), procedure, "SqlQueryTest"));
+            }
         }
     }
 
@@ -229,6 +250,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
+        input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
@@ -244,12 +266,17 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DATA_SOURCE_NAME, dataSource);
+        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
+        input.put(SUCCESS_CODE, successCode);
+        input.put(OUT_CODE_NAME, outParameterCode);
+        input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
         if (!procedure.getHasInput() && !procedure.getHasOutput()) {
             return;
@@ -273,12 +300,17 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DATA_SOURCE_NAME, dataSource);
+        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
+        input.put(SUCCESS_CODE, successCode);
+        input.put(OUT_CODE_NAME, outParameterCode);
+        input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -300,12 +332,17 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DATA_SOURCE_NAME, dataSource);
+        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
+        input.put(SUCCESS_CODE, successCode);
+        input.put(OUT_CODE_NAME, outParameterCode);
+        input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -339,12 +376,17 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(DRIVER_NAME, driverName);
         input.put(DRIVER_VERSION, driverVersion);
+        input.put(DATA_SOURCE_NAME, dataSource);
+        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
+        input.put(SUCCESS_CODE, successCode);
+        input.put(OUT_CODE_NAME, outParameterCode);
+        input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
         String parameterPath = getDomainOutputPath("");
 
@@ -376,12 +418,17 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(DRIVER_NAME, driverName);
         input.put(DRIVER_VERSION, driverVersion);
+        input.put(DATA_SOURCE_NAME, dataSource);
+        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
+        input.put(SUCCESS_CODE, successCode);
+        input.put(OUT_CODE_NAME, outParameterCode);
+        input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
         if (!addTypeTable) {
 
@@ -424,12 +471,17 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(DRIVER_NAME, driverName);
         input.put(DRIVER_VERSION, driverVersion);
+        input.put(DATA_SOURCE_NAME, dataSource);
+        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
         input.put(JSON_NON_NULL, jsonNonNull);
         input.put(LOMBOK, lombok);
         input.put(HEADER, header);
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
+        input.put(SUCCESS_CODE, successCode);
+        input.put(OUT_CODE_NAME, outParameterCode);
+        input.put(OUT_MESSAGE_NAME, outParameterMessage);
 
         String parameterPath = getMapperOutputPath("");
 

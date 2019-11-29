@@ -18,15 +18,24 @@
 package ${javaPackage}.repository.mapper;
 
 import ${javaPackage}.domain.${parameter.javaTypeName};
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.springframework.jdbc.core.RowMapper;
 
 /**
- * Resultset mapper of ${parameter.name}.
+ * Resultset mapper for <#if proc.function>function<#else>stored procedure</#if>.
+ *
+ * ${proc.fullName}
+ *
+ * ${parameter.name}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public final class ${parameter.javaTypeName}RowMapper implements RowMapper<${parameter.javaTypeName}> {
+public final class ${parameter.javaTypeName}RowMapper
+        implements RowMapper<${parameter.javaTypeName}> {
 
     /**
      * Resultset mapper.
@@ -38,11 +47,12 @@ public final class ${parameter.javaTypeName}RowMapper implements RowMapper<${par
      */
     @Override
     public ${parameter.javaTypeName} mapRow(
-            final java.sql.ResultSet resultSet,
+            final ResultSet resultSet,
             final int i
-    ) throws java.sql.SQLException {
+    ) throws SQLException {
 
-        ${parameter.javaTypeName} result = new ${parameter.javaTypeName}();
+        ${parameter.javaTypeName} result;
+        result = new ${parameter.javaTypeName}();
 
 <#list parameter.parameters as paramrs>
 <#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>

@@ -8,7 +8,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ${proc.className}SPTest {
+@SuppressWarnings({"rawtypes", "unchecked"})
+public class ${proc.className}SqlQueryTest {
 
     @Mock
     private javax.sql.DataSource dataSource;
@@ -24,7 +25,5 @@ public class ${proc.className}SPTest {
         ${proc.className}SP sp = new ${proc.className}SP(jdbcTemplate);
 
         Assert.assertSame(dataSource, sp.getJdbcTemplate().getDataSource());
-
-        Assert.assertEquals("{call ${proc.fullName}(<#list proc.parameters as parameter>?<#sep>, </#sep></#list>)}", sp.getCallString());
     }
 }

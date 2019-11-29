@@ -18,14 +18,22 @@
 package ${javaPackage}.repository;
 
 <#if proc.hasInput>
+<#assign fillSpace = 1>
 import ${javaPackage}.domain.${proc.className}IN;
 </#if>
 <#if proc.hasOutput>
+<#assign fillSpace = 1>
 import ${javaPackage}.domain.${proc.className}OUT;
 </#if>
+<#if fillSpace??>
+
+</#if>
+import java.sql.SQLException;
 
 /**
- * DAO interface to stored procedure ${proc.fullName}.
+ * DAO interface for <#if proc.function>function<#else>stored procedure</#if>.
+ *
+ * ${proc.fullName}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
@@ -43,5 +51,7 @@ public interface ${proc.className}DAO {
 </#if>
      * @throws java.sql.SQLException if error
      */
-    <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>${proc.className}IN params</#if>) throws java.sql.SQLException;
+    <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(
+            <#if proc.hasInput>${proc.className}IN params</#if>
+    ) throws SQLException;
 }

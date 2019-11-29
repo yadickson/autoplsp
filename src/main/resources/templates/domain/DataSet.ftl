@@ -27,7 +27,11 @@ import lombok.Setter;
 
 </#if>
 /**
- * DataSet parameter ${parameter.name} in ${proc.fullName}.
+ * DataSet parameter for <#if proc.function>function<#else>stored procedure</#if>.
+ *
+ * ${proc.fullName}
+ *
+ * ${parameter.name}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@

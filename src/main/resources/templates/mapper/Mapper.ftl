@@ -25,7 +25,9 @@ import ${javaPackage}.domain.${proc.className}OUT;
 </#if>
 
 /**
- * Mapper interface to stored procedure ${proc.fullName}.
+ * Mapper interface for <#if proc.function>function<#else>stored procedure</#if>.
+ *
+ * ${proc.fullName}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@

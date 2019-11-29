@@ -17,23 +17,43 @@
 </#if>
 package ${javaPackage}.repository;
 
+<#list proc.parameters as parameter>
+<#if parameter.resultSet || parameter.returnResultSet>
+import ${javaPackage}.domain.${parameter.javaTypeName};
+</#if>
+</#list>
 <#if proc.hasInput>
 import ${javaPackage}.domain.${proc.className}IN;
 </#if>
 <#if proc.hasOutput>
 import ${javaPackage}.domain.${proc.className}OUT;
 </#if>
-<#list proc.parameters as parameter>
-<#if parameter.resultSet || parameter.returnResultSet>
-import ${javaPackage}.domain.${parameter.javaTypeName};
-</#if>
-</#list>
 import ${javaPackage}.repository.sp.${proc.className}SP;
+<#if proc.checkResult>
+import ${javaPackage}.util.CheckResult;
+</#if>
+
+import java.sql.SQLException;
+
+import java.util.HashMap;
+import java.util.Map;
+
+<#if proc.hasObject || proc.hasArray>
 import javax.annotation.Resource;
+
+</#if>
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+<#if proc.hasObject || proc.hasArray>
+import org.springframework.jdbc.core.JdbcTemplate;
+</#if>
 import org.springframework.stereotype.Repository;
 
 /**
- * JDBCTemplate implementation for <#if proc.function>function<#else>stored procedure</#if> ${proc.fullName}.
+ * DAO implementation for <#if proc.function>function<#else>stored procedure</#if>.
+ *
+ * ${proc.fullName}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
@@ -45,25 +65,24 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
     /**
      * JDBC template to use.
      */
-    private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
+    @Resource(name="${jdbcTemplate}")
+    private JdbcTemplate jdbcTemplate;
+
+</#if>
+<#if proc.checkResult>
+    /**
+     * Check result utility.
+     */
+    @Autowired
+    private CheckResult checkResult;
+
 </#if>
     /**
      * <#if proc.function>Function<#else>Stored procedure</#if> ${proc.fullName}.
      */
-    private ${proc.className}SP sp = null;
-
-    /**
-     * Setter for jdbcTemplate.
-     *
-     * @param pjdbcTemplate jdbcTemplate
-     */
-    @Resource(name="${jdbcTemplate}")
-    public void setJdbcTemplate(final org.springframework.jdbc.core.JdbcTemplate pjdbcTemplate) {
-<#if proc.hasObject || proc.hasArray>
-        this.jdbcTemplate = pjdbcTemplate;
-</#if>
-        this.sp = new ${proc.className}SP(pjdbcTemplate);
-    }
+    @Autowired
+    @Qualifier(value = "${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
+    private ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if>;
 
     /**
      * Execute <#if proc.function>function<#else>stored procedure</#if> ${proc.fullName}.
@@ -77,12 +96,13 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
      * @throws java.sql.SQLException if error.
      */
     @Override
-    @SuppressWarnings({"unchecked"})
-    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>final ${proc.className}IN params</#if>) throws java.sql.SQLException {
+    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>
+            final ${proc.className}IN params</#if>
+    ) throws SQLException {
 
-        java.util.Map<String, Object> mparams = new java.util.HashMap<String, Object>();
+        Map<String, Object> mparams = new HashMap<String, Object>();
 <#if proc.hasOutput>
-        java.util.Map<String, Object> r;
+        Map<String, Object> outparams;
 </#if>
 
         try {
@@ -94,26 +114,30 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 </#if>
 </#list>
 <#if !proc.hasOutput>
-            this.sp.execute(mparams);
+            <#if proc.function>function<#else>procedure</#if>.execute(mparams);
         } catch (Exception ex) {
-            throw new java.sql.SQLException(ex);
+            throw new SQLException(ex);
         }
 </#if>
 <#if proc.hasOutput>
-            r = this.sp.runExecute(mparams);
+            outparams = <#if proc.function>function<#else>procedure</#if>.execute(mparams);
         } catch (Exception ex) {
-            throw new java.sql.SQLException(ex);
+            throw new SQLException(ex);
         }
+<#if proc.checkResult>
 
-        java.util.Map<String, Object> m = <#if proc.checkResult >${javaPackage}.util.CheckResult.check(r)<#else>r</#if>;
+        checkResult.check(outparams);
+</#if>
 
-        ${proc.className}OUT result = new ${proc.className}OUT();
+        ${proc.className}OUT result;
+        result = new ${proc.className}OUT();
 
         try {
+
 <#list proc.outputParameters as parameter>
 <#if parameter.sqlTypeName == 'java.sql.Types.CLOB' >
             java.sql.Clob clob${parameter.propertyName};
-            clob${parameter.propertyName} = (java.sql.Clob) m.get("${parameter.prefix}${parameter.name}");
+            clob${parameter.propertyName} = (java.sql.Clob) outparams.get("${parameter.prefix}${parameter.name}");
             String string${parameter.propertyName} = null;
 
             if (clob${parameter.propertyName} != null) {
@@ -124,9 +148,8 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
                 clob${parameter.propertyName}.free();
             }
 
-            result.set${parameter.propertyName}(string${parameter.propertyName});
 <#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
-            java.sql.Blob blob${parameter.propertyName} = (java.sql.Blob) m.get("${parameter.prefix}${parameter.name}");
+            java.sql.Blob blob${parameter.propertyName} = (java.sql.Blob) outparams.get("${parameter.prefix}${parameter.name}");
             byte [] bytes${parameter.propertyName} = null;
 
             if (blob${parameter.propertyName} != null) {
@@ -137,15 +160,29 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
                 blob${parameter.propertyName}.free();
             }
 
-            result.set${parameter.propertyName}(bytes${parameter.propertyName});
 <#elseif parameter.resultSet || parameter.returnResultSet>
-            result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>) m.get("${parameter.prefix}${parameter.name}"));
+            Object object${parameter.propertyName} = outparams.get("${parameter.prefix}${parameter.name}");
 <#else>
-            result.set${parameter.propertyName}((${parameter.javaTypeName}) m.get("${parameter.prefix}${parameter.name}"));
+            ${parameter.javaTypeName} object${parameter.propertyName} = (${parameter.javaTypeName}) outparams.get("${parameter.prefix}${parameter.name}");
 </#if>
 </#list>
+
+<#list proc.outputParameters as parameter>
+<#if parameter.sqlTypeName == 'java.sql.Types.CLOB' >
+            result.set${parameter.propertyName}(string${parameter.propertyName});
+<#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
+            result.set${parameter.propertyName}(bytes${parameter.propertyName});
+<#elseif parameter.resultSet || parameter.returnResultSet>
+            if (object${parameter.propertyName} instanceof java.util.List) {
+                result.set${parameter.propertyName}((java.util.List<${parameter.javaTypeName}>) object${parameter.propertyName});
+            }
+<#else>
+            result.set${parameter.propertyName}(object${parameter.propertyName});
+</#if>
+</#list>
+
         } catch (Exception ex) {
-            throw new java.sql.SQLException(ex);
+            throw new SQLException(ex);
         }
 
         return result;

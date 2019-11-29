@@ -366,6 +366,16 @@ public class AutoGenerator extends AbstractMojo {
     private String position;
 
     /**
+     * Use diamond style.
+     */
+    @Parameter(
+            property = "autoplsp.diamond",
+            defaultValue = "false",
+            readonly = true,
+            required = false)
+    private String diamond;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -397,6 +407,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] Lombok: " + lombok);
         getLog().info("[AutoGenerator] Header: " + header);
         getLog().info("[AutoGenerator] Serialization: " + serialization);
+        getLog().info("[AutoGenerator] Diamond: " + diamond);
         getLog().info("[AutoGenerator] Test: " + test);
         getLog().info("[AutoGenerator] SuccessCode: " + successCode);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
@@ -574,6 +585,7 @@ public class AutoGenerator extends AbstractMojo {
                     serialization.equalsIgnoreCase("true"),
                     test.equalsIgnoreCase("true"),
                     position.equalsIgnoreCase("true"),
+                    diamond.equalsIgnoreCase("true"),
                     outParameterCode,
                     outParameterMessage,
                     successCode,
@@ -581,18 +593,22 @@ public class AutoGenerator extends AbstractMojo {
                     connManager.getVersion()
             );
 
-            List<Table> tables = generator.findTables(connection, tableSuffix);
             List<Table> fullTables = new ArrayList<Table>();
 
-            for (Table table : tables) {
+            if (!fillTables.isEmpty()) {
 
-                String name = table.getName();
+                List<Table> tables = generator.findTables(connection, tableSuffix);
 
-                boolean match = patternT.matcher(name).matches();
+                for (Table table : tables) {
 
-                if (match) {
-                    LoggerManager.getInstance().info("[AutoGenerator] Process table name: " + table.getName());
-                    fullTables.add(table);
+                    String name = table.getName();
+
+                    boolean match = patternT.matcher(name).matches();
+
+                    if (match) {
+                        LoggerManager.getInstance().info("[AutoGenerator] Process table name: " + table.getName());
+                        fullTables.add(table);
+                    }
                 }
             }
 

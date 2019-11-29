@@ -118,7 +118,7 @@ public final class ${proc.className}SqlQuery extends GenericSqlQuery {
      * @param params input parameters.
      */
     public Map<String, Object> execute(final Map<String, Object> params) {
-        Map map<String, Object> = new HashMap<String, Object>();
+        Map map<String, Object> = new HashMap<<#if !diamond>String, Object</#if>>();
 <#list proc.parameters as parameter>
 <#if parameter.returnResultSet>
         map.put("${parameter.prefix}${parameter.name}", super.execute(params.values().toArray()));

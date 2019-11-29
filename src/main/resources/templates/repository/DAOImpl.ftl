@@ -35,6 +35,14 @@ import ${javaPackage}.util.CheckResult;
 
 import java.sql.SQLException;
 
+<#list proc.outputParameters as parameter>
+<#if parameter.date>
+<#assign importDate = 1>
+</#if>
+</#list>
+<#if importDate??>
+import java.util.Date;
+</#if>
 import java.util.HashMap;
 <#if proc.hasResultSet>
 import java.util.List;
@@ -63,7 +71,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @SuppressWarnings({"unchecked"})
-public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
+public final class ${proc.className}DAOImpl
+        implements ${proc.className}DAO {
 
 <#if proc.hasObject || proc.hasArray>
     /**
@@ -104,30 +113,30 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
             final ${proc.className}IN params</#if>
     ) throws SQLException {
 
-        Map<String, Object> inParams = new HashMap<<#if !diamond>String, Object</#if>>();
+        Map<String, Object> in = new HashMap<<#if !diamond>String, Object</#if>>();
 <#if proc.hasOutput>
-        Map<String, Object> outParams;
+        Map<String, Object> out;
 </#if>
 
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
-        inParams.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}().processObject(org.springframework.jdbc.datasource.DataSourceUtils.getConnection(jdbcTemplate.getDataSource())));
+        in.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}().processObject(org.springframework.jdbc.datasource.DataSourceUtils.getConnection(jdbcTemplate.getDataSource())));
 <#else>
-        inParams.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}());
+        in.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}());
 </#if>
 </#list>
 <#if proc.hasInput>
 
 </#if>
         try {
-            <#if proc.hasOutput>outParams = </#if><#if proc.function>function<#else>procedure</#if>.execute(inParams);
+            <#if proc.hasOutput>out = </#if><#if proc.function>function<#else>procedure</#if>.execute(in);
         } catch (Exception ex) {
             throw new SQLException(ex);
         }
 <#if proc.hasOutput>
 <#if proc.checkResult>
 
-        checkResult.check(outParams);
+        checkResult.check(out);
 </#if>
 
         ${proc.className}OUT result;
@@ -136,7 +145,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 <#list proc.outputParameters as parameter>
 <#if parameter.sqlTypeName == 'java.sql.Types.CLOB' >
         java.sql.Clob obj${parameter.propertyName};
-        obj${parameter.propertyName} = (java.sql.Clob) outParams.get("${parameter.prefix}${parameter.name}");
+        obj${parameter.propertyName} = (java.sql.Clob) out.get("${parameter.prefix}${parameter.name}");
         String string${parameter.propertyName} = null;
 
         if (obj${parameter.propertyName} != null) {
@@ -148,7 +157,7 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
         }
 
 <#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
-        java.sql.Blob blob${parameter.propertyName} = (java.sql.Blob) outParams.get("${parameter.prefix}${parameter.name}");
+        java.sql.Blob blob${parameter.propertyName} = (java.sql.Blob) out.get("${parameter.prefix}${parameter.name}");
         byte [] obj${parameter.propertyName} = null;
 
         if (blob${parameter.propertyName} != null) {
@@ -163,22 +172,21 @@ public final class ${proc.className}DAOImpl implements ${proc.className}DAO {
 </#list>
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
-        Object obj${parameter.propertyName} = outParams.get("${parameter.prefix}${parameter.name}");
-<#elseif parameter.number || parameter.string>
-        ${parameter.javaTypeName} obj${parameter.propertyName} = (${parameter.javaTypeName}) outParams.get("${parameter.prefix}${parameter.name}");
+        List<${parameter.javaTypeName}> obj${parameter.propertyName};
+<#else>
+        <#if parameter.date>Date<#else>${parameter.javaTypeName}</#if> obj${parameter.propertyName};
+</#if>
+</#list>
+<#list proc.outputParameters as parameter>
+<#if parameter.resultSet || parameter.returnResultSet>
+        obj${parameter.propertyName} = (List<${parameter.javaTypeName}>) out.get("${parameter.prefix}${parameter.name}");
+<#else>
+        obj${parameter.propertyName} = (${parameter.javaTypeName}) out.get("${parameter.prefix}${parameter.name}");
 </#if>
 </#list>
 
 <#list proc.outputParameters as parameter>
-<#if parameter.sqlTypeName == 'java.sql.Types.CLOB' >
         result.set${parameter.propertyName}(obj${parameter.propertyName});
-<#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
-        result.set${parameter.propertyName}(obj${parameter.propertyName});
-<#elseif parameter.resultSet || parameter.returnResultSet>
-        result.set${parameter.propertyName}((List<${parameter.javaTypeName}>) obj${parameter.propertyName});
-<#else>
-        result.set${parameter.propertyName}(obj${parameter.propertyName});
-</#if>
 </#list>
 
         return result;

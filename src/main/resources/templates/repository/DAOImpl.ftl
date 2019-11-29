@@ -177,9 +177,10 @@ public final class ${proc.className}DAOImpl
         <#if parameter.date>Date<#else>${parameter.javaTypeName}</#if> obj${parameter.propertyName};
 </#if>
 </#list>
+
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
-        obj${parameter.propertyName} = (List<${parameter.javaTypeName}>) out.get("${parameter.prefix}${parameter.name}");
+        obj${parameter.propertyName} = (List) out.get("${parameter.prefix}${parameter.name}");
 <#else>
         obj${parameter.propertyName} = (${parameter.javaTypeName}) out.get("${parameter.prefix}${parameter.name}");
 </#if>

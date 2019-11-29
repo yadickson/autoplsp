@@ -16,11 +16,20 @@
  */
 </#if>
 package ${javaPackage}.repository.mapper;
+<#list parameter.parameters as paramrs>
+<#if paramrs.date>
+<#assign importDate = 1>
+</#if>
+</#list>
 
 import ${javaPackage}.domain.${parameter.javaTypeName};
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+<#if importDate??>
+
+import java.util.Date;
+</#if>
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -58,11 +67,15 @@ public final class ${parameter.javaTypeName}RowMapper
             final int i
     ) throws SQLException {
 
-        ${parameter.javaTypeName} result;
-        result = new ${parameter.javaTypeName}();
+        ${parameter.javaTypeName} row;
+        row = new ${parameter.javaTypeName}();
 
 <#list parameter.parameters as paramrs>
+<#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
+        Date obj${paramrs.propertyName};
+<#else>
         ${paramrs.javaTypeName} obj${paramrs.propertyName};
+</#if>
 </#list>
 
 <#list parameter.parameters as paramrs>
@@ -70,15 +83,17 @@ public final class ${parameter.javaTypeName}RowMapper
         obj${paramrs.propertyName} = resultSet.getString(${paramrs.name});
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
         obj${paramrs.propertyName} = resultSet.getBytes(${paramrs.name});
+<#elseif paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
+        obj${paramrs.propertyName} = (Date) resultSet.getTimestamp(${paramrs.name});
 <#else>
         obj${paramrs.propertyName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
 </#if>
 </#list>
 
 <#list parameter.parameters as paramrs>
-        result.set${paramrs.propertyName}(obj${paramrs.propertyName});
+        row.set${paramrs.propertyName}(obj${paramrs.propertyName});
 </#list>
 
-        return result;
+        return row;
     }
 }

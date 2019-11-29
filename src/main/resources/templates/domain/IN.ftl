@@ -17,7 +17,24 @@
 </#if>
 package ${javaPackage}.domain;
 
-<#if lombok><#if proc.hasInput>import lombok.AllArgsConstructor;</#if>
+<#list proc.inputParameters as parameter>
+<#if parameter.date>
+<#assign importDateUtil = 1>
+</#if>
+</#list>
+<#if importDateUtil??>
+import ${javaPackage}.util.DateUtil;
+
+import java.util.Date;
+
+</#if>
+<#if lombok>
+<#if importDateUtil??>
+import lombok.AccessLevel;
+</#if>
+<#if proc.hasInput>
+import lombok.AllArgsConstructor;
+</#if>
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -52,9 +69,9 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
     /**
      * Input parameter ${parameter.fieldName}.
      */<#if lombok && parameter.date>
-    @Getter(lombok.AccessLevel.NONE)
-    @Setter(lombok.AccessLevel.NONE)</#if>
-    private ${parameter.javaTypeName} ${parameter.fieldName} = null;
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)</#if>
+    private <#if parameter.date>Date<#else>${parameter.javaTypeName}</#if> ${parameter.fieldName} = null;
 </#list>
 <#if !lombok>
 
@@ -86,8 +103,8 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      *
      * @return ${parameter.fieldName}
      */
-    public ${parameter.javaTypeName} get${parameter.propertyName}() {
-        return <#if parameter.date>${javaPackage}.util.DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
+    public <#if parameter.date>Date<#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
+        return <#if parameter.date>DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
 
     /**
@@ -95,8 +112,8 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      *
      * @param p${parameter.propertyName} ${parameter.fieldName} to set
      */
-    public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
-        this.${parameter.fieldName} = <#if parameter.date>${javaPackage}.util.DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
+    public void set${parameter.propertyName}(final <#if parameter.date>Date<#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
+        this.${parameter.fieldName} = <#if parameter.date>DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
     }
 </#if>
 </#list>

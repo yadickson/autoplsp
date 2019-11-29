@@ -62,17 +62,21 @@ public final class ${parameter.javaTypeName}RowMapper
         result = new ${parameter.javaTypeName}();
 
 <#list parameter.parameters as paramrs>
-<#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getTimestamp(${paramrs.name}));
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.VARCHAR'>
-        result.set${paramrs.propertyName}(resultSet.getString(${paramrs.name}));
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
-        result.set${paramrs.propertyName}(resultSet.getString(${paramrs.name}));
+        ${paramrs.javaTypeName} obj${paramrs.propertyName};
+</#list>
+
+<#list parameter.parameters as paramrs>
+<#if paramrs.sqlTypeName == 'java.sql.Types.VARCHAR' || paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
+        obj${paramrs.propertyName} = resultSet.getString(${paramrs.name});
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
-        result.set${paramrs.propertyName}(resultSet.getBytes(${paramrs.name}));
+        obj${paramrs.propertyName} = resultSet.getBytes(${paramrs.name});
 <#else>
-        result.set${paramrs.propertyName}((${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name}));
+        obj${paramrs.propertyName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
 </#if>
+</#list>
+
+<#list parameter.parameters as paramrs>
+        result.set${paramrs.propertyName}(obj${paramrs.propertyName});
 </#list>
 
         return result;

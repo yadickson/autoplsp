@@ -51,7 +51,7 @@ public class DateParameterTest {
     public void testGetJavaTypeName() throws BusinessException {
         String javaType = parameter.getJavaTypeName();
         assertNotNull(javaType);
-        assertEquals("java.util.Date", javaType);
+        assertEquals("Date", javaType);
     }
 
     @Test

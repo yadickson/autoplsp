@@ -13,7 +13,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 - Oracle DataBase 11g and 12c
 - Basic PostgresSQL
 - Basic SQL Server (Tested 2017, Driver jTDS)
-- Java >= 1.6
+- Java >= 7
 - Spring Framework >= 4
 - Auto package name detection
 - Configuration file generation for Spring
@@ -61,8 +61,8 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 
 ```xml
 <properties>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 </properties>
 ```

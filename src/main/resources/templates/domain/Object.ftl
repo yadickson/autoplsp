@@ -100,7 +100,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      *
      * @return ${parameter2.fieldName}
      */
-    public <#if parameter2.date>Date<#else>${parameter2.javaTypeName}</#if> get${parameter2.propertyName}() {
+    public ${parameter2.javaTypeName} get${parameter2.propertyName}() {
         return <#if parameter2.date>DateUtil.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
     }
 
@@ -109,7 +109,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      *
      * @param p${parameter2.propertyName} ${parameter2.fieldName} to set
      */
-    public void set${parameter2.propertyName}(final <#if parameter2.date>Date<#else>${parameter2.javaTypeName}</#if> p${parameter2.propertyName}) {
+    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} p${parameter2.propertyName}) {
         this.${parameter2.fieldName} = <#if parameter2.date>DateUtil.process(</#if>p${parameter2.propertyName}<#if parameter2.date>)</#if>;
     }
 </#if>

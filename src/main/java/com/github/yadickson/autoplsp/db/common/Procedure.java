@@ -196,6 +196,54 @@ public class Procedure implements Serializable {
     }
 
     /**
+     * Getter is procedure has clob type parameter.
+     *
+     * @return true is has clob type parameter
+     * @throws BusinessException if error
+     */
+    public boolean getHasClob() throws BusinessException {
+        for (Parameter param : this.parameters) {
+            if (param.isClob()) {
+                return true;
+            }
+
+            if (param.isResultSet() || param.isReturnResultSet()) {
+                for (Parameter param2 : param.getParameters()) {
+                    if (param2.isClob()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Getter is procedure has blob type parameter.
+     *
+     * @return true is has blob type parameter
+     * @throws BusinessException if error
+     */
+    public boolean getHasBlob() throws BusinessException {
+        for (Parameter param : this.parameters) {
+            if (param.isBlob()) {
+                return true;
+            }
+
+            if (param.isResultSet() || param.isReturnResultSet()) {
+                for (Parameter param2 : param.getParameters()) {
+                    if (param2.isBlob()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Getter is procedure has return result set parameter
      *
      * @return true is has return result set parameter

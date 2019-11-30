@@ -91,6 +91,8 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String DRIVER_VERSION = "driverVersion";
 
     private boolean checkResult;
+    private boolean processClob;
+    private boolean processBlob;
     private boolean addTypeTable;
     private boolean addDateUtil;
 
@@ -169,6 +171,8 @@ public class JavaGenerator extends TemplateGenerator {
         LoggerManager.getInstance().info("[JavaGenerator] Process template for " + procedures.size() + " procedures");
 
         checkResult = false;
+        processClob = false;
+        processBlob = false;
         addTypeTable = false;
         addDateUtil = false;
 
@@ -220,6 +224,28 @@ public class JavaGenerator extends TemplateGenerator {
 
             if (test) {
                 createTemplate(input, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath("DateUtilTest.java"));
+            }
+        }
+
+        if (procedure.getHasClob() && !processClob) {
+            processClob = true;
+            createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(input, UTIL_PATH + "ClobUtil.ftl", getUtilOutputFilePath("ClobUtil.java"));
+            createTemplate(input, UTIL_PATH + "ClobUtilImpl.ftl", getUtilOutputFilePath("ClobUtilImpl.java"));
+
+            if (test) {
+                createTemplate(input, UTIL_PATH + "ClobUtilTest.ftl", getUtilOutputFileTestPath("ClobUtilTest.java"));
+            }
+        }
+
+        if (procedure.getHasBlob() && !processBlob) {
+            processBlob = true;
+            createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(input, UTIL_PATH + "BlobUtil.ftl", getUtilOutputFilePath("BlobUtil.java"));
+            createTemplate(input, UTIL_PATH + "BlobUtilImpl.ftl", getUtilOutputFilePath("BlobUtilImpl.java"));
+
+            if (test) {
+                createTemplate(input, UTIL_PATH + "BlobUtilTest.ftl", getUtilOutputFileTestPath("BlobUtilTest.java"));
             }
         }
 

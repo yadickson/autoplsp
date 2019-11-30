@@ -49,7 +49,7 @@ public class DateParameter extends Parameter {
      */
     @Override
     public String getJavaTypeName() {
-        return "java.util.Date";
+        return "Date";
     }
 
     /**

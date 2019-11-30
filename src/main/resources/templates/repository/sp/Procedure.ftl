@@ -58,7 +58,8 @@ import org.springframework.jdbc.object.StoredProcedure;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public final class ${proc.className}SP extends StoredProcedure {
+public final class ${proc.className}SP
+        extends StoredProcedure {
 
     /**
      * Full <#if proc.function>function<#else>stored procedure</#if> name.

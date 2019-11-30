@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +18,16 @@
 </#if>
 package ${javaPackage}.domain;
 
-<#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
+import java.sql.Connection;
+
+import java.util.ArrayList;
+<#if driverName == 'oracle' >
+
+import oracle.jdbc.OracleConnection;
+<#if>
+
+<#if jsonNonNull>
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 </#if>
 /**
@@ -25,10 +35,14 @@ package ${javaPackage}.domain;
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */<#if jsonNonNull>
-@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+ */
+<#if jsonNonNull>
+@JsonInclude(JsonInclude.Include.NON_NULL)
+</#if>
 @SuppressWarnings({"deprecation"})
-public final class ${parameter.javaTypeName} extends java.util.ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}><#if serialization> implements java.io.Serializable</#if> {
+public final class ${parameter.javaTypeName}
+        extends ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}><#if serialization>
+        implements java.io.Serializable</#if> {
 <#if serialization> 
 
     /**
@@ -45,7 +59,7 @@ public final class ${parameter.javaTypeName} extends java.util.ArrayList<${param
      * @throws Exception
      */
     public Object processObject(
-            final java.sql.Connection connection
+            final Connection connection
     ) throws Exception {
 
         Object[] input = new Object[size()];
@@ -53,15 +67,15 @@ public final class ${parameter.javaTypeName} extends java.util.ArrayList<${param
         int i = 0;
 
         for (${parameter.parameters[parameter.parameters?size - 1].javaTypeName} obj : this) {
-            <#if parameter.parameters[parameter.parameters?size - 1].object>
+<#if parameter.parameters[parameter.parameters?size - 1].object>
             input[i++] = obj.processObject(connection);
-            <#else>
+<#else>
             input[i++] = obj;
-            </#if>
+</#if>
         }
 
 <#if driverName == 'oracle' >
-        return ((oracle.jdbc.OracleConnection)(connection)).createARRAY("${parameter.realObjectName}", input);
+        return ((OracleConnection)connection).createARRAY("${parameter.realObjectName}", input);
 <#else>
         throw new Exception("driver ${driverName} not supported");
 </#if>

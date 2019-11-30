@@ -191,6 +191,24 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Method to know if parameter is clob.
+     *
+     * @return true if date
+     */
+    public boolean isClob() {
+        return false;
+    }
+
+    /**
+     * Method to know if parameter is blob.
+     *
+     * @return true if date
+     */
+    public boolean isBlob() {
+        return false;
+    }
+
+    /**
      * Method to know if parameter is void.
      *
      * @return true if boolean

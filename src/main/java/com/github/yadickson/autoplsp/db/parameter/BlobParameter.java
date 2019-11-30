@@ -71,4 +71,15 @@ public class BlobParameter extends Parameter {
     public String getSqlTypeName() {
         return "java.sql.Types.BLOB";
     }
+    
+    /**
+     * Method to know if parameter is blob.
+     *
+     * @return true if blod
+     */
+    @Override
+    public boolean isBlob() {
+        return true;
+    }
+
 }

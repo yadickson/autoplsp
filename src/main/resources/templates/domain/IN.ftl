@@ -71,7 +71,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      */<#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)</#if>
-    private <#if parameter.date>Date<#else>${parameter.javaTypeName}</#if> ${parameter.fieldName} = null;
+    private ${parameter.javaTypeName} ${parameter.fieldName} = null;
 </#list>
 <#if !lombok>
 
@@ -103,7 +103,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      *
      * @return ${parameter.fieldName}
      */
-    public <#if parameter.date>Date<#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
+    public ${parameter.javaTypeName} get${parameter.propertyName}() {
         return <#if parameter.date>DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
 
@@ -112,7 +112,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      *
      * @param p${parameter.propertyName} ${parameter.fieldName} to set
      */
-    public void set${parameter.propertyName}(final <#if parameter.date>Date<#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
+    public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
         this.${parameter.fieldName} = <#if parameter.date>DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
     }
 </#if>

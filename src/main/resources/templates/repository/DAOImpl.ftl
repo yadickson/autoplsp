@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +18,15 @@
 </#if>
 package ${javaPackage}.repository;
 
+<#list proc.outputParameters as parameter>
+<#if parameter.date>
+<#assign importDate = 1>
+<#elseif parameter.clob>
+<#assign importClobUtil = 1>
+<#elseif parameter.blob>
+<#assign importBlobUtil = 1>
+</#if>
+</#list>
 <#list proc.parameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
 import ${javaPackage}.domain.${parameter.javaTypeName};
@@ -29,17 +39,18 @@ import ${javaPackage}.domain.${proc.className}IN;
 import ${javaPackage}.domain.${proc.className}OUT;
 </#if>
 import ${javaPackage}.repository.sp.${proc.className}SP;
+<#if importBlobUtil??>
+import ${javaPackage}.util.BlobUtil;
+</#if>
 <#if proc.checkResult>
 import ${javaPackage}.util.CheckResult;
+</#if>
+<#if importClobUtil??>
+import ${javaPackage}.util.ClobUtil;
 </#if>
 
 import java.sql.SQLException;
 
-<#list proc.outputParameters as parameter>
-<#if parameter.date>
-<#assign importDate = 1>
-</#if>
-</#list>
 <#if importDate??>
 import java.util.Date;
 </#if>
@@ -82,12 +93,28 @@ public final class ${proc.className}DAOImpl
     private JdbcTemplate jdbcTemplate;
 
 </#if>
+<#if importBlobUtil??>
+    /**
+     * Blob utility.
+     */
+    @Autowired
+    private BlobUtil blobUtil;
+
+</#if>
 <#if proc.checkResult>
     /**
      * Check result utility.
      */
     @Autowired
     private CheckResult checkResult;
+
+</#if>
+<#if importClobUtil??>
+    /**
+     * Clob utility.
+     */
+    @Autowired
+    private ClobUtil clobUtil;
 
 </#if>
     /**
@@ -143,44 +170,20 @@ public final class ${proc.className}DAOImpl
         result = new ${proc.className}OUT();
 
 <#list proc.outputParameters as parameter>
-<#if parameter.sqlTypeName == 'java.sql.Types.CLOB' >
-        java.sql.Clob obj${parameter.propertyName};
-        obj${parameter.propertyName} = (java.sql.Clob) out.get("${parameter.prefix}${parameter.name}");
-        String string${parameter.propertyName} = null;
-
-        if (obj${parameter.propertyName} != null) {
-            java.io.Reader reader${parameter.propertyName} = obj${parameter.propertyName}.getCharacterStream();
-            java.io.StringWriter writer${parameter.propertyName} = new java.io.StringWriter();
-            org.apache.commons.io.IOUtils.copy(reader${parameter.propertyName}, writer${parameter.propertyName});
-            string${parameter.propertyName} = writer${parameter.propertyName}.toString();
-            obj${parameter.propertyName}.free();
-        }
-
-<#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
-        java.sql.Blob blob${parameter.propertyName} = (java.sql.Blob) out.get("${parameter.prefix}${parameter.name}");
-        byte [] obj${parameter.propertyName} = null;
-
-        if (blob${parameter.propertyName} != null) {
-            java.io.InputStream input${parameter.propertyName} = blob${parameter.propertyName}.getBinaryStream();
-            java.io.ByteArrayOutputStream output${parameter.propertyName} = new java.io.ByteArrayOutputStream();
-            org.apache.commons.io.IOUtils.copy(input${parameter.propertyName}, output${parameter.propertyName});
-            obj${parameter.propertyName} = output${parameter.propertyName}.toByteArray();
-            blob${parameter.propertyName}.free();
-        }
-
-</#if>
-</#list>
-<#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
         List<${parameter.javaTypeName}> obj${parameter.propertyName};
 <#else>
-        <#if parameter.date>Date<#else>${parameter.javaTypeName}</#if> obj${parameter.propertyName};
+        ${parameter.javaTypeName} obj${parameter.propertyName};
 </#if>
 </#list>
 
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
         obj${parameter.propertyName} = (List) out.get("${parameter.prefix}${parameter.name}");
+<#elseif parameter.clob>
+        obj${parameter.propertyName} = clobUtil.process(out.get("${parameter.prefix}${parameter.name}"));
+<#elseif parameter.blob>
+        obj${parameter.propertyName} = blobUtil.process(out.get("${parameter.prefix}${parameter.name}"));
 <#else>
         obj${parameter.propertyName} = (${parameter.javaTypeName}) out.get("${parameter.prefix}${parameter.name}");
 </#if>

@@ -71,4 +71,15 @@ public class ClobParameter extends Parameter {
     public String getSqlTypeName() {
         return "java.sql.Types.CLOB";
     }
+        
+    /**
+     * Method to know if parameter is clob.
+     *
+     * @return true if clob
+     */
+    @Override
+    public boolean isClob() {
+        return true;
+    }
+
 }

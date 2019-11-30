@@ -1,6 +1,15 @@
 package ${javaPackage}.repository.mapper;
+<#list parameter.parameters as paramrs>
+<#if paramrs.date>
+<#assign importDate = 1>
+</#if>
+</#list>
 
 import ${javaPackage}.domain.${parameter.javaTypeName};
+<#if importDate??>
+
+import java.util.Date;
+</#if>
 
 import org.junit.Assert;
 import org.junit.Test;

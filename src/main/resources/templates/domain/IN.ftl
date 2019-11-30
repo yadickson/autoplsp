@@ -68,9 +68,11 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
 
     /**
      * Input parameter ${parameter.fieldName}.
-     */<#if lombok && parameter.date>
+     */
+<#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)</#if>
+    @Setter(AccessLevel.NONE)
+</#if>
     private <#if parameter.date>Date<#else>${parameter.javaTypeName}</#if> ${parameter.fieldName} = null;
 </#list>
 <#if !lombok>
@@ -84,15 +86,15 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
     /**
      * Class constructor ${proc.className}IN.
      *
-    <#list proc.inputParameters as parameter>
+<#list proc.inputParameters as parameter>
      * @param p${parameter.propertyName} set value of ${parameter.fieldName}
-    </#list>
+</#list>
      */
     public ${proc.className}IN(<#if proc.hasInput>${'\n'}            </#if><#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>
     ) {
-        <#list proc.inputParameters as parameter>
+<#list proc.inputParameters as parameter>
         this.${parameter.fieldName} = p${parameter.propertyName};
-        </#list>
+</#list>
     }
 </#if>
 <#list proc.inputParameters as parameter>

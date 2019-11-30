@@ -51,7 +51,7 @@ public class BlobParameterTest {
     public void testGetJavaTypeName() throws BusinessException {
         String javaType = parameter.getJavaTypeName();
         assertNotNull(javaType);
-        assertEquals("byte []", javaType);
+        assertEquals("byte[]", javaType);
     }
 
     @Test

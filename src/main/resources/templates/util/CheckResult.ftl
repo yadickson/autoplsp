@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -32,7 +33,7 @@ public interface CheckResult {
      * Evaluate output parameters from database.
      *
      * @param map map to evaluate.
-     * @throws java.sql.SQLException if error.
+     * @throws SQLException if error.
      */
     void check(Map<String, Object> map) throws SQLException;
 

@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -58,7 +59,7 @@ public final class ${parameter.javaTypeName}RowMapper
      *
      * @param resultSet resultset.
      * @param i row number.
-     * @throws java.sql.SQLException if error.
+     * @throws SQLException if error.
      * @return object
      */
     @Override
@@ -71,11 +72,7 @@ public final class ${parameter.javaTypeName}RowMapper
         row = new ${parameter.javaTypeName}();
 
 <#list parameter.parameters as paramrs>
-<#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        Date obj${paramrs.propertyName};
-<#else>
         ${paramrs.javaTypeName} obj${paramrs.propertyName};
-</#if>
 </#list>
 
 <#list parameter.parameters as paramrs>
@@ -84,7 +81,7 @@ public final class ${parameter.javaTypeName}RowMapper
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
         obj${paramrs.propertyName} = resultSet.getBytes(${paramrs.name});
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        obj${paramrs.propertyName} = (Date) resultSet.getTimestamp(${paramrs.name});
+        obj${paramrs.propertyName} = (${paramrs.javaTypeName}) resultSet.getTimestamp(${paramrs.name});
 <#else>
         obj${paramrs.propertyName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
 </#if>

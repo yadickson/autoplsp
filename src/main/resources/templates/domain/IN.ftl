@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -40,7 +41,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 </#if>
-<#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
+<#if jsonNonNull>
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 </#if>
 /**
@@ -50,12 +52,18 @@ import lombok.Setter;
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */<#if lombok>
+ */
+<#if lombok>
 @NoArgsConstructor
-<#if proc.hasInput>@AllArgsConstructor</#if>
+<#if proc.hasInput>
+@AllArgsConstructor
+</#if>
 @Getter
-@Setter</#if><#if jsonNonNull>
-@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+@Setter
+</#if>
+<#if jsonNonNull>
+@JsonInclude(JsonInclude.Include.NON_NULL)
+</#if>
 public final class ${proc.className}IN<#if serialization> implements java.io.Serializable</#if> {
 <#if serialization>
 
@@ -68,9 +76,11 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
 
     /**
      * Input parameter ${parameter.fieldName}.
-     */<#if lombok && parameter.date>
+     */
+<#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)</#if>
+    @Setter(AccessLevel.NONE)
+</#if>
     private ${parameter.javaTypeName} ${parameter.fieldName} = null;
 </#list>
 <#if !lombok>
@@ -84,15 +94,15 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
     /**
      * Class constructor ${proc.className}IN.
      *
-    <#list proc.inputParameters as parameter>
+<#list proc.inputParameters as parameter>
      * @param p${parameter.propertyName} set value of ${parameter.fieldName}
-    </#list>
+</#list>
      */
     public ${proc.className}IN(<#if proc.hasInput>${'\n'}            </#if><#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>
     ) {
-        <#list proc.inputParameters as parameter>
+<#list proc.inputParameters as parameter>
         this.${parameter.fieldName} = p${parameter.propertyName};
-        </#list>
+</#list>
     }
 </#if>
 <#list proc.inputParameters as parameter>

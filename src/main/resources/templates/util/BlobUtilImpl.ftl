@@ -22,6 +22,11 @@ import java.sql.Blob;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+<#if logger>
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+</#if>
 
 import org.springframework.stereotype.Component;
 
@@ -33,6 +38,14 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public final class BlobUtilImpl implements BlobUtil {
+<#if logger>
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(ClobUtilImpl.class);
+</#if>
 
     /**
      * {@inheritDoc}
@@ -50,6 +63,9 @@ public final class BlobUtilImpl implements BlobUtil {
         try (InputStream stream = blob.getBinaryStream()) {
             result = IOUtils.toByteArray(stream, blob.length());
         } catch (Exception ex) {
+<#if logger>
+            LOGGER.error(ex.getMessage(), ex);
+</#if>
             result = null;
         }
 

@@ -68,6 +68,11 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 </#if>
+<#if logger>
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+</#if>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -89,6 +94,14 @@ import org.springframework.stereotype.Repository;
 public final class ${proc.className}DAOImpl
         implements ${proc.className}DAO {
 
+<#if logger>
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(${proc.className}DAOImpl.class);
+
+</#if>
 <#if proc.hasObject || proc.hasArray>
     /**
      * JDBC template to use.
@@ -167,6 +180,9 @@ public final class ${proc.className}DAOImpl
         try {
             <#if proc.hasOutput>out = </#if><#if proc.function>function<#else>procedure</#if>.execute(in);
         } catch (Exception ex) {
+<#if logger>
+            LOGGER.error(ex.getMessage(), ex);
+</#if>
             throw new SQLException(ex);
         }
 <#if proc.hasOutput>

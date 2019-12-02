@@ -20,6 +20,11 @@ package ${javaPackage}.util;
 
 import java.sql.SQLException;
 import java.util.Map;
+<#if logger>
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+</#if>
 
 import org.springframework.stereotype.Component;
 
@@ -31,6 +36,14 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public final class CheckResultImpl implements CheckResult {
+<#if logger>
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(CheckResultImpl.class);
+</#if>
 
     /**
      * Success constant value.
@@ -55,6 +68,11 @@ public final class CheckResultImpl implements CheckResult {
 
         if (!SUCCESS_CODE.equals(code.toString())) {
             String description = (String) map.get("${outParameterMessage}");
+<#if logger>
+            LOGGER.error("${outParameterCode}: " + code);
+            LOGGER.error("${outParameterMessage}: " + description);
+            LOGGER.error(ex.getMessage(), ex);
+</#if>
             throw new SQLException(description, null, code.intValue());
         }
     }

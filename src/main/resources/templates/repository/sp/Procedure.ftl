@@ -21,13 +21,14 @@ package ${javaPackage}.repository.sp;
 import java.util.Map;
 
 /**
- * DAO interface for function or stored procedure.
+ * DAO interface for <#if proc.function>function<#else>stored procedure</#if>.
  *
+ * ${proc.fullName}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface Procedure {
+public interface ${proc.className}SP {
 
     /**
      * Execute the function or stored procedure.

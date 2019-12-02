@@ -61,7 +61,7 @@ import org.springframework.jdbc.object.StoredProcedure;
  */
 public final class ${proc.className}SPImpl
         extends StoredProcedure
-        implements Procedure {
+        implements ${proc.className}SP {
 
     /**
      * Full <#if proc.function>function<#else>stored procedure</#if> name.

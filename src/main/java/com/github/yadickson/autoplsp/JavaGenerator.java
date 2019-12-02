@@ -252,7 +252,7 @@ public class JavaGenerator extends TemplateGenerator {
         if (!procedure.isFunctionInline()) {
 
             createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getRepositorySpOutputFilePath("Procedure.java"));
+            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SP"));
             createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "ProcedureImpl.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SPImpl"));
 
             if (test) {
@@ -262,7 +262,7 @@ public class JavaGenerator extends TemplateGenerator {
         } else {
 
             createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQuery.ftl", getRepositorySpOutputFilePath("SqlQuery.java"));
+            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQuery.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SqlQuery"));
             createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQueryImpl.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SqlQueryImpl"));
 
             if (test) {
@@ -400,12 +400,12 @@ public class JavaGenerator extends TemplateGenerator {
                 String fileName = getFileNamePath(parameterPath, procedure, param, "RSRowMapper");
 
                 createTemplate(input, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "package-info.ftl", getRepositoryMapperOutputFilePath("package-info.java"));
-                createTemplate(input, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "Mapper.ftl", fileName);
+                createTemplate(input, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "RowMapper.ftl", fileName);
 
                 if (test) {
                     String parameterTestPath = getRepositoryOutputTestPath(FOLDER_MAPPER_NAME);
                     String fileNameTest = getFileNamePath(parameterTestPath, procedure, param, "RSRowMapperTest");
-                    createTemplate(input, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "MapperTest.ftl", fileNameTest);
+                    createTemplate(input, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "RowMapperTest.ftl", fileNameTest);
                 }
             }
         }

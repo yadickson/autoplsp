@@ -39,9 +39,9 @@ import ${javaPackage}.domain.${proc.className}IN;
 import ${javaPackage}.domain.${proc.className}OUT;
 </#if>
 <#if !proc.functionInline>
-import ${javaPackage}.repository.sp.Procedure;
+import ${javaPackage}.repository.sp.${proc.className}SP;
 <#else>
-import ${javaPackage}.repository.sp.SqlQuery;
+import ${javaPackage}.repository.sp.${proc.className}SqlQuery;
 </#if>
 <#if importBlobUtil??>
 import ${javaPackage}.util.BlobUtil;
@@ -129,7 +129,7 @@ public final class ${proc.className}DAOImpl
      */
     @Autowired
     @Qualifier(value = "${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
-    private <#if !proc.functionInline>Procedure<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if>;
+    private ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if>;
 
     /**
      * Execute <#if proc.function>function<#else>stored procedure</#if>.

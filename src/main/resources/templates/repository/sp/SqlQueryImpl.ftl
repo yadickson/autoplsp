@@ -63,7 +63,7 @@ import org.springframework.jdbc.object.GenericSqlQuery;
  */
 public final class ${proc.className}SqlQueryImpl
         extends GenericSqlQuery
-        implements SqlQuery {
+        implements ${proc.className}SqlQuery {
 
     /**
      * Full <#if proc.function>function<#else>stored procedure</#if> name.

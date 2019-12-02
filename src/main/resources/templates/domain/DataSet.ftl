@@ -73,10 +73,12 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 <#list parameter.parameters as parameter2>
 
     /**
-     * Field parameter ${parameter2.fieldName}.
-     */<#if lombok && parameter2.date>
+     * Column ${parameter2.name}.
+     */
+<#if lombok && parameter2.date>
     @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)</#if>
+    @Setter(AccessLevel.NONE)
+</#if>
     private ${parameter2.javaTypeName} ${parameter2.fieldName} = null;
 </#list>
 <#if !lombok>
@@ -106,16 +108,16 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 <#if !lombok || parameter2.date>
 
     /**
-     * Getter for ${parameter2.fieldName}.
+     * Getter of ${parameter2.name}.
      *
-     * @return ${parameter2.fieldName}
+     * @return The ${parameter2.name} value.
      */
     public ${parameter2.javaTypeName} get${parameter2.propertyName}() {
         return <#if parameter2.date>DateUtil.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
     }
 
     /**
-     * Setter for ${parameter2.fieldName}.
+     * Setter of ${parameter2.name}.
      *
      * @param p${parameter2.fieldName} ${parameter2.fieldName}
      */

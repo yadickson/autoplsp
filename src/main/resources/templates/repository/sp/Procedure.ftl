@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,82 +18,25 @@
 </#if>
 package ${javaPackage}.repository.sp;
 
-<#list proc.parameters as parameter>
-<#if parameter.inputOutput>
-<#assign fillInOut = 1>
-<#elseif parameter.output>
-<#assign fillOut = 1>
-<#elseif parameter.input>
-<#assign fillIn = 1>
-<#elseif parameter.returnResultSet>
-<#assign fillResultSet = 1>
-</#if>
-<#if parameter.resultSet || parameter.returnResultSet>
-<#assign fillSpace = 1>
-import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
-</#if>
-</#list>
-<#if fillSpace??>
-
-</#if>
-import org.springframework.jdbc.core.JdbcTemplate;
-<#if fillInOut??>
-import org.springframework.jdbc.core.SqlInOutParameter;
-</#if>
-<#if fillOut??>
-import org.springframework.jdbc.core.SqlOutParameter;
-</#if>
-<#if fillIn??>
-import org.springframework.jdbc.core.SqlParameter;
-</#if>
-<#if fillResultSet??>
-import org.springframework.jdbc.core.SqlReturnResultSet;
-</#if>
-import org.springframework.jdbc.object.StoredProcedure;
+import java.util.Map;
 
 /**
- * DAO for <#if proc.function>function<#else>stored procedure</#if>.
+ * DAO interface for function or stored procedure.
  *
- * ${proc.fullName}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public final class ${proc.className}SP
-        extends StoredProcedure {
+public interface Procedure {
 
     /**
-     * Full <#if proc.function>function<#else>stored procedure</#if> name.
-     */
-    public static final String SPROC_NAME
-            = "${proc.fullName}";
-
-    /**
-     * Class constructor from jdbcTemplate.
+     * Execute the function or stored procedure.
      *
-     * @param jdbcTemplate jdbcTemplate
+     * @return response.
+     * @param params input parameters.
+     * @throws org.springframework.dao.DataAccessException if error.
      */
-    public ${proc.className}SP(final JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate.getDataSource(), SPROC_NAME);
-
-        setFunction(<#if proc.function>true<#else>false</#if>);
-
-<#list proc.parameters as parameter>
-        <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> sql${parameter.propertyName};
-</#list>
-
-<#list proc.parameters as parameter>
-        sql${parameter.propertyName} = new <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>(
-                "${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >,
-                ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >,
-                new ${parameter.javaTypeName}RowMapper()</#if>
-        );
-
-</#list>
-<#list proc.parameters as parameter>
-        declareParameter(sql${parameter.propertyName});
-</#list>
-
-        compile();
-    }
+    Map<String, Object> execute(
+            Map<String, ?> params
+    ) throws org.springframework.dao.DataAccessException;
 }

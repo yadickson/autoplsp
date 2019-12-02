@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,114 +18,21 @@
 </#if>
 package ${javaPackage}.repository.sp;
 
-<#list proc.parameters as parameter>
-<#if parameter.inputOutput>
-<#assign fillInOut = 1>
-<#elseif parameter.output>
-<#assign fillOut = 1>
-<#elseif parameter.input>
-<#assign fillIn = 1>
-<#elseif parameter.returnResultSet>
-<#assign fillResultSet = 1>
-</#if>
-<#if parameter.resultSet || parameter.returnResultSet>
-<#assign fillSpace = 1>
-import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
-</#if>
-</#list>
-<#if fillSpace??>
-
-</#if>
 import java.util.Map;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-<#if fillInOut??>
-import org.springframework.jdbc.core.SqlInOutParameter;
-</#if>
-<#if fillOut??>
-import org.springframework.jdbc.core.SqlOutParameter;
-</#if>
-<#if fillIn??>
-import org.springframework.jdbc.core.SqlParameter;
-</#if>
-<#if fillResultSet??>
-import org.springframework.jdbc.core.SqlReturnResultSet;
-</#if>
-import org.springframework.jdbc.object.GenericSqlQuery;
-
 /**
- * DAO for <#if proc.function>function<#else>stored procedure</#if>.
- *
- * ${proc.fullName}
+ * DAO interface for function or stored procedure.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public final class ${proc.className}SqlQuery
-        extends GenericSqlQuery {
+public interface SqlQuery {
 
     /**
-     * Full <#if proc.function>function<#else>stored procedure</#if> name.
-     */
-    public static final String SPROC_NAME
-            = "${proc.fullName}";
-
-    /**
-     * Class constructor from jdbcTemplate.
-     *
-     * @param jdbcTemplate jdbcTemplate
-     */
-    public ${proc.className}SqlQuery(final JdbcTemplate jdbcTemplate) {
-        super();
-
-        setDataSource(jdbcTemplate.getDataSource());
-
-        setSql("select * from ${proc.fullName}(<#list proc.inputParameters as parameter>?<#sep>, </#sep></#list>)");
-
-<#list proc.parameters as parameter>
-<#if !parameter.returnResultSet>
-        Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter sql${parameter.propertyName};
-</#if>
-</#list>
-
-<#list proc.parameters as parameter>
-<#if !parameter.returnResultSet>
-        sql${parameter.propertyName} = new Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter(
-                "${parameter.prefix}${parameter.name}",
-                ${parameter.sqlTypeName}
-        );
-
-</#if>
-</#list>
-
-<#list proc.parameters as parameter>
-<#if !parameter.returnResultSet>
-        declareParameter(sql${parameter.propertyName});
-<#else>
-        try {
-            setRowMapperClass(new ${parameter.javaTypeName}RowMapper().getClass());
-        } catch (Exception ex) {
-
-        }
-</#if>
-</#list>
-
-        compile();
-    }
-
-    /**
-     * Execute the <#if proc.function>function<#else>stored procedure</#if>.
+     * Execute the function or stored procedure.
      *
      * @return response.
      * @param params input parameters.
      */
-    public Map<String, Object> execute(final Map<String, Object> params) {
-        Map map<String, Object> = new HashMap<<#if !diamond>String, Object</#if>>();
-<#list proc.parameters as parameter>
-<#if parameter.returnResultSet>
-        map.put("${parameter.prefix}${parameter.name}", super.execute(params.values().toArray()));
-</#if>
-</#list>
-        return map;
-    }
+    Map<String, Object> execute(Map<String, Object> params);
 }

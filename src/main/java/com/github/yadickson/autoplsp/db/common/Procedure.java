@@ -198,21 +198,51 @@ public class Procedure implements Serializable {
     /**
      * Getter is procedure has clob type parameter.
      *
+     * @param params parameters to evaluate
      * @return true is has clob type parameter
      * @throws BusinessException if error
      */
-    public boolean getHasClob() throws BusinessException {
-        for (Parameter param : this.parameters) {
+    public boolean getHasClob(final List<Parameter> params) throws BusinessException {
+        for (Parameter param : params) {
             if (param.isClob()) {
                 return true;
             }
+        }
 
-            if (param.isResultSet() || param.isReturnResultSet()) {
-                for (Parameter param2 : param.getParameters()) {
-                    if (param2.isClob()) {
-                        return true;
-                    }
-                }
+        return false;
+    }
+
+    /**
+     * Getter is procedure has clob type parameter.
+     *
+     * @return true is has clob type parameter
+     * @throws BusinessException if error
+     */
+    public boolean getHasInputClob() throws BusinessException {
+        return getHasClob(this.inputParameters);
+    }
+
+    /**
+     * Getter is procedure has clob type parameter.
+     *
+     * @return true is has clob type parameter
+     * @throws BusinessException if error
+     */
+    public boolean getHasOutputClob() throws BusinessException {
+        return getHasClob(this.outputParameters);
+    }
+
+    /**
+     * Getter is procedure has blob type parameter.
+     *
+     * @param params parameters to evaluate
+     * @return true is has blob type parameter
+     * @throws BusinessException if error
+     */
+    public boolean getHasBlob(final List<Parameter> params) throws BusinessException {
+        for (Parameter param : params) {
+            if (param.isBlob()) {
+                return true;
             }
         }
 
@@ -225,22 +255,18 @@ public class Procedure implements Serializable {
      * @return true is has blob type parameter
      * @throws BusinessException if error
      */
-    public boolean getHasBlob() throws BusinessException {
-        for (Parameter param : this.parameters) {
-            if (param.isBlob()) {
-                return true;
-            }
+    public boolean getHasInputBlob() throws BusinessException {
+        return getHasClob(this.inputParameters);
+    }
 
-            if (param.isResultSet() || param.isReturnResultSet()) {
-                for (Parameter param2 : param.getParameters()) {
-                    if (param2.isBlob()) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+    /**
+     * Getter is procedure has blob type parameter.
+     *
+     * @return true is has blob type parameter
+     * @throws BusinessException if error
+     */
+    public boolean getHasOutputBlob() throws BusinessException {
+        return getHasClob(this.outputParameters);
     }
 
     /**

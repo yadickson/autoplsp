@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -49,9 +50,9 @@ public interface ${proc.className}DAO {
 <#if proc.hasOutput>
      * @return output parameters
 </#if>
-     * @throws java.sql.SQLException if error
+     * @throws SQLException if error
      */
-    <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(
-            <#if proc.hasInput>${proc.className}IN params</#if>
-    ) throws SQLException;
+    <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>
+            ${proc.className}IN params
+    </#if>) throws SQLException;
 }

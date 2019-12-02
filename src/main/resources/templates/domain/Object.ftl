@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -38,7 +39,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 </#if>
-<#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
+<#if jsonNonNull>
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 </#if>
 /**
@@ -46,12 +48,16 @@ import lombok.Setter;
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */<#if lombok>
+ */
+<#if lombok>
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter</#if><#if jsonNonNull>
-@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+@Setter
+</#if>
+<#if jsonNonNull>
+@JsonInclude(JsonInclude.Include.NON_NULL)
+</#if>
 @SuppressWarnings({"deprecation"})
 public final class ${parameter.javaTypeName}<#if serialization> implements java.io.Serializable</#if> {
 <#if serialization> 

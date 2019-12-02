@@ -227,7 +227,7 @@ public class JavaGenerator extends TemplateGenerator {
             }
         }
 
-        if (procedure.getHasClob() && !processClob) {
+        if (procedure.getHasOutputClob() && !processClob) {
             processClob = true;
             createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
             createTemplate(input, UTIL_PATH + "ClobUtil.ftl", getUtilOutputFilePath("ClobUtil.java"));
@@ -238,7 +238,7 @@ public class JavaGenerator extends TemplateGenerator {
             }
         }
 
-        if (procedure.getHasBlob() && !processBlob) {
+        if (procedure.getHasOutputBlob() && !processBlob) {
             processBlob = true;
             createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
             createTemplate(input, UTIL_PATH + "BlobUtil.ftl", getUtilOutputFilePath("BlobUtil.java"));
@@ -250,9 +250,10 @@ public class JavaGenerator extends TemplateGenerator {
         }
 
         if (!procedure.isFunctionInline()) {
-            
+
             createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SP"));
+            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getRepositorySpOutputFilePath("Procedure.java"));
+            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "ProcedureImpl.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SPImpl"));
 
             if (test) {
                 createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "ProcedureTest.ftl", getFileNamePath(getRepositoryOutputTestPath(FOLDER_SP_NAME), procedure, "SPTest"));
@@ -261,7 +262,8 @@ public class JavaGenerator extends TemplateGenerator {
         } else {
 
             createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQuery.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SqlQuery"));
+            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQuery.ftl", getRepositorySpOutputFilePath("SqlQuery.java"));
+            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQueryImpl.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SqlQueryImpl"));
 
             if (test) {
                 createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQueryTest.ftl", getFileNamePath(getRepositoryOutputTestPath(FOLDER_SP_NAME), procedure, "SqlQueryTest"));
@@ -292,6 +294,10 @@ public class JavaGenerator extends TemplateGenerator {
         createTemplate(input, REPOSITORY_PATH + "package-info.ftl", getRepositoryOutputFilePath("package-info.java"));
         createTemplate(input, REPOSITORY_PATH + "DAO.ftl", getFileNamePath(procedurePath, procedure, "DAO"));
         createTemplate(input, REPOSITORY_PATH + "DAOImpl.ftl", getFileNamePath(procedurePath, procedure, "DAOImpl"));
+
+        if (test) {
+            createTemplate(input, REPOSITORY_PATH + "DAOTest.ftl", getFileNamePath(getRepositoryOutputTestPath(""), procedure, "DAOTest"));
+        }
     }
 
     private void processStoredProcedureParameter(Procedure procedure) throws BusinessException {

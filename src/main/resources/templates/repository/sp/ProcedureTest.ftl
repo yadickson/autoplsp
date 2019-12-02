@@ -21,7 +21,7 @@ public class ${proc.className}SPTest {
 
         Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
 
-        ${proc.className}SP sp = new ${proc.className}SP(jdbcTemplate);
+        ${proc.className}SPImpl sp = new ${proc.className}SPImpl(jdbcTemplate);
 
         Assert.assertSame(dataSource, sp.getJdbcTemplate().getDataSource());
 

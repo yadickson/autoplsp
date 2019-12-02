@@ -370,7 +370,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.diamond",
-            defaultValue = "false",
+            defaultValue = "true",
             readonly = true,
             required = false)
     private String diamond;

@@ -75,7 +75,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
 <#list proc.inputParameters as parameter>
 
     /**
-     * Input parameter ${parameter.fieldName}.
+     * Input parameter ${parameter.name}.
      */
 <#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
@@ -109,16 +109,16 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
 <#if !lombok || parameter.date>
 
     /**
-     * Getter for ${parameter.fieldName}.
+     * Getter of ${parameter.name}.
      *
-     * @return ${parameter.fieldName}
+     * @return The ${parameter.name} value
      */
     public ${parameter.javaTypeName} get${parameter.propertyName}() {
         return <#if parameter.date>DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
 
     /**
-     * Setter for ${parameter.fieldName}.
+     * Setter of ${parameter.name}.
      *
      * @param p${parameter.propertyName} ${parameter.fieldName} to set
      */

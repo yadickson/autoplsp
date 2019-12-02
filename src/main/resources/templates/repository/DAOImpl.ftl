@@ -38,7 +38,11 @@ import ${javaPackage}.domain.${proc.className}IN;
 <#if proc.hasOutput>
 import ${javaPackage}.domain.${proc.className}OUT;
 </#if>
-import ${javaPackage}.repository.sp.${proc.className}SP;
+<#if !proc.functionInline>
+import ${javaPackage}.repository.sp.Procedure;
+<#else>
+import ${javaPackage}.repository.sp.SqlQuery;
+</#if>
 <#if importBlobUtil??>
 import ${javaPackage}.util.BlobUtil;
 </#if>
@@ -89,7 +93,7 @@ public final class ${proc.className}DAOImpl
     /**
      * JDBC template to use.
      */
-    @Resource(name="${jdbcTemplate}")
+    @Resource(name = "${jdbcTemplate}")
     private JdbcTemplate jdbcTemplate;
 
 </#if>
@@ -118,14 +122,19 @@ public final class ${proc.className}DAOImpl
 
 </#if>
     /**
-     * <#if proc.function>Function<#else>Stored procedure</#if> ${proc.fullName}.
+     * <#if proc.function>Function<#else>Stored procedure</#if>.
+     *
+     * ${proc.fullName}
+     *
      */
     @Autowired
     @Qualifier(value = "${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
-    private ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if>;
+    private <#if !proc.functionInline>Procedure<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if>;
 
     /**
-     * Execute <#if proc.function>function<#else>stored procedure</#if> ${proc.fullName}.
+     * Execute <#if proc.function>function<#else>stored procedure</#if>.
+     *
+     * ${proc.fullName}
      *
 <#if proc.hasInput>
      * @param params input parameters
@@ -133,12 +142,12 @@ public final class ${proc.className}DAOImpl
 <#if proc.hasOutput>
      * @return output parameters
 </#if>
-     * @throws java.sql.SQLException if error.
+     * @throws SQLException if error.
      */
     @Override
     public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>
-            final ${proc.className}IN params</#if>
-    ) throws SQLException {
+            final ${proc.className}IN params
+    </#if>) throws SQLException {
 
         Map<String, Object> in = new HashMap<<#if !diamond>String, Object</#if>>();
 <#if proc.hasOutput>

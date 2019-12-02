@@ -49,7 +49,7 @@ public final class ${parameter.javaTypeName}RowMapper
 
 <#list parameter.parameters as paramrs>
     /**
-     * Paramater <#if position>position<#else>name</#if>.
+     * Column <#if position>position<#else>name</#if>.
      */
     private static final <#if position>int<#else>String</#if> ${paramrs.name} = <#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>;
 

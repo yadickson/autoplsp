@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -50,12 +51,18 @@ import lombok.Setter;
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
- */<#if lombok>
+ */
+<#if lombok>
 @NoArgsConstructor
-<#if proc.hasOutput>@AllArgsConstructor</#if>
+<#if proc.hasOutput>
+@AllArgsConstructor
+</#if>
 @Getter
-@Setter</#if><#if jsonNonNull>
-@JsonInclude(JsonInclude.Include.NON_NULL)</#if>
+@Setter
+</#if>
+<#if jsonNonNull>
+@JsonInclude(JsonInclude.Include.NON_NULL)
+</#if>
 public final class ${proc.className}OUT<#if serialization> implements java.io.Serializable</#if> {
 <#if serialization> 
 
@@ -67,10 +74,12 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
 <#list proc.outputParameters as parameter>
 
     /**
-     * Output parameter ${parameter.fieldName}.
-     */<#if lombok && parameter.date>
+     * Output parameter ${parameter.name}.
+     */
+<#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)</#if>
+    @Setter(AccessLevel.NONE)
+</#if>
     private <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName} = null;
 </#list>
 <#if !lombok>
@@ -99,16 +108,16 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
 <#if !lombok || parameter.date>
 
     /**
-     * Getter for ${parameter.fieldName}.
+     * Getter of ${parameter.name}.
      *
-     * @return ${parameter.fieldName}
+     * @return The ${parameter.name} value.
      */
     public <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
         return <#if parameter.date>DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
 
     /**
-     * Setter for ${parameter.fieldName}.
+     * Setter of ${parameter.name}.
      *
      * @param p${parameter.propertyName} ${parameter.fieldName} to set
      */

@@ -22,7 +22,7 @@ public class ${proc.className}SqlQueryTest {
 
         Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
 
-        ${proc.className}SP sp = new ${proc.className}SP(jdbcTemplate);
+        ${proc.className}SqlQueryImpl sp = new ${proc.className}SqlQueryImpl(jdbcTemplate);
 
         Assert.assertSame(dataSource, sp.getJdbcTemplate().getDataSource());
     }

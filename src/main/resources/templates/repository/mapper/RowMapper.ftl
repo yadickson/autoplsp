@@ -117,7 +117,7 @@ public final class ${parameter.javaTypeName}RowMapper
     private void fillStep${step}(
         final ResultSet resultSet,
         final ${parameter.javaTypeName} row
-    )  throws SQLException {
+    ) throws SQLException {
 
 <#list childs as paramrs>
         ${paramrs.javaTypeName} obj${paramrs.propertyName};

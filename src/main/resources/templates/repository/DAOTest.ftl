@@ -92,6 +92,7 @@ public class ${proc.className}DAOTest {
 <#list proc.inputParameters as parameter>
         params.set${parameter.propertyName}(null);
 </#list>
+
 </#if>
 <#if proc.hasOutput>
         ${proc.className}OUT out;

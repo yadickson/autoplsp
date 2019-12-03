@@ -376,6 +376,16 @@ public class AutoGenerator extends AbstractMojo {
     private String diamond;
 
     /**
+     * Use setter.
+     */
+    @Parameter(
+            property = "autoplsp.setter",
+            defaultValue = "true",
+            readonly = true,
+            required = false)
+    private String setter;
+
+    /**
      * Logger support.
      */
     @Parameter(
@@ -418,6 +428,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] Header: " + header);
         getLog().info("[AutoGenerator] Serialization: " + serialization);
         getLog().info("[AutoGenerator] Diamond: " + diamond);
+        getLog().info("[AutoGenerator] Setter: " + setter);
         getLog().info("[AutoGenerator] Logger: " + logger);
         getLog().info("[AutoGenerator] Test: " + test);
         getLog().info("[AutoGenerator] SuccessCode: " + successCode);
@@ -597,6 +608,7 @@ public class AutoGenerator extends AbstractMojo {
                     test.equalsIgnoreCase("true"),
                     position.equalsIgnoreCase("true"),
                     diamond.equalsIgnoreCase("true"),
+                    setter.equalsIgnoreCase("true"),
                     logger.equalsIgnoreCase("true"),
                     outParameterCode,
                     outParameterMessage,

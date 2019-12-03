@@ -37,8 +37,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 </#if>
 import lombok.Getter;
+<#if setter>
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+</#if>
 
 </#if>
 <#if jsonNonNull>
@@ -54,12 +56,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @version @GENERATOR.VERSION@
  */
 <#if lombok>
+<#if setter>
 @NoArgsConstructor
+</#if>
 <#if proc.hasInput>
 @AllArgsConstructor
 </#if>
 @Getter
+<#if setter>
 @Setter
+</#if>
 </#if>
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -76,23 +82,31 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
 
     /**
      * Input parameter ${parameter.name}.
+     *
+     * ${proc.fullName}
      */
 <#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
 </#if>
-    private ${parameter.javaTypeName} ${parameter.fieldName} = null;
+    private <#if !setter>final </#if>${parameter.javaTypeName} ${parameter.fieldName};
 </#list>
 <#if !lombok>
+<#if setter>
 
     /**
      * Class constructor ${proc.className}IN.
+     *
+     * ${proc.fullName}
      */
     public ${proc.className}IN() {
     }
+</#if>
 
     /**
      * Class constructor ${proc.className}IN.
+     *
+     * ${proc.fullName}
      *
 <#list proc.inputParameters as parameter>
      * @param p${parameter.propertyName} set value of ${parameter.fieldName}
@@ -111,20 +125,26 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
     /**
      * Getter of ${parameter.name}.
      *
+     * ${proc.fullName}
+     *
      * @return The ${parameter.name} value
      */
     public ${parameter.javaTypeName} get${parameter.propertyName}() {
         return <#if parameter.date>DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
+<#if setter>
 
     /**
      * Setter of ${parameter.name}.
+     *
+     * ${proc.fullName}
      *
      * @param p${parameter.propertyName} ${parameter.fieldName} to set
      */
     public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
         this.${parameter.fieldName} = <#if parameter.date>DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
     }
+</#if>
 </#if>
 </#list>
 }

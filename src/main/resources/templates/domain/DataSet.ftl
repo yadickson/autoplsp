@@ -33,7 +33,6 @@ import java.util.Date;
 <#if importDateUtil??>
 import lombok.AccessLevel;
 </#if>
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -55,7 +54,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 <#if lombok>
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 </#if>
@@ -74,34 +72,28 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 
     /**
      * Column ${parameter2.name}.
+     *
+     * ${proc.fullName}
+     *
+     * ${parameter.name}
      */
 <#if lombok && parameter2.date>
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
 </#if>
-    private ${parameter2.javaTypeName} ${parameter2.fieldName} = null;
+    private ${parameter2.javaTypeName} ${parameter2.fieldName};
 </#list>
 <#if !lombok>
 
     /**
      * Class constructor ${parameter.javaTypeName}.
+     *
+     * ${proc.fullName}
+     *
+     * ${parameter.name}
      */
     public ${parameter.javaTypeName}() {
 
-    }
-
-    /**
-     * Class constructor ${parameter.javaTypeName}.
-     *
-    <#list parameter.parameters as parameter2>
-     * @param p${parameter2.fieldName} set value of ${parameter2.fieldName}
-    </#list>
-     */
-    public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} p${parameter2.fieldName}<#sep>,${'\n'}            </#sep></#list>
-    ) {
-        <#list parameter.parameters as parameter2>
-        this.${parameter2.fieldName} = p${parameter2.fieldName};
-        </#list>
     }
 </#if>
 <#list parameter.parameters as parameter2>
@@ -109,6 +101,10 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 
     /**
      * Getter of ${parameter2.name}.
+     *
+     * ${proc.fullName}
+     *
+     * ${parameter.name}
      *
      * @return The ${parameter2.name} value.
      */
@@ -118,6 +114,10 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 
     /**
      * Setter of ${parameter2.name}.
+     *
+     * ${proc.fullName}
+     *
+     * ${parameter.name}
      *
      * @param p${parameter2.fieldName} ${parameter2.fieldName}
      */

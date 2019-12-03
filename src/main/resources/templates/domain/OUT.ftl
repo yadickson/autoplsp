@@ -29,12 +29,13 @@ import ${javaPackage}.util.DateUtil;
 import java.util.Date;
 
 </#if>
+<#if proc.hasResultSet>
+import java.util.List;
+</#if>
+
 <#if lombok>
 <#if importDateUtil??>
 import lombok.AccessLevel;
-</#if>
-<#if proc.hasInput>
-import lombok.AllArgsConstructor;
 </#if>
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,9 +55,6 @@ import lombok.Setter;
  */
 <#if lombok>
 @NoArgsConstructor
-<#if proc.hasOutput>
-@AllArgsConstructor
-</#if>
 @Getter
 @Setter
 </#if>
@@ -75,33 +73,23 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
 
     /**
      * Output parameter ${parameter.name}.
+     *
+     * ${proc.fullName}
      */
 <#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
 </#if>
-    private <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName} = null;
+    private <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName};
 </#list>
 <#if !lombok>
 
     /**
      * Class constructor ${proc.className}OUT.
+     *
+     * ${proc.fullName}
      */
     public ${proc.className}OUT() {
-    }
-
-    /**
-     * Class constructor ${proc.className}OUT.
-     *
-    <#list proc.outputParameters as parameter>
-     * @param p${parameter.propertyName} set value of ${parameter.fieldName}
-    </#list>
-     */
-    public ${proc.className}OUT(<#if proc.hasOutput>${'\n'}            </#if><#list proc.outputParameters as parameter>final <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>
-    ) {
-        <#list proc.outputParameters as parameter>
-        this.${parameter.fieldName} = p${parameter.propertyName};
-        </#list>
     }
 </#if>
 <#list proc.outputParameters as parameter>
@@ -110,18 +98,22 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
     /**
      * Getter of ${parameter.name}.
      *
+     * ${proc.fullName}
+     *
      * @return The ${parameter.name} value.
      */
-    public <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
+    public <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
         return <#if parameter.date>DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
 
     /**
      * Setter of ${parameter.name}.
      *
+     * ${proc.fullName}
+     *
      * @param p${parameter.propertyName} ${parameter.fieldName} to set
      */
-    public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
+    public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
         this.${parameter.fieldName} = <#if parameter.date>DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
     }
 </#if>

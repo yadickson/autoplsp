@@ -96,6 +96,23 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 
     }
 </#if>
+
+    /**
+     * Class constructor ${parameter.javaTypeName}.
+     *
+     * ${proc.fullName}
+     *
+     * ${parameter.name}
+     *
+    <#list parameter.parameters as parameter2>
+     * @param p${parameter2.fieldName} set value of ${parameter2.fieldName}
+    </#list>
+     */
+    public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} p${parameter2.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
+<#list parameter.parameters as parameter2>
+        set${parameter2.propertyName}(p${parameter2.fieldName});
+</#list>
+    }
 <#list parameter.parameters as parameter2>
 <#if !lombok || parameter2.date>
 

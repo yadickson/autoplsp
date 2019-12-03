@@ -64,17 +64,14 @@ import java.util.List;
 </#if>
 import java.util.Map;
 
-<#if proc.hasObject || proc.hasArray>
 import javax.annotation.Resource;
 
-</#if>
 <#if logger>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 </#if>
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 <#if proc.hasObject || proc.hasArray>
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -140,8 +137,7 @@ public final class ${proc.className}DAOImpl
      * ${proc.fullName}
      *
      */
-    @Autowired
-    @Qualifier(value = "${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
+    @Resource(name = "${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
     private ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if>;
 
     /**

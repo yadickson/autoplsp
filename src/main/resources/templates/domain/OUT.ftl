@@ -92,6 +92,21 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
     public ${proc.className}OUT() {
     }
 </#if>
+
+    /**
+     * Class constructor ${proc.className}OUT.
+     *
+     * ${proc.fullName}
+     *
+    <#list proc.outputParameters as parameter>
+     * @param p${parameter.propertyName} set value of ${parameter.fieldName}
+    </#list>
+     */
+    public ${proc.className}OUT(${'\n'}            <#list proc.outputParameters as parameter>final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
+<#list proc.outputParameters as parameter>
+        set${parameter.propertyName}(p${parameter.propertyName});
+</#list>
+    }
 <#list proc.outputParameters as parameter>
 <#if !lombok || parameter.date>
 

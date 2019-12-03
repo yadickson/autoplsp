@@ -33,14 +33,9 @@ import java.util.Date;
 <#if importDateUtil??>
 import lombok.AccessLevel;
 </#if>
-<#if proc.hasInput>
-import lombok.AllArgsConstructor;
-</#if>
 import lombok.Getter;
-<#if setter>
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-</#if>
 
 </#if>
 <#if jsonNonNull>
@@ -56,16 +51,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @version @GENERATOR.VERSION@
  */
 <#if lombok>
-<#if setter>
 @NoArgsConstructor
-</#if>
-<#if proc.hasInput>
-@AllArgsConstructor
-</#if>
 @Getter
-<#if setter>
 @Setter
-</#if>
 </#if>
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -87,14 +75,11 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      */
 <#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
-<#if setter>
     @Setter(AccessLevel.NONE)
 </#if>
-</#if>
-    private <#if !setter>final </#if>${parameter.javaTypeName} ${parameter.fieldName};
+    private ${parameter.javaTypeName} ${parameter.fieldName};
 </#list>
 <#if !lombok>
-<#if setter>
 
     /**
      * Class constructor ${proc.className}IN.
@@ -114,13 +99,11 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      * @param p${parameter.propertyName} set value of ${parameter.fieldName}
 </#list>
      */
-    public ${proc.className}IN(<#if proc.hasInput>${'\n'}            </#if><#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>
-    ) {
+    public ${proc.className}IN(${'\n'}            <#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
 <#list proc.inputParameters as parameter>
-        this.${parameter.fieldName} = p${parameter.propertyName};
+        set${parameter.propertyName}(p${parameter.propertyName});
 </#list>
     }
-</#if>
 <#list proc.inputParameters as parameter>
 <#if !lombok || parameter.date>
 
@@ -134,7 +117,6 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
     public ${parameter.javaTypeName} get${parameter.propertyName}() {
         return <#if parameter.date>DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
-<#if setter>
 
     /**
      * Setter of ${parameter.name}.
@@ -146,7 +128,6 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
     public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
         this.${parameter.fieldName} = <#if parameter.date>DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
     }
-</#if>
 </#if>
 </#list>
 }

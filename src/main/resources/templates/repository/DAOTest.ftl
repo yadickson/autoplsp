@@ -87,7 +87,11 @@ public class ${proc.className}DAOTest {
     @Test
     public void testExecute() throws java.sql.SQLException {
 <#if proc.hasInput>
-        ${proc.className}IN params = new ${proc.className}IN(<#list proc.inputParameters as parameter>null<#sep>, </#sep></#list>);
+        ${proc.className}IN params = new ${proc.className}IN();
+
+<#list proc.inputParameters as parameter>
+        params.set${parameter.propertyName}(null);
+</#list>
 </#if>
 <#if proc.hasOutput>
         ${proc.className}OUT out;

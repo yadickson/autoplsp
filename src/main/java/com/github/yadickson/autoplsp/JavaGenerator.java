@@ -47,7 +47,6 @@ public class JavaGenerator extends TemplateGenerator {
     private final Boolean test;
     private final Boolean position;
     private final Boolean diamond;
-    private final Boolean setter;
     private final Boolean logger;
     private final String outParameterCode;
     private final String outParameterMessage;
@@ -75,7 +74,6 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String SERIALIZATION = "serialization";
     private static final String POSITION = "position";
     private static final String DIAMOND = "diamond";
-    private static final String SETTER = "setter";
     private static final String LOGGER = "logger";
     private static final String OUT_CODE_NAME = "outParameterCode";
     private static final String OUT_MESSAGE_NAME = "outParameterMessage";
@@ -117,7 +115,6 @@ public class JavaGenerator extends TemplateGenerator {
      * @param test The test support.
      * @param position The support position.
      * @param diamond The diamond style.
-     * @param setter The setter support.
      * @param logger The logger support.
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
@@ -140,7 +137,6 @@ public class JavaGenerator extends TemplateGenerator {
             final Boolean test,
             final Boolean position,
             final Boolean diamond,
-            final Boolean setter,
             final Boolean logger,
             final String outParameterCode,
             final String outParameterMessage,
@@ -161,7 +157,6 @@ public class JavaGenerator extends TemplateGenerator {
         this.test = test;
         this.position = position;
         this.diamond = diamond;
-        this.setter = setter;
         this.logger = logger;
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
@@ -212,7 +207,6 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
-        input.put(SETTER, setter);
         input.put(LOGGER, logger);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
@@ -297,7 +291,6 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
-        input.put(SETTER, setter);
         input.put(LOGGER, logger);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
@@ -328,7 +321,6 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
-        input.put(SETTER, setter);
         input.put(LOGGER, logger);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
@@ -365,7 +357,6 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
-        input.put(SETTER, setter);
         input.put(LOGGER, logger);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
@@ -400,7 +391,6 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
-        input.put(SETTER, setter);
         input.put(LOGGER, logger);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
@@ -447,7 +437,6 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
-        input.put(SETTER, setter);
         input.put(LOGGER, logger);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
@@ -492,7 +481,6 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
-        input.put(SETTER, setter);
         input.put(LOGGER, logger);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
@@ -548,7 +536,6 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(SERIALIZATION, serialization);
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
-        input.put(SETTER, setter);
         input.put(LOGGER, logger);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);

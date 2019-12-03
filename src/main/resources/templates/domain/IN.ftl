@@ -87,7 +87,9 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      */
 <#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
+<#if setter>
     @Setter(AccessLevel.NONE)
+</#if>
 </#if>
     private <#if !setter>final </#if>${parameter.javaTypeName} ${parameter.fieldName};
 </#list>

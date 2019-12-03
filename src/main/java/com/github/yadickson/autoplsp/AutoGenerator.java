@@ -386,6 +386,16 @@ public class AutoGenerator extends AbstractMojo {
     private String logger;
 
     /**
+     * Full constructor support.
+     */
+    @Parameter(
+            property = "autoplsp.fullConstructor",
+            defaultValue = "true",
+            readonly = true,
+            required = false)
+    private String fullConstructor;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -419,6 +429,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] Serialization: " + serialization);
         getLog().info("[AutoGenerator] Diamond: " + diamond);
         getLog().info("[AutoGenerator] Logger: " + logger);
+        getLog().info("[AutoGenerator] FullConstructor: " + fullConstructor);
         getLog().info("[AutoGenerator] Test: " + test);
         getLog().info("[AutoGenerator] SuccessCode: " + successCode);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
@@ -598,6 +609,7 @@ public class AutoGenerator extends AbstractMojo {
                     position.equalsIgnoreCase("true"),
                     diamond.equalsIgnoreCase("true"),
                     logger.equalsIgnoreCase("true"),
+                    fullConstructor.equalsIgnoreCase("true"),
                     outParameterCode,
                     outParameterMessage,
                     successCode,

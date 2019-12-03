@@ -16,6 +16,11 @@
  */
 package com.github.yadickson.autoplsp;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.common.Table;
@@ -23,11 +28,6 @@ import com.github.yadickson.autoplsp.db.common.TableField;
 import com.github.yadickson.autoplsp.db.parameter.DataSetParameter;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
-import java.io.File;
-import java.util.List;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Java classes generator
@@ -48,6 +48,7 @@ public class JavaGenerator extends TemplateGenerator {
     private final Boolean position;
     private final Boolean diamond;
     private final Boolean logger;
+    private final Boolean fullConstructor;
     private final String outParameterCode;
     private final String outParameterMessage;
     private final String successCode;
@@ -75,6 +76,7 @@ public class JavaGenerator extends TemplateGenerator {
     private static final String POSITION = "position";
     private static final String DIAMOND = "diamond";
     private static final String LOGGER = "logger";
+    private static final String FULL_CONSTRUCTOR = "fullConstructor";
     private static final String OUT_CODE_NAME = "outParameterCode";
     private static final String OUT_MESSAGE_NAME = "outParameterMessage";
     private static final String SUCCESS_CODE = "successCode";
@@ -116,6 +118,7 @@ public class JavaGenerator extends TemplateGenerator {
      * @param position The support position.
      * @param diamond The diamond style.
      * @param logger The logger support.
+     * @param fullConstructor The full constructor support.
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
      * @param successCode Output success code value.
@@ -138,6 +141,7 @@ public class JavaGenerator extends TemplateGenerator {
             final Boolean position,
             final Boolean diamond,
             final Boolean logger,
+            final Boolean fullConstructor,
             final String outParameterCode,
             final String outParameterMessage,
             final String successCode,
@@ -158,6 +162,7 @@ public class JavaGenerator extends TemplateGenerator {
         this.position = position;
         this.diamond = diamond;
         this.logger = logger;
+        this.fullConstructor = fullConstructor;
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
         this.successCode = successCode;
@@ -208,6 +213,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
         input.put(LOGGER, logger);
+        input.put(FULL_CONSTRUCTOR, fullConstructor);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
@@ -292,6 +298,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
         input.put(LOGGER, logger);
+        input.put(FULL_CONSTRUCTOR, fullConstructor);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
@@ -322,6 +329,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
         input.put(LOGGER, logger);
+        input.put(FULL_CONSTRUCTOR, fullConstructor);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
@@ -358,6 +366,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
         input.put(LOGGER, logger);
+        input.put(FULL_CONSTRUCTOR, fullConstructor);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
@@ -392,6 +401,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
         input.put(LOGGER, logger);
+        input.put(FULL_CONSTRUCTOR, fullConstructor);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
@@ -438,6 +448,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
         input.put(LOGGER, logger);
+        input.put(FULL_CONSTRUCTOR, fullConstructor);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
@@ -482,6 +493,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
         input.put(LOGGER, logger);
+        input.put(FULL_CONSTRUCTOR, fullConstructor);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);
@@ -537,6 +549,7 @@ public class JavaGenerator extends TemplateGenerator {
         input.put(POSITION, position);
         input.put(DIAMOND, diamond);
         input.put(LOGGER, logger);
+        input.put(FULL_CONSTRUCTOR, fullConstructor);
         input.put(SUCCESS_CODE, successCode);
         input.put(OUT_CODE_NAME, outParameterCode);
         input.put(OUT_MESSAGE_NAME, outParameterMessage);

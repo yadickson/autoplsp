@@ -38,7 +38,9 @@ import java.util.List;
 import lombok.AccessLevel;
 </#if>
 import lombok.Getter;
+<#if fullConstructor>
 import lombok.NoArgsConstructor;
+</#if>
 import lombok.Setter;
 
 </#if>
@@ -54,7 +56,9 @@ import lombok.Setter;
  * @version @GENERATOR.VERSION@
  */
 <#if lombok>
+<#if fullConstructor>
 @NoArgsConstructor
+</#if>
 @Getter
 @Setter
 </#if>
@@ -92,6 +96,7 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
     public ${proc.className}OUT() {
     }
 </#if>
+<#if fullConstructor>
 
     /**
      * Class constructor ${proc.className}OUT.
@@ -99,7 +104,7 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
      * ${proc.fullName}
      *
     <#list proc.outputParameters as parameter>
-     * @param p${parameter.propertyName} set value of ${parameter.fieldName}
+     * @param p${parameter.propertyName} set value of ${parameter.name}
     </#list>
      */
     public ${proc.className}OUT(${'\n'}            <#list proc.outputParameters as parameter>final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
@@ -107,6 +112,7 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
         set${parameter.propertyName}(p${parameter.propertyName});
 </#list>
     }
+</#if>
 <#list proc.outputParameters as parameter>
 <#if !lombok || parameter.date>
 
@@ -126,7 +132,7 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
      *
      * ${proc.fullName}
      *
-     * @param p${parameter.propertyName} ${parameter.fieldName} to set
+     * @param p${parameter.propertyName} ${parameter.name} to set
      */
     public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
         this.${parameter.fieldName} = <#if parameter.date>DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;

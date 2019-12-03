@@ -34,7 +34,9 @@ import java.util.Date;
 import lombok.AccessLevel;
 </#if>
 import lombok.Getter;
+<#if fullConstructor>
 import lombok.NoArgsConstructor;
+</#if>
 import lombok.Setter;
 
 </#if>
@@ -51,7 +53,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @version @GENERATOR.VERSION@
  */
 <#if lombok>
+<#if fullConstructor>
 @NoArgsConstructor
+</#if>
 @Getter
 @Setter
 </#if>
@@ -89,6 +93,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
     public ${proc.className}IN() {
     }
 </#if>
+<#if fullConstructor>
 
     /**
      * Class constructor ${proc.className}IN.
@@ -96,7 +101,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      * ${proc.fullName}
      *
 <#list proc.inputParameters as parameter>
-     * @param p${parameter.propertyName} set value of ${parameter.fieldName}
+     * @param p${parameter.propertyName} set value of ${parameter.name}
 </#list>
      */
     public ${proc.className}IN(${'\n'}            <#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
@@ -104,6 +109,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
         set${parameter.propertyName}(p${parameter.propertyName});
 </#list>
     }
+</#if>
 <#list proc.inputParameters as parameter>
 <#if !lombok || parameter.date>
 
@@ -123,7 +129,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      *
      * ${proc.fullName}
      *
-     * @param p${parameter.propertyName} ${parameter.fieldName} to set
+     * @param p${parameter.propertyName} ${parameter.name} to set
      */
     public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
         this.${parameter.fieldName} = <#if parameter.date>DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;

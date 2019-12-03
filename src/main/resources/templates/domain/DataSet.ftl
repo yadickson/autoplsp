@@ -34,7 +34,9 @@ import java.util.Date;
 import lombok.AccessLevel;
 </#if>
 import lombok.Getter;
+<#if fullConstructor>
 import lombok.NoArgsConstructor;
+</#if>
 import lombok.Setter;
 
 </#if>
@@ -53,7 +55,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @version @GENERATOR.VERSION@
  */
 <#if lombok>
+<#if fullConstructor>
 @NoArgsConstructor
+</#if>
 @Getter
 @Setter
 </#if>
@@ -96,6 +100,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 
     }
 </#if>
+<#if fullConstructor>
 
     /**
      * Class constructor ${parameter.javaTypeName}.
@@ -105,14 +110,15 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      * ${parameter.name}
      *
     <#list parameter.parameters as parameter2>
-     * @param p${parameter2.fieldName} set value of ${parameter2.fieldName}
+     * @param c${parameter2.propertyName} set value of ${parameter2.name}
     </#list>
      */
-    public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} p${parameter2.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
+    public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} c${parameter2.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
 <#list parameter.parameters as parameter2>
-        set${parameter2.propertyName}(p${parameter2.fieldName});
+        set${parameter2.propertyName}(c${parameter2.propertyName});
 </#list>
     }
+</#if>
 <#list parameter.parameters as parameter2>
 <#if !lombok || parameter2.date>
 
@@ -136,10 +142,10 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      *
      * ${parameter.name}
      *
-     * @param p${parameter2.fieldName} ${parameter2.fieldName}
+     * @param c${parameter2.propertyName} ${parameter2.name} to set
      */
-    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} p${parameter2.fieldName}) {
-        this.${parameter2.fieldName} = <#if parameter2.date>DateUtil.process(</#if>p${parameter2.fieldName}<#if parameter2.date>)</#if>;
+    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} c${parameter2.propertyName}) {
+        this.${parameter2.fieldName} = <#if parameter2.date>DateUtil.process(</#if>c${parameter2.propertyName}<#if parameter2.date>)</#if>;
     }
 </#if>
 </#list>

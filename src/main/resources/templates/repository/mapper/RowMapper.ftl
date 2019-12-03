@@ -71,6 +71,8 @@ public final class ${parameter.javaTypeName}RowMapper
         ${parameter.javaTypeName} row;
         row = new ${parameter.javaTypeName}();
 
+<#if parameter.parameters?size <= 20 >
+<#assign noFullChunk = 1>
 <#list parameter.parameters as paramrs>
         ${paramrs.javaTypeName} obj${paramrs.propertyName};
 </#list>
@@ -90,7 +92,53 @@ public final class ${parameter.javaTypeName}RowMapper
 <#list parameter.parameters as paramrs>
         row.set${paramrs.propertyName}(obj${paramrs.propertyName});
 </#list>
+<#else>
+<#assign step = 0 >
+<#list parameter.parameters?chunk(20) as childs>
+<#assign step++ >
+        fillStep${step}(resultSet, row);
+</#list>
+</#if>
 
         return row;
     }
+<#if ! noFullChunk?? >
+<#assign step = 0 >
+<#list parameter.parameters?chunk(20) as childs>
+<#assign step++ >
+
+    /**
+     * Fill row values for step ${step}.
+     *
+     * @param resultSet resultset.
+     * @param row row to fill.
+     * @throws SQLException if error.
+     */
+    private void fillStep${step}(
+        final ResultSet resultSet,
+        final ${parameter.javaTypeName} row
+    )  throws SQLException {
+
+<#list childs as paramrs>
+        ${paramrs.javaTypeName} obj${paramrs.propertyName};
+</#list>
+
+<#list childs as paramrs>
+<#if paramrs.sqlTypeName == 'java.sql.Types.VARCHAR' || paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
+        obj${paramrs.propertyName} = resultSet.getString(${paramrs.name});
+<#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
+        obj${paramrs.propertyName} = resultSet.getBytes(${paramrs.name});
+<#elseif paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
+        obj${paramrs.propertyName} = (${paramrs.javaTypeName}) resultSet.getTimestamp(${paramrs.name});
+<#else>
+        obj${paramrs.propertyName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
+</#if>
+</#list>
+
+<#list childs as paramrs>
+        row.set${paramrs.propertyName}(obj${paramrs.propertyName});
+</#list>
+    }
+</#list>
+</#if>
 }

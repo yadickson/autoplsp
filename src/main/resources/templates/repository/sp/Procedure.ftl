@@ -35,9 +35,6 @@ public interface ${proc.className}SP {
      *
      * @return response.
      * @param params input parameters.
-     * @throws org.springframework.dao.DataAccessException if error.
      */
-    Map<String, Object> execute(
-            Map<String, ?> params
-    ) throws org.springframework.dao.DataAccessException;
+    Map<String, Object> execute(Map<String, ?> params);
 }

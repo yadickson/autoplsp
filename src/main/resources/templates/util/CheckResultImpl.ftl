@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
 </#if>
 
 import org.springframework.stereotype.Component;
@@ -69,8 +70,8 @@ public final class CheckResultImpl implements CheckResult {
         if (!SUCCESS_CODE.equals(code.toString())) {
             String description = (String) map.get("${outParameterMessage}");
 <#if logger>
-            LOGGER.error("${outParameterCode}: " + code);
-            LOGGER.error("${outParameterMessage}: " + description);
+            LOGGER.error(Marker.ANY_MARKER, "${outParameterCode}: {}", code);
+            LOGGER.error(Marker.ANY_MARKER, "${outParameterMessage}: {}", description);
 </#if>
             throw new SQLException(description, code.toString());
         }

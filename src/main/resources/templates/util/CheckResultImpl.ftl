@@ -72,7 +72,7 @@ public final class CheckResultImpl implements CheckResult {
             LOGGER.error("${outParameterCode}: " + code);
             LOGGER.error("${outParameterMessage}: " + description);
 </#if>
-            throw new SQLException(description, null, code.intValue());
+            throw new SQLException(description, code.toString());
         }
     }
 

@@ -179,7 +179,7 @@ public final class ${proc.className}DAOImpl
 <#if logger>
             LOGGER.error(ex.getMessage(), ex);
 </#if>
-            throw new SQLException(ex);
+            throw new SQLException(ex.getMessage(), "${successCode}", ex);
         }
 <#if proc.hasOutput>
 <#if proc.checkResult>

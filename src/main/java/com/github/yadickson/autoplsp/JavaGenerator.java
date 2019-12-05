@@ -56,6 +56,8 @@ public class JavaGenerator extends TemplateGenerator {
     private final String driverName;
     private final String driverVersion;
 
+    private final Map<String, String> mappers;
+
     private static final String PROCEDURE_NAME = "proc";
     private static final String PARAMETER_NAME = "parameter";
     private static final String TABLE_NAME = "table";
@@ -122,6 +124,7 @@ public class JavaGenerator extends TemplateGenerator {
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
      * @param successCode Output success code value.
+     * @param mappers The mappers.
      * @param driverName driver name
      * @param driverVersion driver version
      */
@@ -145,6 +148,7 @@ public class JavaGenerator extends TemplateGenerator {
             final String outParameterCode,
             final String outParameterMessage,
             final String successCode,
+            final Map<String, String> mappers,
             final String driverName,
             final String driverVersion) {
 
@@ -166,6 +170,7 @@ public class JavaGenerator extends TemplateGenerator {
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
         this.successCode = successCode;
+        this.mappers = mappers;
         this.driverName = driverName;
         this.driverVersion = driverVersion;
     }

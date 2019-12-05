@@ -16,7 +16,6 @@
  */
 package com.github.yadickson.autoplsp.db;
 
-import com.github.yadickson.autoplsp.ConfigMapper;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -604,15 +603,6 @@ public abstract class Generator {
         LoggerManager.getInstance().info("[FindTables] Found " + list.size() + " tables");
 
         return list;
-    }
-
-    public List<Parameter> processMapper(
-            final List<Procedure> spList,
-            final Map<String, ConfigMapper> mappers) {
-
-        List<Parameter> parameters = new ArrayList<Parameter>();
-
-        return parameters;
     }
 
 }

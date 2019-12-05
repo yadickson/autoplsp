@@ -458,7 +458,7 @@ public class AutoGenerator extends AbstractMojo {
         List<String> fillResultset = new ArrayList<String>();
         List<String> fillTables = new ArrayList<String>();
 
-        Map<String, ConfigMapper> mappers = new HashMap<String, ConfigMapper>();
+        Map<String, String> mappers = new HashMap<String, String>();
 
         String regexInclude = ".*";
         String regexExclude = "";
@@ -483,35 +483,13 @@ public class AutoGenerator extends AbstractMojo {
 
         if (mMappers != null) {
             for (String mapper : mMappers) {
-                String[] parts = StringUtils.split(mapper, ",");
+                String[] parts = StringUtils.split(mapper, ":");
 
-                if (parts.length < 3) {
+                if (parts.length < 2) {
                     continue;
                 }
 
-                int i = 0;
-                ConfigMapper objMapper = new ConfigMapper();
-
-                for (String part : parts) {
-                    switch (i++) {
-                        case 0:
-                            objMapper.setProcedureName(part.toUpperCase().trim());
-                            break;
-                        case 1:
-                            objMapper.setCursorName(part.toUpperCase().trim());
-                            break;
-                        default:
-                            objMapper.getKeys().add(part.toUpperCase().trim());
-                            break;
-                    }
-                }
-
-                mappers.put(
-                        objMapper.getProcedureName()
-                        + ":"
-                        + objMapper.getCursorName(),
-                        objMapper
-                );
+                mappers.put(parts[0], parts[1]);
             }
         }
 
@@ -553,6 +531,7 @@ public class AutoGenerator extends AbstractMojo {
         LoggerManager.getInstance().info("[AutoGenerator] RegexExclude: " + regexExclude);
         LoggerManager.getInstance().info("[AutoGenerator] RegexResultSet: " + regexResultSet);
         LoggerManager.getInstance().info("[AutoGenerator] RegexTable: " + regexTable);
+        LoggerManager.getInstance().info("[AutoGenerator] Mapper: " + mappers);
 
         DriverConnection connManager = new DriverConnection(driver, connectionString, user, pass);
 
@@ -613,6 +592,7 @@ public class AutoGenerator extends AbstractMojo {
                     outParameterCode,
                     outParameterMessage,
                     successCode,
+                    mappers,
                     generator.getName(),
                     connManager.getVersion()
             );
@@ -636,12 +616,9 @@ public class AutoGenerator extends AbstractMojo {
                 }
             }
 
-            //List<com.github.yadickson.autoplsp.db.common.Parameter> mList;
-            //mList = generator.processMapper(spList, mappers);
             template.processProcedures(spList);
             template.processObjects(objects);
             template.processTables(fullTables);
-            //template.processMappers(mList);
 
             ConfigGenerator config;
             config = new ConfigGenerator(

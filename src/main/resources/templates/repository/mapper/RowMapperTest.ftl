@@ -30,11 +30,11 @@ public class ${parameter.javaTypeName}RowMapperTest {
         ${parameter.javaTypeName}RowMapper mapper = new ${parameter.javaTypeName}RowMapper();
 
 <#list parameter.parameters as paramrs>
-<#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
+<#if paramrs.date>
         ${paramrs.javaTypeName} ${paramrs.fieldName} = new java.util.Date();
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
+<#elseif paramrs.blob>
         ${paramrs.javaTypeName} ${paramrs.fieldName} = new ${paramrs.javaTypeName}[0];
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.NUMERIC'>
+<#elseif paramrs.number>
         ${paramrs.javaTypeName} ${paramrs.fieldName} = ${paramrs.position};
 <#else>
         ${paramrs.javaTypeName} ${paramrs.fieldName} = "${paramrs.name}";
@@ -42,13 +42,13 @@ public class ${parameter.javaTypeName}RowMapperTest {
 </#list>
 
 <#list parameter.parameters as paramrs>
-<#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
+<#if paramrs.date>
         Mockito.when(resultSet.getTimestamp(Mockito.eq(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>))).thenReturn(new java.sql.Timestamp(${paramrs.fieldName}.getTime()));
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
+<#elseif paramrs.clob>
         Mockito.when(resultSet.getString(Mockito.eq(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>))).thenReturn(${paramrs.fieldName});
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
+<#elseif paramrs.blob>
         Mockito.when(resultSet.getBytes(Mockito.eq(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>))).thenReturn(${paramrs.fieldName});
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.VARCHAR'>
+<#elseif paramrs.string>
         Mockito.when(resultSet.getString(Mockito.eq(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>))).thenReturn(${paramrs.fieldName});
 <#else>
         Mockito.when(resultSet.getObject(Mockito.eq(<#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>))).thenReturn(${paramrs.fieldName});
@@ -59,7 +59,7 @@ public class ${parameter.javaTypeName}RowMapperTest {
 
         Assert.assertNotNull(result);
 <#list parameter.parameters as paramrs>
-<#if paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
+<#if paramrs.date>
         Assert.assertEquals(${paramrs.fieldName}, result.get${paramrs.propertyName}());
 <#else>
         Assert.assertSame(${paramrs.fieldName}, result.get${paramrs.propertyName}());

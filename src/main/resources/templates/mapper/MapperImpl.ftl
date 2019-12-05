@@ -104,7 +104,7 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
 
         try {
         <#list proc.outputParameters as parameter>
-        <#if parameter.sqlTypeName == 'java.sql.Types.CLOB' >
+        <#if parameter.clob >
             java.sql.Clob clob${parameter.propertyName} = ( java.sql.Clob ) m.get("${parameter.prefix}${parameter.name}");
             String string${parameter.propertyName} = null;
 
@@ -117,7 +117,7 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
             }
 
             result.set${parameter.propertyName}( string${parameter.propertyName} );
-        <#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB' >
+        <#elseif parameterblob >
             java.sql.Blob blob${parameter.propertyName} = ( java.sql.Blob ) m.get("${parameter.prefix}${parameter.name}");
             byte [] bytes${parameter.propertyName} = null;
 

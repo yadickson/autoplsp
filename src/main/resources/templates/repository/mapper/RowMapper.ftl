@@ -78,12 +78,12 @@ public final class ${parameter.javaTypeName}RowMapper
 </#list>
 
 <#list parameter.parameters as paramrs>
-<#if paramrs.sqlTypeName == 'java.sql.Types.VARCHAR' || paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
+<#if paramrs.string || paramrs.clob>
         ${paramrs.fieldName} = resultSet.getString(${paramrs.name});
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
+<#elseif paramrs.blob>
         ${paramrs.fieldName} = resultSet.getBytes(${paramrs.name});
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getTimestamp(${paramrs.name});
+<#elseif paramrs.date>
+        ${paramrs.fieldName} = resultSet.getTimestamp(${paramrs.name});
 <#else>
         ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
 </#if>
@@ -124,12 +124,12 @@ public final class ${parameter.javaTypeName}RowMapper
 </#list>
 
 <#list childs as paramrs>
-<#if paramrs.sqlTypeName == 'java.sql.Types.VARCHAR' || paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
+<#if paramrs.string || paramrs.clob>
         ${paramrs.fieldName} = resultSet.getString(${paramrs.name});
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
+<#elseif paramrs.blob>
         ${paramrs.fieldName} = resultSet.getBytes(${paramrs.name});
-<#elseif paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getTimestamp(${paramrs.name});
+<#elseif paramrs.date>
+        ${paramrs.fieldName} = resultSet.getTimestamp(${paramrs.name});
 <#else>
         ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
 </#if>

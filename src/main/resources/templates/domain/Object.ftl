@@ -130,7 +130,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      */
     public Object processObject(final java.sql.Connection connection) throws Exception {
 <#list parameter.parameters as parameter>
-<#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>
+<#if parameter.clob>
         oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);
         java.io.Writer clobWriter${parameter.propertyName} = clob${parameter.propertyName}.getCharacterOutputStream();
         if (get${parameter.propertyName}() != null) {
@@ -138,16 +138,16 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
         }
         clobWriter${parameter.propertyName}.flush();
         clobWriter${parameter.propertyName}.close();
-<#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB'>
+<#elseif parameterblob>
         oracle.sql.BLOB blob${parameter.propertyName} = oracle.sql.BLOB.createTemporary(connection, false, oracle.sql.BLOB.DURATION_SESSION);
         blob${parameter.propertyName}.getBinaryOutputStream().write(get${parameter.propertyName}());
-<#elseif parameter.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
+<#elseif parameter.date>
         oracle.sql.DATE date${parameter.propertyName} = get${parameter.propertyName}() == null ? null : new oracle.sql.DATE(new java.sql.Date(get${parameter.propertyName}().getTime()));
 </#if>
 </#list>
 
         Object[] objs = new Object[]{
-<#list parameter.parameters as parameter>            <#if parameter.sqlTypeName == 'java.sql.Types.CLOB'>clob${parameter.propertyName}<#elseif parameter.sqlTypeName == 'java.sql.Types.BLOB'>blob${parameter.propertyName}<#elseif parameter.sqlTypeName == 'java.sql.Types.TIMESTAMP'>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
+<#list parameter.parameters as parameter>            <#if parameter.clob>clob${parameter.propertyName}<#elseif parameterblob>blob${parameter.propertyName}<#elseif parameter.date>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
 </#list>        };
 
 <#if driverName == 'oracle' >

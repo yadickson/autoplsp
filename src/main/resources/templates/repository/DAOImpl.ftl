@@ -192,26 +192,26 @@ public final class ${proc.className}DAOImpl
 
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
-        List<${parameter.javaTypeName}> obj${parameter.propertyName};
+        List<${parameter.javaTypeName}> ${parameter.fieldName};
 <#else>
-        ${parameter.javaTypeName} obj${parameter.propertyName};
+        ${parameter.javaTypeName} ${parameter.fieldName};
 </#if>
 </#list>
 
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
-        obj${parameter.propertyName} = (List) out.get("${parameter.prefix}${parameter.name}");
+        ${parameter.fieldName} = (List) out.get("${parameter.prefix}${parameter.name}");
 <#elseif parameter.clob>
-        obj${parameter.propertyName} = clobUtil.process(out.get("${parameter.prefix}${parameter.name}"));
+        ${parameter.fieldName} = clobUtil.process(out.get("${parameter.prefix}${parameter.name}"));
 <#elseif parameter.blob>
-        obj${parameter.propertyName} = blobUtil.process(out.get("${parameter.prefix}${parameter.name}"));
+        ${parameter.fieldName} = blobUtil.process(out.get("${parameter.prefix}${parameter.name}"));
 <#else>
-        obj${parameter.propertyName} = (${parameter.javaTypeName}) out.get("${parameter.prefix}${parameter.name}");
+        ${parameter.fieldName} = (${parameter.javaTypeName}) out.get("${parameter.prefix}${parameter.name}");
 </#if>
 </#list>
 
 <#list proc.outputParameters as parameter>
-        result.set${parameter.propertyName}(obj${parameter.propertyName});
+        result.set${parameter.propertyName}(${parameter.fieldName});
 </#list>
 
         return result;

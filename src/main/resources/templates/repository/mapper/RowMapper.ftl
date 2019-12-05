@@ -74,23 +74,23 @@ public final class ${parameter.javaTypeName}RowMapper
 <#if parameter.parameters?size <= 20 >
 <#assign noFullChunk = 1>
 <#list parameter.parameters as paramrs>
-        ${paramrs.javaTypeName} obj${paramrs.propertyName};
+        ${paramrs.javaTypeName} ${paramrs.fieldName};
 </#list>
 
 <#list parameter.parameters as paramrs>
 <#if paramrs.sqlTypeName == 'java.sql.Types.VARCHAR' || paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
-        obj${paramrs.propertyName} = resultSet.getString(${paramrs.name});
+        ${paramrs.fieldName} = resultSet.getString(${paramrs.name});
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
-        obj${paramrs.propertyName} = resultSet.getBytes(${paramrs.name});
+        ${paramrs.fieldName} = resultSet.getBytes(${paramrs.name});
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        obj${paramrs.propertyName} = (${paramrs.javaTypeName}) resultSet.getTimestamp(${paramrs.name});
+        ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getTimestamp(${paramrs.name});
 <#else>
-        obj${paramrs.propertyName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
+        ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
 </#if>
 </#list>
 
 <#list parameter.parameters as paramrs>
-        row.set${paramrs.propertyName}(obj${paramrs.propertyName});
+        row.set${paramrs.propertyName}(${paramrs.fieldName});
 </#list>
 <#else>
 <#assign step = 0 >
@@ -120,23 +120,23 @@ public final class ${parameter.javaTypeName}RowMapper
     ) throws SQLException {
 
 <#list childs as paramrs>
-        ${paramrs.javaTypeName} obj${paramrs.propertyName};
+        ${paramrs.javaTypeName} ${paramrs.fieldName};
 </#list>
 
 <#list childs as paramrs>
 <#if paramrs.sqlTypeName == 'java.sql.Types.VARCHAR' || paramrs.sqlTypeName == 'java.sql.Types.CLOB'>
-        obj${paramrs.propertyName} = resultSet.getString(${paramrs.name});
+        ${paramrs.fieldName} = resultSet.getString(${paramrs.name});
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.BLOB'>
-        obj${paramrs.propertyName} = resultSet.getBytes(${paramrs.name});
+        ${paramrs.fieldName} = resultSet.getBytes(${paramrs.name});
 <#elseif paramrs.sqlTypeName == 'java.sql.Types.TIMESTAMP'>
-        obj${paramrs.propertyName} = (${paramrs.javaTypeName}) resultSet.getTimestamp(${paramrs.name});
+        ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getTimestamp(${paramrs.name});
 <#else>
-        obj${paramrs.propertyName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
+        ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
 </#if>
 </#list>
 
 <#list childs as paramrs>
-        row.set${paramrs.propertyName}(obj${paramrs.propertyName});
+        row.set${paramrs.propertyName}(${paramrs.fieldName});
 </#list>
     }
 </#list>

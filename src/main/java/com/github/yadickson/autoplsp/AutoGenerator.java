@@ -147,6 +147,14 @@ public class AutoGenerator extends AbstractMojo {
     private String outputConfigFileName;
 
     /**
+     * SQL readme definition file name.
+     */
+    @Parameter(
+            defaultValue = "SQL.md",
+            readonly = true,
+            required = false)
+    private String outputDefinitionFileName;
+    /**
      * Java package name.
      */
     @Parameter(
@@ -414,6 +422,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] OutputTestDirectory: " + outputTestDirectory.getPath());
         getLog().info("[AutoGenerator] OutputDirectoryResource: " + outputDirectoryResource.getPath());
         getLog().info("[AutoGenerator] OutputConfigFileName: " + outputConfigFileName);
+        getLog().info("[AutoGenerator] OutputDefinitionFileName: " + outputDefinitionFileName);
         getLog().info("[AutoGenerator] JavaPackageName: " + javaPackageName);
         getLog().info("[AutoGenerator] JavaDataSourceName: " + javaDataSourceName);
         getLog().info("[AutoGenerator] JavaJdbcTemplateName: " + javaJdbcTemplateName);
@@ -633,6 +642,21 @@ public class AutoGenerator extends AbstractMojo {
             );
 
             config.process();
+
+            DefinitionGenerator definition;
+            definition = new DefinitionGenerator(
+                    outputDirectoryResource.getPath(),
+                    folderNameResourceGenerator,
+                    outputDefinitionFileName,
+                    spList,
+                    outParameterCode,
+                    outParameterMessage,
+                    successCode,
+                    generator.getName(),
+                    connManager.getVersion()
+            );
+
+            definition.process();
 
         } catch (RuntimeException ex) {
             getLog().error(ex.getMessage(), ex);

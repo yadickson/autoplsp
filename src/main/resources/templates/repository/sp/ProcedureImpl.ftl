@@ -75,6 +75,7 @@ public final class ${proc.className}SPImpl
      * @param jdbcTemplate jdbcTemplate
      */
     public ${proc.className}SPImpl(final JdbcTemplate jdbcTemplate) {
+
         super(jdbcTemplate.getDataSource(), SPROC_NAME);
 
         setFunction(<#if proc.function>true<#else>false</#if>);

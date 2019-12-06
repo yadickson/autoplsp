@@ -23,8 +23,8 @@ CREATE OR REPLACE <#if proc.function>FUNCTION<#else>PROCEDURE</#if> ${proc.name}
 <#if proc.hasInput>
 )
 </#if>
-         AS
-         BEGIN
+AS
+BEGIN
 
 <#if proc.checkResult>
     ${outParameterCode} := ${successCode};
@@ -47,14 +47,14 @@ CREATE OR REPLACE <#if proc.function>FUNCTION<#else>PROCEDURE</#if> ${proc.name}
     NULL;
 </#if>
 
-         EXCEPTION
+EXCEPTION
    WHEN OTHERS
    THEN
 <#if proc.checkResult>
-         ${outParameterCode} := 1${successCode};
-         ${outParameterMessage} := 'NOK';
+        ${outParameterCode} := 1${successCode};
+        ${outParameterMessage} := 'NOK';
 <#else>
-         NULL;
+        NULL;
 </#if>
 
 END;

@@ -76,7 +76,7 @@ public interface ${proc.className}SP {
          NULL;
 </#if>
 
-     EXCEPTION            
+     EXCEPTION
         WHEN OTHERS
         THEN
 <#if proc.checkResult>

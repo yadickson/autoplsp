@@ -54,6 +54,7 @@ public class OracleTableParameter extends Parameter {
      * @param typeName Particular parameter type name
      * @param objectSuffix Object suffix name
      * @param arraySuffix Array suffix name
+     * @param sqlNativeDirection The sql native direction.
      * @throws BusinessException If create parameter process throws an error
      */
     public OracleTableParameter(
@@ -65,9 +66,10 @@ public class OracleTableParameter extends Parameter {
             final Connection connection,
             final String typeName,
             final String objectSuffix,
-            final String arraySuffix)
+            final String arraySuffix,
+            final String sqlNativeDirection)
             throws BusinessException {
-        super(position, name, direction, prefix, procedure);
+        super(position, name, direction, prefix, procedure, sqlNativeDirection, typeName);
         this.objectName = typeName;
         this.objectSuffix = objectSuffix;
         this.arraySuffix = arraySuffix;
@@ -154,7 +156,7 @@ public class OracleTableParameter extends Parameter {
             String parameterName = p.getName();
 
             LoggerManager.getInstance().info("[OracleArrayParameter] type: " + dataType + " name: " + parameterName);
-            parameters.add(new OracleMakeParameter().create(dataType, 0, "Value", Direction.INPUT, connection, parameterName, procedure, objectSuffix, arraySuffix));
+            parameters.add(new OracleMakeParameter().create(dataType, 0, "Value", Direction.INPUT, "IN", connection, parameterName, procedure, objectSuffix, arraySuffix));
         }
     }
 }

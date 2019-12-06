@@ -194,7 +194,7 @@ public abstract class Generator {
             Direction direction = new MakeDirection().getDirection(p.getDirection());
 
             LoggerManager.getInstance().info("[SPGenerator] Process (" + position + ") " + parameterName + " " + direction + " " + dataType + " " + typeName);
-            Parameter param = maker.create(dataType, position, parameterName, direction, connection, typeName, procedure, objectSuffix, arraySuffix);
+            Parameter param = maker.create(dataType, position, parameterName, direction, p.getDirection().replace("/", " "), connection, typeName, procedure, objectSuffix, arraySuffix);
             LoggerManager.getInstance().info("[SPGenerator] Parameter (" + param.getPosition() + ") " + param.getName() + " " + param.getDirection() + " [" + param.getSqlTypeName() + "]");
 
             mparameters.put(position, param);
@@ -317,13 +317,13 @@ public abstract class Generator {
                 int position = Integer.MIN_VALUE;
                 boolean first = true;
                 int index = 1;
-                String pname = "return_value";
+                String pname = "RETURN_VALUE";
 
                 do {
 
                     ResultSet result = statement.getResultSet();
-
-                    Parameter rs = maker.getReturnResultSet(position++, first ? pname : pname + "_" + index, procedure, connection, objectSuffix, arraySuffix);
+                    String currentName = first ? pname : pname + "_" + index;
+                    Parameter rs = maker.getReturnResultSet(position++, currentName, procedure, connection, objectSuffix, arraySuffix);
                     rs.setParameters(getParameters(maker, procedure, connection, result, objectSuffix, arraySuffix));
                     parameters.add(rs);
                     procedure.setParameters(parameters);
@@ -477,7 +477,7 @@ public abstract class Generator {
                     throw new BusinessException("Parameter type [" + cType + "] in position [" + (j + 1) + "] has not name");
                 }
 
-                Parameter p = maker.create(cType.split(" ")[0], j + 1, cName, Direction.OUTPUT, connection, null, procedure, objectSuffix, arraySuffix);
+                Parameter p = maker.create(cType.split(" ")[0], j + 1, cName, Direction.OUTPUT, "OUT", connection, null, procedure, objectSuffix, arraySuffix);
 
                 if (pNames.contains(p.getName())) {
                     throw new BusinessException("Parameter name [" + p.getName() + "] is duplicated");
@@ -525,7 +525,7 @@ public abstract class Generator {
         List<ParameterBean> parameters = new FindParameterImpl().getParameters(connection, sql, new String[]{});
 
         for (ParameterBean p : parameters) {
-            Parameter parameter = getMakeParameter().getOwnerParameter(p.getDtype(), 0, p.getNtype(), Direction.INPUT, connection, p.getNtype(), null, objectSuffix, arraySuffix);
+            Parameter parameter = getMakeParameter().getOwnerParameter(p.getDtype(), 0, p.getNtype(), Direction.INPUT, "IN", connection, p.getNtype(), null, objectSuffix, arraySuffix);
             LoggerManager.getInstance().info("[FindObjects] Found (" + p.getDtype() + " - " + p.getNtype() + ")");
             list.add(parameter);
         }

@@ -37,9 +37,19 @@ public class NumberParameter extends Parameter {
      * @param direction The parameter direction
      * @param prefix The prameter prefix
      * @param procedure The procedure
+     * @param sqlNativeDirection The sql native direction.
+     * @param sqlNativeTypeName The sql native type name.
      */
-    public NumberParameter(int position, String name, Direction direction, String prefix, Procedure procedure) {
-        super(position, name, direction, prefix, procedure);
+    public NumberParameter(
+            final int position,
+            final String name,
+            final Direction direction,
+            final String prefix,
+            final Procedure procedure,
+            final String sqlNativeDirection,
+            final String sqlNativeTypeName
+    ) {
+        super(position, name, direction, prefix, procedure, sqlNativeDirection, sqlNativeTypeName);
     }
 
     /**

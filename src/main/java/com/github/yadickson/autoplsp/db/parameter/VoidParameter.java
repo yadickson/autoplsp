@@ -39,8 +39,16 @@ public class VoidParameter extends Parameter {
      * @param prefix The parameter prefix
      * @param procedure the procedure
      */
-    public VoidParameter(int position, String name, Direction direction, String prefix, Procedure procedure) {
-        super(position, name, direction, prefix, procedure);
+    public VoidParameter(
+            final int position,
+            final String name,
+            final Direction direction,
+            final String prefix,
+            final Procedure procedure,
+            final String sqlNativeDirection,
+            final String sqlNativeTypeName
+    ) {
+        super(position, name, direction, prefix, procedure, sqlNativeDirection, sqlNativeTypeName);
     }
 
     /**

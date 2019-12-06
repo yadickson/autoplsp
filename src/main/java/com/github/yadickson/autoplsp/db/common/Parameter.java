@@ -16,10 +16,11 @@
  */
 package com.github.yadickson.autoplsp.db.common;
 
-import com.github.yadickson.autoplsp.handler.BusinessException;
-import java.util.List;
-import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 import java.io.Serializable;
+import java.util.List;
+
+import com.github.yadickson.autoplsp.handler.BusinessException;
+import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 
 /**
  * Parameter class
@@ -35,6 +36,8 @@ public abstract class Parameter implements Serializable {
     private final Integer position;
     private final String parent;
     private final String prefix;
+    private final String sqlNativeDirection;
+    private final String sqlNativeTypeName;
 
     /**
      * Class constructor.
@@ -44,13 +47,25 @@ public abstract class Parameter implements Serializable {
      * @param direction The parameter direction
      * @param prefix prefix value
      * @param procedure The procedure parent
+     * @param sqlNativeDirection The sql native direction.
+     * @param sqlNativeTypeName The sql native type name.
      */
-    public Parameter(Integer position, String name, Direction direction, String prefix, Procedure procedure) {
+    public Parameter(
+            final Integer position,
+            final String name,
+            final Direction direction,
+            final String prefix,
+            final Procedure procedure,
+            final String sqlNativeDirection,
+            final String sqlNativeTypeName
+    ) {
         this.position = position;
         this.name = name;
         this.direction = direction;
         this.prefix = prefix;
         this.parent = procedure == null ? "" : procedure.getFullName();
+        this.sqlNativeDirection = sqlNativeDirection;
+        this.sqlNativeTypeName = sqlNativeTypeName;
     }
 
     /**
@@ -295,5 +310,19 @@ public abstract class Parameter implements Serializable {
      * @throws BusinessException if exist error
      */
     public abstract String getSqlTypeName() throws BusinessException;
+
+    /**
+     * @return the sqlNativeDirection
+     */
+    public String getSqlNativeDirection() {
+        return sqlNativeDirection;
+    }
+
+    /**
+     * @return the sqlNativeTypeName
+     */
+    public String getSqlNativeTypeName() {
+        return sqlNativeTypeName;
+    }
 
 }

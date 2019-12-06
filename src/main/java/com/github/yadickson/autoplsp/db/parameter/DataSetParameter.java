@@ -44,9 +44,19 @@ public abstract class DataSetParameter extends Parameter {
      * @param direction The parameter direction
      * @param prefix The prefix
      * @param procedure The procedure
+     * @param sqlNativeDirection The sql native direction.
+     * @param sqlNativeTypeName The sql native type name.
      */
-    public DataSetParameter(int position, String name, Direction direction, String prefix, Procedure procedure) {
-        super(position, name, direction, prefix, procedure);
+    public DataSetParameter(
+            final int position,
+            final String name,
+            final Direction direction,
+            final String prefix,
+            final Procedure procedure,
+            final String sqlNativeDirection,
+            final String sqlNativeTypeName
+    ) {
+        super(position, name, direction, prefix, procedure, sqlNativeDirection, sqlNativeTypeName);
         this.className = procedure.getClassName();
     }
 

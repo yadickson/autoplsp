@@ -42,7 +42,7 @@ public class PostgreSqlMakeParameter extends MakeParameter {
     /**
      * PostgreSQL method to create parameter class from database information
      *
-     * @param type Parameter type
+     * @param sqlNativeTypeName Parameter type
      * @param position Parameter position
      * @param name Parameter name
      * @param direction Parameter direction
@@ -56,36 +56,37 @@ public class PostgreSqlMakeParameter extends MakeParameter {
      */
     @Override
     public Parameter getOwnerParameter(
-            final String type,
+            final String sqlNativeTypeName,
             final int position,
             final String name,
             final Direction direction,
+            final String sqlNativeDirection,
             final Connection connection,
             final String typeName,
             final Procedure procedure,
             final String objectSuffix,
             final String arraySuffix) throws BusinessException {
-        if (findParameterType(type, "TEXT", "CHARACTER")) {
-            return new CharParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "TEXT", "CHARACTER")) {
+            return new CharParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "INT4", "FLOAT4", "INTEGER", "REAL")) {
-            return new NumberParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "INT4", "FLOAT4", "INTEGER", "REAL")) {
+            return new NumberParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "BOOLEAN")) {
-            return new BooleanParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "BOOLEAN")) {
+            return new BooleanParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "VOID")) {
-            return new VoidParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "VOID")) {
+            return new VoidParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
 
-        throw new BusinessException("Type [" + type + " " + name + "] not supported");
+        throw new BusinessException("Type [" + sqlNativeTypeName + " " + name + "] not supported");
     }
 
     /**
      * Getter return result set parameter.
      *
      * @param position The position
-     * @param name The name
+     * @param sqlNativeTypeName The name
      * @param procedure The procedure owner
      * @param connection Database connection
      * @param objectSuffix Object suffix name
@@ -96,12 +97,12 @@ public class PostgreSqlMakeParameter extends MakeParameter {
     @Override
     public Parameter getReturnResultSet(
             final int position,
-            final String name,
+            final String sqlNativeTypeName,
             final Procedure procedure,
             final Connection connection,
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        return new ReturnResultSetParameter(position, name, PREFIX, procedure);
+        return new ReturnResultSetParameter(position, sqlNativeTypeName, PREFIX, procedure);
     }
 }

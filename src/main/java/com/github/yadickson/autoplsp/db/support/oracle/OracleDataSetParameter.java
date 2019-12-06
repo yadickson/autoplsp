@@ -17,11 +17,9 @@
 package com.github.yadickson.autoplsp.db.support.oracle;
 
 import com.github.yadickson.autoplsp.db.ConstantTypes;
-import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.db.parameter.DataSetParameter;
-import java.util.List;
 
 /**
  * Oracle Dataset parameter class
@@ -39,9 +37,16 @@ public class OracleDataSetParameter extends DataSetParameter {
      * @param name The parameter name
      * @param prefix The prefix
      * @param procedure The procedure
+     * @param sqlNativeTypeName The sql native type name.
      */
-    public OracleDataSetParameter(int position, String name, String prefix, Procedure procedure) {
-        super(position, name, Direction.OUTPUT, prefix, procedure);
+    public OracleDataSetParameter(
+            final int position,
+            final String name,
+            final String prefix,
+            final Procedure procedure,
+            final String sqlNativeTypeName
+    ) {
+        super(position, name, Direction.OUTPUT, prefix, procedure, "OUT", sqlNativeTypeName);
     }
 
     /**

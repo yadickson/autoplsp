@@ -37,8 +37,13 @@ public class ReturnResultSetParameter extends DataSetParameter {
      * @param prefix The prefix
      * @param procedure The procedure
      */
-    public ReturnResultSetParameter(int position, String name, String prefix, Procedure procedure) {
-        super(position, name, Direction.OUTPUT, prefix, procedure);
+    public ReturnResultSetParameter(
+            final int position,
+            final String name,
+            final String prefix,
+            final Procedure procedure
+    ) {
+        super(position, name, Direction.OUTPUT, prefix, procedure, "OUT", name);
     }
 
     /**

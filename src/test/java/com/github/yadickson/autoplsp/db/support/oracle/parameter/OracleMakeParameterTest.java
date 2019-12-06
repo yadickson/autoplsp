@@ -49,17 +49,17 @@ public class OracleMakeParameterTest {
 
     @Test(expected = Exception.class)
     public void testNullType() throws BusinessException {
-        maker.create(null, 0, null, Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        maker.create(null, 0, null, Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
     }
 
     @Test(expected = Exception.class)
     public void testUnknowType() throws BusinessException {
-        maker.create("xx", 0, null, Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        maker.create("xx", 0, null, Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
     }
 
     @Test
     public void testChar() throws BusinessException {
-        Parameter parameter = maker.create("char", 1, "charName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("char", 1, "charName", Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof CharParameter);
         assertEquals((Integer) 1, parameter.getPosition());
@@ -69,7 +69,7 @@ public class OracleMakeParameterTest {
 
     @Test
     public void testVarchar2() throws BusinessException {
-        Parameter parameter = maker.create("varchar2", 2, "vcName", Direction.OUTPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("varchar2", 2, "vcName", Direction.OUTPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof CharParameter);
         assertEquals((Integer) 2, parameter.getPosition());
@@ -79,7 +79,7 @@ public class OracleMakeParameterTest {
 
     @Test
     public void testNumber() throws BusinessException {
-        Parameter parameter = maker.create("number", 1, "numberName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("number", 1, "numberName", Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof NumberParameter);
         assertEquals((Integer) 1, parameter.getPosition());
@@ -89,7 +89,7 @@ public class OracleMakeParameterTest {
 
     @Test
     public void testDecimal() throws BusinessException {
-        Parameter parameter = maker.create("decimal", 2, "decimalName", Direction.OUTPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("decimal", 2, "decimalName", Direction.OUTPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof NumberParameter);
         assertEquals((Integer) 2, parameter.getPosition());
@@ -99,7 +99,7 @@ public class OracleMakeParameterTest {
 
     @Test
     public void testClob() throws BusinessException {
-        Parameter parameter = maker.create("clob", 1, "clobName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("clob", 1, "clobName", Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof ClobParameter);
         assertEquals((Integer) 1, parameter.getPosition());
@@ -109,7 +109,7 @@ public class OracleMakeParameterTest {
 
     @Test
     public void testBlob() throws BusinessException {
-        Parameter parameter = maker.create("blob", 1, "blobName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("blob", 1, "blobName", Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof BlobParameter);
         assertEquals((Integer) 1, parameter.getPosition());
@@ -119,7 +119,7 @@ public class OracleMakeParameterTest {
 
     @Test
     public void testDate() throws BusinessException {
-        Parameter parameter = maker.create("date", 1, "dateName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("date", 1, "dateName", Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof DateParameter);
         assertEquals((Integer) 1, parameter.getPosition());
@@ -129,7 +129,7 @@ public class OracleMakeParameterTest {
 
     @Test
     public void testTimestamp() throws BusinessException {
-        Parameter parameter = maker.create("timestamp", 2, "tsName", Direction.OUTPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("timestamp", 2, "tsName", Direction.OUTPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof DateParameter);
         assertEquals((Integer) 2, parameter.getPosition());
@@ -139,7 +139,7 @@ public class OracleMakeParameterTest {
 
     @Test
     public void testRowId() throws BusinessException {
-        Parameter parameter = maker.create("rowid", 1, "rowName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("rowid", 1, "rowName", Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleRowIdParameter);
         assertEquals((Integer) 1, parameter.getPosition());
@@ -149,12 +149,12 @@ public class OracleMakeParameterTest {
 
     @Test(expected = Exception.class)
     public void testRefCursorInputError() throws BusinessException {
-        maker.create("cursor", 1, "rcName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        maker.create("cursor", 1, "rcName", Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
     }
 
     @Test
     public void testRefCursor() throws BusinessException {
-        Parameter parameter = maker.create("cursor", 1, "rc_name", Direction.OUTPUT, null, null, new Procedure(true, "package", "test", "", ""), "", "");
+        Parameter parameter = maker.create("cursor", 1, "rc_name", Direction.OUTPUT, "", null, null, new Procedure(true, "package", "test", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleDataSetParameter);
         assertEquals((Integer) 1, parameter.getPosition());
@@ -166,7 +166,7 @@ public class OracleMakeParameterTest {
 
     @Test
     public void testRefCursorWithoutPackageName() throws BusinessException {
-        Parameter parameter = maker.create("cursor", 1, "rc_name", Direction.OUTPUT, null, null, new Procedure(false, "package", "test", "", ""), "", "");
+        Parameter parameter = maker.create("cursor", 1, "rc_name", Direction.OUTPUT, "", null, null, new Procedure(false, "package", "test", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleDataSetParameter);
         assertEquals((Integer) 1, parameter.getPosition());
@@ -178,12 +178,12 @@ public class OracleMakeParameterTest {
 
     @Test(expected = Exception.class)
     public void testObjectOutputError() throws BusinessException {
-        maker.create("object", 1, "objName", Direction.OUTPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        maker.create("object", 1, "objName", Direction.OUTPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
     }
 
     @Test
     public void testObject() throws BusinessException {
-        Parameter parameter = maker.create("object", 1, "objName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("object", 1, "objName", Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleObjectParameter);
         assertEquals((Integer) 1, parameter.getPosition());
@@ -194,12 +194,12 @@ public class OracleMakeParameterTest {
 
     @Test(expected = Exception.class)
     public void testTableOutputError() throws BusinessException {
-        maker.create("table", 1, "tName", Direction.OUTPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        maker.create("table", 1, "tName", Direction.OUTPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
     }
 
     @Test
     public void testTable() throws BusinessException {
-        Parameter parameter = maker.create("table", 1, "tName", Direction.INPUT, null, null, new Procedure(true, "", "", "", ""), "", "");
+        Parameter parameter = maker.create("table", 1, "tName", Direction.INPUT, "", null, null, new Procedure(true, "", "", "", ""), "", "");
         assertNotNull(parameter);
         assertTrue(parameter instanceof OracleTableParameter);
         assertEquals((Integer) 1, parameter.getPosition());

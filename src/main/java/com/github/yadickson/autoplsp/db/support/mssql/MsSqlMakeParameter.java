@@ -43,7 +43,7 @@ public class MsSqlMakeParameter extends MakeParameter {
     /**
      * Microsoft SQL method to create parameter class from database information
      *
-     * @param type Parameter type
+     * @param sqlNativeTypeName Parameter type
      * @param position Parameter position
      * @param name Parameter name
      * @param direction Parameter direction
@@ -57,43 +57,44 @@ public class MsSqlMakeParameter extends MakeParameter {
      */
     @Override
     public Parameter getOwnerParameter(
-            final String type,
+            final String sqlNativeTypeName,
             final int position,
             final String name,
             final Direction direction,
+            final String sqlNativeDirection,
             final Connection connection,
             final String typeName,
             final Procedure procedure,
             final String objectSuffix,
             final String arraySuffix) throws BusinessException {
         
-        if (findParameterType(type, "CHAR", "NCHAR", "TEXT", "NTEXT", "VARCHAR", "NVARCHAR")) {
-            return new CharParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "CHAR", "NCHAR", "TEXT", "NTEXT", "VARCHAR", "NVARCHAR")) {
+            return new CharParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "INT", "BIGINT", "SMALLINT", "TINYINT", "DECIMAL", "NUMERIC", "FLOAT", "REAL", "MONEY", "SMALLMONEY")) {
-            return new NumberParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "INT", "BIGINT", "SMALLINT", "TINYINT", "DECIMAL", "NUMERIC", "FLOAT", "REAL", "MONEY", "SMALLMONEY")) {
+            return new NumberParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "BIT")) {
-            return new BooleanParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "BIT")) {
+            return new BooleanParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "BINARY", "VARBINARY", "IMAGE")) {
-            return new BlobParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "BINARY", "VARBINARY", "IMAGE")) {
+            return new BlobParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "DATE", "TIME", "DATETIME", "DATETIME2", "DATETIMEOFFSET", "SMALLDATETIME")) {
-            return new DateParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "DATE", "TIME", "DATETIME", "DATETIME2", "DATETIMEOFFSET", "SMALLDATETIME")) {
+            return new DateParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "CURSOR")) {
+        if (findParameterType(sqlNativeTypeName, "CURSOR")) {
             throw new BusinessException("Input REF CURSOR not supported yet");
         }
         
-        throw new BusinessException("Type [" + type + " " + name + "] not supported");
+        throw new BusinessException("Type [" + sqlNativeTypeName + " " + name + "] not supported");
     }
 
     /**
      * Getter return result set parameter.
      *
      * @param position The position
-     * @param name The name
+     * @param sqlNativeTypeName The name
      * @param procedure The procedure owner
      * @param connection Database connection
      * @param objectSuffix Object suffix name
@@ -104,12 +105,12 @@ public class MsSqlMakeParameter extends MakeParameter {
     @Override
     public Parameter getReturnResultSet(
             final int position,
-            final String name,
+            final String sqlNativeTypeName,
             final Procedure procedure,
             final Connection connection,
             final String objectSuffix,
             final String arraySuffix)
             throws BusinessException {
-        return new ReturnResultSetParameter(position, name, PREFIX, procedure);
+        return new ReturnResultSetParameter(position, sqlNativeTypeName, PREFIX, procedure);
     }
 }

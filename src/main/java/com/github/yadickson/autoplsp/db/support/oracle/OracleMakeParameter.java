@@ -42,12 +42,13 @@ public class OracleMakeParameter extends MakeParameter {
     /**
      * Oracle method to create parameter class from database information
      *
-     * @param type Parameter type
+     * @param sqlNativeTypeName Parameter sqlNativeTypeName
      * @param position Parameter position
      * @param name Parameter name
      * @param direction Parameter direction
+     * @param sqlNativeDirection The sql native direction.
      * @param connection Database connection
-     * @param typeName Particular parameter type name
+     * @param typeName Particular parameter sqlNativeTypeName name
      * @param procedure The procedure owner
      * @param objectSuffix Object suffix name
      * @param arraySuffix Array suffix name
@@ -56,10 +57,11 @@ public class OracleMakeParameter extends MakeParameter {
      */
     @Override
     public Parameter getOwnerParameter(
-            final String type,
+            final String sqlNativeTypeName,
             final int position,
             final String name,
             final Direction direction,
+            final String sqlNativeDirection,
             final Connection connection,
             final String typeName,
             final Procedure procedure,
@@ -67,48 +69,48 @@ public class OracleMakeParameter extends MakeParameter {
             final String arraySuffix)
             throws BusinessException {
 
-        if (findParameterType(type, "CHAR", "NCHAR", "VARCHAR", "VARCHAR2", "NVARCHAR2")) {
-            return new CharParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "CHAR", "NCHAR", "VARCHAR", "VARCHAR2", "NVARCHAR2")) {
+            return new CharParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "NUMBER", "DECIMAL", "FLOAT", "INTEGER", "REAL", "DEC", "INT", "SMALLINT", "BINARY_DOUBLE", "BINARY_FLOAT")) {
-            return new NumberParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "NUMBER", "DECIMAL", "FLOAT", "INTEGER", "REAL", "DEC", "INT", "SMALLINT", "BINARY_DOUBLE", "BINARY_FLOAT")) {
+            return new NumberParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "CLOB", "NCLOB")) {
-            return new ClobParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "CLOB", "NCLOB")) {
+            return new ClobParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "BLOB")) {
-            return new BlobParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "BLOB")) {
+            return new BlobParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "DATE", "TIMESTAMP")) {
-            return new DateParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "DATE", "TIMESTAMP")) {
+            return new DateParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "ROWID", "UROWID")) {
-            return new OracleRowIdParameter(position, name, direction, PREFIX, procedure);
+        if (findParameterType(sqlNativeTypeName, "ROWID", "UROWID")) {
+            return new OracleRowIdParameter(position, name, direction, PREFIX, procedure, sqlNativeDirection, sqlNativeTypeName);
         }
-        if (findParameterType(type, "CURSOR")) {
+        if (findParameterType(sqlNativeTypeName, "CURSOR")) {
             if (direction != Direction.OUTPUT) {
                 throw new BusinessException("Input REF CURSOR not supported");
             }
 
-            return new OracleDataSetParameter(position, name, PREFIX, procedure);
+            return new OracleDataSetParameter(position, name, PREFIX, procedure, "SYS_REFCURSOR");
         }
 
-        if (findParameterType(type, "OBJECT")) {
+        if (findParameterType(sqlNativeTypeName, "OBJECT")) {
             if (direction != Direction.INPUT) {
                 throw new BusinessException("Output OBJECT not supported");
             }
 
-            return new OracleObjectParameter(position, name, direction, PREFIX, procedure, connection, typeName, objectSuffix, arraySuffix);
+            return new OracleObjectParameter(position, name, direction, PREFIX, procedure, connection, typeName, objectSuffix, arraySuffix, sqlNativeDirection);
         }
 
-        if (findParameterType(type, "TABLE")) {
+        if (findParameterType(sqlNativeTypeName, "TABLE")) {
             if (direction != Direction.INPUT) {
                 throw new BusinessException("Output TABLE not supported");
             }
 
-            return new OracleTableParameter(position, name, direction, PREFIX, procedure, connection, typeName, objectSuffix, arraySuffix);
+            return new OracleTableParameter(position, name, direction, PREFIX, procedure, connection, typeName, objectSuffix, arraySuffix, sqlNativeDirection);
         }
 
-        throw new BusinessException("Type [" + type + " " + name + "] not supported");
+        throw new BusinessException("Type [" + sqlNativeTypeName + " " + name + "] not supported");
     }
 }

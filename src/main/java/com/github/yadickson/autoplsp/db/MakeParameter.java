@@ -33,10 +33,11 @@ public abstract class MakeParameter {
     /**
      * Generic method to create parameter class from database information
      *
-     * @param type Parameter type
+     * @param sqlNativeTypeName Parameter type
      * @param position Parameter position
      * @param name Parameter name
      * @param direction Parameter direction
+     * @param sqlNativeDirection The sql native direction.
      * @param connection Database connection
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
@@ -46,10 +47,11 @@ public abstract class MakeParameter {
      * @throws BusinessException If create parameter process throws an error
      */
     public Parameter create(
-            final String type,
+            final String sqlNativeTypeName,
             final int position,
             final String name,
             final Direction direction,
+            final String sqlNativeDirection,
             final Connection connection,
             final String typeName,
             final Procedure procedure,
@@ -57,20 +59,21 @@ public abstract class MakeParameter {
             final String arraySuffix)
             throws BusinessException {
 
-        if (type == null) {
+        if (sqlNativeTypeName == null) {
             throw new BusinessException("Parameter type is null");
         }
 
-        return getOwnerParameter(type, position, name, direction, connection, typeName, procedure, objectSuffix, arraySuffix);
+        return getOwnerParameter(sqlNativeTypeName, position, name, direction, sqlNativeDirection, connection, typeName, procedure, objectSuffix, arraySuffix);
     }
 
     /**
      * Custom method to create parameter class from database information
      *
-     * @param type Parameter type
+     * @param sqlNativeTypeName Parameter type
      * @param position Parameter position
      * @param name Parameter name
      * @param direction Parameter direction
+     * @param sqlNativeDirection The sql native direction.
      * @param connection Database connection
      * @param typeName Particular parameter type name
      * @param procedure The procedure owner
@@ -80,10 +83,11 @@ public abstract class MakeParameter {
      * @throws BusinessException If create parameter process throws an error
      */
     public abstract Parameter getOwnerParameter(
-            final String type,
+            final String sqlNativeTypeName,
             final int position,
             final String name,
             final Direction direction,
+            final String sqlNativeDirection,
             final Connection connection,
             final String typeName,
             final Procedure procedure,
@@ -95,7 +99,7 @@ public abstract class MakeParameter {
      * Getter return result set parameter.
      *
      * @param position The position
-     * @param name The name
+     * @param sqlNativeTypeName The name
      * @param procedure The procedure owner
      * @param connection Database connection
      * @param objectSuffix Object suffix name
@@ -105,7 +109,7 @@ public abstract class MakeParameter {
      */
     public Parameter getReturnResultSet(
             final int position,
-            final String name,
+            final String sqlNativeTypeName,
             final Procedure procedure,
             final Connection connection,
             final String objectSuffix,

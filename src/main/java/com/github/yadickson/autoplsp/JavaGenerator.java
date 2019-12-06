@@ -208,6 +208,8 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DRIVER_NAME, driverName);
+        input.put(DRIVER_VERSION, driverVersion);
         input.put(DATA_SOURCE_NAME, dataSource);
         input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
@@ -292,6 +294,8 @@ public class JavaGenerator extends TemplateGenerator {
         Map<String, Object> input = new HashMap<String, Object>();
 
         input.put(PROCEDURE_NAME, procedure);
+        input.put(DRIVER_NAME, driverName);
+        input.put(DRIVER_VERSION, driverVersion);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
         input.put(DATA_SOURCE_NAME, dataSource);
         input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
@@ -324,6 +328,8 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DRIVER_NAME, driverName);
+        input.put(DRIVER_VERSION, driverVersion);
         input.put(DATA_SOURCE_NAME, dataSource);
         input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
@@ -361,6 +367,8 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DRIVER_NAME, driverName);
+        input.put(DRIVER_VERSION, driverVersion);
         input.put(DATA_SOURCE_NAME, dataSource);
         input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);
@@ -396,6 +404,8 @@ public class JavaGenerator extends TemplateGenerator {
 
         input.put(PROCEDURE_NAME, procedure);
         input.put(JAVA_PACKAGE_NAME, javaPackage);
+        input.put(DRIVER_NAME, driverName);
+        input.put(DRIVER_VERSION, driverVersion);
         input.put(DATA_SOURCE_NAME, dataSource);
         input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         input.put(ENCODE, encode);

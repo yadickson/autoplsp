@@ -37,7 +37,7 @@ public class OracleDataSetParameterTest {
 
     @Before
     public void setup() {
-        parameter = new OracleDataSetParameter(0, null, "", new Procedure(true, "", "", "", ""));
+        parameter = new OracleDataSetParameter(0, null, "", new Procedure(true, "", "", "", ""), "");
         parameter.setParameters(new ArrayList<Parameter>());
     }
 

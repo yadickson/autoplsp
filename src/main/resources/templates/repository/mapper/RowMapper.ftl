@@ -71,7 +71,7 @@ public final class ${parameter.javaTypeName}RowMapper
         ${parameter.javaTypeName} row;
         row = new ${parameter.javaTypeName}();
 
-<#if parameter.parameters?size <= 20 >
+<#if parameter.parameters?size <= 10 >
 <#assign noFullChunk = 1>
 <#list parameter.parameters as paramrs>
         ${paramrs.javaTypeName} ${paramrs.fieldName};
@@ -94,7 +94,7 @@ public final class ${parameter.javaTypeName}RowMapper
 </#list>
 <#else>
 <#assign step = 0 >
-<#list parameter.parameters?chunk(20) as childs>
+<#list parameter.parameters?chunk(10) as childs>
 <#assign step++ >
         fillStep${step}(resultSet, row);
 </#list>
@@ -104,7 +104,7 @@ public final class ${parameter.javaTypeName}RowMapper
     }
 <#if ! noFullChunk?? >
 <#assign step = 0 >
-<#list parameter.parameters?chunk(20) as childs>
+<#list parameter.parameters?chunk(10) as childs>
 <#assign step++ >
 
     /**

@@ -80,12 +80,14 @@ public final class ${proc.className}SPImpl
 
         setFunction(<#if proc.function>true<#else>false</#if>);
 
+<#if proc.parameters?size <= 10 >
+<#assign noFullChunk = 1>
 <#list proc.parameters as parameter>
-        <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> sql${parameter.propertyName};
+        <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ${parameter.fieldName};
 </#list>
 
 <#list proc.parameters as parameter>
-        sql${parameter.propertyName} = new <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>(
+        ${parameter.fieldName} = new <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>(
                 "${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >,
                 ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >,
                 new ${parameter.javaTypeName}RowMapper()</#if>
@@ -93,9 +95,45 @@ public final class ${proc.className}SPImpl
 
 </#list>
 <#list proc.parameters as parameter>
-        declareParameter(sql${parameter.propertyName});
+        declareParameter(${parameter.fieldName});
 </#list>
+<#else>
+<#assign step = 0 >
+<#list proc.parameters?chunk(10) as childs>
+<#assign step++ >
+        fillStep${step}();
+</#list>
+</#if>
 
         compile();
     }
+<#if ! noFullChunk?? >
+<#assign step = 0 >
+<#list proc.parameters?chunk(10) as childs>
+<#assign step++ >
+
+    /**
+     * Fill parameters declaration for step ${step}.
+     */
+    private void fillStep${step}() {
+
+<#list childs as paramrs>
+        <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if> ${paramrs.fieldName};
+</#list>
+
+<#list childs as paramrs>
+        ${paramrs.fieldName} = new <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if>(
+                "${paramrs.prefix}${paramrs.name}"<#if ! paramrs.returnResultSet >,
+                ${paramrs.sqlTypeName}</#if><#if paramrs.resultSet || paramrs.returnResultSet >,
+                new ${paramrs.javaTypeName}RowMapper()</#if>
+        );
+
+</#list>
+
+<#list childs as paramrs>
+        declareParameter(${paramrs.fieldName});
+</#list>
+    }
+</#list>
+</#if>
 }

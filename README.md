@@ -106,7 +106,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 </dependency>
 ```
 ## Oracle
-```
+```xml
 <dependency>
     <groupId>com.jslsolucoes</groupId>
     <artifactId>ojdbc6</artifactId>
@@ -115,7 +115,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 </dependency>
 ```
 ## PostgreSQL
-```
+```xml
 <dependency>
     <groupId>org.postgresql</groupId>
     <artifactId>postgresql</artifactId>
@@ -124,7 +124,7 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 </dependency>
 ```
 ## SQL Server
-```
+```xml
 <dependency>
     <groupId>net.sourceforge.jtds</groupId>
     <artifactId>jtds</artifactId>

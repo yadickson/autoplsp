@@ -129,7 +129,6 @@ public final class ${proc.className}SPImpl
         );
 
 </#list>
-
 <#list childs as paramrs>
         declareParameter(${paramrs.fieldName});
 </#list>

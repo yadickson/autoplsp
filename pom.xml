@@ -142,7 +142,7 @@
                                     <include name="**/*.ftl"/>
                                     <replacefilter token="@GENERATOR.NAME@" value="${project.name}"/>
                                     <replacefilter token="@GENERATOR.VERSION@" value="${project.version}"/>
-                                </replace>             
+                                </replace>
                             </target>
                         </configuration>
                         <goals>

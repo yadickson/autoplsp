@@ -37,7 +37,7 @@ BEGIN
     OPEN ${parameter.name} FOR
     SELECT
 <#list parameter.parameters as pcursor>
-        <#if pcursor.string>' <#elseif pcursor.clob>TO_CLOB(' <#elseif pcursor.blob>TO_BLOB(0<#else>0</#if><#if pcursor.string>'<#elseif pcursor.clob>')<#elseif pcursor.blob>)</#if> AS ${pcursor.name}<#sep>,</#sep>
+        <#if pcursor.string>' <#elseif pcursor.clob>TO_CLOB(' <#elseif pcursor.blob>TO_BLOB(0<#elseif pcursor.date>SYSDATE<#else>0</#if><#if pcursor.string>'<#elseif pcursor.clob>')<#elseif pcursor.blob>)</#if> AS ${pcursor.name}<#sep>,</#sep>
 </#list>
     FROM DUAL;
 </#if>

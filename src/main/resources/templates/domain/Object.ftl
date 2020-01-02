@@ -21,8 +21,18 @@ package ${javaPackage}.domain;
 <#list parameter.parameters as parameter2>
 <#if parameter2.date>
 <#assign importDateUtil = 1>
+<#elseif parameter2.clob>
+<#assign importClobUtil = 1>
+<#elseif parameter2.blob>
+<#assign importBlobUtil = 1>
 </#if>
 </#list>
+<#if importBlobUtil??>
+import ${javaPackage}.util.BlobUtil;
+</#if>
+<#if importClobUtil??>
+import ${javaPackage}.util.ClobUtil;
+</#if>
 <#if importDateUtil??>
 import ${javaPackage}.util.DateUtil;
 
@@ -71,9 +81,11 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 
     /**
      * Field parameter ${parameter2.fieldName}.
-     */<#if lombok && parameter2.date>
+     */
+<#if lombok && parameter2.date>
     @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)</#if>
+    @Setter(AccessLevel.NONE)
+</#if>
     private ${parameter2.javaTypeName} ${parameter2.fieldName} = null;
 </#list>
 <#if !lombok>

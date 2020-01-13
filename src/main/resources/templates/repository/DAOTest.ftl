@@ -121,7 +121,7 @@ public class ${proc.className}DAOTest {
 </#if>
 <#if proc.hasOutput>
 
-        Mockito.when(<#if proc.function>function<#else>procedure</#if>.execute(<#if proc.hasInput>Mockito.anyMap()</#if>)).thenReturn(mapResult);
+        Mockito.when(<#if proc.function>function<#else>procedure</#if>.execute(Mockito.anyMap())).thenReturn(mapResult);
 </#if>
 <#if proc.hasInput || proc.hasOutput>
 
@@ -142,7 +142,7 @@ public class ${proc.className}DAOTest {
 
         InOrder inOrder = Mockito.inOrder(<#if proc.function>function<#else>procedure</#if><#if proc.checkResult>, checkResult</#if>);
 
-        inOrder.verify(<#if proc.function>function<#else>procedure</#if>, Mockito.times(1)).execute(<#if proc.hasInput>Mockito.anyMap()</#if>);
+        inOrder.verify(<#if proc.function>function<#else>procedure</#if>, Mockito.times(1)).execute(Mockito.anyMap());
 <#if proc.checkResult>
         inOrder.verify(checkResult, Mockito.times(1)).check(<#if proc.hasOutput>Mockito.same(mapResult)</#if>);
 </#if>
@@ -162,10 +162,10 @@ public class ${proc.className}DAOTest {
 </#if>
 <#if proc.hasOutput>
 
-        Mockito.when(<#if proc.function>function<#else>procedure</#if>.execute(<#if proc.hasInput>Mockito.anyMap()</#if>)).thenThrow(new RuntimeException());
+        Mockito.when(<#if proc.function>function<#else>procedure</#if>.execute(Mockito.anyMap())).thenThrow(new RuntimeException());
 <#else>
 
-        Mockito.doThrow(new RuntimeException()).when(<#if proc.function>function<#else>procedure</#if>.execute(<#if proc.hasInput>Mockito.anyMap()</#if>);
+        Mockito.doThrow(new RuntimeException()).when(<#if proc.function>function<#else>procedure</#if>.execute(Mockito.anyMap());
 </#if>
 <#if proc.hasInput || proc.hasOutput>
 

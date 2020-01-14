@@ -34,27 +34,11 @@ import com.github.yadickson.autoplsp.logger.LoggerManager;
  *
  * @author Yadickson Soto
  */
-public class JavaGenerator extends TemplateGenerator {
+public final class JavaGenerator extends TemplateGenerator {
 
     private final String javaPackage;
-    private final String dataSource;
-    private final String jdbcTemplate;
-    private final String encode;
-    private final Boolean jsonNonNull;
-    private final Boolean lombok;
-    private final Boolean header;
-    private final Boolean serialization;
     private final Boolean test;
-    private final Boolean position;
-    private final Boolean diamond;
-    private final Boolean logger;
-    private final Boolean fullConstructor;
-    private final String outParameterCode;
-    private final String outParameterMessage;
-    private final String successCode;
     private final String folderNameGenerator;
-    private final String driverName;
-    private final String driverVersion;
 
     private final Map<String, String> mappers;
 
@@ -102,13 +86,15 @@ public class JavaGenerator extends TemplateGenerator {
     private boolean addTypeTable;
     private boolean addDateUtil;
 
+    private static final Map<String, Object> INPUT_MAP = new HashMap<String, Object>();
+
     /**
      * Class constructor
      *
      * @param outputDir Output source directory
      * @param outputTestDir Output test directory
      * @param folderNameGenerator folder name generator
-     * @param packageName Java package name
+     * @param javaPackage Java package name
      * @param dataSource Datasource name
      * @param jdbcTemplate JdbcTemplate name
      * @param encode encode data base.
@@ -132,7 +118,7 @@ public class JavaGenerator extends TemplateGenerator {
             final String outputDir,
             final String outputTestDir,
             final String folderNameGenerator,
-            final String packageName,
+            final String javaPackage,
             final String dataSource,
             final String jdbcTemplate,
             final String encode,
@@ -153,26 +139,29 @@ public class JavaGenerator extends TemplateGenerator {
             final String driverVersion) {
 
         super(outputDir, outputTestDir);
+
+        this.javaPackage = javaPackage;
         this.folderNameGenerator = folderNameGenerator;
-        this.javaPackage = packageName;
-        this.dataSource = dataSource;
-        this.jdbcTemplate = jdbcTemplate;
-        this.encode = encode;
-        this.jsonNonNull = jsonNonNull;
-        this.lombok = lombok;
-        this.header = header;
-        this.serialization = serialization;
         this.test = test;
-        this.position = position;
-        this.diamond = diamond;
-        this.logger = logger;
-        this.fullConstructor = fullConstructor;
-        this.outParameterCode = outParameterCode;
-        this.outParameterMessage = outParameterMessage;
-        this.successCode = successCode;
         this.mappers = mappers;
-        this.driverName = driverName;
-        this.driverVersion = driverVersion;
+
+        INPUT_MAP.put(JAVA_PACKAGE_NAME, javaPackage);
+        INPUT_MAP.put(DRIVER_NAME, driverName);
+        INPUT_MAP.put(DRIVER_VERSION, driverVersion);
+        INPUT_MAP.put(DATA_SOURCE_NAME, dataSource);
+        INPUT_MAP.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
+        INPUT_MAP.put(ENCODE, encode);
+        INPUT_MAP.put(JSON_NON_NULL, jsonNonNull);
+        INPUT_MAP.put(LOMBOK, lombok);
+        INPUT_MAP.put(HEADER, header);
+        INPUT_MAP.put(SERIALIZATION, serialization);
+        INPUT_MAP.put(POSITION, position);
+        INPUT_MAP.put(DIAMOND, diamond);
+        INPUT_MAP.put(LOGGER, logger);
+        INPUT_MAP.put(FULL_CONSTRUCTOR, fullConstructor);
+        INPUT_MAP.put(SUCCESS_CODE, successCode);
+        INPUT_MAP.put(OUT_CODE_NAME, outParameterCode);
+        INPUT_MAP.put(OUT_MESSAGE_NAME, outParameterMessage);
     }
 
     /**
@@ -204,146 +193,92 @@ public class JavaGenerator extends TemplateGenerator {
     }
 
     private void processStoredProcedure(Procedure procedure) throws BusinessException {
-        Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put(PROCEDURE_NAME, procedure);
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-        input.put(DRIVER_NAME, driverName);
-        input.put(DRIVER_VERSION, driverVersion);
-        input.put(DATA_SOURCE_NAME, dataSource);
-        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
-        input.put(ENCODE, encode);
-        input.put(JSON_NON_NULL, jsonNonNull);
-        input.put(LOMBOK, lombok);
-        input.put(HEADER, header);
-        input.put(SERIALIZATION, serialization);
-        input.put(POSITION, position);
-        input.put(DIAMOND, diamond);
-        input.put(LOGGER, logger);
-        input.put(FULL_CONSTRUCTOR, fullConstructor);
-        input.put(SUCCESS_CODE, successCode);
-        input.put(OUT_CODE_NAME, outParameterCode);
-        input.put(OUT_MESSAGE_NAME, outParameterMessage);
+        INPUT_MAP.put(PROCEDURE_NAME, procedure);
 
         if (procedure.isCheckResult() && !checkResult) {
             checkResult = true;
-            createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
-            createTemplate(input, UTIL_PATH + "CheckResult.ftl", getUtilOutputFilePath("CheckResult.java"));
-            createTemplate(input, UTIL_PATH + "CheckResultImpl.ftl", getUtilOutputFilePath("CheckResultImpl.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "CheckResult.ftl", getUtilOutputFilePath("CheckResult.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "CheckResultImpl.ftl", getUtilOutputFilePath("CheckResultImpl.java"));
 
             if (test) {
-                createTemplate(input, UTIL_PATH + "CheckResultTest.ftl", getUtilOutputFileTestPath("CheckResultTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "CheckResultTest.ftl", getUtilOutputFileTestPath("CheckResultTest.java"));
             }
         }
 
         if (procedure.getHasDate() && !addDateUtil) {
             addDateUtil = true;
-            createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
-            createTemplate(input, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath("DateUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath("DateUtil.java"));
 
             if (test) {
-                createTemplate(input, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath("DateUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath("DateUtilTest.java"));
             }
         }
 
         if (procedure.getHasOutputClob() && !processClob) {
             processClob = true;
-            createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
-            createTemplate(input, UTIL_PATH + "ClobUtil.ftl", getUtilOutputFilePath("ClobUtil.java"));
-            createTemplate(input, UTIL_PATH + "ClobUtilImpl.ftl", getUtilOutputFilePath("ClobUtilImpl.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtil.ftl", getUtilOutputFilePath("ClobUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilImpl.ftl", getUtilOutputFilePath("ClobUtilImpl.java"));
 
             if (test) {
-                createTemplate(input, UTIL_PATH + "ClobUtilTest.ftl", getUtilOutputFileTestPath("ClobUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilTest.ftl", getUtilOutputFileTestPath("ClobUtilTest.java"));
             }
         }
 
         if (procedure.getHasOutputBlob() && !processBlob) {
             processBlob = true;
-            createTemplate(input, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
-            createTemplate(input, UTIL_PATH + "BlobUtil.ftl", getUtilOutputFilePath("BlobUtil.java"));
-            createTemplate(input, UTIL_PATH + "BlobUtilImpl.ftl", getUtilOutputFilePath("BlobUtilImpl.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtil.ftl", getUtilOutputFilePath("BlobUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilImpl.ftl", getUtilOutputFilePath("BlobUtilImpl.java"));
 
             if (test) {
-                createTemplate(input, UTIL_PATH + "BlobUtilTest.ftl", getUtilOutputFileTestPath("BlobUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilTest.ftl", getUtilOutputFileTestPath("BlobUtilTest.java"));
             }
         }
 
         if (!procedure.isFunctionInline()) {
 
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SP"));
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "ProcedureImpl.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SPImpl"));
+            createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "Procedure.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SP"));
+            createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "ProcedureImpl.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SPImpl"));
 
             if (test) {
-                createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "ProcedureTest.ftl", getFileNamePath(getRepositoryOutputTestPath(FOLDER_SP_NAME), procedure, "SPTest"));
+                createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "ProcedureTest.ftl", getFileNamePath(getRepositoryOutputTestPath(FOLDER_SP_NAME), procedure, "SPTest"));
             }
 
         } else {
 
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQuery.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SqlQuery"));
-            createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQueryImpl.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SqlQueryImpl"));
+            createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "package-info.ftl", getRepositorySpOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQuery.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SqlQuery"));
+            createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQueryImpl.ftl", getFileNamePath(getRepositoryOutputPath(FOLDER_SP_NAME), procedure, "SqlQueryImpl"));
 
             if (test) {
-                createTemplate(input, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQueryTest.ftl", getFileNamePath(getRepositoryOutputTestPath(FOLDER_SP_NAME), procedure, "SqlQueryTest"));
+                createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_SP_NAME + File.separator + "SqlQueryTest.ftl", getFileNamePath(getRepositoryOutputTestPath(FOLDER_SP_NAME), procedure, "SqlQueryTest"));
             }
         }
     }
 
     private void processStoredProcedureService(Procedure procedure) throws BusinessException {
-        Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put(PROCEDURE_NAME, procedure);
-        input.put(DRIVER_NAME, driverName);
-        input.put(DRIVER_VERSION, driverVersion);
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-        input.put(DATA_SOURCE_NAME, dataSource);
-        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
-        input.put(ENCODE, encode);
-        input.put(JSON_NON_NULL, jsonNonNull);
-        input.put(LOMBOK, lombok);
-        input.put(HEADER, header);
-        input.put(SERIALIZATION, serialization);
-        input.put(POSITION, position);
-        input.put(DIAMOND, diamond);
-        input.put(LOGGER, logger);
-        input.put(FULL_CONSTRUCTOR, fullConstructor);
-        input.put(SUCCESS_CODE, successCode);
-        input.put(OUT_CODE_NAME, outParameterCode);
-        input.put(OUT_MESSAGE_NAME, outParameterMessage);
+        INPUT_MAP.put(PROCEDURE_NAME, procedure);
 
         String procedurePath = getRepositoryOutputPath("");
 
-        createTemplate(input, REPOSITORY_PATH + "package-info.ftl", getRepositoryOutputFilePath("package-info.java"));
-        createTemplate(input, REPOSITORY_PATH + "DAO.ftl", getFileNamePath(procedurePath, procedure, "DAO"));
-        createTemplate(input, REPOSITORY_PATH + "DAOImpl.ftl", getFileNamePath(procedurePath, procedure, "DAOImpl"));
+        createTemplate(INPUT_MAP, REPOSITORY_PATH + "package-info.ftl", getRepositoryOutputFilePath("package-info.java"));
+        createTemplate(INPUT_MAP, REPOSITORY_PATH + "DAO.ftl", getFileNamePath(procedurePath, procedure, "DAO"));
+        createTemplate(INPUT_MAP, REPOSITORY_PATH + "DAOImpl.ftl", getFileNamePath(procedurePath, procedure, "DAOImpl"));
 
         if (test) {
-            createTemplate(input, REPOSITORY_PATH + "DAOTest.ftl", getFileNamePath(getRepositoryOutputTestPath(""), procedure, "DAOTest"));
+            createTemplate(INPUT_MAP, REPOSITORY_PATH + "DAOTest.ftl", getFileNamePath(getRepositoryOutputTestPath(""), procedure, "DAOTest"));
         }
     }
 
     private void processStoredProcedureParameter(Procedure procedure) throws BusinessException {
-        Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put(PROCEDURE_NAME, procedure);
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-        input.put(DRIVER_NAME, driverName);
-        input.put(DRIVER_VERSION, driverVersion);
-        input.put(DATA_SOURCE_NAME, dataSource);
-        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
-        input.put(ENCODE, encode);
-        input.put(JSON_NON_NULL, jsonNonNull);
-        input.put(LOMBOK, lombok);
-        input.put(HEADER, header);
-        input.put(SERIALIZATION, serialization);
-        input.put(POSITION, position);
-        input.put(DIAMOND, diamond);
-        input.put(LOGGER, logger);
-        input.put(FULL_CONSTRUCTOR, fullConstructor);
-        input.put(SUCCESS_CODE, successCode);
-        input.put(OUT_CODE_NAME, outParameterCode);
-        input.put(OUT_MESSAGE_NAME, outParameterMessage);
+        INPUT_MAP.put(PROCEDURE_NAME, procedure);
 
         if (!procedure.getHasInput() && !procedure.getHasOutput()) {
             return;
@@ -352,37 +287,19 @@ public class JavaGenerator extends TemplateGenerator {
         String parameterPath = getDomainOutputPath("");
 
         if (procedure.getHasInput()) {
-            createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
-            createTemplate(input, DOMAIN_PATH + "IN.ftl", getFileNamePath(parameterPath, procedure, "IN"));
+            createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, DOMAIN_PATH + "IN.ftl", getFileNamePath(parameterPath, procedure, "IN"));
         }
 
         if (procedure.getHasOutput()) {
-            createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
-            createTemplate(input, DOMAIN_PATH + "OUT.ftl", getFileNamePath(parameterPath, procedure, "OUT"));
+            createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, DOMAIN_PATH + "OUT.ftl", getFileNamePath(parameterPath, procedure, "OUT"));
         }
     }
 
     private void processStoredProcedureParameterRS(Procedure procedure) throws BusinessException {
-        Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put(PROCEDURE_NAME, procedure);
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-        input.put(DRIVER_NAME, driverName);
-        input.put(DRIVER_VERSION, driverVersion);
-        input.put(DATA_SOURCE_NAME, dataSource);
-        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
-        input.put(ENCODE, encode);
-        input.put(JSON_NON_NULL, jsonNonNull);
-        input.put(LOMBOK, lombok);
-        input.put(HEADER, header);
-        input.put(SERIALIZATION, serialization);
-        input.put(POSITION, position);
-        input.put(DIAMOND, diamond);
-        input.put(LOGGER, logger);
-        input.put(FULL_CONSTRUCTOR, fullConstructor);
-        input.put(SUCCESS_CODE, successCode);
-        input.put(OUT_CODE_NAME, outParameterCode);
-        input.put(OUT_MESSAGE_NAME, outParameterMessage);
+        INPUT_MAP.put(PROCEDURE_NAME, procedure);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -392,34 +309,16 @@ public class JavaGenerator extends TemplateGenerator {
 
         for (Parameter param : procedure.getParameters()) {
             if (param.isResultSet() || param.isReturnResultSet()) {
-                input.put(PARAMETER_NAME, param);
-                createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
-                createTemplate(input, DOMAIN_PATH + "DataSet.ftl", getFileNamePath(parameterPath, procedure, param, "RS"));
+                INPUT_MAP.put(PARAMETER_NAME, param);
+                createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
+                createTemplate(INPUT_MAP, DOMAIN_PATH + "DataSet.ftl", getFileNamePath(parameterPath, procedure, param, "RS"));
             }
         }
     }
 
     private void processStoredProcedureMapperRS(Procedure procedure) throws BusinessException {
-        Map<String, Object> input = new HashMap<String, Object>();
 
-        input.put(PROCEDURE_NAME, procedure);
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-        input.put(DRIVER_NAME, driverName);
-        input.put(DRIVER_VERSION, driverVersion);
-        input.put(DATA_SOURCE_NAME, dataSource);
-        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
-        input.put(ENCODE, encode);
-        input.put(JSON_NON_NULL, jsonNonNull);
-        input.put(LOMBOK, lombok);
-        input.put(HEADER, header);
-        input.put(SERIALIZATION, serialization);
-        input.put(POSITION, position);
-        input.put(DIAMOND, diamond);
-        input.put(LOGGER, logger);
-        input.put(FULL_CONSTRUCTOR, fullConstructor);
-        input.put(SUCCESS_CODE, successCode);
-        input.put(OUT_CODE_NAME, outParameterCode);
-        input.put(OUT_MESSAGE_NAME, outParameterMessage);
+        INPUT_MAP.put(PROCEDURE_NAME, procedure);
 
         if (!procedure.getHasResultSet() && !procedure.getReturnResultSet()) {
             return;
@@ -431,16 +330,16 @@ public class JavaGenerator extends TemplateGenerator {
             if (param.isResultSet() || param.isReturnResultSet()) {
 
                 DataSetParameter dataSetParameter = (DataSetParameter) param;
-                input.put(PARAMETER_NAME, dataSetParameter);
+                INPUT_MAP.put(PARAMETER_NAME, dataSetParameter);
                 String fileName = getFileNamePath(parameterPath, procedure, param, "RSRowMapper");
 
-                createTemplate(input, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "package-info.ftl", getRepositoryMapperOutputFilePath("package-info.java"));
-                createTemplate(input, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "RowMapper.ftl", fileName);
+                createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "package-info.ftl", getRepositoryMapperOutputFilePath("package-info.java"));
+                createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "RowMapper.ftl", fileName);
 
                 if (test) {
                     String parameterTestPath = getRepositoryOutputTestPath(FOLDER_MAPPER_NAME);
                     String fileNameTest = getFileNamePath(parameterTestPath, procedure, param, "RSRowMapperTest");
-                    createTemplate(input, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "RowMapperTest.ftl", fileNameTest);
+                    createTemplate(INPUT_MAP, REPOSITORY_PATH + FOLDER_MAPPER_NAME + File.separator + "RowMapperTest.ftl", fileNameTest);
                 }
             }
         }
@@ -448,41 +347,21 @@ public class JavaGenerator extends TemplateGenerator {
 
     public void processObjects(List<Parameter> objects) throws BusinessException {
 
-        Map<String, Object> input = new HashMap<String, Object>();
-
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-        input.put(DRIVER_NAME, driverName);
-        input.put(DRIVER_VERSION, driverVersion);
-        input.put(DATA_SOURCE_NAME, dataSource);
-        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
-        input.put(ENCODE, encode);
-        input.put(JSON_NON_NULL, jsonNonNull);
-        input.put(LOMBOK, lombok);
-        input.put(HEADER, header);
-        input.put(SERIALIZATION, serialization);
-        input.put(POSITION, position);
-        input.put(DIAMOND, diamond);
-        input.put(LOGGER, logger);
-        input.put(FULL_CONSTRUCTOR, fullConstructor);
-        input.put(SUCCESS_CODE, successCode);
-        input.put(OUT_CODE_NAME, outParameterCode);
-        input.put(OUT_MESSAGE_NAME, outParameterMessage);
-
         String parameterPath = getDomainOutputPath("");
 
         for (Parameter param : objects) {
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + param.getName());
 
             if (param.isObject()) {
-                input.put(PARAMETER_NAME, param);
-                createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
-                createTemplate(input, DOMAIN_PATH + "Object.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
+                INPUT_MAP.put(PARAMETER_NAME, param);
+                createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
+                createTemplate(INPUT_MAP, DOMAIN_PATH + "Object.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
             }
 
             if (param.isArray()) {
-                input.put(PARAMETER_NAME, param);
-                createTemplate(input, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
-                createTemplate(input, DOMAIN_PATH + "Array.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
+                INPUT_MAP.put(PARAMETER_NAME, param);
+                createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
+                createTemplate(INPUT_MAP, DOMAIN_PATH + "Array.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
             }
         }
     }
@@ -493,36 +372,16 @@ public class JavaGenerator extends TemplateGenerator {
             return;
         }
 
-        Map<String, Object> input = new HashMap<String, Object>();
-
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-        input.put(DRIVER_NAME, driverName);
-        input.put(DRIVER_VERSION, driverVersion);
-        input.put(DATA_SOURCE_NAME, dataSource);
-        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
-        input.put(ENCODE, encode);
-        input.put(JSON_NON_NULL, jsonNonNull);
-        input.put(LOMBOK, lombok);
-        input.put(HEADER, header);
-        input.put(SERIALIZATION, serialization);
-        input.put(POSITION, position);
-        input.put(DIAMOND, diamond);
-        input.put(LOGGER, logger);
-        input.put(FULL_CONSTRUCTOR, fullConstructor);
-        input.put(SUCCESS_CODE, successCode);
-        input.put(OUT_CODE_NAME, outParameterCode);
-        input.put(OUT_MESSAGE_NAME, outParameterMessage);
-
         if (!addTypeTable) {
 
             addTypeTable = true;
             String typePath = getTypeOutputPath("");
 
-            createTemplate(input, TYPE_PATH + "FieldType.ftl", getFileNameTypePath(typePath, "FieldType"));
-            createTemplate(input, TYPE_PATH + "BinaryField.ftl", getFileNameTypePath(typePath, "BinaryField"));
-            createTemplate(input, TYPE_PATH + "CharacterField.ftl", getFileNameTypePath(typePath, "CharacterField"));
-            createTemplate(input, TYPE_PATH + "NumericField.ftl", getFileNameTypePath(typePath, "NumericField"));
-            createTemplate(input, TYPE_PATH + "DateField.ftl", getFileNameTypePath(typePath, "DateField"));
+            createTemplate(INPUT_MAP, TYPE_PATH + "FieldType.ftl", getFileNameTypePath(typePath, "FieldType"));
+            createTemplate(INPUT_MAP, TYPE_PATH + "BinaryField.ftl", getFileNameTypePath(typePath, "BinaryField"));
+            createTemplate(INPUT_MAP, TYPE_PATH + "CharacterField.ftl", getFileNameTypePath(typePath, "CharacterField"));
+            createTemplate(INPUT_MAP, TYPE_PATH + "NumericField.ftl", getFileNameTypePath(typePath, "NumericField"));
+            createTemplate(INPUT_MAP, TYPE_PATH + "DateField.ftl", getFileNameTypePath(typePath, "DateField"));
         }
 
         String tablePath = getTableOutputPath("");
@@ -531,17 +390,17 @@ public class JavaGenerator extends TemplateGenerator {
         for (Table table : tables) {
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + table.getName());
 
-            input.put(TABLE_NAME, table);
+            INPUT_MAP.put(TABLE_NAME, table);
 
-            createTemplate(input, TABLE_PATH + "Table.ftl", getFileNameTablePath(tablePath, table, ""));
-            createTemplate(input, TABLE_PATH + "TableImpl.ftl", getFileNameTablePath(tablePath, table, "Impl"));
+            createTemplate(INPUT_MAP, TABLE_PATH + "Table.ftl", getFileNameTablePath(tablePath, table, ""));
+            createTemplate(INPUT_MAP, TABLE_PATH + "TableImpl.ftl", getFileNameTablePath(tablePath, table, "Impl"));
 
             for (TableField field : table.getFields()) {
 
-                input.put(TABLE_FIELD_NAME, field);
+                INPUT_MAP.put(TABLE_FIELD_NAME, field);
 
-                createTemplate(input, TABLE_COLUMN_PATH + "TableField.ftl", getFileNameTableFieldPath(tableFieldPath, table, field, ""));
-                createTemplate(input, TABLE_COLUMN_PATH + "TableFieldImpl.ftl", getFileNameTableFieldPath(tableFieldPath, table, field, "Impl"));
+                createTemplate(INPUT_MAP, TABLE_COLUMN_PATH + "TableField.ftl", getFileNameTableFieldPath(tableFieldPath, table, field, ""));
+                createTemplate(INPUT_MAP, TABLE_COLUMN_PATH + "TableFieldImpl.ftl", getFileNameTableFieldPath(tableFieldPath, table, field, "Impl"));
             }
 
         }
@@ -549,35 +408,15 @@ public class JavaGenerator extends TemplateGenerator {
 
     public void processMappers(final List<Parameter> mappers) throws BusinessException {
 
-        Map<String, Object> input = new HashMap<String, Object>();
-
-        input.put(JAVA_PACKAGE_NAME, javaPackage);
-        input.put(DRIVER_NAME, driverName);
-        input.put(DRIVER_VERSION, driverVersion);
-        input.put(DATA_SOURCE_NAME, dataSource);
-        input.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
-        input.put(ENCODE, encode);
-        input.put(JSON_NON_NULL, jsonNonNull);
-        input.put(LOMBOK, lombok);
-        input.put(HEADER, header);
-        input.put(SERIALIZATION, serialization);
-        input.put(POSITION, position);
-        input.put(DIAMOND, diamond);
-        input.put(LOGGER, logger);
-        input.put(FULL_CONSTRUCTOR, fullConstructor);
-        input.put(SUCCESS_CODE, successCode);
-        input.put(OUT_CODE_NAME, outParameterCode);
-        input.put(OUT_MESSAGE_NAME, outParameterMessage);
-
         String parameterPath = getMapperOutputPath("");
 
         for (Parameter param : mappers) {
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + param.getName());
 
-            input.put(FOLDER_MAPPER_NAME, param);
+            INPUT_MAP.put(FOLDER_MAPPER_NAME, param);
 
-            createTemplate(input, MAPPER_PATH + "Mapper.ftl", getFileNameMapperPath(parameterPath, param));
-            createTemplate(input, MAPPER_PATH + "MapperImpl.ftl", getFileNameMapperPath(parameterPath, param));
+            createTemplate(INPUT_MAP, MAPPER_PATH + "Mapper.ftl", getFileNameMapperPath(parameterPath, param));
+            createTemplate(INPUT_MAP, MAPPER_PATH + "MapperImpl.ftl", getFileNameMapperPath(parameterPath, param));
         }
 
     }

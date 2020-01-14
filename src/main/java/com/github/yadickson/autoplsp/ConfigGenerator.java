@@ -26,11 +26,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Configuration spring file generator
+ * Configuration spring file generator.
  *
  * @author Yadickson Soto
  */
-public class ConfigGenerator extends TemplateGenerator {
+public final class ConfigGenerator extends TemplateGenerator {
 
     private final String fileName;
     private final String javaPackage;

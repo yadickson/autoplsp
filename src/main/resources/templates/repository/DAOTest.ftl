@@ -172,4 +172,12 @@ public class ${proc.className}DAOTest {
 </#if>
         repository.execute(<#if proc.hasInput>params</#if>);
     }
+<#if proc.hasInput>
+
+    @Test(expected = java.sql.SQLException.class)
+    public void testExecuteInputNullParameterError() throws java.sql.SQLException {
+        ${proc.className}IN params = null;
+        repository.execute(params);
+    }
+</#if>
 }

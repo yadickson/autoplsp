@@ -26,11 +26,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Sql definition file generator
+ * Sql definition file generator.
  *
  * @author Yadickson Soto
  */
-public class DefinitionGenerator extends TemplateGenerator {
+public final class DefinitionGenerator extends TemplateGenerator {
 
     private final String fileName;
     private final String folderNameResourceGenerator;

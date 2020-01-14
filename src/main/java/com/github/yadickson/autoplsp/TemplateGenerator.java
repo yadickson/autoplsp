@@ -31,24 +31,37 @@ import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
- * Template freemarker class manager
+ * Template freemarker class manager.
  *
  * @author Yadickson Soto
  */
-public class TemplateGenerator {
+public abstract class TemplateGenerator {
 
+    /**
+     * Output directory.
+     */
     private final String outputDir;
+
+    /**
+     * Output test directory.
+     */
     private final String outputTestDir;
 
+    /**
+     * Configuration class.
+     */
     private final Configuration cfg;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param outputDir Output directory path result
      * @param outputTestDir Output directory test path result
      */
-    public TemplateGenerator(String outputDir, String outputTestDir) {
+    public TemplateGenerator(
+            final String outputDir,
+            final String outputTestDir
+    ) {
         this.outputDir = outputDir;
         this.outputTestDir = outputTestDir;
 
@@ -61,14 +74,18 @@ public class TemplateGenerator {
     }
 
     /**
-     * Create template
+     * Create template.
      *
      * @param input Mapper information
      * @param templateFileName template freemarker file name
      * @param outputFileNamePath output filename
      * @throws BusinessException If error
      */
-    protected void createTemplate(Map<String, Object> input, String templateFileName, String outputFileNamePath) throws BusinessException {
+    protected void createTemplate(
+            final Map<String, Object> input,
+            final String templateFileName,
+            final String outputFileNamePath
+    ) throws BusinessException {
 
         LoggerManager.getInstance().info("[TemplateGenerator] Create template: from " + templateFileName + " to " + outputFileNamePath);
 
@@ -88,14 +105,17 @@ public class TemplateGenerator {
     }
 
     /**
-     * Get output directory path and make directory if not exist
+     * Get output directory path and make directory if not exist.
      *
      * @param output output path
      * @param path path
      * @return full directory path
      * @exception BusinessException if error
      */
-    private String getPath(String output, String path) throws BusinessException {
+    private String getPath(
+            final String output,
+            final String path
+    ) throws BusinessException {
         String result = output + File.separatorChar + path + File.separatorChar;
         File file = new File(result);
 
@@ -107,53 +127,63 @@ public class TemplateGenerator {
     }
 
     /**
-     * Get output directory path and make directory if not exist
+     * Get output directory path and make directory if not exist.
      *
      * @param path path
      * @return full directory path
      * @exception BusinessException if error
      */
-    protected String getOutputPath(String path) throws BusinessException {
+    protected String getOutputPath(
+            final String path
+    ) throws BusinessException {
         return getPath(outputDir, path);
     }
 
     /**
-     * Get output directory test path and make directory if not exist
+     * Get output directory test path and make directory if not exist.
      *
      * @param path path
      * @return full directory path
      * @exception BusinessException if error
      */
-    protected String getOutputTestPath(String path) throws BusinessException {
+    protected String getOutputTestPath(
+            final String path
+    ) throws BusinessException {
         return getPath(outputTestDir, path);
     }
 
     /**
-     * Get full filename path
+     * Get full filename path.
      *
      * @param path directory path
      * @param fileName filename
      * @return full filename path
      * @exception BusinessException if error
      */
-    protected String getFileNamePath(String path, String fileName) throws BusinessException {
+    protected String getFileNamePath(
+            final String path,
+            final String fileName
+    ) throws BusinessException {
         return getOutputPath(path) + fileName;
     }
 
     /**
-     * Get full filename test path
+     * Get full filename test path.
      *
      * @param path directory path
      * @param fileName filename
      * @return full filename path
      * @exception BusinessException if error
      */
-    protected String getFileNameTestPath(String path, String fileName) throws BusinessException {
+    protected String getFileNameTestPath(
+            final String path,
+            final String fileName
+    ) throws BusinessException {
         return getOutputTestPath(path) + fileName;
     }
 
     /**
-     * @return the freemarker configuration
+     * @return the freemarker configuration.
      */
     public Configuration getCfg() {
         return cfg;

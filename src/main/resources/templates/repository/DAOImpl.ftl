@@ -18,6 +18,11 @@
 </#if>
 package ${javaPackage}.repository;
 
+<#list proc.parameters as parameter>
+<#if parameter.object || parameter.array>
+<#assign importDataSourceUtils = 1>
+</#if>
+</#list>
 <#list proc.outputParameters as parameter>
 <#if parameter.date>
 <#assign importDate = 1>
@@ -53,6 +58,9 @@ import ${javaPackage}.util.CheckResult;
 import ${javaPackage}.util.ClobUtil;
 </#if>
 
+<#if importDataSourceUtils??>
+import java.sql.Connection;
+</#if>
 import java.sql.SQLException;
 
 <#if importDate??>
@@ -71,10 +79,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 </#if>
+<#if importBlobUtil?? || proc.checkResult || importClobUtil??>
 import org.springframework.beans.factory.annotation.Autowired;
 
-<#if proc.hasObject || proc.hasArray>
+</#if>
+<#if importDataSourceUtils??>
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+
 </#if>
 import org.springframework.stereotype.Repository;
 
@@ -99,7 +111,7 @@ public final class ${proc.className}DAOImpl
             = LoggerFactory.getLogger(${proc.className}DAOImpl.class);
 
 </#if>
-<#if proc.hasObject || proc.hasArray>
+<#if importDataSourceUtils??>
     /**
      * JDBC template to use.
      */
@@ -162,25 +174,41 @@ public final class ${proc.className}DAOImpl
 <#if proc.hasOutput>
         Map<String, Object> out;
 </#if>
+<#if importDataSourceUtils??>
+
+        Connection conn;
+        conn = DataSourceUtils.getConnection(jdbcTemplate.getDataSource());
+</#if>
+
+        try {
 
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
-        in.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}().processObject(org.springframework.jdbc.datasource.DataSourceUtils.getConnection(jdbcTemplate.getDataSource())));
+            in.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}().process(conn));
 <#else>
-        in.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}());
+            in.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}());
 </#if>
 </#list>
 <#if proc.hasInput>
 
 </#if>
-        try {
             <#if proc.hasOutput>out = </#if><#if proc.function>function<#else>procedure</#if>.execute(in);
+
         } catch (Exception ex) {
 <#if logger>
             LOGGER.error(ex.getMessage(), ex);
 </#if>
             throw new SQLException(ex.getMessage(), "${successCode}", ex);
+<#if importDataSourceUtils??> 
+        } finally {
+            DataSourceUtils.releaseConnection(
+                    conn,
+                    jdbcTemplate.getDataSource()
+            );
         }
+<#else>
+        }
+</#if>
 <#if proc.hasOutput>
 <#if proc.checkResult>
 

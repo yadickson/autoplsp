@@ -24,7 +24,7 @@ import java.util.ArrayList;
 <#if driverName == 'oracle' >
 
 import oracle.jdbc.OracleConnection;
-<#if>
+</#if>
 
 <#if jsonNonNull>
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -55,10 +55,10 @@ public final class ${parameter.javaTypeName}
      * Getter data object type.
      *
      * @param connection Database connection
-     * @return object
-     * @throws Exception
+     * @return object object processed.
+     * @throws Exception if error
      */
-    public Object processObject(
+    public Object process(
             final Connection connection
     ) throws Exception {
 
@@ -68,7 +68,7 @@ public final class ${parameter.javaTypeName}
 
         for (${parameter.parameters[parameter.parameters?size - 1].javaTypeName} obj : this) {
 <#if parameter.parameters[parameter.parameters?size - 1].object>
-            input[i++] = obj.processObject(connection);
+            input[i++] = obj.process(connection);
 <#else>
             input[i++] = obj;
 </#if>

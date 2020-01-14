@@ -140,7 +140,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      * @return object
      * @throws Exception
      */
-    public Object processObject(final java.sql.Connection connection) throws Exception {
+    public Object process(final java.sql.Connection connection) throws Exception {
 <#list parameter.parameters as parameter>
 <#if parameter.clob>
         oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);
@@ -150,7 +150,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
         }
         clobWriter${parameter.propertyName}.flush();
         clobWriter${parameter.propertyName}.close();
-<#elseif parameterblob>
+<#elseif parameter.blob>
         oracle.sql.BLOB blob${parameter.propertyName} = oracle.sql.BLOB.createTemporary(connection, false, oracle.sql.BLOB.DURATION_SESSION);
         blob${parameter.propertyName}.getBinaryOutputStream().write(get${parameter.propertyName}());
 <#elseif parameter.date>
@@ -159,7 +159,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 </#list>
 
         Object[] objs = new Object[]{
-<#list parameter.parameters as parameter>            <#if parameter.clob>clob${parameter.propertyName}<#elseif parameterblob>blob${parameter.propertyName}<#elseif parameter.date>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
+<#list parameter.parameters as parameter>            <#if parameter.clob>clob${parameter.propertyName}<#elseif parameter.blob>blob${parameter.propertyName}<#elseif parameter.date>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
 </#list>        };
 
 <#if driverName == 'oracle' >

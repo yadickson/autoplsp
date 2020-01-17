@@ -4,7 +4,7 @@
 <#if driverName == 'oracle' >
 ```sql
 CREATE OR REPLACE <#if proc.function>FUNCTION<#else>PROCEDURE</#if> ${proc.name}
-<#if proc.hasInput>
+<#if proc.hasInput || proc.hasOutput >
 (
 </#if>
 <#assign nameLength = 0>
@@ -20,7 +20,7 @@ CREATE OR REPLACE <#if proc.function>FUNCTION<#else>PROCEDURE</#if> ${proc.name}
 <#list proc.parameters as parameter>
     ${parameter.name}<#list parameter.name?length..nameLength as i> </#list>    ${parameter.sqlNativeDirection} <#list parameter.sqlNativeDirection?length..directionLength as i> </#list>${parameter.sqlNativeTypeName}<#sep>,</#sep>
 </#list>
-<#if proc.hasInput>
+<#if proc.hasInput || proc.hasOutput >
 )
 </#if>
 AS

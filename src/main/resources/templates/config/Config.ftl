@@ -16,10 +16,17 @@
         <property name="resourceRef" value="true" />
         <property name="proxyInterface" value="javax.sql.DataSource" />
     </bean>
-    
-    <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+<#if transactionQualityName >
+    <tx:annotation-driven />
+<#else>
+    <tx:annotation-driven transaction-manager="${transactionName}" />
+</#if>
+
+    <bean id="${transactionName}" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+<#if transactionQualityName >
+        <qualifier value="${transactionName}"/>
+</#if>
         <property name="dataSource" ref="${dataSource}"/>
     </bean>
 

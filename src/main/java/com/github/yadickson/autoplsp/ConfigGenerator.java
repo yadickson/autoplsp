@@ -33,18 +33,21 @@ import java.util.Map;
 public final class ConfigGenerator extends TemplateGenerator {
 
     private final String fileName;
-    private final String javaPackage;
-    private final String dataSource;
-    private final String jdbcTemplate;
-    private final String jndi;
     private final String folderNameResourceGenerator;
-    private final List<Procedure> procedures;
+
+    private static final String JAVA_PACKAGE_NAME = "javaPackage";
+    private static final String TRANSACTION_NAME = "transactionName";
+    private static final String TRANSACTION_QUALITY_NAME = "transactionQualityName";
+
+    private static final Map<String, Object> INPUT_MAP = new HashMap<String, Object>();
 
     /**
      * Class constructor
      *
      * @param outputDir Output resource directory
-     * @param packageName Java package name
+     * @param javaPackage Java package name
+     * @param transactionName transaction name
+     * @param transactionQualityName transaction quality name
      * @param dataSource Datasource name
      * @param jdbcTemplate JdbcTemplate name
      * @param jndi JNDI datasource name
@@ -53,7 +56,9 @@ public final class ConfigGenerator extends TemplateGenerator {
      * @param procedures procedure list
      */
     public ConfigGenerator(String outputDir,
-            final String packageName,
+            final String javaPackage,
+            final String transactionName,
+            final Boolean transactionQualityName,
             final String dataSource,
             final String jdbcTemplate,
             final String jndi,
@@ -62,12 +67,15 @@ public final class ConfigGenerator extends TemplateGenerator {
             final List<Procedure> procedures) {
         super(outputDir, null);
         this.fileName = outputFileName;
-        this.javaPackage = packageName;
-        this.dataSource = dataSource;
-        this.jdbcTemplate = jdbcTemplate;
-        this.jndi = jndi;
         this.folderNameResourceGenerator = folderNameResourceGenerator;
-        this.procedures = procedures;
+
+        INPUT_MAP.put(JAVA_PACKAGE_NAME, javaPackage);
+        INPUT_MAP.put(TRANSACTION_NAME, transactionName);
+        INPUT_MAP.put(TRANSACTION_QUALITY_NAME, transactionQualityName);
+        INPUT_MAP.put("dataSource", dataSource);
+        INPUT_MAP.put("jdbcTemplate", jdbcTemplate);
+        INPUT_MAP.put("jndi", jndi);
+        INPUT_MAP.put("procedures", procedures);
     }
 
     /**
@@ -78,15 +86,7 @@ public final class ConfigGenerator extends TemplateGenerator {
      */
     public void process() throws BusinessException {
         LoggerManager.getInstance().info("[ConfigGenerator] Process spring template config");
-        Map<String, Object> input = new HashMap<String, Object>();
-
-        input.put("javaPackage", javaPackage);
-        input.put("dataSource", dataSource);
-        input.put("jdbcTemplate", jdbcTemplate);
-        input.put("jndi", jndi);
-        input.put("procedures", procedures);
-
-        createTemplate(input, "/config/Config.ftl", getFileNamePath(folderNameResourceGenerator, fileName));
+        createTemplate(INPUT_MAP, "/config/Config.ftl", getFileNamePath(folderNameResourceGenerator, fileName));
     }
 
     /**

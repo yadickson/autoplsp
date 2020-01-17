@@ -52,6 +52,9 @@ public final class JavaGenerator extends TemplateGenerator {
     private static final String FOLDER_SP_NAME = "sp";
 
     private static final String JAVA_PACKAGE_NAME = "javaPackage";
+    private static final String TRANSACTION_NAME = "transactionName";
+    private static final String TRANSACTION_QUALITY_NAME = "transactionQualityName";
+
     private static final String DATA_SOURCE_NAME = "dataSource";
     private static final String JDBC_TEMPLATE_NAME = "jdbcTemplate";
     private static final String ENCODE = "encode";
@@ -94,6 +97,8 @@ public final class JavaGenerator extends TemplateGenerator {
      * @param outputDir Output source directory
      * @param outputTestDir Output test directory
      * @param folderNameGenerator folder name generator
+     * @param transactionName transaction name
+     * @param transactionQualityName transaction quality name
      * @param javaPackage Java package name
      * @param dataSource Datasource name
      * @param jdbcTemplate JdbcTemplate name
@@ -118,6 +123,8 @@ public final class JavaGenerator extends TemplateGenerator {
             final String outputDir,
             final String outputTestDir,
             final String folderNameGenerator,
+            final String transactionName,
+            final Boolean transactionQualityName,
             final String javaPackage,
             final String dataSource,
             final String jdbcTemplate,
@@ -146,6 +153,8 @@ public final class JavaGenerator extends TemplateGenerator {
         this.mappers = mappers;
 
         INPUT_MAP.put(JAVA_PACKAGE_NAME, javaPackage);
+        INPUT_MAP.put(TRANSACTION_NAME, transactionName);
+        INPUT_MAP.put(TRANSACTION_QUALITY_NAME, transactionQualityName);
         INPUT_MAP.put(DRIVER_NAME, driverName);
         INPUT_MAP.put(DRIVER_VERSION, driverVersion);
         INPUT_MAP.put(DATA_SOURCE_NAME, dataSource);

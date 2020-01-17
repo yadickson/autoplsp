@@ -163,6 +163,26 @@ public class AutoGenerator extends AbstractMojo {
     private String javaPackageName;
 
     /**
+     * Transaction manager name.
+     */
+    @Parameter(
+            property = "autoplsp.transactionName",
+            defaultValue = "transactionManager",
+            readonly = true,
+            required = false)
+    private String transactionName;
+
+    /**
+     * Transaction quality name.
+     */
+    @Parameter(
+            property = "autoplsp.transactionQualityName",
+            defaultValue = "false",
+            readonly = true,
+            required = false)
+    private String transactionQualityName;
+
+    /**
      * Datasource name.
      */
     @Parameter(
@@ -423,6 +443,8 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] OutputDirectoryResource: " + outputDirectoryResource.getPath());
         getLog().info("[AutoGenerator] OutputConfigFileName: " + outputConfigFileName);
         getLog().info("[AutoGenerator] OutputDefinitionFileName: " + outputDefinitionFileName);
+        getLog().info("[AutoGenerator] TransactionName: " + transactionName);
+        getLog().info("[AutoGenerator] TransactionQualityName: " + transactionQualityName);
         getLog().info("[AutoGenerator] JavaPackageName: " + javaPackageName);
         getLog().info("[AutoGenerator] JavaDataSourceName: " + javaDataSourceName);
         getLog().info("[AutoGenerator] JavaJdbcTemplateName: " + javaJdbcTemplateName);
@@ -585,6 +607,8 @@ public class AutoGenerator extends AbstractMojo {
                     outputDirectory.getPath(),
                     outputTestDirectory.getPath(),
                     folderNameGenerator,
+                    transactionName,
+                    transactionQualityName.equalsIgnoreCase("true"),
                     javaPackageName,
                     javaDataSourceName,
                     javaJdbcTemplateName,
@@ -633,6 +657,8 @@ public class AutoGenerator extends AbstractMojo {
             config = new ConfigGenerator(
                     outputDirectoryResource.getPath(),
                     javaPackageName,
+                    transactionName,
+                    transactionQualityName.equalsIgnoreCase("true"),
                     javaDataSourceName,
                     javaJdbcTemplateName,
                     jndiDataSourceName,

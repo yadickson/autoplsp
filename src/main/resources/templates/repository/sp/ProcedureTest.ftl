@@ -25,6 +25,6 @@ public class ${proc.className}SPTest {
 
         Assert.assertSame(dataSource, sp.getJdbcTemplate().getDataSource());
 
-        Assert.assertEquals("{call ${proc.fullName}(<#list proc.parameters as parameter>?<#sep>, </#sep></#list>)}", sp.getCallString());
+        Assert.assertEquals("{<#if proc.function>? = </#if>call ${proc.fullName}(<#list proc.parameters as parameter><#if parameter.position != 0>?<#sep>, </#sep></#if></#list>)}", sp.getCallString());
     }
 }

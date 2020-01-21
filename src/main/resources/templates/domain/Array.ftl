@@ -75,7 +75,8 @@ public final class ${parameter.javaTypeName}
         }
 
 <#if driverName == 'oracle' >
-        return ((OracleConnection)connection).createARRAY("${parameter.realObjectName}", input);
+        return ((OracleConnection) connection)
+                .createARRAY("${parameter.realObjectName}", input);
 <#else>
         throw new Exception("driver ${driverName} not supported");
 </#if>

@@ -45,7 +45,9 @@ import java.util.Date;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 </#if>
+<#if proc.hasOutput>
 import org.junit.Assert;
+</#if>
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -77,6 +79,9 @@ public class ${proc.className}DAOTest {
 </#if>
 <#if proc.hasObject || proc.hasArray>
 
+    @Mock
+    private javax.sql.DataSource dataSource;
+
     @Mock(name="${jdbcTemplate}")
     private JdbcTemplate jdbcTemplate;
 </#if>
@@ -103,9 +108,9 @@ public class ${proc.className}DAOTest {
 <#if parameter.resultSet || parameter.returnResultSet>
         java.util.List<${parameter.javaTypeName}> obj${parameter.propertyName} = new java.util.ArrayList<<#if !diamond>${parameter.javaTypeName}</#if>>();
 <#elseif parameter.clob>
-        java.sql.Clob obj${parameter.propertyName} = Mockito.mock(java.sql.Clob);
+        java.sql.Clob obj${parameter.propertyName} = Mockito.mock(java.sql.Clob.class);
 <#elseif parameter.blob>
-        java.sql.Blob obj${parameter.propertyName} = Mockito.mock(java.sql.Blob);
+        java.sql.Blob obj${parameter.propertyName} = Mockito.mock(java.sql.Blob.class);
 <#elseif parameter.number>
         ${parameter.javaTypeName} obj${parameter.propertyName} = ${parameter.position};
 <#elseif parameter.date>
@@ -119,8 +124,18 @@ public class ${proc.className}DAOTest {
         mapResult.put("${parameter.name}", obj${parameter.propertyName});
 </#list>
 </#if>
+<#if proc.hasObject || proc.hasArray>
+        Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
+</#if>
 <#if proc.hasOutput>
 
+<#list proc.outputParameters as parameter>
+<#if parameter.blob>
+        Mockito.when(blobUtil.process(Mockito.same(obj${parameter.propertyName}))).thenReturn(new byte[0]);
+<#elseif parameter.clob>
+        Mockito.when(clobUtil.process(Mockito.same(obj${parameter.propertyName}))).thenReturn("${parameter.name}");
+</#if>
+</#list>
         Mockito.when(<#if proc.function>function<#else>procedure</#if>.execute(Mockito.anyMap())).thenReturn(mapResult);
 </#if>
 <#if proc.hasInput || proc.hasOutput>
@@ -134,6 +149,10 @@ public class ${proc.className}DAOTest {
 <#list proc.outputParameters as parameter>
 <#if parameter.date>
         Assert.assertEquals(obj${parameter.propertyName}, out.get${parameter.propertyName}());
+<#elseif parameter.clob>
+        Assert.assertEquals("${parameter.name}", out.get${parameter.propertyName}());
+<#elseif parameter.blob>
+        Assert.assertNotNull(out.get${parameter.propertyName}());
 <#else>
         Assert.assertSame(obj${parameter.propertyName}, out.get${parameter.propertyName}());
 </#if>
@@ -160,12 +179,15 @@ public class ${proc.className}DAOTest {
 </#if>
 
 </#if>
+<#if proc.hasObject || proc.hasArray>
+        Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
+</#if>
 <#if proc.hasOutput>
 
         Mockito.when(<#if proc.function>function<#else>procedure</#if>.execute(Mockito.anyMap())).thenThrow(new RuntimeException());
 <#else>
 
-        Mockito.doThrow(new RuntimeException()).when(<#if proc.function>function<#else>procedure</#if>.execute(Mockito.anyMap());
+        Mockito.doThrow(new RuntimeException()).when(<#if proc.function>function<#else>procedure</#if>.execute(Mockito.anyMap()));
 </#if>
 <#if proc.hasInput || proc.hasOutput>
 
@@ -177,6 +199,9 @@ public class ${proc.className}DAOTest {
     @Test(expected = java.sql.SQLException.class)
     public void testExecuteInputNullParameterError() throws java.sql.SQLException {
         ${proc.className}IN params = null;
+<#if proc.hasObject || proc.hasArray>
+        Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
+</#if>
         repository.execute(params);
     }
 </#if>

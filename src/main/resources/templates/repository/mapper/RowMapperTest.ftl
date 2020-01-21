@@ -33,7 +33,7 @@ public class ${parameter.javaTypeName}RowMapperTest {
 <#if paramrs.date>
         ${paramrs.javaTypeName} ${paramrs.fieldName} = new java.util.Date();
 <#elseif paramrs.blob>
-        ${paramrs.javaTypeName} ${paramrs.fieldName} = new ${paramrs.javaTypeName}[0];
+        byte[] ${paramrs.fieldName} = new byte[0];
 <#elseif paramrs.number>
         ${paramrs.javaTypeName} ${paramrs.fieldName} = ${paramrs.position};
 <#else>

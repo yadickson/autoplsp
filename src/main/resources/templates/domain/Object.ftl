@@ -18,6 +18,8 @@
 </#if>
 package ${javaPackage}.domain;
 
+import java.sql.Connection;
+
 <#list parameter.parameters as parameter2>
 <#if parameter2.date>
 <#assign importDateUtil = 1>
@@ -49,12 +51,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 </#if>
+<#if driverName == 'oracle' >
+import oracle.sql.StructDescriptor;
+import oracle.sql.STRUCT;
+
+</#if>
 <#if jsonNonNull>
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 </#if>
 /**
- * Bean object for datatype ${parameter.realObjectName}
+ * Bean object for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
@@ -69,7 +76,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
 @SuppressWarnings({"deprecation"})
-public final class ${parameter.javaTypeName}<#if serialization> implements java.io.Serializable</#if> {
+public final class ${parameter.javaTypeName}<#if serialization>
+        implements java.io.Serializable</#if> {
 <#if serialization> 
 
     /**
@@ -138,9 +146,11 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      *
      * @param connection Database connection
      * @return object
-     * @throws Exception
+     * @throws Exception if error
      */
-    public Object process(final java.sql.Connection connection) throws Exception {
+    public Object process(
+            final Connection connection
+    ) throws Exception {
 <#list parameter.parameters as parameter>
 <#if parameter.clob>
         oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);
@@ -158,13 +168,18 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 </#if>
 </#list>
 
-        Object[] objs = new Object[]{
+        Object[] objs = new Object[] {
 <#list parameter.parameters as parameter>            <#if parameter.clob>clob${parameter.propertyName}<#elseif parameter.blob>blob${parameter.propertyName}<#elseif parameter.date>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
 </#list>        };
 
 <#if driverName == 'oracle' >
-        oracle.sql.StructDescriptor descriptor = oracle.sql.StructDescriptor.createDescriptor("${parameter.realObjectName}", connection);
-        return new oracle.sql.STRUCT(descriptor, connection, objs);
+        StructDescriptor descriptor;
+        descriptor = StructDescriptor.createDescriptor(
+                "${parameter.realObjectName}",
+                connection
+        );
+
+        return new STRUCT(descriptor, connection, objs);
 <#else>
         throw new Exception("driver ${driverName} not supported");
 </#if>

@@ -22,6 +22,15 @@ package ${javaPackage}.repository;
 <#if parameter.object || parameter.array>
 <#assign importConnectionUtils = 1>
 </#if>
+<#if parameter.array>
+<#assign importArrayUtil = 1>
+<#if parameter.parameters[parameter.parameters?size - 1].object>
+<#assign importObjectUtil = 1>
+</#if>
+</#if>
+<#if parameter.object>
+<#assign importObjectUtil = 1>
+</#if>
 </#list>
 <#list proc.outputParameters as parameter>
 <#if parameter.date>
@@ -48,6 +57,9 @@ import ${javaPackage}.repository.sp.${proc.className}SP;
 <#else>
 import ${javaPackage}.repository.sp.${proc.className}SqlQuery;
 </#if>
+<#if importArrayUtil??>
+import ${javaPackage}.util.ArrayUtil;
+</#if>
 <#if importBlobUtil??>
 import ${javaPackage}.util.BlobUtil;
 </#if>
@@ -59,6 +71,9 @@ import ${javaPackage}.util.ClobUtil;
 </#if>
 <#if importConnectionUtils??>
 import ${javaPackage}.util.ConnectionUtil;
+</#if>
+<#if importObjectUtil??>
+import ${javaPackage}.util.ObjectUtil;
 </#if>
 
 <#if importConnectionUtils??>
@@ -82,7 +97,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 </#if>
-<#if importBlobUtil?? || proc.checkResult || importClobUtil?? || importConnectionUtils??>
+<#if importBlobUtil?? || proc.checkResult || importClobUtil?? || importConnectionUtils?? || importArrayUtil?? || importObjectUtil??>
 import org.springframework.beans.factory.annotation.Autowired;
 
 </#if>
@@ -107,6 +122,14 @@ public final class ${proc.className}DAOImpl
      */
     private static final Logger LOGGER
             = LoggerFactory.getLogger(${proc.className}DAOImpl.class);
+
+</#if>
+<#if importArrayUtil??>
+    /**
+     * Array utility.
+     */
+    @Autowired
+    private ArrayUtil arrayUtil;
 
 </#if>
 <#if importBlobUtil??>
@@ -139,6 +162,14 @@ public final class ${proc.className}DAOImpl
      */
     @Autowired
     private ConnectionUtil connectionUtil;
+
+</#if>
+<#if importObjectUtil??>
+    /**
+     * Object utility.
+     */
+    @Autowired
+    private ObjectUtil objectUtil;
 
 </#if>
     /**
@@ -174,18 +205,39 @@ public final class ${proc.className}DAOImpl
 </#if>
 <#if importConnectionUtils??>
 
-        Connection conn = null;
+        Connection connection = null;
 </#if>
 
         try {
 <#if importConnectionUtils??>
 
-            conn = connectionUtil.process();
+            connection = connectionUtil.process();
+
+<#list proc.inputParameters as parameter>
+<#if parameter.array || parameter.object>
+            Object ${parameter.propertyName};
+</#if>
+</#list>
+<#list proc.inputParameters as parameter>
+<#if parameter.array>
+
+            ${parameter.propertyName} = params.get${parameter.propertyName}().process(
+                    connection,
+                    arrayUtil<#if parameter.parameters[parameter.parameters?size - 1].object>,${'\n'}                    objectUtil</#if>
+            );
+<#elseif parameter.object>
+
+            ${parameter.propertyName} = params.get${parameter.propertyName}().process(
+                    connection,
+                    objectUtil
+            );
+</#if>
+</#list>
 </#if>
 
 <#list proc.inputParameters as parameter>
-<#if parameter.object || parameter.array>
-            in.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}().process(conn));
+<#if parameter.array || parameter.object>
+            in.put("${parameter.prefix}${parameter.name}", ${parameter.propertyName});
 <#else>
             in.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}());
 </#if>
@@ -202,7 +254,7 @@ public final class ${proc.className}DAOImpl
             throw new SQLException(ex.getMessage(), "${successCode}", ex);
 <#if importConnectionUtils??> 
         } finally {
-            connectionUtil.release(conn);
+            connectionUtil.release(connection);
         }
 <#else>
         }

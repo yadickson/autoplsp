@@ -19,6 +19,14 @@
 package ${javaPackage}.domain;
 
 <#list proc.inputParameters as parameter>
+<#if parameter.array>
+import ${javaPackage}.array.${parameter.javaTypeName};
+</#if>
+<#if parameter.object>
+import ${javaPackage}.object.${parameter.javaTypeName};
+</#if>
+</#list>
+<#list proc.inputParameters as parameter>
 <#if parameter.date>
 <#assign importDateUtil = 1>
 </#if>

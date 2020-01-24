@@ -73,6 +73,8 @@ public final class JavaGenerator extends TemplateGenerator {
 
     private static final String REPOSITORY_PATH = File.separatorChar + "repository" + File.separatorChar;
     private static final String DOMAIN_PATH = File.separatorChar + "domain" + File.separatorChar;
+    private static final String ARRAY_PATH = File.separatorChar + "array" + File.separatorChar;
+    private static final String OBJECT_PATH = File.separatorChar + "object" + File.separatorChar;
     private static final String UTIL_PATH = File.separatorChar + "util" + File.separatorChar;
 
     private static final String TABLE_PATH = File.separatorChar + TABLE_NAME + File.separatorChar;
@@ -253,12 +255,15 @@ public final class JavaGenerator extends TemplateGenerator {
         if ((procedure.getHasObject() || procedure.getHasArray()) && !processConnection) {
             processConnection = true;
             createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+
             createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtil.ftl", getUtilOutputFilePath("ConnectionUtil.java"));
             createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtilImpl.ftl", getUtilOutputFilePath("ConnectionUtilImpl.java"));
 
-            //if (test) {
-            //    createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtilTest.ftl", getUtilOutputFileTestPath("BlobUtilTest.java"));
-            //}
+            createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtil.ftl", getUtilOutputFilePath("ArrayUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilImpl.ftl", getUtilOutputFilePath("ArrayUtilImpl.java"));
+
+            createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtil.ftl", getUtilOutputFilePath("ObjectUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilImpl.ftl", getUtilOutputFilePath("ObjectUtilImpl.java"));
         }
 
         if (!procedure.isFunctionInline()) {
@@ -369,21 +374,24 @@ public final class JavaGenerator extends TemplateGenerator {
 
     public void processObjects(List<Parameter> objects) throws BusinessException {
 
-        String parameterPath = getDomainOutputPath("");
+        String arrayPath = getArrayOutputPath("");
+        String objectPath = getObjectOutputPath("");
 
         for (Parameter param : objects) {
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + param.getName());
 
             if (param.isObject()) {
                 INPUT_MAP.put(PARAMETER_NAME, param);
-                createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
-                createTemplate(INPUT_MAP, DOMAIN_PATH + "Object.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "package-info.ftl", getObjectOutputFilePath("package-info.java"));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "Object.ftl", getFileNameObjectPath(objectPath, param.getJavaTypeName()));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectImpl.ftl", getFileNameObjectPath(objectPath, param.getJavaTypeName() + "Impl"));
             }
 
             if (param.isArray()) {
                 INPUT_MAP.put(PARAMETER_NAME, param);
-                createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
-                createTemplate(INPUT_MAP, DOMAIN_PATH + "Array.ftl", getFileNameObjectPath(parameterPath, param.getJavaTypeName()));
+                createTemplate(INPUT_MAP, ARRAY_PATH + "package-info.ftl", getArrayOutputFilePath("package-info.java"));
+                createTemplate(INPUT_MAP, ARRAY_PATH + "Array.ftl", getFileNameObjectPath(arrayPath, param.getJavaTypeName()));
+                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayImpl.ftl", getFileNameObjectPath(arrayPath, param.getJavaTypeName() + "Impl"));
             }
         }
     }
@@ -519,8 +527,24 @@ public final class JavaGenerator extends TemplateGenerator {
         return this.getOutputPath(DOMAIN_PATH + path);
     }
 
+    private String getArrayOutputPath(String path) throws BusinessException {
+        return this.getOutputPath(ARRAY_PATH + path);
+    }
+
+    private String getObjectOutputPath(String path) throws BusinessException {
+        return this.getOutputPath(OBJECT_PATH + path);
+    }
+
     private String getDomainOutputFilePath(String file) throws BusinessException {
         return this.getDomainOutputPath("") + File.separatorChar + file;
+    }
+
+    private String getArrayOutputFilePath(String file) throws BusinessException {
+        return this.getArrayOutputPath("") + File.separatorChar + file;
+    }
+
+    private String getObjectOutputFilePath(String file) throws BusinessException {
+        return this.getObjectOutputPath("") + File.separatorChar + file;
     }
 
     private String getFileNameObjectPath(String path, String name) {

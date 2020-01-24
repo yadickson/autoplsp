@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.domain;
+package ${javaPackage}.object;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
+import ${javaPackage}.util.ObjectUtil;
 
 <#list parameter.parameters as parameter2>
 <#if parameter2.date>
@@ -45,15 +48,11 @@ import java.util.Date;
 <#if importDateUtil??>
 import lombok.AccessLevel;
 </#if>
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+<#if fullConstructor>
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 </#if>
-<#if driverName == 'oracle' >
-import oracle.sql.StructDescriptor;
-import oracle.sql.STRUCT;
+import lombok.Setter;
 
 </#if>
 <#if jsonNonNull>
@@ -67,18 +66,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @version @GENERATOR.VERSION@
  */
 <#if lombok>
+<#if fullConstructor>
 @NoArgsConstructor
-@AllArgsConstructor
+</#if>
 @Getter
 @Setter
 </#if>
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-@SuppressWarnings({"deprecation"})
-public final class ${parameter.javaTypeName}<#if serialization>
-        implements java.io.Serializable</#if> {
-<#if serialization> 
+public final class ${parameter.javaTypeName}Impl
+        implements ${parameter.javaTypeName}<#if serialization>, java.io.Serializable</#if> {
+<#if serialization>
 
     /**
      * Serialization.
@@ -142,46 +141,43 @@ public final class ${parameter.javaTypeName}<#if serialization>
 </#list>
 
     /**
-     * Getter data object type.
-     *
-     * @param connection Database connection
-     * @return object
-     * @throws Exception if error
+     * {@inheritDoc}
      */
+    @Override
     public Object process(
-            final Connection connection
-    ) throws Exception {
+            final Connection connection,
+            final ObjectUtil objectUtil
+    ) throws SQLException {
+
 <#list parameter.parameters as parameter>
 <#if parameter.clob>
         oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);
         java.io.Writer clobWriter${parameter.propertyName} = clob${parameter.propertyName}.getCharacterOutputStream();
+
         if (get${parameter.propertyName}() != null) {
             clobWriter${parameter.propertyName}.write(get${parameter.propertyName}().toCharArray());
         }
+
         clobWriter${parameter.propertyName}.flush();
         clobWriter${parameter.propertyName}.close();
+
 <#elseif parameter.blob>
         oracle.sql.BLOB blob${parameter.propertyName} = oracle.sql.BLOB.createTemporary(connection, false, oracle.sql.BLOB.DURATION_SESSION);
         blob${parameter.propertyName}.getBinaryOutputStream().write(get${parameter.propertyName}());
+
 <#elseif parameter.date>
         oracle.sql.DATE date${parameter.propertyName} = get${parameter.propertyName}() == null ? null : new oracle.sql.DATE(new java.sql.Date(get${parameter.propertyName}().getTime()));
+
 </#if>
 </#list>
-
-        Object[] objs = new Object[] {
-<#list parameter.parameters as parameter>            <#if parameter.clob>clob${parameter.propertyName}<#elseif parameter.blob>blob${parameter.propertyName}<#elseif parameter.date>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
+        Object[] objs = new Object[]{
+<#list parameter.parameters as parameter>        <#if parameter.clob>clob${parameter.propertyName}<#elseif parameter.blob>blob${parameter.propertyName}<#elseif parameter.date>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
 </#list>        };
 
-<#if driverName == 'oracle' >
-        StructDescriptor descriptor;
-        descriptor = StructDescriptor.createDescriptor(
-                "${parameter.realObjectName}",
-                connection
+        return objectUtil.process(
+            connection,
+            "${parameter.realObjectName}",
+            objs
         );
-
-        return new STRUCT(descriptor, connection, objs);
-<#else>
-        throw new Exception("driver ${driverName} not supported");
-</#if>
     }
 }

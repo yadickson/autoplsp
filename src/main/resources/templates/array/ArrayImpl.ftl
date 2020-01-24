@@ -16,14 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.domain;
+package ${javaPackage}.array;
 
 import java.sql.Connection;
-
+import java.sql.SQLException;
 import java.util.ArrayList;
-<#if driverName == 'oracle' >
 
-import oracle.jdbc.OracleConnection;
+<#if parameter.parameters[parameter.parameters?size - 1].object>
+import ${javaPackage}.object.${parameter.parameters[parameter.parameters?size - 1].javaTypeName};
+<#assign importObjectUtil = 1>
+</#if>
+import ${javaPackage}.util.ArrayUtil;
+<#if importObjectUtil??>
+import ${javaPackage}.util.ObjectUtil;
 </#if>
 
 <#if jsonNonNull>
@@ -39,10 +44,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-@SuppressWarnings({"deprecation"})
-public final class ${parameter.javaTypeName}
-        extends ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}><#if serialization>
-        implements java.io.Serializable</#if> {
+<#if !serialization>
+@SuppressWarnings({"serial"})
+</#if>
+public final class ${parameter.javaTypeName}Impl
+        extends ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}>
+        implements ${parameter.javaTypeName}<#if serialization>, java.io.Serializable</#if> {
 <#if serialization> 
 
     /**
@@ -52,33 +59,30 @@ public final class ${parameter.javaTypeName}
 </#if>
 
     /**
-     * Getter data object type.
-     *
-     * @param connection Database connection
-     * @return object object processed.
-     * @throws Exception if error
+     * {@inheritDoc}
      */
+    @Override
     public Object process(
-            final Connection connection
-    ) throws Exception {
+            final Connection connection,
+            final ArrayUtil arrayUtil<#if importObjectUtil??>,${'\n'}            final ObjectUtil objectUtil</#if>
+    ) throws SQLException {
 
         Object[] input = new Object[size()];
 
         int i = 0;
 
         for (${parameter.parameters[parameter.parameters?size - 1].javaTypeName} obj : this) {
-<#if parameter.parameters[parameter.parameters?size - 1].object>
-            input[i++] = obj.process(connection);
+<#if importObjectUtil??>
+            input[i++] = obj.process(connection, objectUtil);
 <#else>
             input[i++] = obj;
 </#if>
         }
 
-<#if driverName == 'oracle' >
-        return ((OracleConnection) connection)
-                .createARRAY("${parameter.realObjectName}", input);
-<#else>
-        throw new Exception("driver ${driverName} not supported");
-</#if>
+        return arrayUtil.process(
+            connection,
+            "${parameter.realObjectName}",
+            input
+        );
     }
 }

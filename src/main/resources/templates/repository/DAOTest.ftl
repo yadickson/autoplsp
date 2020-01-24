@@ -3,6 +3,15 @@ package ${javaPackage}.repository;
 <#if parameter.object || parameter.array>
 <#assign importConnectionUtils = 1>
 </#if>
+<#if parameter.object>
+<#assign importObjectUtil = 1>
+</#if>
+<#if parameter.array>
+<#if parameter.parameters[parameter.parameters?size - 1].object>
+<#assign importObjectUtil = 1>
+</#if>
+<#assign importArrayUtil = 1>
+</#if>
 </#list>
 <#list proc.outputParameters as parameter>
 <#if parameter.date>
@@ -13,15 +22,18 @@ package ${javaPackage}.repository;
 <#assign importBlobUtil = 1>
 </#if>
 </#list>
-<#if importConnectionUtils??>
-import ${javaPackage}.util.ConnectionUtil;
 
-</#if>
 <#if importConnectionUtils??>
 import java.sql.Connection;
 
 </#if>
 <#list proc.parameters as parameter>
+<#if parameter.array>
+import ${javaPackage}.array.${parameter.javaTypeName};
+</#if>
+<#if parameter.object>
+import ${javaPackage}.object.${parameter.javaTypeName};
+</#if>
 <#if parameter.resultSet || parameter.returnResultSet>
 import ${javaPackage}.domain.${parameter.javaTypeName};
 </#if>
@@ -37,6 +49,9 @@ import ${javaPackage}.repository.sp.${proc.className}SP;
 <#else>
 import ${javaPackage}.repository.sp.${proc.className}SqlQuery;
 </#if>
+<#if importArrayUtil??>
+import ${javaPackage}.util.ArrayUtil;
+</#if>
 <#if importBlobUtil??>
 import ${javaPackage}.util.BlobUtil;
 </#if>
@@ -48,6 +63,9 @@ import ${javaPackage}.util.ClobUtil;
 </#if>
 <#if importConnectionUtils??>
 import ${javaPackage}.util.ConnectionUtil;
+</#if>
+<#if importObjectUtil??>
+import ${javaPackage}.util.ObjectUtil;
 </#if>
 <#if importDate??>
 
@@ -72,6 +90,11 @@ public class ${proc.className}DAOTest {
 
     @InjectMocks
     ${proc.className}DAOImpl repository;
+<#if importArrayUtil??>
+
+    @Mock
+    private ArrayUtil arrayUtil;
+</#if>
 <#if importBlobUtil??>
 
     @Mock
@@ -94,7 +117,18 @@ public class ${proc.className}DAOTest {
 
     @Mock
     private ConnectionUtil connectionUtil;
+<#list proc.inputParameters as parameter>
+<#if parameter.object || parameter.array>
 
+    @Mock
+    private ${parameter.javaTypeName} ${parameter.fieldName};
+</#if>
+</#list>
+</#if>
+<#if importObjectUtil??>
+
+    @Mock
+    private ObjectUtil objectUtil;
 </#if>
 
     @Mock(name = "${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
@@ -106,7 +140,11 @@ public class ${proc.className}DAOTest {
         ${proc.className}IN params = new ${proc.className}IN();
 
 <#list proc.inputParameters as parameter>
+<#if parameter.object || parameter.array>
+        params.set${parameter.propertyName}(${parameter.fieldName});
+<#else>
         params.set${parameter.propertyName}(null);
+</#if>
 </#list>
 
 </#if>
@@ -138,6 +176,14 @@ public class ${proc.className}DAOTest {
 <#if importConnectionUtils??>
 
         Mockito.when(connectionUtil.process()).thenReturn(connection);
+<#list proc.inputParameters as parameter>
+<#if parameter.object>
+        Mockito.when(${parameter.fieldName}.process(Mockito.same(connection), Mockito.same(objectUtil))).thenReturn(null);
+</#if>
+<#if parameter.array>
+        Mockito.when(${parameter.fieldName}.process(Mockito.same(connection), Mockito.same(arrayUtil)<#if parameter.parameters[parameter.parameters?size - 1].object>, Mockito.same(objectUtil)</#if>)).thenReturn(null);
+</#if>
+</#list>
 </#if>
 <#if proc.hasOutput>
 
@@ -171,17 +217,25 @@ public class ${proc.className}DAOTest {
 </#list>
 </#if>
 
-        InOrder inOrder = Mockito.inOrder(<#if proc.function>function<#else>procedure</#if><#if proc.checkResult>, checkResult</#if><#if importConnectionUtils??>, connectionUtil</#if>);
+        InOrder inOrder = Mockito.inOrder(<#if proc.function>function<#else>procedure</#if><#if proc.checkResult>, checkResult</#if><#if importConnectionUtils??>, connectionUtil</#if><#list proc.inputParameters as parameter><#if parameter.object || parameter.array>, ${parameter.fieldName}</#if></#list>);
 
 <#if importConnectionUtils??>
         inOrder.verify(connectionUtil, Mockito.times(1)).process();
 </#if>
-        inOrder.verify(<#if proc.function>function<#else>procedure</#if>, Mockito.times(1)).execute(Mockito.anyMap());
-<#if proc.checkResult>
-        inOrder.verify(checkResult, Mockito.times(1)).check(<#if proc.hasOutput>Mockito.same(mapResult)</#if>);
+<#list proc.inputParameters as parameter>
+<#if parameter.object>
+        inOrder.verify(${parameter.fieldName}, Mockito.times(1)).process(Mockito.same(connection), Mockito.same(objectUtil));
 </#if>
+<#if parameter.array>
+        inOrder.verify(${parameter.fieldName}, Mockito.times(1)).process(Mockito.same(connection), Mockito.same(arrayUtil)<#if parameter.parameters[parameter.parameters?size - 1].object>, Mockito.same(objectUtil)</#if>);
+</#if>
+</#list>
+        inOrder.verify(<#if proc.function>function<#else>procedure</#if>, Mockito.times(1)).execute(Mockito.anyMap());
 <#if importConnectionUtils??>
         inOrder.verify(connectionUtil, Mockito.times(1)).release(Mockito.same(connection));
+</#if>
+<#if proc.checkResult>
+        inOrder.verify(checkResult, Mockito.times(1)).check(<#if proc.hasOutput>Mockito.same(mapResult)</#if>);
 </#if>
     }
 
@@ -192,13 +246,25 @@ public class ${proc.className}DAOTest {
 <#if !fullConstructor>
 
 <#list proc.inputParameters as parameter>
+<#if parameter.object || parameter.array>
+        params.set${parameter.propertyName}(${parameter.fieldName});
+<#else>
         params.set${parameter.propertyName}(null);
+</#if>
 </#list>
 </#if>
 
 </#if>
 <#if importConnectionUtils??>
         Mockito.when(connectionUtil.process()).thenReturn(connection);
+<#list proc.inputParameters as parameter>
+<#if parameter.object>
+        Mockito.when(${parameter.fieldName}.process(Mockito.same(connection), Mockito.same(objectUtil))).thenReturn(null);
+</#if>
+<#if parameter.array>
+        Mockito.when(${parameter.fieldName}.process(Mockito.same(connection), Mockito.same(arrayUtil)<#if parameter.parameters[parameter.parameters?size - 1].object>, Mockito.same(objectUtil)</#if>)).thenReturn(null);
+</#if>
+</#list>
 </#if>
 <#if proc.hasOutput>
 

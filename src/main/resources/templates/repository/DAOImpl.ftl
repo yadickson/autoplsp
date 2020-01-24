@@ -215,13 +215,13 @@ public final class ${proc.className}DAOImpl
 
 <#list proc.inputParameters as parameter>
 <#if parameter.array || parameter.object>
-            Object ${parameter.propertyName};
+            Object ${parameter.fieldName};
 </#if>
 </#list>
 <#list proc.inputParameters as parameter>
 <#if parameter.array>
 
-            ${parameter.propertyName} = params.get${parameter.propertyName}().process(
+            ${parameter.fieldName} = params.get${parameter.propertyName}().process(
                     connection,
                     arrayUtil<#if parameter.parameters[parameter.parameters?size - 1].object>,${'\n'}                    objectUtil</#if>
             );
@@ -237,7 +237,7 @@ public final class ${proc.className}DAOImpl
 
 <#list proc.inputParameters as parameter>
 <#if parameter.array || parameter.object>
-            in.put("${parameter.prefix}${parameter.name}", ${parameter.propertyName});
+            in.put("${parameter.prefix}${parameter.name}", ${parameter.fieldName});
 <#else>
             in.put("${parameter.prefix}${parameter.name}", params.get${parameter.propertyName}());
 </#if>

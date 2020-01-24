@@ -136,6 +136,7 @@ public class ${proc.className}DAOTest {
 </#list>
 </#if>
 <#if importConnectionUtils??>
+
         Mockito.when(connectionUtil.process()).thenReturn(connection);
 </#if>
 <#if proc.hasOutput>
@@ -170,16 +171,17 @@ public class ${proc.className}DAOTest {
 </#list>
 </#if>
 
-        InOrder inOrder = Mockito.inOrder(<#if proc.function>function<#else>procedure</#if><#if proc.checkResult>, checkResult</#if>);
+        InOrder inOrder = Mockito.inOrder(<#if proc.function>function<#else>procedure</#if><#if proc.checkResult>, checkResult</#if><#if importConnectionUtils??>, connectionUtil</#if>);
 
+<#if importConnectionUtils??>
+        inOrder.verify(connectionUtil, Mockito.times(1)).process();
+</#if>
         inOrder.verify(<#if proc.function>function<#else>procedure</#if>, Mockito.times(1)).execute(Mockito.anyMap());
 <#if proc.checkResult>
         inOrder.verify(checkResult, Mockito.times(1)).check(<#if proc.hasOutput>Mockito.same(mapResult)</#if>);
 </#if>
 <#if importConnectionUtils??>
-
-        Mockito.verify(connectionUtil, Mockito.times(1)).process();
-        Mockito.verify(connectionUtil, Mockito.times(1)).release(Mockito.same(connection));
+        inOrder.verify(connectionUtil, Mockito.times(1)).release(Mockito.same(connection));
 </#if>
     }
 

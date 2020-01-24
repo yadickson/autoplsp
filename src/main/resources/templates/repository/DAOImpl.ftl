@@ -20,7 +20,7 @@ package ${javaPackage}.repository;
 
 <#list proc.parameters as parameter>
 <#if parameter.object || parameter.array>
-<#assign importDataSourceUtils = 1>
+<#assign importConnectionUtils = 1>
 </#if>
 </#list>
 <#list proc.outputParameters as parameter>
@@ -57,8 +57,11 @@ import ${javaPackage}.util.CheckResult;
 <#if importClobUtil??>
 import ${javaPackage}.util.ClobUtil;
 </#if>
+<#if importConnectionUtils??>
+import ${javaPackage}.util.ConnectionUtil;
+</#if>
 
-<#if importDataSourceUtils??>
+<#if importConnectionUtils??>
 import java.sql.Connection;
 </#if>
 import java.sql.SQLException;
@@ -79,13 +82,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 </#if>
-<#if importBlobUtil?? || proc.checkResult || importClobUtil??>
+<#if importBlobUtil?? || proc.checkResult || importClobUtil?? || importConnectionUtils??>
 import org.springframework.beans.factory.annotation.Autowired;
-
-</#if>
-<#if importDataSourceUtils??>
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 
 </#if>
 import org.springframework.stereotype.Repository;
@@ -111,14 +109,6 @@ public final class ${proc.className}DAOImpl
             = LoggerFactory.getLogger(${proc.className}DAOImpl.class);
 
 </#if>
-<#if importDataSourceUtils??>
-    /**
-     * JDBC template to use.
-     */
-    @Resource(name = "${jdbcTemplate}")
-    private JdbcTemplate jdbcTemplate;
-
-</#if>
 <#if importBlobUtil??>
     /**
      * Blob utility.
@@ -141,6 +131,14 @@ public final class ${proc.className}DAOImpl
      */
     @Autowired
     private ClobUtil clobUtil;
+
+</#if>
+<#if importConnectionUtils??>
+    /**
+     * The connection util.
+     */
+    @Autowired
+    private ConnectionUtil connectionUtil;
 
 </#if>
     /**
@@ -174,13 +172,16 @@ public final class ${proc.className}DAOImpl
 <#if proc.hasOutput>
         Map<String, Object> out;
 </#if>
-<#if importDataSourceUtils??>
+<#if importConnectionUtils??>
 
-        Connection conn;
-        conn = DataSourceUtils.getConnection(jdbcTemplate.getDataSource());
+        Connection conn = null;
 </#if>
 
         try {
+<#if importConnectionUtils??>
+
+            conn = connectionUtil.process();
+</#if>
 
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
@@ -199,12 +200,9 @@ public final class ${proc.className}DAOImpl
             LOGGER.error(ex.getMessage(), ex);
 </#if>
             throw new SQLException(ex.getMessage(), "${successCode}", ex);
-<#if importDataSourceUtils??> 
+<#if importConnectionUtils??> 
         } finally {
-            DataSourceUtils.releaseConnection(
-                    conn,
-                    jdbcTemplate.getDataSource()
-            );
+            connectionUtil.release(conn);
         }
 <#else>
         }

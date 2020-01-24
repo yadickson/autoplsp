@@ -44,7 +44,7 @@ public final class BlobUtilImpl implements BlobUtil {
      * Logger.
      */
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(ClobUtilImpl.class);
+            = LoggerFactory.getLogger(BlobUtilImpl.class);
 </#if>
 
     /**

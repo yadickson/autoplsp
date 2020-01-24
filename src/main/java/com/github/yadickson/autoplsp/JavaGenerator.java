@@ -86,6 +86,7 @@ public final class JavaGenerator extends TemplateGenerator {
     private boolean checkResult;
     private boolean processClob;
     private boolean processBlob;
+    private boolean processConnection;
     private boolean addTypeTable;
     private boolean addDateUtil;
 
@@ -186,6 +187,7 @@ public final class JavaGenerator extends TemplateGenerator {
         checkResult = false;
         processClob = false;
         processBlob = false;
+        processConnection = false;
         addTypeTable = false;
         addDateUtil = false;
 
@@ -246,6 +248,17 @@ public final class JavaGenerator extends TemplateGenerator {
             if (test) {
                 createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilTest.ftl", getUtilOutputFileTestPath("BlobUtilTest.java"));
             }
+        }
+
+        if ((procedure.getHasObject() || procedure.getHasArray()) && !processConnection) {
+            processConnection = true;
+            createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtil.ftl", getUtilOutputFilePath("ConnectionUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtilImpl.ftl", getUtilOutputFilePath("ConnectionUtilImpl.java"));
+
+            //if (test) {
+            //    createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtilTest.ftl", getUtilOutputFileTestPath("BlobUtilTest.java"));
+            //}
         }
 
         if (!procedure.isFunctionInline()) {

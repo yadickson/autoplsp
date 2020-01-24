@@ -1,4 +1,9 @@
 package ${javaPackage}.repository;
+<#list proc.parameters as parameter>
+<#if parameter.object || parameter.array>
+<#assign importConnectionUtils = 1>
+</#if>
+</#list>
 <#list proc.outputParameters as parameter>
 <#if parameter.date>
 <#assign importDate = 1>
@@ -8,7 +13,14 @@ package ${javaPackage}.repository;
 <#assign importBlobUtil = 1>
 </#if>
 </#list>
+<#if importConnectionUtils??>
+import ${javaPackage}.util.ConnectionUtil;
 
+</#if>
+<#if importConnectionUtils??>
+import java.sql.Connection;
+
+</#if>
 <#list proc.parameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
 import ${javaPackage}.domain.${parameter.javaTypeName};
@@ -34,15 +46,13 @@ import ${javaPackage}.util.CheckResult;
 <#if importClobUtil??>
 import ${javaPackage}.util.ClobUtil;
 </#if>
+<#if importConnectionUtils??>
+import ${javaPackage}.util.ConnectionUtil;
+</#if>
 <#if importDate??>
 
 import java.util.Date;
 <#else>
-
-</#if>
-<#if proc.hasObject || proc.hasArray>
-
-import org.springframework.jdbc.core.JdbcTemplate;
 
 </#if>
 <#if proc.hasOutput>
@@ -77,13 +87,14 @@ public class ${proc.className}DAOTest {
     @Mock
     private ClobUtil clobUtil;
 </#if>
-<#if proc.hasObject || proc.hasArray>
+<#if importConnectionUtils??>
 
     @Mock
-    private javax.sql.DataSource dataSource;
+    private Connection connection;
 
-    @Mock(name="${jdbcTemplate}")
-    private JdbcTemplate jdbcTemplate;
+    @Mock
+    private ConnectionUtil connectionUtil;
+
 </#if>
 
     @Mock(name = "${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
@@ -124,8 +135,8 @@ public class ${proc.className}DAOTest {
         mapResult.put("${parameter.name}", obj${parameter.propertyName});
 </#list>
 </#if>
-<#if proc.hasObject || proc.hasArray>
-        Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
+<#if importConnectionUtils??>
+        Mockito.when(connectionUtil.process()).thenReturn(connection);
 </#if>
 <#if proc.hasOutput>
 
@@ -165,6 +176,11 @@ public class ${proc.className}DAOTest {
 <#if proc.checkResult>
         inOrder.verify(checkResult, Mockito.times(1)).check(<#if proc.hasOutput>Mockito.same(mapResult)</#if>);
 </#if>
+<#if importConnectionUtils??>
+
+        Mockito.verify(connectionUtil, Mockito.times(1)).process();
+        Mockito.verify(connectionUtil, Mockito.times(1)).release(Mockito.same(connection));
+</#if>
     }
 
     @Test(expected = java.sql.SQLException.class)
@@ -179,8 +195,8 @@ public class ${proc.className}DAOTest {
 </#if>
 
 </#if>
-<#if proc.hasObject || proc.hasArray>
-        Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
+<#if importConnectionUtils??>
+        Mockito.when(connectionUtil.process()).thenReturn(connection);
 </#if>
 <#if proc.hasOutput>
 
@@ -199,8 +215,10 @@ public class ${proc.className}DAOTest {
     @Test(expected = java.sql.SQLException.class)
     public void testExecuteInputNullParameterError() throws java.sql.SQLException {
         ${proc.className}IN params = null;
-<#if proc.hasObject || proc.hasArray>
-        Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
+<#if importConnectionUtils??>
+
+        Mockito.when(connectionUtil.process()).thenReturn(connection);
+
 </#if>
         repository.execute(params);
     }

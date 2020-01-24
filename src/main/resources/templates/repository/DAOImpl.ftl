@@ -227,7 +227,7 @@ public final class ${proc.className}DAOImpl
             );
 <#elseif parameter.object>
 
-            ${parameter.propertyName} = params.get${parameter.propertyName}().process(
+            ${parameter.fieldName} = params.get${parameter.propertyName}().process(
                     connection,
                     objectUtil
             );

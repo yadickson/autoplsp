@@ -171,13 +171,13 @@ public final class ${parameter.javaTypeName}Impl
 </#if>
 </#list>
         Object[] objs = new Object[]{
-<#list parameter.parameters as parameter>        <#if parameter.clob>clob${parameter.propertyName}<#elseif parameter.blob>blob${parameter.propertyName}<#elseif parameter.date>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
+<#list parameter.parameters as parameter>            <#if parameter.clob>clob${parameter.propertyName}<#elseif parameter.blob>blob${parameter.propertyName}<#elseif parameter.date>date${parameter.propertyName}<#else>get${parameter.propertyName}()</#if><#sep>,</#sep>
 </#list>        };
 
         return objectUtil.process(
-            connection,
-            "${parameter.realObjectName}",
-            objs
+                connection,
+                "${parameter.realObjectName}",
+                objs
         );
     }
 }

@@ -80,9 +80,9 @@ public final class ${parameter.javaTypeName}Impl
         }
 
         return arrayUtil.process(
-            connection,
-            "${parameter.realObjectName}",
-            input
+                connection,
+                "${parameter.realObjectName}",
+                input
         );
     }
 }

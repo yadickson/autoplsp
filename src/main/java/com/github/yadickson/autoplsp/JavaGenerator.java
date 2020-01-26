@@ -384,14 +384,24 @@ public final class JavaGenerator extends TemplateGenerator {
                 INPUT_MAP.put(PARAMETER_NAME, param);
                 createTemplate(INPUT_MAP, OBJECT_PATH + "package-info.ftl", getObjectOutputFilePath("package-info.java"));
                 createTemplate(INPUT_MAP, OBJECT_PATH + "Object.ftl", getFileNameObjectPath(objectPath, param.getJavaTypeName()));
-                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectImpl.ftl", getFileNameObjectPath(objectPath, param.getJavaTypeName() + "Impl"));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilder.ftl", getFileNameObjectPath(objectPath, param.getJavaTypeName() + "Builder"));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderImpl.ftl", getFileNameObjectPath(objectPath, param.getJavaTypeName() + "BuilderImpl"));
+
+                if (test) {
+                    createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderTest.ftl", getFileNameObjectPath(getObjectOutputTestPath(""), param.getJavaTypeName() + "BuilderTest"));
+                }
             }
 
             if (param.isArray()) {
                 INPUT_MAP.put(PARAMETER_NAME, param);
                 createTemplate(INPUT_MAP, ARRAY_PATH + "package-info.ftl", getArrayOutputFilePath("package-info.java"));
                 createTemplate(INPUT_MAP, ARRAY_PATH + "Array.ftl", getFileNameObjectPath(arrayPath, param.getJavaTypeName()));
-                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayImpl.ftl", getFileNameObjectPath(arrayPath, param.getJavaTypeName() + "Impl"));
+                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilder.ftl", getFileNameObjectPath(arrayPath, param.getJavaTypeName() + "Builder"));
+                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilderImpl.ftl", getFileNameObjectPath(arrayPath, param.getJavaTypeName() + "BuilderImpl"));
+
+                if (test) {
+                    createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilderTest.ftl", getFileNameObjectPath(getArrayOutputTestPath(""), param.getJavaTypeName() + "BuilderTest"));
+                }
             }
         }
     }
@@ -493,6 +503,14 @@ public final class JavaGenerator extends TemplateGenerator {
 
     private String getRepositoryOutputTestPath(String path) throws BusinessException {
         return this.getOutputTestPath(REPOSITORY_PATH + path);
+    }
+
+    private String getArrayOutputTestPath(String path) throws BusinessException {
+        return this.getOutputTestPath(ARRAY_PATH + path);
+    }
+
+    private String getObjectOutputTestPath(String path) throws BusinessException {
+        return this.getOutputTestPath(OBJECT_PATH + path);
     }
 
     private String getRepositoryOutputFilePath(String file) throws BusinessException {

@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * The procedure class
@@ -390,5 +393,41 @@ public class Procedure implements Serializable {
         }
 
         return hasCode && hasMessage;
+    }
+
+    /**
+     * Getter the array import list.
+     *
+     * @return the import list
+     * @throws BusinessException error if not supported
+     */
+    public Collection<Parameter> getArrayImports() throws BusinessException {
+        Map<String, Parameter> map = new TreeMap<String, Parameter>();
+
+        for (Parameter param : getParameters()) {
+            if (param.isArray()) {
+                map.put(param.getJavaTypeName(), param);
+            }
+        }
+
+        return map.values();
+    }
+
+    /**
+     * Getter the object import list.
+     *
+     * @return the import list
+     * @throws BusinessException error if not supported
+     */
+    public Collection<Parameter> getObjectImports() throws BusinessException {
+        Map<String, Parameter> map = new TreeMap<String, Parameter>();
+
+        for (Parameter param : getParameters()) {
+            if (param.isObject()) {
+                map.put(param.getJavaTypeName(), param);
+            }
+        }
+
+        return map.values();
     }
 }

@@ -22,15 +22,6 @@ package ${javaPackage}.repository;
 <#if parameter.object || parameter.array>
 <#assign importConnectionUtils = 1>
 </#if>
-<#if parameter.array>
-<#assign importArrayUtil = 1>
-<#if parameter.parameters[parameter.parameters?size - 1].object>
-<#assign importObjectUtil = 1>
-</#if>
-</#if>
-<#if parameter.object>
-<#assign importObjectUtil = 1>
-</#if>
 </#list>
 <#list proc.outputParameters as parameter>
 <#if parameter.date>
@@ -40,6 +31,9 @@ package ${javaPackage}.repository;
 <#elseif parameter.blob>
 <#assign importBlobUtil = 1>
 </#if>
+</#list>
+<#list proc.arrayImports as parameter>
+import ${javaPackage}.array.${parameter.javaTypeName}Builder;
 </#list>
 <#list proc.parameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
@@ -75,6 +69,9 @@ import ${javaPackage}.util.ConnectionUtil;
 <#if importObjectUtil??>
 import ${javaPackage}.util.ObjectUtil;
 </#if>
+<#list proc.objectImports as parameter>
+import ${javaPackage}.object.${parameter.javaTypeName}Builder;
+</#list>
 
 <#if importConnectionUtils??>
 import java.sql.Connection;
@@ -124,6 +121,22 @@ public final class ${proc.className}DAOImpl
             = LoggerFactory.getLogger(${proc.className}DAOImpl.class);
 
 </#if>
+<#list proc.arrayImports as parameter>
+    /**
+     * ${parameter.javaTypeName} builder utility.
+     */
+    @Autowired
+    private ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder;
+
+</#list>
+<#list proc.objectImports as parameter>
+    /**
+     * ${parameter.javaTypeName} builder utility.
+     */
+    @Autowired
+    private ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder;
+
+</#list>
 <#if importArrayUtil??>
     /**
      * Array utility.
@@ -219,17 +232,11 @@ public final class ${proc.className}DAOImpl
 </#if>
 </#list>
 <#list proc.inputParameters as parameter>
-<#if parameter.array>
+<#if parameter.object || parameter.array>
 
-            ${parameter.fieldName} = params.get${parameter.propertyName}().process(
+            ${parameter.fieldName} = ${parameter.javaTypeFieldName}Builder.process(
                     connection,
-                    arrayUtil<#if parameter.parameters[parameter.parameters?size - 1].object>,${'\n'}                    objectUtil</#if>
-            );
-<#elseif parameter.object>
-
-            ${parameter.fieldName} = params.get${parameter.propertyName}().process(
-                    connection,
-                    objectUtil
+                    params.get${parameter.propertyName}()
             );
 </#if>
 </#list>

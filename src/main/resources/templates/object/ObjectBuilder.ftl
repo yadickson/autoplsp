@@ -16,38 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.array;
+package ${javaPackage}.object;
 
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-<#if parameter.parameters[parameter.parameters?size - 1].object>
-import ${javaPackage}.object.${parameter.parameters[parameter.parameters?size - 1].javaTypeName};
-
-</#if>
-<#if jsonNonNull>
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-</#if>
 /**
- * Bean array for datatype ${parameter.realObjectName}.
+ * Interface to build object for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-<#if jsonNonNull>
-@JsonInclude(JsonInclude.Include.NON_NULL)
-</#if>
-<#if !serialization>
-@SuppressWarnings({"serial"})
-</#if>
-public final class ${parameter.javaTypeName}
-        extends ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}><#if serialization>
-        implements java.io.Serializable</#if> {
-<#if serialization> 
+public interface ${parameter.javaTypeName}Builder {
 
     /**
-     * Serialization.
+     * Getter data object type.
+     *
+     * @param connection database connection.
+     * @param object object to process.
+     * @return object processed.
+     * @throws SQLException if error
      */
-    static final long serialVersionUID = 1L;
-</#if>
+    Object process(
+            Connection connection,
+            ${parameter.javaTypeName} object
+    ) throws SQLException;
 }

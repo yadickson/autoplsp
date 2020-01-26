@@ -17,45 +17,45 @@
  */
 </#if>
 package ${javaPackage}.array;
+<#if parameter.parameters[parameter.parameters?size - 1].object>
+<#assign importObjectBuilder = 1>
+</#if>
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-<#if parameter.parameters[parameter.parameters?size - 1].object>
+<#if importObjectBuilder??>
 import ${javaPackage}.object.${parameter.parameters[parameter.parameters?size - 1].javaTypeName};
-<#assign importObjectUtil = 1>
+import ${javaPackage}.object.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder;
+
 </#if>
 import ${javaPackage}.util.ArrayUtil;
-<#if importObjectUtil??>
-import ${javaPackage}.util.ObjectUtil;
-</#if>
 
-<#if jsonNonNull>
-import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-</#if>
 /**
- * Bean object for datatype ${parameter.realObjectName}.
+ * Builder class to make array for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-<#if jsonNonNull>
-@JsonInclude(JsonInclude.Include.NON_NULL)
-</#if>
-<#if !serialization>
-@SuppressWarnings({"serial"})
-</#if>
-public final class ${parameter.javaTypeName}Impl
-        extends ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}>
-        implements ${parameter.javaTypeName}<#if serialization>, java.io.Serializable</#if> {
-<#if serialization> 
+@Component
+public final class ${parameter.javaTypeName}BuilderImpl
+        implements ${parameter.javaTypeName}Builder {
 
     /**
-     * Serialization.
+     * Array utility.
      */
-    static final long serialVersionUID = 1L;
+    @Autowired
+    private ArrayUtil arrayUtil;
+<#if importObjectBuilder??>
+
+    /**
+     * Object utility to build ${parameter.parameters[parameter.parameters?size - 1].realObjectName}.
+     */
+    @Autowired
+    private ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder objectBuilder;
 </#if>
 
     /**
@@ -64,16 +64,16 @@ public final class ${parameter.javaTypeName}Impl
     @Override
     public Object process(
             final Connection connection,
-            final ArrayUtil arrayUtil<#if importObjectUtil??>,${'\n'}            final ObjectUtil objectUtil</#if>
+            final ${parameter.javaTypeName} array
     ) throws SQLException {
 
-        Object[] input = new Object[size()];
+        Object[] input = new Object[array.size()];
 
         int i = 0;
 
-        for (${parameter.parameters[parameter.parameters?size - 1].javaTypeName} obj : this) {
-<#if importObjectUtil??>
-            input[i++] = obj.process(connection, objectUtil);
+        for (${parameter.parameters[parameter.parameters?size - 1].javaTypeName} obj : array) {
+<#if importObjectBuilder??>
+            input[i++] = objectBuilder.process(connection, obj);
 <#else>
             input[i++] = obj;
 </#if>

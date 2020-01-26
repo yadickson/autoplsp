@@ -32,7 +32,6 @@ import java.util.Date;
 <#if proc.hasResultSet>
 import java.util.List;
 </#if>
-
 <#if lombok>
 <#if importDateUtil??>
 import lombok.AccessLevel;

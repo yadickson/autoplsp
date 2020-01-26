@@ -134,6 +134,16 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Getter java type file name (The name uncapitalize).
+     *
+     * @return the property name
+     * @throws BusinessException if exist error
+     */
+    public String getJavaTypeFieldName() throws BusinessException {
+        return CapitalizeUtil.uncapitalize(getJavaTypeName());
+    }
+
+    /**
      * Getter parent name.
      *
      * @return the parent

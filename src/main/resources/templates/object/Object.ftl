@@ -18,29 +18,110 @@
 </#if>
 package ${javaPackage}.object;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+<#list parameter.parameters as parameter2>
+<#if parameter2.date>
+<#assign importDateUtil = 1>
+</#if>
+</#list>
+<#if importDateUtil??>
+import ${javaPackage}.util.DateUtil;
 
-import ${javaPackage}.util.ObjectUtil;
+import java.util.Date;
 
+</#if>
+<#if lombok>
+<#if importDateUtil??>
+import lombok.AccessLevel;
+</#if>
+import lombok.Getter;
+<#if fullConstructor>
+import lombok.NoArgsConstructor;
+</#if>
+import lombok.Setter;
+
+</#if>
+<#if jsonNonNull>
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+</#if>
 /**
- * Interface object for datatype ${parameter.realObjectName}.
+ * Bean object for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface ${parameter.javaTypeName} {
+<#if lombok>
+<#if fullConstructor>
+@NoArgsConstructor
+</#if>
+@Getter
+@Setter
+</#if>
+<#if jsonNonNull>
+@JsonInclude(JsonInclude.Include.NON_NULL)
+</#if>
+public final class ${parameter.javaTypeName}<#if serialization>
+        implements java.io.Serializable</#if> {
+<#if serialization>
 
     /**
-     * Getter data object type.
-     *
-     * @param connection database connection.
-     * @param objectUtil object util.
-     * @return object
-     * @throws SQLException if error
+     * Serialization.
      */
-    Object process(
-            Connection connection,
-            ObjectUtil objectUtil
-    ) throws SQLException;
+    static final long serialVersionUID = 1L;
+</#if>
+<#list parameter.parameters as parameter2>
+
+    /**
+     * Field parameter ${parameter2.fieldName}.
+     */
+<#if lombok && parameter2.date>
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+</#if>
+    private ${parameter2.javaTypeName} ${parameter2.fieldName} = null;
+</#list>
+<#if !lombok>
+
+    /**
+     * Class Constructor ${parameter.javaTypeName}.
+     */
+    public ${parameter.javaTypeName}() {
+    }
+
+    /**
+     * Class Constructor ${parameter.javaTypeName}.
+     *
+    <#list parameter.parameters as parameter2>
+     * @param p${parameter2.propertyName} set value of ${parameter2.fieldName}
+    </#list>
+     */
+    public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} p${parameter2.propertyName}<#sep>,${'\n'}            </#sep></#list>
+    ) {
+        <#list parameter.parameters as parameter2>
+        this.${parameter2.fieldName} = p${parameter2.propertyName};
+        </#list>
+    }
+</#if>
+<#list parameter.parameters as parameter2>
+<#if !lombok || parameter2.date>
+
+    /**
+     * Getter for ${parameter2.fieldName}.
+     *
+     * @return ${parameter2.fieldName}
+     */
+    public ${parameter2.javaTypeName} get${parameter2.propertyName}() {
+        return <#if parameter2.date>DateUtil.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
+    }
+
+    /**
+     * Setter for ${parameter2.fieldName}.
+     *
+     * @param p${parameter2.propertyName} ${parameter2.fieldName} to set
+     */
+    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} p${parameter2.propertyName}) {
+        this.${parameter2.fieldName} = <#if parameter2.date>DateUtil.process(</#if>p${parameter2.propertyName}<#if parameter2.date>)</#if>;
+    }
+</#if>
+</#list>
 }

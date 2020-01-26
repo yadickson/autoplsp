@@ -18,13 +18,11 @@
 </#if>
 package ${javaPackage}.domain;
 
-<#list proc.inputParameters as parameter>
-<#if parameter.array>
+<#list proc.arrayImports as parameter>
 import ${javaPackage}.array.${parameter.javaTypeName};
-</#if>
-<#if parameter.object>
+</#list>
+<#list proc.objectImports as parameter>
 import ${javaPackage}.object.${parameter.javaTypeName};
-</#if>
 </#list>
 <#list proc.inputParameters as parameter>
 <#if parameter.date>

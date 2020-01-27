@@ -183,6 +183,7 @@ public class ${proc.className}DAOTest {
 <#list proc.outputParameters as parameter>
         mapResult.put("${parameter.name}", obj${parameter.propertyName});
 </#list>
+
 </#if>
 <#if importConnectionUtils??>
         Mockito.when(connectionUtil.process()).thenReturn(connection);

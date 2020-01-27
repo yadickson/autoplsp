@@ -89,6 +89,5 @@ public class ${parameter.javaTypeName}BuilderTest {
 <#list parameter.parameters as parameter>
         Assert.assertSame(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
 </#list>
-
     }
 }

@@ -2,9 +2,14 @@ package ${javaPackage}.util;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-<#if driverName == 'oracle' && driverVersionName != 'ojdbc6' >
+<#if driverName == 'oracle'>
 
+<#if driverVersionName == 'ojdbc6'>
+import oracle.jdbc.OracleConnection;
+</#if>
+<#if driverVersionName != 'ojdbc6' >
 import java.sql.Struct;
+</#if>
 </#if>
 
 import org.junit.Assert;
@@ -20,10 +25,17 @@ public class ObjectUtilTest {
 
     @InjectMocks
     ObjectUtilImpl objectUtil;
-<#if driverName == 'oracle' && driverVersionName != 'ojdbc6' >
+<#if driverName == 'oracle'>
+<#if driverVersionName == 'ojdbc6'>
+
+    @Mock
+    private OracleConnection oracleConnection;
+</#if>
+<#if driverVersionName != 'ojdbc6' >
 
     @Mock
     private Struct struct;
+</#if>
 </#if>
 
     @Mock
@@ -41,14 +53,20 @@ public class ObjectUtilTest {
         Assert.assertNotNull(result);
         Assert.assertSame(struct, result);
     }
+</#if>
 
     @Test(expected = SQLException.class)
     public void testProcessObjectError() throws SQLException {
         Object[] objects = new Object[0];
+<#if driverName == 'oracle' >
 
+<#if driverVersionName == 'ojdbc6' >
+        Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
+<#else>
         Mockito.when(connection.createStruct(Mockito.eq("NAME"), Mockito.same(objects))).thenThrow(new RuntimeException());
+</#if>
+</#if>
 
         objectUtil.process(connection, "NAME", objects);
     }
-</#if>
 }

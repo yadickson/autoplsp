@@ -15,7 +15,7 @@ CREATE OR REPLACE TYPE ${parameter.realObjectName} AS OBJECT
 ```
 <#elseif parameter.array>
 ```sql
-CREATE OR REPLACE TYPE ${parameter.realObjectName} AS TABLE OF ${parameter.parameters[parameter.parameters?size - 1].realObjectName};
+CREATE OR REPLACE TYPE ${parameter.realObjectName} AS TABLE OF <#if parameter.parameters[parameter.parameters?size - 1].realObjectName??>${parameter.parameters[parameter.parameters?size - 1].realObjectName}<#else>${parameter.parameters[parameter.parameters?size - 1].sqlNativeTypeName}<#if parameter.parameters[parameter.parameters?size - 1].string>(100 CHAR)</#if></#if>;
 ```
 </#if>
 

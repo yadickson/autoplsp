@@ -25,6 +25,8 @@ import java.util.Date;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -48,6 +50,9 @@ public class ${parameter.javaTypeName}BuilderTest {
     private ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder objectBuilder;
 </#if>
 
+    @Captor
+    private ArgumentCaptor<Object[]> captorObjects;
+
     @Test
     public void test${parameter.javaTypeName}BuilderProcess() throws SQLException {
 
@@ -57,6 +62,8 @@ public class ${parameter.javaTypeName}BuilderTest {
         ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = "${parameter.parameters[parameter.parameters?size - 1].javaTypeName}";
 <#elseif parameter.parameters[parameter.parameters?size - 1].number>
         ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = ${parameter.parameters[parameter.parameters?size - 1].position};
+<#elseif parameter.parameters[parameter.parameters?size - 1].date>
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = new ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}(${parameter.parameters[parameter.parameters?size - 1].position});
 <#else>
         ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = new ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}();
 </#if>
@@ -68,7 +75,7 @@ public class ${parameter.javaTypeName}BuilderTest {
 <#if importObjectBuilder??>
         Mockito.when(objectBuilder.process(Mockito.same(connection), Mockito.same(object))).thenReturn(object);
 </#if>
-        Mockito.when(arrayUtil.process(Mockito.same(connection), Mockito.eq("${parameter.realObjectName}"), Mockito.isNotNull(Object[].class))).thenReturn(obj);
+        Mockito.when(arrayUtil.process(Mockito.same(connection), Mockito.eq("${parameter.realObjectName}"), captorObjects.capture())).thenReturn(obj);
 
         Object result = builder.process(connection, array);
 
@@ -77,6 +84,17 @@ public class ${parameter.javaTypeName}BuilderTest {
 
 <#if importObjectBuilder??>
         Mockito.verify(objectBuilder, Mockito.times(1)).process(Mockito.same(connection), Mockito.same(object));
+</#if>
+
+        Object[] objParamsResult = captorObjects.getValue();
+
+        Assert.assertNotNull(objParamsResult);
+        Assert.assertEquals(${parameter.parameters?size}, objParamsResult.length);
+
+<#if parameter.parameters[parameter.parameters?size - 1].date>
+        Assert.assertEquals(object, objParamsResult[0]);
+<#else>
+        Assert.assertSame(object, objParamsResult[0]);
 </#if>
     }
 }

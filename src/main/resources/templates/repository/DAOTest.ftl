@@ -134,7 +134,7 @@ public class ${proc.className}DAOTest {
 
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
-        ${parameter.javaTypeName} ${parameter.fieldName} = new java.util.Date();
+        ${parameter.javaTypeName} ${parameter.fieldName} = new ${parameter.javaTypeName}(${parameter.position});
 <#elseif parameter.blob>
         byte[] ${parameter.fieldName} = new byte[0];
 <#elseif parameter.number>
@@ -174,7 +174,7 @@ public class ${proc.className}DAOTest {
 <#elseif parameter.number>
         ${parameter.javaTypeName} obj${parameter.propertyName} = ${parameter.position};
 <#elseif parameter.date>
-        ${parameter.javaTypeName} obj${parameter.propertyName} = new ${parameter.javaTypeName}();
+        ${parameter.javaTypeName} obj${parameter.propertyName} = new ${parameter.javaTypeName}(${parameter.javaTypeName});
 <#else>
         ${parameter.javaTypeName} obj${parameter.propertyName} = "${parameter.name}";
 </#if>
@@ -254,6 +254,8 @@ public class ${proc.className}DAOTest {
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
         Assert.assertSame(${parameter.fieldName}Builder, mapParamsResult.get("${parameter.name}"));
+<#elseif parameter.date>
+        Assert.assertEquals(${parameter.fieldName}, mapParamsResult.get("${parameter.name}"));
 <#else>
         Assert.assertSame(${parameter.fieldName}, mapParamsResult.get("${parameter.name}"));
 </#if>

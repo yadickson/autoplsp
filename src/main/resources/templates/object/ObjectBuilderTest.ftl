@@ -63,7 +63,7 @@ public class ${parameter.javaTypeName}BuilderTest {
 <#if parameter.number>
         ${parameter.javaTypeName} obj${parameter.propertyName} = ${parameter.position};
 <#elseif parameter.date>
-        ${parameter.javaTypeName} obj${parameter.propertyName} = new ${parameter.javaTypeName}();
+        ${parameter.javaTypeName} obj${parameter.propertyName} = new ${parameter.javaTypeName}(${parameter.position});
 <#else>
         ${parameter.javaTypeName} obj${parameter.propertyName} = "${parameter.name}";
 </#if>
@@ -87,7 +87,11 @@ public class ${parameter.javaTypeName}BuilderTest {
         Assert.assertNotNull(objParamsResult);
         Assert.assertEquals(${parameter.parameters?size}, objParamsResult.length);
 <#list parameter.parameters as parameter>
+<#if parameter.date>
+        Assert.assertEquals(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
+<#else>
         Assert.assertSame(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
+</#if>
 </#list>
     }
 }

@@ -49,7 +49,7 @@ public class ${parameter.javaTypeName}BuilderTest {
 </#if>
 
     @Test
-    public void testProcess() throws SQLException {
+    public void test${parameter.javaTypeName}BuilderProcess() throws SQLException {
 
         ${parameter.javaTypeName} array = new ${parameter.javaTypeName}();
 

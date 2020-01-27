@@ -16,6 +16,7 @@
  */
 package com.github.yadickson.autoplsp;
 
+import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
@@ -35,7 +36,7 @@ public final class DefinitionGenerator extends TemplateGenerator {
     private final String fileName;
     private final String folderNameResourceGenerator;
     private final List<Procedure> procedures;
-
+    private final List<Parameter> objectParameters;
     private final String driverName;
     private final String driverVersion;
 
@@ -44,6 +45,7 @@ public final class DefinitionGenerator extends TemplateGenerator {
     private final String successCode;
 
     private static final String PROCEDURES = "procedures";
+    private static final String OBJECTS = "objects";
     private static final String DRIVER_NAME = "driverName";
     private static final String DRIVER_VERSION = "driverVersion";
     private static final String OUT_CODE_NAME = "outParameterCode";
@@ -57,6 +59,7 @@ public final class DefinitionGenerator extends TemplateGenerator {
      * @param folderNameResourceGenerator folder name spring resource directory
      * @param outputFileName Spring configuration file name
      * @param procedures procedure list
+     * @param objectParameters object parameters.
      * @param outParameterCode Output parameter code to evaluate process
      * @param outParameterMessage Output parameter message
      * @param successCode Output success code value.
@@ -67,6 +70,7 @@ public final class DefinitionGenerator extends TemplateGenerator {
             final String folderNameResourceGenerator,
             final String outputFileName,
             final List<Procedure> procedures,
+            final List<Parameter> objectParameters,
             final String outParameterCode,
             final String outParameterMessage,
             final String successCode,
@@ -76,6 +80,7 @@ public final class DefinitionGenerator extends TemplateGenerator {
         this.fileName = outputFileName;
         this.folderNameResourceGenerator = folderNameResourceGenerator;
         this.procedures = procedures;
+        this.objectParameters = objectParameters;
         this.outParameterCode = outParameterCode;
         this.outParameterMessage = outParameterMessage;
         this.successCode = successCode;
@@ -94,6 +99,7 @@ public final class DefinitionGenerator extends TemplateGenerator {
         Map<String, Object> input = new HashMap<String, Object>();
 
         input.put(PROCEDURES, procedures);
+        input.put(OBJECTS, objectParameters);
         input.put(DRIVER_NAME, driverName);
         input.put(DRIVER_VERSION, driverVersion);
         input.put(SUCCESS_CODE, successCode);

@@ -21,6 +21,8 @@ import ${javaPackage}.util.ObjectUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -49,18 +51,44 @@ public class ${parameter.javaTypeName}BuilderTest {
     @Mock
     private Connection connection;
 
+    @Captor
+    private ArgumentCaptor<Object[]> captorObjects;
+
     @Test
-    public void testProcess() throws SQLException {
+    public void test${parameter.javaTypeName}BuilderProcess() throws SQLException {
 
         ${parameter.javaTypeName} object = new ${parameter.javaTypeName}();
 
-        Object obj = new Object();
+<#list parameter.parameters as parameter>
+<#if parameter.number>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = ${parameter.position};
+<#elseif parameter.date>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = new ${parameter.javaTypeName}();
+<#else>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = "${parameter.name}";
+</#if>
+</#list>
 
-        Mockito.when(objectUtil.process(Mockito.same(connection), Mockito.eq("${parameter.realObjectName}"), Mockito.isNotNull(Object[].class))).thenReturn(obj);
+<#list parameter.parameters as parameter>
+        object.set${parameter.propertyName}(obj${parameter.propertyName});
+</#list>
+
+        Object[] obj = new Object[0];
+
+        Mockito.when(objectUtil.process(Mockito.same(connection), Mockito.eq("${parameter.realObjectName}"), captorObjects.capture())).thenReturn(obj);
 
         Object result = builder.process(connection, object);
 
         Assert.assertNotNull(result);
         Assert.assertSame(obj, result);
+
+        Object[] objParamsResult = captorObjects.getValue();
+
+        Assert.assertNotNull(objParamsResult);
+        Assert.assertEquals(${parameter.parameters?size}, objParamsResult.length);
+<#list parameter.parameters as parameter>
+        Assert.assertSame(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
+</#list>
+
     }
 }

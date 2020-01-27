@@ -1,7 +1,30 @@
+<#if objects?size != 0>
+# object definitions
+
+</#if>
+<#if driverName == 'oracle' >
+<#list objects as parameter>
+<#if parameter.object>
+```sql
+CREATE OR REPLACE TYPE ${parameter.realObjectName} AS OBJECT
+(
+<#list parameter.parameters as param>
+    ${param.name} ${param.sqlNativeTypeName}<#if param.string>(100 CHAR)</#if><#sep>,</#sep>
+</#list>
+)
+```
+<#elseif parameter.array>
+```sql
+CREATE OR REPLACE TYPE ${parameter.realObjectName} AS TABLE OF ${parameter.parameters[parameter.parameters?size - 1].realObjectName};
+```
+</#if>
+
+</#list>
+<#if procedures?size != 0>
 # Procedure definitions
 
+</#if>
 <#list procedures as proc>
-<#if driverName == 'oracle' >
 ```sql
 CREATE OR REPLACE <#if proc.function>FUNCTION<#else>PROCEDURE</#if> ${proc.name}
 <#if proc.hasInput || proc.hasOutput >
@@ -60,5 +83,5 @@ EXCEPTION
 END;
 ```
 
-</#if>
 </#list>
+</#if>

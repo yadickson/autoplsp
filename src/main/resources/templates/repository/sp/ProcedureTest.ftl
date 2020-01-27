@@ -17,7 +17,7 @@ public class ${proc.className}SPTest {
     private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
 
     @Test
-    public void testDataSource() throws java.sql.SQLException {
+    public void test${proc.className}SPDataSource() throws java.sql.SQLException {
 
         Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
 

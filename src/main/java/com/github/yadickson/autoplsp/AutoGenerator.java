@@ -675,6 +675,7 @@ public class AutoGenerator extends AbstractMojo {
                     folderNameResourceGenerator,
                     outputDefinitionFileName,
                     spList,
+                    objects,
                     outParameterCode,
                     outParameterMessage,
                     successCode,

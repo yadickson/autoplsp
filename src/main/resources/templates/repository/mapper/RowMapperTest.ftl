@@ -26,7 +26,7 @@ public class ${parameter.javaTypeName}RowMapperTest {
     private java.sql.ResultSet resultSet;
 
     @Test
-    public void testMapper() throws java.sql.SQLException {
+    public void test${parameter.javaTypeName}RowMapper() throws java.sql.SQLException {
         ${parameter.javaTypeName}RowMapper mapper = new ${parameter.javaTypeName}RowMapper();
 
 <#list parameter.parameters as paramrs>

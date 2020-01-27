@@ -424,6 +424,16 @@ public class AutoGenerator extends AbstractMojo {
     private String fullConstructor;
 
     /**
+     * Driver name.
+     */
+    @Parameter(
+            property = "autoplsp.driverVersionName",
+            defaultValue = "ojdbc6",
+            readonly = true,
+            required = false)
+    private String driverVersionName;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -433,6 +443,7 @@ public class AutoGenerator extends AbstractMojo {
     public void execute() throws MojoExecutionException {
 
         getLog().info("[AutoGenerator] Driver: " + driver);
+        getLog().info("[AutoGenerator] DriverVersionName: " + driverVersionName);
         getLog().info("[AutoGenerator] ConnectionString: " + connectionString);
         getLog().info("[AutoGenerator] User: " + user);
         getLog().info("[AutoGenerator] Pass: ****");
@@ -627,7 +638,8 @@ public class AutoGenerator extends AbstractMojo {
                     successCode,
                     mappers,
                     generator.getName(),
-                    connManager.getVersion()
+                    connManager.getVersion(),
+                    driverVersionName
             );
 
             List<Table> fullTables = new ArrayList<Table>();

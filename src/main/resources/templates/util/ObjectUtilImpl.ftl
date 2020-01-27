@@ -25,8 +25,9 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 </#if>
-<#if driverName == 'oracle' >
+<#if driverName == 'oracle' && driverVersionName == 'ojdbc6' >
 
+import oracle.jdbc.OracleConnection;
 import oracle.sql.StructDescriptor;
 import oracle.sql.STRUCT;
 </#if>
@@ -69,15 +70,21 @@ public final class ObjectUtilImpl
         );
 <#else>
         try {
+<#if driverVersionName == 'ojdbc6' >
+
+            OracleConnection oConn = connection.unwrap(OracleConnection.class);
 
             StructDescriptor descriptor;
             descriptor = StructDescriptor.createDescriptor(
                     name,
-                    connection
+                    oConn
             );
 
-            return new STRUCT(descriptor, connection, objects);
+            return new STRUCT(descriptor, oConn, objects);
 
+<#else>
+            return connection.createStruct(name, objects);
+</#if>
         } catch (Exception ex) {
 <#if logger>
             LOGGER.error(ex.getMessage(), ex);

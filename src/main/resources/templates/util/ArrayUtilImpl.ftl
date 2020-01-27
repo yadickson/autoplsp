@@ -25,7 +25,7 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 </#if>
-<#if driverName == 'oracle' >
+<#if driverName == 'oracle' && driverVersionName == 'ojdbc6' >
 
 import oracle.jdbc.OracleConnection;
 </#if>
@@ -68,12 +68,18 @@ public final class ArrayUtilImpl
         );
 <#else>
         try {
+<#if driverVersionName == 'ojdbc6' >
 
-            return ((OracleConnection) connection).createARRAY(
+            OracleConnection oConn = connection.unwrap(OracleConnection.class);
+
+            return oConn.createARRAY(
                     name,
                     objects
             );
 
+<#else>
+            return connection.createArrayOf(name, objects);
+</#if>
         } catch (Exception ex) {
 <#if logger>
             LOGGER.error(ex.getMessage(), ex);

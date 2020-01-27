@@ -84,6 +84,7 @@ public final class JavaGenerator extends TemplateGenerator {
 
     private static final String DRIVER_NAME = "driverName";
     private static final String DRIVER_VERSION = "driverVersion";
+    private static final String DRIVER_VERSION_NAME = "driverVersionName";
 
     private boolean checkResult;
     private boolean processClob;
@@ -146,7 +147,8 @@ public final class JavaGenerator extends TemplateGenerator {
             final String successCode,
             final Map<String, String> mappers,
             final String driverName,
-            final String driverVersion) {
+            final String driverVersion,
+            final String driverVersionName) {
 
         super(outputDir, outputTestDir);
 
@@ -160,6 +162,7 @@ public final class JavaGenerator extends TemplateGenerator {
         INPUT_MAP.put(TRANSACTION_QUALITY_NAME, transactionQualityName);
         INPUT_MAP.put(DRIVER_NAME, driverName);
         INPUT_MAP.put(DRIVER_VERSION, driverVersion);
+        INPUT_MAP.put(DRIVER_VERSION_NAME, driverVersionName);
         INPUT_MAP.put(DATA_SOURCE_NAME, dataSource);
         INPUT_MAP.put(JDBC_TEMPLATE_NAME, jdbcTemplate);
         INPUT_MAP.put(ENCODE, encode);
@@ -264,6 +267,12 @@ public final class JavaGenerator extends TemplateGenerator {
 
             createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtil.ftl", getUtilOutputFilePath("ObjectUtil.java"));
             createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilImpl.ftl", getUtilOutputFilePath("ObjectUtilImpl.java"));
+
+            if (test) {
+                createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilTest.ftl", getUtilOutputFileTestPath("ArrayUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilTest.ftl", getUtilOutputFileTestPath("ObjectUtilTest.java"));
+            }
+
         }
 
         if (!procedure.isFunctionInline()) {

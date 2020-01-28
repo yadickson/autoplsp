@@ -87,7 +87,7 @@ public final class ObjectUtilImpl
             return new STRUCT(descriptor, oConn, objects);
 
 <#else>
-            return connection.createStruct(name, objects);
+            return oConn.createStruct(name, objects);
 </#if>
         } catch (Exception ex) {
 <#if logger>

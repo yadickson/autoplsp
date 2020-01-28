@@ -24,11 +24,9 @@ public class ObjectUtilTest {
     @InjectMocks
     ObjectUtilImpl objectUtil;
 <#if driverName == 'oracle'>
-<#if driverVersionName == 'ojdbc6'>
 
     @Mock
     private OracleConnection oracleConnection;
-</#if>
 <#if driverVersionName != 'ojdbc6' >
 
     @Mock
@@ -45,7 +43,7 @@ public class ObjectUtilTest {
         Object[] objects = new Object[0];
 
         Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
-        Mockito.when(connection.createStruct(Mockito.eq("NAME"), Mockito.same(objects))).thenReturn(struct);
+        Mockito.when(oracleConnection.createStruct(Mockito.eq("NAME"), Mockito.same(objects))).thenReturn(struct);
 
         Object result = objectUtil.process(connection, "NAME", objects);
 
@@ -61,7 +59,7 @@ public class ObjectUtilTest {
 
         Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
 <#if driverVersionName != 'ojdbc6' >
-        Mockito.when(connection.createStruct(Mockito.eq("NAME"), Mockito.same(objects))).thenThrow(new RuntimeException());
+        Mockito.when(oracleConnection.createStruct(Mockito.eq("NAME"), Mockito.same(objects))).thenThrow(new RuntimeException());
 </#if>
 </#if>
 

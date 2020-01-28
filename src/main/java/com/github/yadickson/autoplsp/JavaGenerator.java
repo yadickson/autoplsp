@@ -92,6 +92,8 @@ public final class JavaGenerator extends TemplateGenerator {
     private boolean processConnection;
     private boolean addTypeTable;
     private boolean addDateUtil;
+    private boolean addObjectUtil;
+    private boolean addArrayUtil;
 
     private static final Map<String, Object> INPUT_MAP = new HashMap<String, Object>();
 
@@ -195,6 +197,8 @@ public final class JavaGenerator extends TemplateGenerator {
         processConnection = false;
         addTypeTable = false;
         addDateUtil = false;
+        addObjectUtil = false;
+        addArrayUtil = false;
 
         for (Procedure procedure : procedures) {
 
@@ -261,17 +265,6 @@ public final class JavaGenerator extends TemplateGenerator {
 
             createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtil.ftl", getUtilOutputFilePath("ConnectionUtil.java"));
             createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtilImpl.ftl", getUtilOutputFilePath("ConnectionUtilImpl.java"));
-
-            createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtil.ftl", getUtilOutputFilePath("ArrayUtil.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilImpl.ftl", getUtilOutputFilePath("ArrayUtilImpl.java"));
-
-            createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtil.ftl", getUtilOutputFilePath("ObjectUtil.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilImpl.ftl", getUtilOutputFilePath("ObjectUtilImpl.java"));
-
-            if (test) {
-                createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilTest.ftl", getUtilOutputFileTestPath("ArrayUtilTest.java"));
-                createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilTest.ftl", getUtilOutputFileTestPath("ObjectUtilTest.java"));
-            }
 
         }
 
@@ -383,33 +376,50 @@ public final class JavaGenerator extends TemplateGenerator {
 
     public void processObjects(List<Parameter> objects) throws BusinessException {
 
-        String arrayPath = getArrayOutputPath("");
-        String objectPath = getObjectOutputPath("");
-
         for (Parameter param : objects) {
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + param.getName());
 
             if (param.isObject()) {
                 INPUT_MAP.put(PARAMETER_NAME, param);
                 createTemplate(INPUT_MAP, OBJECT_PATH + "package-info.ftl", getObjectOutputFilePath("package-info.java"));
-                createTemplate(INPUT_MAP, OBJECT_PATH + "Object.ftl", getFileNameObjectPath(objectPath, param.getJavaTypeName()));
-                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilder.ftl", getFileNameObjectPath(objectPath, param.getJavaTypeName() + "Builder"));
-                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderImpl.ftl", getFileNameObjectPath(objectPath, param.getJavaTypeName() + "BuilderImpl"));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "Object.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName()));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilder.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName() + "Builder"));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderImpl.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName() + "BuilderImpl"));
 
                 if (test) {
                     createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderTest.ftl", getFileNameObjectPath(getObjectOutputTestPath(""), param.getJavaTypeName() + "BuilderTest"));
+                }
+
+                if (!addObjectUtil) {
+                    addObjectUtil = true;
+                    createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtil.ftl", getUtilOutputFilePath("ObjectUtil.java"));
+                    createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilImpl.ftl", getUtilOutputFilePath("ObjectUtilImpl.java"));
+
+                    if (test) {
+                        createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilTest.ftl", getUtilOutputFileTestPath("ObjectUtilTest.java"));
+                    }
                 }
             }
 
             if (param.isArray()) {
                 INPUT_MAP.put(PARAMETER_NAME, param);
                 createTemplate(INPUT_MAP, ARRAY_PATH + "package-info.ftl", getArrayOutputFilePath("package-info.java"));
-                createTemplate(INPUT_MAP, ARRAY_PATH + "Array.ftl", getFileNameObjectPath(arrayPath, param.getJavaTypeName()));
-                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilder.ftl", getFileNameObjectPath(arrayPath, param.getJavaTypeName() + "Builder"));
-                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilderImpl.ftl", getFileNameObjectPath(arrayPath, param.getJavaTypeName() + "BuilderImpl"));
+                createTemplate(INPUT_MAP, ARRAY_PATH + "Array.ftl", getFileNameObjectPath(getArrayOutputPath(""), param.getJavaTypeName()));
+                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilder.ftl", getFileNameObjectPath(getArrayOutputPath(""), param.getJavaTypeName() + "Builder"));
+                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilderImpl.ftl", getFileNameObjectPath(getArrayOutputPath(""), param.getJavaTypeName() + "BuilderImpl"));
 
                 if (test) {
                     createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilderTest.ftl", getFileNameObjectPath(getArrayOutputTestPath(""), param.getJavaTypeName() + "BuilderTest"));
+                }
+
+                if (!addArrayUtil) {
+                    addArrayUtil = true;
+                    createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtil.ftl", getUtilOutputFilePath("ArrayUtil.java"));
+                    createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilImpl.ftl", getUtilOutputFilePath("ArrayUtilImpl.java"));
+
+                    if (test) {
+                        createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilTest.ftl", getUtilOutputFileTestPath("ArrayUtilTest.java"));
+                    }
                 }
             }
         }

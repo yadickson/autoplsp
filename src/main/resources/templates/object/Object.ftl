@@ -87,19 +87,21 @@ public final class ${parameter.javaTypeName}<#if serialization>
      */
     public ${parameter.javaTypeName}() {
     }
+</#if>
+<#if fullConstructor>
 
     /**
      * Class Constructor ${parameter.javaTypeName}.
      *
-    <#list parameter.parameters as parameter2>
+<#list parameter.parameters as parameter2>
      * @param p${parameter2.propertyName} set value of ${parameter2.fieldName}
-    </#list>
+</#list>
      */
     public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} p${parameter2.propertyName}<#sep>,${'\n'}            </#sep></#list>
     ) {
-        <#list parameter.parameters as parameter2>
-        this.${parameter2.fieldName} = p${parameter2.propertyName};
-        </#list>
+<#list parameter.parameters as parameter2>
+        set${parameter2.propertyName}(p${parameter2.propertyName});
+</#list>
     }
 </#if>
 <#list parameter.parameters as parameter2>

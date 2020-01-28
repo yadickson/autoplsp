@@ -7,6 +7,7 @@ package com.github.yadickson.autoplsp.db.common;
 
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  *
@@ -63,7 +64,7 @@ public final class TableField implements Serializable {
             final String charUsed
     ) {
         this.name = name;
-        this.type = type.toUpperCase();
+        this.type = type.toUpperCase(Locale.ENGLISH);
         this.position = position;
         this.minSize = minSize;
         this.maxSize = maxSize;
@@ -71,7 +72,7 @@ public final class TableField implements Serializable {
         this.maxNumberValue = maxNumberValue;
         this.notNull = "1".equals(notNull);
         this.defaultValue = defaultValue;
-        this.charUsed = charUsed == null ? null : charUsed.toUpperCase();
+        this.charUsed = charUsed == null ? null : charUsed.toUpperCase(Locale.ENGLISH);
     }
 
     /**

@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 <#if driverName == 'oracle'>
 
-<#if driverVersionName == 'ojdbc6'>
 import oracle.jdbc.OracleConnection;
-</#if>
 <#if driverVersionName != 'ojdbc6' >
 import java.sql.Struct;
 </#if>
@@ -46,6 +44,7 @@ public class ObjectUtilTest {
     public void testProcessObject() throws SQLException {
         Object[] objects = new Object[0];
 
+        Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
         Mockito.when(connection.createStruct(Mockito.eq("NAME"), Mockito.same(objects))).thenReturn(struct);
 
         Object result = objectUtil.process(connection, "NAME", objects);
@@ -60,9 +59,8 @@ public class ObjectUtilTest {
         Object[] objects = new Object[0];
 <#if driverName == 'oracle' >
 
-<#if driverVersionName == 'ojdbc6' >
         Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
-<#else>
+<#if driverVersionName != 'ojdbc6' >
         Mockito.when(connection.createStruct(Mockito.eq("NAME"), Mockito.same(objects))).thenThrow(new RuntimeException());
 </#if>
 </#if>

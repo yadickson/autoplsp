@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 <#if driverName == 'oracle'>
 
-<#if driverVersionName == 'ojdbc6' >
 import oracle.jdbc.OracleConnection;
+<#if driverVersionName == 'ojdbc6' >
 import oracle.sql.ARRAY;
 <#else>
 import java.sql.Array;
@@ -25,7 +25,7 @@ public class ArrayUtilTest {
 
     @InjectMocks
     ArrayUtilImpl arrayUtil;
-<#if driverName == 'oracle' && driverVersionName == 'ojdbc6'>
+<#if driverName == 'oracle'>
 
     @Mock
     private OracleConnection oracleConnection;
@@ -42,12 +42,8 @@ public class ArrayUtilTest {
     public void testProcessArray() throws SQLException {
         Object[] objects = new Object[0];
 
-<#if driverVersionName == 'ojdbc6' >
         Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
-        Mockito.when(oracleConnection.createARRAY(Mockito.eq("NAME"), Mockito.same(objects))).thenReturn(array);
-<#else>
-        Mockito.when(connection.createArrayOf(Mockito.eq("NAME"), Mockito.same(objects))).thenReturn(array);
-</#if>
+        Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(Mockito.eq("NAME"), Mockito.same(objects))).thenReturn(array);
 
         Object result = arrayUtil.process(connection, "NAME", objects);
 
@@ -60,16 +56,11 @@ public class ArrayUtilTest {
     public void testProcessArrayError() throws SQLException {
         Object[] objects = new Object[0];
 <#if driverName == 'oracle' >
-<#if driverVersionName == 'ojdbc6' >
 
         Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
-        Mockito.when(oracleConnection.createARRAY(Mockito.eq("NAME"), Mockito.same(objects))).thenThrow(new RuntimeException());
-<#else>
+        Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(Mockito.eq("NAME"), Mockito.same(objects))).thenThrow(new RuntimeException());
 
-        Mockito.when(connection.createArrayOf(Mockito.eq("NAME"), Mockito.same(objects))).thenThrow(new RuntimeException());
 </#if>
-</#if>
-
         arrayUtil.process(connection, "NAME", objects);
     }
 }

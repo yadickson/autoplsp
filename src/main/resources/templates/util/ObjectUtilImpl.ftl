@@ -25,11 +25,13 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 </#if>
-<#if driverName == 'oracle' && driverVersionName == 'ojdbc6' >
+<#if driverName == 'oracle'>
 
 import oracle.jdbc.OracleConnection;
+<#if driverVersionName == 'ojdbc6' >
 import oracle.sql.StructDescriptor;
 import oracle.sql.STRUCT;
+</#if>
 </#if>
 
 import org.springframework.stereotype.Component;
@@ -41,7 +43,9 @@ import org.springframework.stereotype.Component;
  * @version @GENERATOR.VERSION@
  */
 @Component
+<#if driverVersionName == 'ojdbc6' >
 @SuppressWarnings({"deprecation"})
+</#if>
 public final class ObjectUtilImpl
         implements ObjectUtil {
 <#if logger>
@@ -70,9 +74,9 @@ public final class ObjectUtilImpl
         );
 <#else>
         try {
-<#if driverVersionName == 'ojdbc6' >
 
             OracleConnection oConn = connection.unwrap(OracleConnection.class);
+<#if driverVersionName == 'ojdbc6' >
 
             StructDescriptor descriptor;
             descriptor = StructDescriptor.createDescriptor(

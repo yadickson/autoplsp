@@ -25,7 +25,7 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 </#if>
-<#if driverName == 'oracle' && driverVersionName == 'ojdbc6' >
+<#if driverName == 'oracle'>
 
 import oracle.jdbc.OracleConnection;
 </#if>
@@ -39,7 +39,9 @@ import org.springframework.stereotype.Component;
  * @version @GENERATOR.VERSION@
  */
 @Component
+<#if driverVersionName == 'ojdbc6' >
 @SuppressWarnings({"deprecation"})
+</#if>
 public final class ArrayUtilImpl
         implements ArrayUtil {
 <#if logger>
@@ -68,18 +70,10 @@ public final class ArrayUtilImpl
         );
 <#else>
         try {
-<#if driverVersionName == 'ojdbc6' >
 
             OracleConnection oConn = connection.unwrap(OracleConnection.class);
+            return oConn.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(name, objects);
 
-            return oConn.createARRAY(
-                    name,
-                    objects
-            );
-
-<#else>
-            return connection.createArrayOf(name, objects);
-</#if>
         } catch (Exception ex) {
 <#if logger>
             LOGGER.error(ex.getMessage(), ex);

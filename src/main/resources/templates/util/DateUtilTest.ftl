@@ -9,19 +9,19 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ${prefixUtilityName}DateUtilTest {
 
     @Test
-    public void testCreate() throws java.sql.SQLException {
-        Assert.assertNotNull(new DateUtil());
+    public void testCreate() {
+        Assert.assertNotNull(new ${prefixUtilityName}DateUtil());
     }
 
     @Test
-    public void testInputNull() throws java.sql.SQLException {
-        Assert.assertNull(DateUtil.process(null));
+    public void testInputNull() {
+        Assert.assertNull(${prefixUtilityName}DateUtil.process(null));
     }
 
     @Test
-    public void testInputNotNull() throws java.sql.SQLException {
+    public void testInputNotNull() {
         java.util.Date date = new java.util.Date();
-        java.util.Date result = DateUtil.process(date);
+        java.util.Date result = ${prefixUtilityName}DateUtil.process(date);
         Assert.assertNotNull(result);
         Assert.assertNotSame(date, result);
         Assert.assertEquals(date, result);

@@ -39,6 +39,7 @@ public final class JavaGenerator extends TemplateGenerator {
     private final String javaPackage;
     private final Boolean test;
     private final String folderNameGenerator;
+    private final String prefixUtilityName;
 
     private final Map<String, String> mappers;
 
@@ -85,6 +86,7 @@ public final class JavaGenerator extends TemplateGenerator {
     private static final String DRIVER_NAME = "driverName";
     private static final String DRIVER_VERSION = "driverVersion";
     private static final String DRIVER_VERSION_NAME = "driverVersionName";
+    private static final String PREFIX_UTILITY_NAME = "prefixUtilityName";
 
     private boolean checkResult;
     private boolean processClob;
@@ -124,6 +126,8 @@ public final class JavaGenerator extends TemplateGenerator {
      * @param mappers The mappers.
      * @param driverName driver name
      * @param driverVersion driver version
+     * @param driverVersionName driver version name.
+     * @param prefixUtilityName prefix utility name.
      */
     public JavaGenerator(
             final String outputDir,
@@ -150,12 +154,15 @@ public final class JavaGenerator extends TemplateGenerator {
             final Map<String, String> mappers,
             final String driverName,
             final String driverVersion,
-            final String driverVersionName) {
+            final String driverVersionName,
+            final String prefixUtilityName) {
 
         super(outputDir, outputTestDir);
 
         this.javaPackage = javaPackage;
         this.folderNameGenerator = folderNameGenerator;
+        this.prefixUtilityName = prefixUtilityName;
+
         this.test = test;
         this.mappers = mappers;
 
@@ -179,6 +186,7 @@ public final class JavaGenerator extends TemplateGenerator {
         INPUT_MAP.put(SUCCESS_CODE, successCode);
         INPUT_MAP.put(OUT_CODE_NAME, outParameterCode);
         INPUT_MAP.put(OUT_MESSAGE_NAME, outParameterMessage);
+        INPUT_MAP.put(PREFIX_UTILITY_NAME, prefixUtilityName);
     }
 
     /**
@@ -219,43 +227,43 @@ public final class JavaGenerator extends TemplateGenerator {
         if (procedure.isCheckResult() && !checkResult) {
             checkResult = true;
             createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "CheckResult.ftl", getUtilOutputFilePath("CheckResult.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "CheckResultImpl.ftl", getUtilOutputFilePath("CheckResultImpl.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "CheckResult.ftl", getUtilOutputFilePath(this.prefixUtilityName + "CheckResult.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "CheckResultImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "CheckResultImpl.java"));
 
             if (test) {
-                createTemplate(INPUT_MAP, UTIL_PATH + "CheckResultTest.ftl", getUtilOutputFileTestPath("CheckResultTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "CheckResultTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "CheckResultTest.java"));
             }
         }
 
         if (procedure.getHasDate() && !addDateUtil) {
             addDateUtil = true;
             createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath("DateUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtil.java"));
 
             if (test) {
-                createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath("DateUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "DateUtilTest.java"));
             }
         }
 
         if (procedure.getHasOutputClob() && !processClob) {
             processClob = true;
             createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtil.ftl", getUtilOutputFilePath("ClobUtil.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilImpl.ftl", getUtilOutputFilePath("ClobUtilImpl.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ClobUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ClobUtilImpl.java"));
 
             if (test) {
-                createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilTest.ftl", getUtilOutputFileTestPath("ClobUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "ClobUtilTest.java"));
             }
         }
 
         if (procedure.getHasOutputBlob() && !processBlob) {
             processBlob = true;
             createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtil.ftl", getUtilOutputFilePath("BlobUtil.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilImpl.ftl", getUtilOutputFilePath("BlobUtilImpl.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "BlobUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "BlobUtilImpl.java"));
 
             if (test) {
-                createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilTest.ftl", getUtilOutputFileTestPath("BlobUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "BlobUtilTest.java"));
             }
         }
 
@@ -263,8 +271,8 @@ public final class JavaGenerator extends TemplateGenerator {
             processConnection = true;
             createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
 
-            createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtil.ftl", getUtilOutputFilePath("ConnectionUtil.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtilImpl.ftl", getUtilOutputFilePath("ConnectionUtilImpl.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ConnectionUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ConnectionUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ConnectionUtilImpl.java"));
 
         }
 
@@ -392,11 +400,11 @@ public final class JavaGenerator extends TemplateGenerator {
 
                 if (!addObjectUtil) {
                     addObjectUtil = true;
-                    createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtil.ftl", getUtilOutputFilePath("ObjectUtil.java"));
-                    createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilImpl.ftl", getUtilOutputFilePath("ObjectUtilImpl.java"));
+                    createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ObjectUtil.java"));
+                    createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ObjectUtilImpl.java"));
 
                     if (test) {
-                        createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilTest.ftl", getUtilOutputFileTestPath("ObjectUtilTest.java"));
+                        createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "ObjectUtilTest.java"));
                     }
                 }
             }
@@ -414,11 +422,11 @@ public final class JavaGenerator extends TemplateGenerator {
 
                 if (!addArrayUtil) {
                     addArrayUtil = true;
-                    createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtil.ftl", getUtilOutputFilePath("ArrayUtil.java"));
-                    createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilImpl.ftl", getUtilOutputFilePath("ArrayUtilImpl.java"));
+                    createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ArrayUtil.java"));
+                    createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ArrayUtilImpl.java"));
 
                     if (test) {
-                        createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilTest.ftl", getUtilOutputFileTestPath("ArrayUtilTest.java"));
+                        createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "ArrayUtilTest.java"));
                     }
                 }
             }

@@ -52,22 +52,22 @@ import ${javaPackage}.repository.sp.${proc.className}SP;
 import ${javaPackage}.repository.sp.${proc.className}SqlQuery;
 </#if>
 <#if importArrayUtil??>
-import ${javaPackage}.util.ArrayUtil;
+import ${javaPackage}.util.${prefixUtilityName}ArrayUtil;
 </#if>
 <#if importBlobUtil??>
-import ${javaPackage}.util.BlobUtil;
+import ${javaPackage}.util.${prefixUtilityName}BlobUtil;
 </#if>
 <#if proc.checkResult>
-import ${javaPackage}.util.CheckResult;
+import ${javaPackage}.util.${prefixUtilityName}CheckResult;
 </#if>
 <#if importClobUtil??>
-import ${javaPackage}.util.ClobUtil;
+import ${javaPackage}.util.${prefixUtilityName}ClobUtil;
 </#if>
 <#if importConnectionUtils??>
-import ${javaPackage}.util.ConnectionUtil;
+import ${javaPackage}.util.${prefixUtilityName}ConnectionUtil;
 </#if>
 <#if importObjectUtil??>
-import ${javaPackage}.util.ObjectUtil;
+import ${javaPackage}.util.${prefixUtilityName}ObjectUtil;
 </#if>
 <#list proc.objectImports as parameter>
 import ${javaPackage}.object.${parameter.javaTypeName}Builder;
@@ -142,7 +142,7 @@ public final class ${proc.className}DAOImpl
      * Array utility.
      */
     @Autowired
-    private ArrayUtil arrayUtil;
+    private ${prefixUtilityName}ArrayUtil arrayUtil;
 
 </#if>
 <#if importBlobUtil??>
@@ -150,7 +150,7 @@ public final class ${proc.className}DAOImpl
      * Blob utility.
      */
     @Autowired
-    private BlobUtil blobUtil;
+    private ${prefixUtilityName}BlobUtil blobUtil;
 
 </#if>
 <#if proc.checkResult>
@@ -158,7 +158,7 @@ public final class ${proc.className}DAOImpl
      * Check result utility.
      */
     @Autowired
-    private CheckResult checkResult;
+    private ${prefixUtilityName}CheckResult checkResult;
 
 </#if>
 <#if importClobUtil??>
@@ -166,7 +166,7 @@ public final class ${proc.className}DAOImpl
      * Clob utility.
      */
     @Autowired
-    private ClobUtil clobUtil;
+    private ${prefixUtilityName}ClobUtil clobUtil;
 
 </#if>
 <#if importConnectionUtils??>
@@ -174,7 +174,7 @@ public final class ${proc.className}DAOImpl
      * The connection util.
      */
     @Autowired
-    private ConnectionUtil connectionUtil;
+    private ${prefixUtilityName}ConnectionUtil connectionUtil;
 
 </#if>
 <#if importObjectUtil??>
@@ -182,7 +182,7 @@ public final class ${proc.className}DAOImpl
      * Object utility.
      */
     @Autowired
-    private ObjectUtil objectUtil;
+    private ${prefixUtilityName}ObjectUtil objectUtil;
 
 </#if>
     /**

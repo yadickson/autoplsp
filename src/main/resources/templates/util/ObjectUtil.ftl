@@ -27,7 +27,7 @@ import java.sql.SQLException;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface ObjectUtil {
+public interface ${prefixUtilityName}ObjectUtil {
 
     /**
      * Getter data object type.

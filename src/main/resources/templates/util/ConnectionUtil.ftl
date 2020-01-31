@@ -26,7 +26,7 @@ import java.sql.Connection;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface ConnectionUtil {
+public interface ${prefixUtilityName}ConnectionUtil {
 
     /**
      * Getter current connection.

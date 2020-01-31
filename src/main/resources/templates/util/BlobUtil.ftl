@@ -24,7 +24,7 @@ package ${javaPackage}.util;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface BlobUtil {
+public interface ${prefixUtilityName}BlobUtil {
 
     /**
      * Process blob parameter from database.

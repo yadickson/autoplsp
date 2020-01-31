@@ -27,7 +27,7 @@ import java.util.Map;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface CheckResult {
+public interface ${prefixUtilityName}CheckResult {
 
     /**
      * Evaluate output parameters from database.

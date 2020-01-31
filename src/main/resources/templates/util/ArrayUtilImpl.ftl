@@ -42,8 +42,8 @@ import org.springframework.stereotype.Component;
 <#if driverVersionName == 'ojdbc6' >
 @SuppressWarnings({"deprecation"})
 </#if>
-public final class ArrayUtilImpl
-        implements ArrayUtil {
+public final class ${prefixUtilityName}ArrayUtilImpl
+        implements ${prefixUtilityName}ArrayUtil {
 <#if logger>
 
     /**

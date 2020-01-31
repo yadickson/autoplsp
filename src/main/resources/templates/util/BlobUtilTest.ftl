@@ -7,10 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BlobUtilTest {
+public class ${prefixUtilityName}BlobUtilTest {
 
     @InjectMocks
-    BlobUtilImpl blobUtil;
+    ${prefixUtilityName}BlobUtilImpl blobUtil;
 
     @Test
     public void testInputNull() {

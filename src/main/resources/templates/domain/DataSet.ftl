@@ -24,7 +24,7 @@ package ${javaPackage}.domain;
 </#if>
 </#list>
 <#if importDateUtil??>
-import ${javaPackage}.util.DateUtil;
+import ${javaPackage}.util.${prefixUtilityName}DateUtil;
 
 import java.util.Date;
 
@@ -132,7 +132,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      * @return The ${parameter2.name} value.
      */
     public ${parameter2.javaTypeName} get${parameter2.propertyName}() {
-        return <#if parameter2.date>DateUtil.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
+        return <#if parameter2.date>${prefixUtilityName}DateUtil.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
     }
 
     /**
@@ -145,7 +145,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      * @param c${parameter2.propertyName} ${parameter2.name} to set
      */
     public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} c${parameter2.propertyName}) {
-        this.${parameter2.fieldName} = <#if parameter2.date>DateUtil.process(</#if>c${parameter2.propertyName}<#if parameter2.date>)</#if>;
+        this.${parameter2.fieldName} = <#if parameter2.date>${prefixUtilityName}DateUtil.process(</#if>c${parameter2.propertyName}<#if parameter2.date>)</#if>;
     }
 </#if>
 </#list>

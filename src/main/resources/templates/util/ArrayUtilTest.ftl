@@ -21,10 +21,10 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ArrayUtilTest {
+public class ${prefixUtilityName}ArrayUtilTest {
 
     @InjectMocks
-    ArrayUtilImpl arrayUtil;
+    ${prefixUtilityName}ArrayUtilImpl arrayUtil;
 <#if driverName == 'oracle'>
 
     @Mock

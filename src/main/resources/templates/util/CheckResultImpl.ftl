@@ -36,7 +36,8 @@ import org.springframework.stereotype.Component;
  * @version @GENERATOR.VERSION@
  */
 @Component
-public final class CheckResultImpl implements CheckResult {
+public final class ${prefixUtilityName}CheckResultImpl
+        implements ${prefixUtilityName}CheckResult {
 <#if logger>
 
     /**

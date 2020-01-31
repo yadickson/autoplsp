@@ -46,7 +46,8 @@ import org.springframework.stereotype.Component;
  * @version @GENERATOR.VERSION@
  */
 @Component
-public final class ConnectionUtilImpl implements ConnectionUtil {
+public final class ${prefixUtilityName}ConnectionUtilImpl implements
+        ${prefixUtilityName}ConnectionUtil {
 <#if logger>
 
     /**

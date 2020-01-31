@@ -23,12 +23,12 @@ package ${javaPackage}.util;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public final class DateUtil {
+public final class ${prefixUtilityName}DateUtil {
 
     /**
      * Class constructor.
      */
-    protected DateUtil() {
+    protected ${prefixUtilityName}DateUtil() {
 
     }
 

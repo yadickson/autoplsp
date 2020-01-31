@@ -23,7 +23,7 @@ package ${javaPackage}.util;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface ClobUtil {
+public interface ${prefixUtilityName}ClobUtil {
 
     /**
      * Process clob parameter from database.

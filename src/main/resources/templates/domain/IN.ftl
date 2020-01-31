@@ -30,7 +30,7 @@ import ${javaPackage}.object.${parameter.javaTypeName};
 </#if>
 </#list>
 <#if importDateUtil??>
-import ${javaPackage}.util.DateUtil;
+import ${javaPackage}.util.${prefixUtilityName}DateUtil;
 
 import java.util.Date;
 
@@ -127,7 +127,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      * @return The ${parameter.name} value
      */
     public ${parameter.javaTypeName} get${parameter.propertyName}() {
-        return <#if parameter.date>DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
+        return <#if parameter.date>${prefixUtilityName}DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
 
     /**
@@ -138,7 +138,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      * @param p${parameter.propertyName} ${parameter.name} to set
      */
     public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
-        this.${parameter.fieldName} = <#if parameter.date>DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
+        this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
     }
 </#if>
 </#list>

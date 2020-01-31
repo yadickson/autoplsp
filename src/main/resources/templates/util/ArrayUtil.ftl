@@ -27,7 +27,7 @@ import java.sql.SQLException;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface ArrayUtil {
+public interface ${prefixUtilityName}ArrayUtil {
 
     /**
      * Getter database array type.

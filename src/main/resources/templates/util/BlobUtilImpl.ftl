@@ -37,7 +37,8 @@ import org.springframework.stereotype.Component;
  * @version @GENERATOR.VERSION@
  */
 @Component
-public final class BlobUtilImpl implements BlobUtil {
+public final class ${prefixUtilityName}BlobUtilImpl
+        implements ${prefixUtilityName}BlobUtil {
 <#if logger>
 
     /**

@@ -47,16 +47,16 @@ import ${javaPackage}.object.${parameter.javaTypeName};
 import ${javaPackage}.object.${parameter.javaTypeName}Builder;
 </#list>
 <#if importBlobUtil??>
-import ${javaPackage}.util.BlobUtil;
+import ${javaPackage}.util.${prefixUtilityName}BlobUtil;
 </#if>
 <#if proc.checkResult>
-import ${javaPackage}.util.CheckResult;
+import ${javaPackage}.util.${prefixUtilityName}CheckResult;
 </#if>
 <#if importClobUtil??>
-import ${javaPackage}.util.ClobUtil;
+import ${javaPackage}.util.${prefixUtilityName}ClobUtil;
 </#if>
 <#if importConnectionUtils??>
-import ${javaPackage}.util.ConnectionUtil;
+import ${javaPackage}.util.${prefixUtilityName}ConnectionUtil;
 </#if>
 
 <#if importDate??>
@@ -87,17 +87,17 @@ public class ${proc.className}DAOTest {
 <#if importBlobUtil??>
 
     @Mock
-    private BlobUtil blobUtil;
+    private ${prefixUtilityName}BlobUtil blobUtil;
 </#if>
 <#if proc.checkResult>
 
     @Mock
-    private CheckResult checkResult;
+    private ${prefixUtilityName}CheckResult checkResult;
 </#if>
 <#if importClobUtil??>
 
     @Mock
-    private ClobUtil clobUtil;
+    private ${prefixUtilityName}ClobUtil clobUtil;
 </#if>
 <#if importConnectionUtils??>
 
@@ -105,7 +105,7 @@ public class ${proc.className}DAOTest {
     private Connection connection;
 
     @Mock
-    private ConnectionUtil connectionUtil;
+    private ${prefixUtilityName}ConnectionUtil connectionUtil;
 <#list proc.arrayImports as parameter>
 
     @Mock

@@ -434,6 +434,16 @@ public class AutoGenerator extends AbstractMojo {
     private String driverVersionName;
 
     /**
+     * Prefix utility name.
+     */
+    @Parameter(
+            property = "autoplsp.prefixUtilityName",
+            defaultValue = "",
+            readonly = true,
+            required = false)
+    private String prefixUtilityName;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -476,6 +486,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] SuccessCode: " + successCode);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
+        getLog().info("[AutoGenerator] PrefixUtilityName: " + prefixUtilityName);
 
         if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
             throw new MojoExecutionException("Fail make " + outputDirectory + " directory.");
@@ -639,7 +650,8 @@ public class AutoGenerator extends AbstractMojo {
                     mappers,
                     generator.getName(),
                     connManager.getVersion(),
-                    driverVersionName
+                    driverVersionName,
+                    prefixUtilityName
             );
 
             List<Table> fullTables = new ArrayList<Table>();

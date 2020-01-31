@@ -24,7 +24,7 @@ package ${javaPackage}.domain;
 </#if>
 </#list>
 <#if importDateUtil??>
-import ${javaPackage}.util.DateUtil;
+import ${javaPackage}.util.${prefixUtilityName}DateUtil;
 
 import java.util.Date;
 
@@ -123,7 +123,7 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
      * @return The ${parameter.name} value.
      */
     public <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
-        return <#if parameter.date>DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
+        return <#if parameter.date>${prefixUtilityName}DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
 
     /**
@@ -134,7 +134,7 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
      * @param p${parameter.propertyName} ${parameter.name} to set
      */
     public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
-        this.${parameter.fieldName} = <#if parameter.date>DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
+        this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
     }
 </#if>
 </#list>

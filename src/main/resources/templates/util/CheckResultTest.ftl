@@ -6,10 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CheckResultTest {
+public class ${prefixUtilityName}CheckResultTest {
 
     @InjectMocks
-    CheckResultImpl checkResult;
+    ${prefixUtilityName}CheckResultImpl checkResult;
 
     @Test
     public void testInputNull() throws java.sql.SQLException {

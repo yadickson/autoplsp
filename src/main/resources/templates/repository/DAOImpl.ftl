@@ -244,13 +244,11 @@ public final class ${proc.className}DAOImpl
 
 <#list proc.inputParameters as parameter>
 <#if parameter.array || parameter.object>
-            in.put(
-                    "${parameter.prefix}${parameter.name}",
+            in.put("${parameter.prefix}${parameter.name}",
                     ${parameter.fieldName}
             );
 <#else>
-            in.put(
-                    "${parameter.prefix}${parameter.name}",
+            in.put("${parameter.prefix}${parameter.name}",
                     params.get${parameter.propertyName}()
             );
 </#if>

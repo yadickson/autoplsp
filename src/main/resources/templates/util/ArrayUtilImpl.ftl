@@ -71,8 +71,9 @@ public final class ${prefixUtilityName}ArrayUtilImpl
 <#else>
         try {
 
-            OracleConnection oConn = connection.unwrap(OracleConnection.class);
-            return oConn.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(name, objects);
+            OracleConnection <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>;
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if> = connection.unwrap(OracleConnection.class);
+            return <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(name, objects);
 
         } catch (Exception ex) {
 <#if logger>

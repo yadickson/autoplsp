@@ -71,22 +71,22 @@ public final class ${prefixUtilityName}ConnectionUtilImpl implements
     @Override
     public Connection process() {
 
-        Connection connection;
+        Connection <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>;
 
         try {
 
-            connection = DataSourceUtils.getConnection(
-                 jdbcTemplate.getDataSource()
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if> = DataSourceUtils.getConnection(
+                    jdbcTemplate.getDataSource()
             );
 
         } catch (Exception ex) {
 <#if logger>
             LOGGER.error(ex.getMessage(), ex);
 </#if>
-            connection = null;
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if> = null;
         }
 
-        return connection;
+        return <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>;
     }
 
     /**
@@ -95,22 +95,22 @@ public final class ${prefixUtilityName}ConnectionUtilImpl implements
     @Override
     public boolean release(final Connection connection) {
 
-        boolean result;
+        boolean <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Result<#else>result</#if>;
 
         try {
 
             DataSourceUtils.releaseConnection(
-                connection,
-                jdbcTemplate.getDataSource()
+                    connection,
+                    jdbcTemplate.getDataSource()
             );
 
-            result = true;
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Result<#else>result</#if> = true;
 
         } catch (Exception ex) {
-            result = false;
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Result<#else>result</#if> = false;
         }
 
-        return result;
+        return <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Result<#else>result</#if>;
     }
 
 }

@@ -61,18 +61,18 @@ public final class ${prefixUtilityName}DateUtilImpl
             return null;
         }
 
-        DATE date;
+        DATE <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Date<#else>date</#if>;
 
         try {
-            date = new DATE(new java.sql.Date(param.getTime()));
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Date<#else>date</#if> = new DATE(new java.sql.Date(param.getTime()));
         } catch (Exception ex) {
 <#if logger>
             LOGGER.error(ex.getMessage(), ex);
 </#if>
-            date = null;
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Date<#else>date</#if> = null;
         }
 
-        return date;
+        return <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Date<#else>date</#if>;
 </#if>
     }
 

@@ -75,19 +75,24 @@ public final class ${prefixUtilityName}ObjectUtilImpl
 <#else>
         try {
 
-            OracleConnection oConn = connection.unwrap(OracleConnection.class);
+            OracleConnection <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>;
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if> = connection.unwrap(OracleConnection.class);
 <#if driverVersionName == 'ojdbc6' >
 
             StructDescriptor descriptor;
             descriptor = StructDescriptor.createDescriptor(
                     name,
-                    oConn
+                    <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>
             );
 
-            return new STRUCT(descriptor, oConn, objects);
+            return new STRUCT(
+                    descriptor,
+                    <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>,
+                    objects
+            );
 
 <#else>
-            return oConn.createStruct(name, objects);
+            return <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>.createStruct(name, objects);
 </#if>
         } catch (Exception ex) {
 <#if logger>

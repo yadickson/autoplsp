@@ -103,16 +103,17 @@ public final class ${prefixUtilityName}BlobUtilImpl
 
         try {
 
-            OracleConnection oConn = connection.unwrap(OracleConnection.class);
+            OracleConnection <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>;
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if> = connection.unwrap(OracleConnection.class);
 
             blob = BLOB.createTemporary(
-                    oConn,
+                    <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>,
                     false,
                     BLOB.DURATION_SESSION
             );
 
-            try (OutputStream stream = blob.getBinaryOutputStream()) {
-                stream.write(param);
+            try (OutputStream <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Stream<#else>stream</#if> = blob.getBinaryOutputStream()) {
+                <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Stream<#else>stream</#if>.write(param);
             } catch (Exception ex) {
 <#if logger>
                 LOGGER.error(ex.getMessage(), ex);

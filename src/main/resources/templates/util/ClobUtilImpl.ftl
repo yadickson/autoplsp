@@ -104,16 +104,17 @@ public final class ${prefixUtilityName}ClobUtilImpl
 
         try {
 
-            OracleConnection oConn = connection.unwrap(OracleConnection.class);
+            OracleConnection <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>;
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if> = connection.unwrap(OracleConnection.class);
 
             clob = CLOB.createTemporary(
-                    oConn,
+                    <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>,
                     false,
                     CLOB.DURATION_SESSION
             );
 
-            try (Writer writer = clob.getCharacterOutputStream()) {
-                writer.write(param.toCharArray());
+            try (Writer <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Writer<#else>writer</#if> = clob.getCharacterOutputStream()) {
+                <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Writer<#else>writer</#if>.write(param.toCharArray());
             } catch (Exception ex) {
 <#if logger>
                 LOGGER.error(ex.getMessage(), ex);

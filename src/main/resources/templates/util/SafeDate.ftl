@@ -17,6 +17,8 @@
 </#if>
 package ${javaPackage}.util;
 
+import java.util.Date;
+
 /**
  * Utility to process date class.
  *
@@ -35,16 +37,16 @@ public final class ${prefixUtilityName}SafeDate {
     /**
      * Process date.
      *
-     * @param input date to process.
+     * @param <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Input<#else>input</#if> input date to process.
      * @return date.
      */
-    public static java.util.Date process(final java.util.Date input) {
+    public static Date process(final Date <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Input<#else>input</#if>) {
 
-        if (input == null) {
+        if (<#if prefixUtilityName??>${prefixUtilityName?uncap_first}Input<#else>input</#if> == null) {
             return null;
         }
 
-        return (java.util.Date) input.clone();
+        return (Date) <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Input<#else>input</#if>.clone();
     }
 
 }

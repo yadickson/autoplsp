@@ -5,7 +5,7 @@ package ${javaPackage}.repository.mapper;
 </#if>
 </#list>
 
-import ${javaPackage}.domain.${parameter.javaTypeName};
+import ${javaPackage}.cursor.${parameter.javaTypeName};
 <#if importDate??>
 
 import java.util.Date;

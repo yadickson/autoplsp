@@ -107,13 +107,17 @@ public final class ${prefixUtilityName}ClobUtilImpl
             OracleConnection <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>;
             <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if> = connection.unwrap(OracleConnection.class);
 
+<#if driverVersionName != 'ojdbc6' >
+            clob = <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>.createClob();
+<#else>
             clob = CLOB.createTemporary(
                     <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>,
                     false,
                     CLOB.DURATION_SESSION
             );
+</#if>
 
-            try (Writer <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Writer<#else>writer</#if> = clob.getCharacterOutputStream()) {
+            try (Writer <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Writer<#else>writer</#if> = clob.<#if driverVersionName != 'ojdbc6' >setCharacterStream(0)<#else>getCharacterOutputStream()</#if>) {
                 <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Writer<#else>writer</#if>.write(param.toCharArray());
             } catch (Exception ex) {
 <#if logger>

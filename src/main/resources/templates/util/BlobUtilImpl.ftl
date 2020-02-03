@@ -106,13 +106,17 @@ public final class ${prefixUtilityName}BlobUtilImpl
             OracleConnection <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>;
             <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if> = connection.unwrap(OracleConnection.class);
 
+<#if driverVersionName != 'ojdbc6' >
+            blob = <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>.createBlob();
+<#else>
             blob = BLOB.createTemporary(
                     <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>,
                     false,
                     BLOB.DURATION_SESSION
             );
+</#if>
 
-            try (OutputStream <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Stream<#else>stream</#if> = blob.getBinaryOutputStream()) {
+            try (OutputStream <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Stream<#else>stream</#if> = blob.<#if driverVersionName != 'ojdbc6' >setBinaryStream(0)<#else>getBinaryOutputStream()</#if>) {
                 <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Stream<#else>stream</#if>.write(param);
             } catch (Exception ex) {
 <#if logger>

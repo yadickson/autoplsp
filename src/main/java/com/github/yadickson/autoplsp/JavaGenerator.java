@@ -76,6 +76,7 @@ public final class JavaGenerator extends TemplateGenerator {
     private static final String DOMAIN_PATH = File.separatorChar + "domain" + File.separatorChar;
     private static final String ARRAY_PATH = File.separatorChar + "array" + File.separatorChar;
     private static final String OBJECT_PATH = File.separatorChar + "object" + File.separatorChar;
+    private static final String CURSOR_PATH = File.separatorChar + "cursor" + File.separatorChar;
     private static final String UTIL_PATH = File.separatorChar + "util" + File.separatorChar;
 
     private static final String TABLE_PATH = File.separatorChar + TABLE_NAME + File.separatorChar;
@@ -344,13 +345,11 @@ public final class JavaGenerator extends TemplateGenerator {
             return;
         }
 
-        String parameterPath = getDomainOutputPath("");
-
         for (Parameter param : procedure.getParameters()) {
             if (param.isResultSet() || param.isReturnResultSet()) {
                 INPUT_MAP.put(PARAMETER_NAME, param);
-                createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
-                createTemplate(INPUT_MAP, DOMAIN_PATH + "DataSet.ftl", getFileNamePath(parameterPath, procedure, param, "RS"));
+                createTemplate(INPUT_MAP, CURSOR_PATH + "package-info.ftl", getCursorOutputFilePath("package-info.java"));
+                createTemplate(INPUT_MAP, CURSOR_PATH + "DataSet.ftl", getFileNamePath(getCursorOutputPath(""), procedure, param, "RS"));
             }
         }
     }
@@ -410,16 +409,9 @@ public final class JavaGenerator extends TemplateGenerator {
                     }
                 }
 
-                if (param.hasDate() && !addDateUtil) {
-                    addDateUtil = false;
-
-                    createTemplate(INPUT_MAP, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtil.java"));
-                    createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtilImpl.java"));
-
-                    if (test) {
-                        createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "DateUtilTest.java"));
-                    }
-                }
+                checkDateUtil(param);
+                checkBlodUtil(param);
+                checkClodUtil(param);
             }
 
             if (param.isArray()) {
@@ -443,16 +435,48 @@ public final class JavaGenerator extends TemplateGenerator {
                     }
                 }
 
-                if (param.hasDate() && !addDateUtil) {
-                    addDateUtil = false;
+                checkDateUtil(param);
+                checkBlodUtil(param);
+                checkClodUtil(param);
+            }
+        }
+    }
 
-                    createTemplate(INPUT_MAP, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtil.java"));
-                    createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtilImpl.java"));
+    private void checkDateUtil(final Parameter parameter) throws BusinessException {
+        if (parameter.hasDate() && !addDateUtil) {
+            addDateUtil = true;
 
-                    if (test) {
-                        createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "DateUtilTest.java"));
-                    }
-                }
+            createTemplate(INPUT_MAP, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtilImpl.java"));
+
+            if (test) {
+                createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "DateUtilTest.java"));
+            }
+        }
+    }
+
+    private void checkClodUtil(final Parameter parameter) throws BusinessException {
+        if (parameter.hasClob() && !processClob) {
+            processClob = true;
+            createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ClobUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ClobUtilImpl.java"));
+
+            if (test) {
+                createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "ClobUtilTest.java"));
+            }
+        }
+    }
+
+    private void checkBlodUtil(final Parameter parameter) throws BusinessException {
+        if (parameter.hasBlob() && !processBlob) {
+            processBlob = true;
+            createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "BlobUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "BlobUtilImpl.java"));
+
+            if (test) {
+                createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "BlobUtilTest.java"));
             }
         }
     }
@@ -598,6 +622,14 @@ public final class JavaGenerator extends TemplateGenerator {
 
     private String getArrayOutputPath(String path) throws BusinessException {
         return this.getOutputPath(ARRAY_PATH + path);
+    }
+
+    private String getCursorOutputPath(String path) throws BusinessException {
+        return this.getOutputPath(CURSOR_PATH + path);
+    }
+
+    private String getCursorOutputFilePath(String file) throws BusinessException {
+        return this.getCursorOutputPath("") + File.separatorChar + file;
     }
 
     private String getObjectOutputPath(String path) throws BusinessException {

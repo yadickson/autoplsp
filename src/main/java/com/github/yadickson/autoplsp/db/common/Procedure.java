@@ -200,9 +200,9 @@ public class Procedure implements Serializable {
      * @return true is has clob type parameter
      * @throws BusinessException if error
      */
-    public boolean getHasClob(final List<Parameter> params) throws BusinessException {
+    private boolean getHasClob(final List<Parameter> params) throws BusinessException {
         for (Parameter param : params) {
-            if (param.isClob() || param.hasClob()) {
+            if (param.isClob()) {
                 return true;
             }
         }
@@ -237,9 +237,9 @@ public class Procedure implements Serializable {
      * @return true is has blob type parameter
      * @throws BusinessException if error
      */
-    public boolean getHasBlob(final List<Parameter> params) throws BusinessException {
+    private boolean getHasBlob(final List<Parameter> params) throws BusinessException {
         for (Parameter param : params) {
-            if (param.isBlob() || param.hasBlob()) {
+            if (param.isBlob()) {
                 return true;
             }
         }
@@ -254,7 +254,7 @@ public class Procedure implements Serializable {
      * @throws BusinessException if error
      */
     public boolean getHasInputBlob() throws BusinessException {
-        return getHasClob(this.inputParameters);
+        return getHasBlob(this.inputParameters);
     }
 
     /**
@@ -264,7 +264,7 @@ public class Procedure implements Serializable {
      * @throws BusinessException if error
      */
     public boolean getHasOutputBlob() throws BusinessException {
-        return getHasClob(this.outputParameters);
+        return getHasBlob(this.outputParameters);
     }
 
     /**

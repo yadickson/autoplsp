@@ -16,21 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.domain;
+package ${javaPackage}.cursor;
 
 <#list parameter.parameters as parameter2>
 <#if parameter2.date>
-<#assign importDateUtil = 1>
+<#assign importSafeDate = 1>
 </#if>
 </#list>
-<#if importDateUtil??>
-import ${javaPackage}.util.${prefixUtilityName}DateUtil;
+<#if importSafeDate??>
+import ${javaPackage}.util.${prefixUtilityName}SafeDate;
 
 import java.util.Date;
 
 </#if>
 <#if lombok>
-<#if importDateUtil??>
+<#if importSafeDate??>
 import lombok.AccessLevel;
 </#if>
 import lombok.Getter;
@@ -132,7 +132,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      * @return The ${parameter2.name} value.
      */
     public ${parameter2.javaTypeName} get${parameter2.propertyName}() {
-        return <#if parameter2.date>${prefixUtilityName}DateUtil.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
+        return <#if parameter2.date>${prefixUtilityName}SafeDate.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
     }
 
     /**
@@ -145,7 +145,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      * @param c${parameter2.propertyName} ${parameter2.name} to set
      */
     public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} c${parameter2.propertyName}) {
-        this.${parameter2.fieldName} = <#if parameter2.date>${prefixUtilityName}DateUtil.process(</#if>c${parameter2.propertyName}<#if parameter2.date>)</#if>;
+        this.${parameter2.fieldName} = <#if parameter2.date>${prefixUtilityName}SafeDate.process(</#if>c${parameter2.propertyName}<#if parameter2.date>)</#if>;
     }
 </#if>
 </#list>

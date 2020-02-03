@@ -28,7 +28,7 @@ import ${javaPackage}.array.${parameter.javaTypeName}Builder;
 </#list>
 <#list proc.parameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
-import ${javaPackage}.domain.${parameter.javaTypeName};
+import ${javaPackage}.cursor.${parameter.javaTypeName};
 </#if>
 </#list>
 <#if proc.hasInput>

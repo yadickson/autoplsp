@@ -23,6 +23,11 @@ package ${javaPackage}.domain;
 <#assign importSafeDate = 1>
 </#if>
 </#list>
+<#list proc.outputParameters as parameter>
+<#if parameter.resultSet || parameter.returnResultSet>
+import ${javaPackage}.cursor.${parameter.javaTypeName};
+</#if>
+</#list>
 <#if importSafeDate??>
 import ${javaPackage}.util.${prefixUtilityName}SafeDate;
 

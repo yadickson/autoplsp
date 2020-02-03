@@ -18,6 +18,15 @@
 </#if>
 package ${javaPackage}.array;
 
+<#list parameter.parameters as parameter2>
+<#if parameter2.date>
+<#assign importSafeDate = 1>
+</#if>
+</#list>
+<#if importSafeDate??>
+import java.util.Date;
+
+</#if>
 import java.util.ArrayList;
 
 <#if parameter.parameters[parameter.parameters?size - 1].object>

@@ -19,6 +19,12 @@
 package ${javaPackage}.array;
 <#if parameter.parameters[parameter.parameters?size - 1].object>
 <#assign importObjectBuilder = 1>
+<#elseif parameter.parameters[parameter.parameters?size - 1].date>
+<#assign importDateUtil = 1>
+<#elseif parameter.parameters[parameter.parameters?size - 1].clob>
+<#assign importClobUtil = 1>
+<#elseif parameter.parameters[parameter.parameters?size - 1].blob>
+<#assign importBlobUtil = 1>
 </#if>
 
 import java.sql.Connection;
@@ -28,8 +34,17 @@ import java.sql.SQLException;
 import ${javaPackage}.object.${parameter.parameters[parameter.parameters?size - 1].javaTypeName};
 import ${javaPackage}.object.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder;
 
+<#elseif importDateUtil??>
+import ${javaPackage}.util.${prefixUtilityName}DateUtil;
+
+<#elseif importClobUtil??>
+import ${javaPackage}.util.${prefixUtilityName}ClobUtil;
+
+<#elseif importBlobUtil??>
+import ${javaPackage}.util.${prefixUtilityName}BlobUtil;
+
 </#if>
-import ${javaPackage}.util.ArrayUtil;
+import ${javaPackage}.util.${prefixUtilityName}ArrayUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,7 +63,7 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Array utility.
      */
     @Autowired
-    private ArrayUtil arrayUtil;
+    private ${prefixUtilityName}ArrayUtil arrayUtil;
 <#if importObjectBuilder??>
 
     /**
@@ -56,6 +71,27 @@ public final class ${parameter.javaTypeName}BuilderImpl
      */
     @Autowired
     private ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder objectBuilder;
+<#elseif importDateUtil??>
+
+    /**
+     * Date utility.
+     */
+    @Autowired
+    private ${prefixUtilityName}DateUtil dateUtil;
+<#elseif importBlobUtil??>
+
+    /**
+     * Blob utility.
+     */
+    @Autowired
+    private ${prefixUtilityName}BlobUtil blobUtil;
+<#elseif importClobUtil??>
+
+    /**
+     * Clob utility.
+     */
+    @Autowired
+    private ${prefixUtilityName}ClobUtil clobUtil;
 </#if>
 
     /**
@@ -74,6 +110,12 @@ public final class ${parameter.javaTypeName}BuilderImpl
         for (${parameter.parameters[parameter.parameters?size - 1].javaTypeName} obj : array) {
 <#if importObjectBuilder??>
             input[i++] = objectBuilder.process(connection, obj);
+<#elseif importDateUtil??>
+            input[i++] = dateUtil.process(obj);
+<#elseif importBlobUtil??>
+            input[i++] = blobUtil.process(connection, obj);
+<#elseif importClobUtil??>
+            input[i++] = clobUtil.process(connection, obj);
 <#else>
             input[i++] = obj;
 </#if>

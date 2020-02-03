@@ -19,8 +19,8 @@ package com.github.yadickson.autoplsp.db.common;
 import java.io.Serializable;
 import java.util.List;
 
-import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
+import java.util.ArrayList;
 
 /**
  * Parameter class
@@ -38,6 +38,7 @@ public abstract class Parameter implements Serializable {
     private final String prefix;
     private final String sqlNativeDirection;
     private final String sqlNativeTypeName;
+    private final List<Parameter> parameters;
 
     /**
      * Class constructor.
@@ -66,6 +67,7 @@ public abstract class Parameter implements Serializable {
         this.parent = procedure == null ? "" : procedure.getFullName();
         this.sqlNativeDirection = sqlNativeDirection;
         this.sqlNativeTypeName = sqlNativeTypeName;
+        this.parameters = new ArrayList<Parameter>();
     }
 
     /**
@@ -99,20 +101,19 @@ public abstract class Parameter implements Serializable {
      * Getter parameter list.
      *
      * @return the parameter list
-     * @throws BusinessException error if not supported
      */
-    public List<Parameter> getParameters() throws BusinessException {
-        throw new BusinessException("Parameters not found");
+    public List<Parameter> getParameters() {
+        return this.parameters;
     }
 
     /**
      * Setter parameter list.
      *
      * @param params The new parameter list
-     * @throws BusinessException error if not supported
      */
-    public void setParameters(List<Parameter> params) throws BusinessException {
-        throw new BusinessException("Parameters not found");
+    public void setParameters(final List<Parameter> params) {
+        this.parameters.clear();
+        this.parameters.addAll(params);
     }
 
     /**
@@ -137,9 +138,8 @@ public abstract class Parameter implements Serializable {
      * Getter java type file name (The name uncapitalize).
      *
      * @return the property name
-     * @throws BusinessException if exist error
      */
-    public String getJavaTypeFieldName() throws BusinessException {
+    public String getJavaTypeFieldName() {
         return CapitalizeUtil.uncapitalize(getJavaTypeName());
     }
 
@@ -216,6 +216,22 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Getter if parameter has dates.
+     *
+     * @return true if parameter has dates.
+     */
+    public boolean hasDate() {
+
+        for (Parameter parameter : getParameters()) {
+            if (parameter.isDate() || parameter.hasDate()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Method to know if parameter is clob.
      *
      * @return true if date
@@ -225,11 +241,43 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Getter if parameter has clobs.
+     *
+     * @return true if parameter has clobs.
+     */
+    public boolean hasClob() {
+
+        for (Parameter parameter : getParameters()) {
+            if (parameter.isClob() || parameter.hasClob()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Method to know if parameter is blob.
      *
      * @return true if date
      */
     public boolean isBlob() {
+        return false;
+    }
+
+    /**
+     * Getter if parameter has blobs.
+     *
+     * @return true if parameter has blobs.
+     */
+    public boolean hasBlob() {
+
+        for (Parameter parameter : getParameters()) {
+            if (parameter.isBlob() || parameter.hasBlob()) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -261,6 +309,22 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Getter if parameter has objects.
+     *
+     * @return true if parameter has objects.
+     */
+    public boolean hasObject() {
+
+        for (Parameter parameter : getParameters()) {
+            if (parameter.isObject() || parameter.hasObject()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Method to know if parameter is table (array).
      *
      * @return true if table
@@ -270,13 +334,28 @@ public abstract class Parameter implements Serializable {
     }
 
     /**
+     * Getter if parameter has arrays.
+     *
+     * @return true if parameter has arrays.
+     */
+    public boolean hasArray() {
+
+        for (Parameter parameter : getParameters()) {
+            if (parameter.isArray() || parameter.hasArray()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Getter the object database name.
      *
      * @return the object name
-     * @throws BusinessException error if not supported
      */
-    public String getObjectName() throws BusinessException {
-        throw new BusinessException("Object Name not found");
+    public String getObjectName() {
+        return null;
     }
 
     /**
@@ -301,25 +380,22 @@ public abstract class Parameter implements Serializable {
      * Getter the java type name.
      *
      * @return The java type name
-     * @throws BusinessException if exist error
      */
-    public abstract String getJavaTypeName() throws BusinessException;
+    public abstract String getJavaTypeName();
 
     /**
      * Getter the sql type.
      *
      * @return The sql type
-     * @throws BusinessException if exist error
      */
-    public abstract int getSqlType() throws BusinessException;
+    public abstract int getSqlType();
 
     /**
      * Getter the sql type name.
      *
      * @return the sql type name
-     * @throws BusinessException if exist error
      */
-    public abstract String getSqlTypeName() throws BusinessException;
+    public abstract String getSqlTypeName();
 
     /**
      * @return the sqlNativeDirection

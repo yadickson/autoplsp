@@ -16,14 +16,15 @@
  */
 package com.github.yadickson.autoplsp.db.common;
 
-import com.github.yadickson.autoplsp.handler.BusinessException;
-import java.util.ArrayList;
-import java.util.List;
-import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import com.github.yadickson.autoplsp.handler.BusinessException;
+import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 
 /**
  * The procedure class
@@ -148,12 +149,14 @@ public class Procedure implements Serializable {
      * Getter is procedure has object parameter
      *
      * @return true is has object parameter
+     * @throws BusinessException if error
      */
-    public boolean getHasObject() {
+    public boolean getHasObject() throws BusinessException {
         for (Parameter param : this.getParameters()) {
-            if (param.isObject()) {
+            if (param.isObject() || param.hasObject()) {
                 return true;
             }
+
         }
 
         return false;
@@ -166,7 +169,7 @@ public class Procedure implements Serializable {
      */
     public boolean getHasArray() {
         for (Parameter param : this.parameters) {
-            if (param.isArray()) {
+            if (param.isArray() || param.hasArray()) {
                 return true;
             }
         }
@@ -182,16 +185,8 @@ public class Procedure implements Serializable {
      */
     public boolean getHasDate() throws BusinessException {
         for (Parameter param : this.parameters) {
-            if (param.isDate()) {
+            if (param.isDate() || param.hasDate()) {
                 return true;
-            }
-
-            if (param.isResultSet() || param.isReturnResultSet()) {
-                for (Parameter param2 : param.getParameters()) {
-                    if (param2.isDate()) {
-                        return true;
-                    }
-                }
             }
         }
 
@@ -207,7 +202,7 @@ public class Procedure implements Serializable {
      */
     public boolean getHasClob(final List<Parameter> params) throws BusinessException {
         for (Parameter param : params) {
-            if (param.isClob()) {
+            if (param.isClob() || param.hasClob()) {
                 return true;
             }
         }
@@ -244,7 +239,7 @@ public class Procedure implements Serializable {
      */
     public boolean getHasBlob(final List<Parameter> params) throws BusinessException {
         for (Parameter param : params) {
-            if (param.isBlob()) {
+            if (param.isBlob() || param.hasBlob()) {
                 return true;
             }
         }

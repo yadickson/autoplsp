@@ -17,34 +17,22 @@
 </#if>
 package ${javaPackage}.util;
 
+import java.util.Date;
+
 /**
- * Utility to process date class.
+ * Interface utility to process date database.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public final class ${prefixUtilityName}DateUtil {
-
-    /**
-     * Class constructor.
-     */
-    protected ${prefixUtilityName}DateUtil() {
-
-    }
+public interface ${prefixUtilityName}DateUtil {
 
     /**
      * Process date.
      *
-     * @param input date to process.
-     * @return date.
+     * @param param date to process.
+     * @return object date.
      */
-    public static java.util.Date process(final java.util.Date input) {
-
-        if (input == null) {
-            return null;
-        }
-
-        return (java.util.Date) input.clone();
-    }
+    Object process(final Date param);
 
 }

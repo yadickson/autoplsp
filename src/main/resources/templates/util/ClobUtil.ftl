@@ -17,6 +17,8 @@
 </#if>
 package ${javaPackage}.util;
 
+import java.sql.Connection;
+
 /**
  * Interface to process clob element.
  *
@@ -32,5 +34,14 @@ public interface ${prefixUtilityName}ClobUtil {
      * @return string representation.
      */
     String process(Object object);
+
+    /**
+     * Process clob parameter from database.
+     *
+     * @param connection database connection.
+     * @param param to process.
+     * @return clob representation.
+     */
+    Object process(Connection connection, String param);
 
 }

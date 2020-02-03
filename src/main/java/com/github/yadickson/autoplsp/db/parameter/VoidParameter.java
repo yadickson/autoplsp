@@ -55,11 +55,10 @@ public class VoidParameter extends Parameter {
      * Getter the java type name
      *
      * @return the java type name
-     * @throws BusinessException if error exists
      */
     @Override
-    public String getJavaTypeName() throws BusinessException {
-        throw new BusinessException("Java type name not supported");
+    public String getJavaTypeName() {
+        return "void";
     }
 
     /**
@@ -76,10 +75,9 @@ public class VoidParameter extends Parameter {
      * Getter the sql type name
      *
      * @return the sql type name
-     * @throws BusinessException if error exists
      */
     @Override
-    public String getSqlTypeName() throws BusinessException {
+    public String getSqlTypeName() {
         return "java.sql.Types.OTHER";
     }
 

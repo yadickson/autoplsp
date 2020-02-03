@@ -18,14 +18,26 @@
 </#if>
 package ${javaPackage}.util;
 
-import java.sql.Blob;
 import java.io.InputStream;
+<#if driverName == 'oracle'>
+import java.io.OutputStream;
+</#if>
+
+import java.sql.Blob;
+import java.sql.Connection;
 
 import org.apache.commons.io.IOUtils;
 <#if logger>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+</#if>
+<#if driverName == 'oracle'>
+
+import oracle.jdbc.OracleConnection;
+<#if driverVersionName == 'ojdbc6' >
+import oracle.sql.BLOB;
+</#if>
 </#if>
 
 import org.springframework.stereotype.Component;
@@ -37,6 +49,9 @@ import org.springframework.stereotype.Component;
  * @version @GENERATOR.VERSION@
  */
 @Component
+<#if driverVersionName == 'ojdbc6' >
+@SuppressWarnings({"deprecation"})
+</#if>
 public final class ${prefixUtilityName}BlobUtilImpl
         implements ${prefixUtilityName}BlobUtil {
 <#if logger>
@@ -45,7 +60,7 @@ public final class ${prefixUtilityName}BlobUtilImpl
      * Logger.
      */
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(BlobUtilImpl.class);
+            = LoggerFactory.getLogger(${prefixUtilityName}BlobUtilImpl.class);
 </#if>
 
     /**
@@ -71,6 +86,49 @@ public final class ${prefixUtilityName}BlobUtilImpl
         }
 
         return result;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object process(
+        final Connection connection,
+        final byte[] param
+    ) {
+<#if driverName != 'oracle' >
+        return param;
+<#else>
+        <#if driverVersionName == 'ojdbc6' >BLOB<#else>Blob</#if> blob = null;
+
+        try {
+
+            OracleConnection oConn = connection.unwrap(OracleConnection.class);
+
+            blob = BLOB.createTemporary(
+                    oConn,
+                    false,
+                    BLOB.DURATION_SESSION
+            );
+
+            try (OutputStream stream = blob.getBinaryOutputStream()) {
+                stream.write(param);
+            } catch (Exception ex) {
+<#if logger>
+                LOGGER.error(ex.getMessage(), ex);
+</#if>
+                blob = null;
+            }
+
+        } catch (Exception ex) {
+<#if logger>
+            LOGGER.error(ex.getMessage(), ex);
+</#if>
+            blob = null;
+        }
+
+        return blob;
+</#if>
     }
 
 }

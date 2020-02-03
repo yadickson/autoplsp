@@ -19,6 +19,7 @@ package com.github.yadickson.autoplsp.db.parameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 import com.github.yadickson.autoplsp.handler.BusinessException;
+import org.junit.Assert;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,9 +38,9 @@ public class NumberParameterTest {
         parameter = new NumberParameter(0, null, Direction.INPUT, "", new Procedure(true, "", "", "", ""), "", "");
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testGetParameters() throws BusinessException {
-        parameter.getParameters();
+        Assert.assertNotNull(parameter.getParameters());
     }
 
     @Test(expected = Exception.class)

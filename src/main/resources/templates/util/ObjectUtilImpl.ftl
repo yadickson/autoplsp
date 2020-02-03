@@ -54,7 +54,7 @@ public final class ${prefixUtilityName}ObjectUtilImpl
      * Logger.
      */
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(ObjectUtilImpl.class);
+            = LoggerFactory.getLogger(${prefixUtilityName}ObjectUtilImpl.class);
 </#if>
 
     /**

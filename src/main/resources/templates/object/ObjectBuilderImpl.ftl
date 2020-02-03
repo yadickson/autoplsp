@@ -22,6 +22,8 @@ package ${javaPackage}.object;
 <#assign importClobUtil = 1>
 <#elseif parameter.blob>
 <#assign importBlobUtil = 1>
+<#elseif parameter.date>
+<#assign importDateUtil = 1>
 </#if>
 </#list>
 
@@ -29,12 +31,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 <#if importBlobUtil??>
-import ${javaPackage}.util.BlobUtil;
+import ${javaPackage}.util.${prefixUtilityName}BlobUtil;
 </#if>
 <#if importClobUtil??>
-import ${javaPackage}.util.ClobUtil;
+import ${javaPackage}.util.${prefixUtilityName}ClobUtil;
 </#if>
-import ${javaPackage}.util.ObjectUtil;
+<#if importDateUtil??>
+import ${javaPackage}.util.${prefixUtilityName}DateUtil;
+</#if>
+import ${javaPackage}.util.${prefixUtilityName}ObjectUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -54,7 +59,7 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Blob utility.
      */
     @Autowired
-    private BlobUtil blobUtil;
+    private ${prefixUtilityName}BlobUtil blobUtil;
 </#if>
 <#if importClobUtil??>
 
@@ -62,14 +67,22 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Clob utility.
      */
     @Autowired
-    private ClobUtil clobUtil;
+    private ${prefixUtilityName}ClobUtil clobUtil;
+</#if>
+<#if importDateUtil??>
+
+    /**
+     * Date utility.
+     */
+    @Autowired
+    private ${prefixUtilityName}DateUtil dateUtil;
 </#if>
 
     /**
      * Object utility.
      */
     @Autowired
-    private ObjectUtil objectUtil;
+    private ${prefixUtilityName}ObjectUtil objectUtil;
 
     /**
      * {@inheritDoc}
@@ -81,28 +94,23 @@ public final class ${parameter.javaTypeName}BuilderImpl
     ) throws SQLException {
 
 <#list parameter.parameters as parameter>
+        Object ${parameter.fieldName};
+</#list>
+
+<#list parameter.parameters as parameter>
 <#if parameter.clob>
-        oracle.sql.CLOB clob${parameter.propertyName} = oracle.sql.CLOB.createTemporary(connection, false, oracle.sql.CLOB.DURATION_SESSION);
-        java.io.Writer clobWriter${parameter.propertyName} = clob${parameter.propertyName}.getCharacterOutputStream();
-
-        if (get${parameter.propertyName}() != null) {
-            clobWriter${parameter.propertyName}.write(get${parameter.propertyName}().toCharArray());
-        }
-
-        clobWriter${parameter.propertyName}.flush();
-        clobWriter${parameter.propertyName}.close();
-
+        ${parameter.fieldName} = clobUtil.process(connection, object.get${parameter.propertyName}());
 <#elseif parameter.blob>
-        oracle.sql.BLOB blob${parameter.propertyName} = oracle.sql.BLOB.createTemporary(connection, false, oracle.sql.BLOB.DURATION_SESSION);
-        blob${parameter.propertyName}.getBinaryOutputStream().write(get${parameter.propertyName}());
-
+        ${parameter.fieldName} = blobUtil.process(connection, object.get${parameter.propertyName}());
 <#elseif parameter.date>
-        oracle.sql.DATE date${parameter.propertyName} = get${parameter.propertyName}() == null ? null : new oracle.sql.DATE(new java.sql.Date(get${parameter.propertyName}().getTime()));
-
+        ${parameter.fieldName} = dateUtil.process(object.get${parameter.propertyName}());
+<#else>
+        ${parameter.fieldName} = object.get${parameter.propertyName}();
 </#if>
 </#list>
+
         Object[] objs = new Object[]{
-<#list parameter.parameters as parameter>            <#if parameter.clob>clob${parameter.propertyName}<#elseif parameter.blob>blob${parameter.propertyName}<#elseif parameter.date>date${parameter.propertyName}<#else>object.get${parameter.propertyName}()</#if><#sep>,</#sep>
+<#list parameter.parameters as parameter>            ${parameter.fieldName}<#sep>,</#sep>
 </#list>        };
 
         return objectUtil.process(

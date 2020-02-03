@@ -54,7 +54,7 @@ public final class ${prefixUtilityName}ConnectionUtilImpl implements
      * Logger.
      */
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(ConnectionUtilImpl.class);
+            = LoggerFactory.getLogger(${prefixUtilityName}ConnectionUtilImpl.class);
 </#if>
 <#if importDataSourceUtils??>
 

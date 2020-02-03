@@ -20,11 +20,11 @@ package ${javaPackage}.domain;
 
 <#list proc.outputParameters as parameter>
 <#if parameter.date>
-<#assign importDateUtil = 1>
+<#assign importSafeDate = 1>
 </#if>
 </#list>
-<#if importDateUtil??>
-import ${javaPackage}.util.${prefixUtilityName}DateUtil;
+<#if importSafeDate??>
+import ${javaPackage}.util.${prefixUtilityName}SafeDate;
 
 import java.util.Date;
 
@@ -33,7 +33,7 @@ import java.util.Date;
 import java.util.List;
 </#if>
 <#if lombok>
-<#if importDateUtil??>
+<#if importSafeDate??>
 import lombok.AccessLevel;
 </#if>
 import lombok.Getter;
@@ -123,7 +123,7 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
      * @return The ${parameter.name} value.
      */
     public <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
-        return <#if parameter.date>${prefixUtilityName}DateUtil.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
+        return <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
 
     /**
@@ -134,7 +134,7 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
      * @param p${parameter.propertyName} ${parameter.name} to set
      */
     public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
-        this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}DateUtil.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
+        this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
     }
 </#if>
 </#list>

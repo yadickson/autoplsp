@@ -1,5 +1,4 @@
-<#if header>
-/*
+<#if header>/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,31 +17,34 @@
 </#if>
 package ${javaPackage}.util;
 
-import java.sql.Connection;
-
 /**
- * Interface to process blob element.
+ * Utility to process date class.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-public interface ${prefixUtilityName}BlobUtil {
+public final class ${prefixUtilityName}SafeDate {
 
     /**
-     * Process blob parameter from database.
-     *
-     * @param object to process.
-     * @return byte array representation.
+     * Class constructor.
      */
-    byte[] process(Object object);
+    protected ${prefixUtilityName}SafeDate() {
+
+    }
 
     /**
-     * Process blob parameter from database.
+     * Process date.
      *
-     * @param connection database connection.
-     * @param param to process.
-     * @return blob representation.
+     * @param input date to process.
+     * @return date.
      */
-    Object process(Connection connection, byte[] param);
+    public static java.util.Date process(final java.util.Date input) {
+
+        if (input == null) {
+            return null;
+        }
+
+        return (java.util.Date) input.clone();
+    }
 
 }

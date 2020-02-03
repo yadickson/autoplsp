@@ -50,7 +50,7 @@ public final class ${prefixUtilityName}ArrayUtilImpl
      * Logger.
      */
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(ArrayUtilImpl.class);
+            = LoggerFactory.getLogger(${prefixUtilityName}ArrayUtilImpl.class);
 </#if>
 
     /**

@@ -93,9 +93,10 @@ public final class JavaGenerator extends TemplateGenerator {
     private boolean processBlob;
     private boolean processConnection;
     private boolean addTypeTable;
-    private boolean addDateUtil;
+    private boolean addSafeDate;
     private boolean addObjectUtil;
     private boolean addArrayUtil;
+    private boolean addDateUtil;
 
     private static final Map<String, Object> INPUT_MAP = new HashMap<String, Object>();
 
@@ -204,9 +205,10 @@ public final class JavaGenerator extends TemplateGenerator {
         processBlob = false;
         processConnection = false;
         addTypeTable = false;
-        addDateUtil = false;
+        addSafeDate = false;
         addObjectUtil = false;
         addArrayUtil = false;
+        addDateUtil = false;
 
         for (Procedure procedure : procedures) {
 
@@ -235,17 +237,17 @@ public final class JavaGenerator extends TemplateGenerator {
             }
         }
 
-        if (procedure.getHasDate() && !addDateUtil) {
-            addDateUtil = true;
+        if (procedure.getHasDate() && !addSafeDate) {
+            addSafeDate = true;
             createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
-            createTemplate(INPUT_MAP, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtil.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "SafeDate.ftl", getUtilOutputFilePath(this.prefixUtilityName + "SafeDate.java"));
 
             if (test) {
-                createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "DateUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "SafeDateTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "SafeDateTest.java"));
             }
         }
 
-        if (procedure.getHasOutputClob() && !processClob) {
+        if ((procedure.getHasInputClob() || procedure.getHasOutputClob()) && !processClob) {
             processClob = true;
             createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
             createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ClobUtil.java"));
@@ -256,7 +258,7 @@ public final class JavaGenerator extends TemplateGenerator {
             }
         }
 
-        if (procedure.getHasOutputBlob() && !processBlob) {
+        if ((procedure.getHasInputBlob() || procedure.getHasOutputBlob()) && !processBlob) {
             processBlob = true;
             createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
             createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "BlobUtil.java"));
@@ -407,6 +409,17 @@ public final class JavaGenerator extends TemplateGenerator {
                         createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "ObjectUtilTest.java"));
                     }
                 }
+
+                if (param.hasDate() && !addDateUtil) {
+                    addDateUtil = false;
+
+                    createTemplate(INPUT_MAP, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtil.java"));
+                    createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtilImpl.java"));
+
+                    if (test) {
+                        createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "DateUtilTest.java"));
+                    }
+                }
             }
 
             if (param.isArray()) {
@@ -427,6 +440,17 @@ public final class JavaGenerator extends TemplateGenerator {
 
                     if (test) {
                         createTemplate(INPUT_MAP, UTIL_PATH + "ArrayUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "ArrayUtilTest.java"));
+                    }
+                }
+
+                if (param.hasDate() && !addDateUtil) {
+                    addDateUtil = false;
+
+                    createTemplate(INPUT_MAP, UTIL_PATH + "DateUtil.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtil.java"));
+                    createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtilImpl.java"));
+
+                    if (test) {
+                        createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "DateUtilTest.java"));
                     }
                 }
             }

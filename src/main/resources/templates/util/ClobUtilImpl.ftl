@@ -19,6 +19,11 @@
 package ${javaPackage}.util;
 
 import java.io.InputStream;
+<#if driverName == 'oracle'>
+import java.io.Writer;
+</#if>
+
+import java.sql.Connection;
 import java.sql.Clob;
 
 import org.apache.commons.io.IOUtils;
@@ -26,6 +31,13 @@ import org.apache.commons.io.IOUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+</#if>
+<#if driverName == 'oracle'>
+
+import oracle.jdbc.OracleConnection;
+<#if driverVersionName == 'ojdbc6' >
+import oracle.sql.CLOB;
+</#if>
 </#if>
 
 import org.springframework.stereotype.Component;
@@ -37,6 +49,9 @@ import org.springframework.stereotype.Component;
  * @version @GENERATOR.VERSION@
  */
 @Component
+<#if driverVersionName == 'ojdbc6' >
+@SuppressWarnings({"deprecation"})
+</#if>
 public final class ${prefixUtilityName}ClobUtilImpl
         implements ${prefixUtilityName}ClobUtil {
 <#if logger>
@@ -45,7 +60,7 @@ public final class ${prefixUtilityName}ClobUtilImpl
      * Logger.
      */
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(ClobUtilImpl.class);
+            = LoggerFactory.getLogger(${prefixUtilityName}ClobUtilImpl.class);
 </#if>
 
     /**
@@ -72,5 +87,48 @@ public final class ${prefixUtilityName}ClobUtilImpl
 
         return result;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object process(
+        final Connection connection,
+        final String param
+    ) {
+<#if driverName != 'oracle' >
+        return param;
+<#else>
 
+        <#if driverVersionName == 'ojdbc6' >CLOB<#else>Clob</#if> clob = null;
+
+        try {
+
+            OracleConnection oConn = connection.unwrap(OracleConnection.class);
+
+            clob = CLOB.createTemporary(
+                    oConn,
+                    false,
+                    CLOB.DURATION_SESSION
+            );
+
+            try (Writer writer = clob.getCharacterOutputStream()) {
+                writer.write(param.toCharArray());
+            } catch (Exception ex) {
+<#if logger>
+                LOGGER.error(ex.getMessage(), ex);
+</#if>
+                clob = null;
+            }
+
+        } catch (Exception ex) {
+<#if logger>
+            LOGGER.error(ex.getMessage(), ex);
+</#if>
+            clob = null;
+        }
+
+        return clob;
+</#if>
+    }
 }

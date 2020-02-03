@@ -4,6 +4,11 @@ package ${javaPackage}.object;
 <#assign importClobUtil = 1>
 <#elseif parameter.blob>
 <#assign importBlobUtil = 1>
+<#elseif parameter.date>
+<#assign importDateUtil = 1>
+</#if>
+<#if parameter.date>
+<#assign importDate = 1>
 </#if>
 </#list>
 
@@ -11,13 +16,20 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 <#if importBlobUtil??>
-import ${javaPackage}.util.BlobUtil;
+import ${javaPackage}.util.${prefixUtilityName}BlobUtil;
 </#if>
 <#if importClobUtil??>
-import ${javaPackage}.util.ClobUtil;
+import ${javaPackage}.util.${prefixUtilityName}ClobUtil;
 </#if>
-import ${javaPackage}.util.ObjectUtil;
+<#if importDateUtil??>
+import ${javaPackage}.util.${prefixUtilityName}DateUtil;
+</#if>
+import ${javaPackage}.util.${prefixUtilityName}ObjectUtil;
 
+<#if importDate??>
+import java.util.Date;
+
+</#if>
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,16 +49,21 @@ public class ${parameter.javaTypeName}BuilderTest {
 <#if importBlobUtil??>
 
     @Mock
-    private BlobUtil blobUtil;
+    private ${prefixUtilityName}BlobUtil blobUtil;
 </#if>
 <#if importClobUtil??>
 
     @Mock
-    private ClobUtil clobUtil;
+    private ${prefixUtilityName}ClobUtil clobUtil;
+</#if>
+<#if importDateUtil??>
+
+    @Mock
+    private ${prefixUtilityName}DateUtil dateUtil;
 </#if>
 
     @Mock
-    private ObjectUtil objectUtil;
+    private ${prefixUtilityName}ObjectUtil objectUtil;
 
     @Mock
     private Connection connection;
@@ -64,6 +81,8 @@ public class ${parameter.javaTypeName}BuilderTest {
         ${parameter.javaTypeName} obj${parameter.propertyName} = ${parameter.position};
 <#elseif parameter.date>
         ${parameter.javaTypeName} obj${parameter.propertyName} = new ${parameter.javaTypeName}(${parameter.position});
+<#elseif parameter.blob>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = new byte[0];
 <#else>
         ${parameter.javaTypeName} obj${parameter.propertyName} = "${parameter.name}";
 </#if>
@@ -75,6 +94,15 @@ public class ${parameter.javaTypeName}BuilderTest {
 
         Object[] obj = new Object[0];
 
+<#list parameter.parameters as parameter>
+<#if parameter.date>
+        Mockito.when(dateUtil.process(Mockito.eq(obj${parameter.propertyName}))).thenReturn(obj${parameter.propertyName});
+<#elseif parameter.blob>
+        Mockito.when(blobUtil.process(Mockito.same(connection), Mockito.same(obj${parameter.propertyName}))).thenReturn(obj${parameter.propertyName});
+<#elseif parameter.clob>
+        Mockito.when(clobUtil.process(Mockito.same(connection), Mockito.same(obj${parameter.propertyName}))).thenReturn(obj${parameter.propertyName});
+</#if>
+</#list>
         Mockito.when(objectUtil.process(Mockito.same(connection), Mockito.eq("${parameter.realObjectName}"), captorObjects.capture())).thenReturn(obj);
 
         Object result = builder.process(connection, object);
@@ -91,6 +119,16 @@ public class ${parameter.javaTypeName}BuilderTest {
         Assert.assertEquals(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
 <#else>
         Assert.assertSame(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
+</#if>
+</#list>
+
+<#list parameter.parameters as parameter>
+<#if parameter.date>
+        Mockito.verify(dateUtil, Mockito.times(1)).process(Mockito.eq(obj${parameter.propertyName}));
+<#elseif parameter.blob>
+        Mockito.verify(blobUtil, Mockito.times(1)).process(Mockito.same(connection), Mockito.same(obj${parameter.propertyName}));
+<#elseif parameter.clob>
+        Mockito.verify(clobUtil, Mockito.times(1)).process(Mockito.same(connection), Mockito.same(obj${parameter.propertyName}));
 </#if>
 </#list>
     }

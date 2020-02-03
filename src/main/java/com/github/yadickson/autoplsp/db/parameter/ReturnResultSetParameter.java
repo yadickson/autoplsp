@@ -70,10 +70,9 @@ public class ReturnResultSetParameter extends DataSetParameter {
      * Getter the sql type.
      *
      * @return The sql type
-     * @throws BusinessException if error
      */
     @Override
-    public int getSqlType() throws BusinessException {
+    public int getSqlType() {
         return java.sql.Types.OTHER;
     }
 
@@ -81,10 +80,9 @@ public class ReturnResultSetParameter extends DataSetParameter {
      * Getter the sql type name.
      *
      * @return the sql type name
-     * @throws BusinessException if error
      */
     @Override
-    public String getSqlTypeName() throws BusinessException {
+    public String getSqlTypeName() {
         return "java.sql.Types.OTHER";
     }
 

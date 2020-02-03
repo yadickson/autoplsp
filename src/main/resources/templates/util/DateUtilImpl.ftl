@@ -1,5 +1,4 @@
-<#if header>
-/*
+<#if header>/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,64 +17,63 @@
 </#if>
 package ${javaPackage}.util;
 
-import java.sql.SQLException;
-import java.util.Map;
+import java.util.Date; 
 <#if logger>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
+</#if>
+<#if driverName == 'oracle'>
+
+import oracle.sql.DATE;
 </#if>
 
 import org.springframework.stereotype.Component;
 
 /**
- * Check result from store procedure or function.
+ * Utility to process date class.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
 @Component
-public final class ${prefixUtilityName}CheckResultImpl
-        implements ${prefixUtilityName}CheckResult {
+public final class ${prefixUtilityName}DateUtilImpl
+        implements ${prefixUtilityName}DateUtil {
 <#if logger>
 
     /**
      * Logger.
      */
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(${prefixUtilityName}CheckResultImpl.class);
+            = LoggerFactory.getLogger(${prefixUtilityName}DateUtilImpl.class);
 </#if>
-
-    /**
-     * Success constant value.
-     */
-    private static final String SUCCESS_CODE = "${successCode}";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void check(final Map<String, Object> map) throws SQLException {
+    public Object process(final Date param) {
+<#if driverName != 'oracle' >
+        return param;
+<#else>
 
-        if (map == null) {
-            return;
+        if (param == null) {
+            return null;
         }
 
-        Number code = (Number) map.get("${outParameterCode}");
+        DATE date;
 
-        if (code == null) {
-            return;
-        }
-
-        if (!SUCCESS_CODE.equals(code.toString())) {
-            String description = (String) map.get("${outParameterMessage}");
+        try {
+            date = new DATE(new java.sql.Date(param.getTime()));
+        } catch (Exception ex) {
 <#if logger>
-            LOGGER.error(Marker.ANY_MARKER, "${outParameterCode}: {}", code);
-            LOGGER.error(Marker.ANY_MARKER, "${outParameterMessage}: {}", description);
+            LOGGER.error(ex.getMessage(), ex);
 </#if>
-            throw new SQLException(description, code.toString());
+            date = null;
         }
+
+        return date;
+</#if>
     }
 
 }

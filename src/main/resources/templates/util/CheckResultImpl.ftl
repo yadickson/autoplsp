@@ -50,7 +50,17 @@ public final class ${prefixUtilityName}CheckResultImpl
     /**
      * Success constant value.
      */
-    private static final String SUCCESS_CODE = "${successCode}";
+    private static final String <#if prefixUtilityName??>${prefixUtilityName?upper_case}_</#if>SUCCESS_CODE = "${successCode}";
+
+    /**
+     * Code to check.
+     */
+    private static final String <#if prefixUtilityName??>${prefixUtilityName?upper_case}_</#if>CODE = "${outParameterCode}";
+
+    /**
+     * Message to check.
+     */
+    private static final String <#if prefixUtilityName??>${prefixUtilityName?upper_case}_</#if>MESSAGE = "${outParameterMessage}";
 
     /**
      * {@inheritDoc}
@@ -62,19 +72,19 @@ public final class ${prefixUtilityName}CheckResultImpl
             return;
         }
 
-        Number code = (Number) map.get("${outParameterCode}");
+        Number <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Code<#else>code</#if> = (Number) map.get(<#if prefixUtilityName??>${prefixUtilityName?upper_case}_</#if>CODE);
 
-        if (code == null) {
+        if (<#if prefixUtilityName??>${prefixUtilityName?uncap_first}Code<#else>code</#if> == null) {
             return;
         }
 
-        if (!SUCCESS_CODE.equals(code.toString())) {
-            String description = (String) map.get("${outParameterMessage}");
+        if (!<#if prefixUtilityName??>${prefixUtilityName?upper_case}_</#if>SUCCESS_CODE.equals(<#if prefixUtilityName??>${prefixUtilityName?uncap_first}Code<#else>code</#if>.toString())) {
+            String description = (String) map.get(<#if prefixUtilityName??>${prefixUtilityName?upper_case}_</#if>MESSAGE);
 <#if logger>
-            LOGGER.error(Marker.ANY_MARKER, "${outParameterCode}: {}", code);
+            LOGGER.error(Marker.ANY_MARKER, "${outParameterCode}: {}", <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Code<#else>code</#if>);
             LOGGER.error(Marker.ANY_MARKER, "${outParameterMessage}: {}", description);
 </#if>
-            throw new SQLException(description, code.toString());
+            throw new SQLException(description, <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Code<#else>code</#if>.toString());
         }
     }
 

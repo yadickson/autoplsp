@@ -145,48 +145,48 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
             <goals>
                 <goal>generator</goal>
             </goals>
-            <configuration>
-                <driver>...</driver>
-                <connectionString>...</connectionString>
-                <user>...</user>
-                <pass>...</pass>
-                <javaDataSourceName>...DataSource</javaDataSourceName>
-                <javaJdbcTemplateName>...JdbcTemplate</javaJdbcTemplateName>
-                <jndiDataSourceName>JDBC/...</jndiDataSourceName>
-                <objectSuffix>Object</objectSuffix>
-                <arraySuffix>Array</arraySuffix>
-                <outputDirectory>...</outputDirectory>
-                <outputDirectoryResource>...</outputDirectoryResource>
-                <folderNameGenerator>...</folderNameGenerator>
-                <folderNameResourceGenerator>...</folderNameResourceGenerator>
-                <outputConfigFileName>...</outputConfigFileName>
-                <outParameterCode>...</outParameterCode>
-                <outParameterMessage>...</outParameterMessage>
-                <javaPackageName>...</javaPackageName>
-                <jsonNonNull>...</jsonNonNull>
-                <includes>
-                    <param>...</param>
-                    <param>...</param>
-                </includes>
-                <excludes>
-                    <param>...</param>
-                    <param>...</param>
-                </excludes>
-                <mappers>
-                    <param>...</param>
-                    <param>...</param>
-                </mappers>
-                <resultset>
-                    <param>...</param>
-                    <param>...</param>
-                </resultset>
-                <tables>
-                    <param>...</param>
-                    <param>...</param>
-                </tables>
-            </configuration>
         </execution>
     </executions>
+    <configuration>
+        <driver>...</driver>
+        <connectionString>...</connectionString>
+        <user>...</user>
+        <pass>...</pass>
+        <javaDataSourceName>...DataSource</javaDataSourceName>
+        <javaJdbcTemplateName>...JdbcTemplate</javaJdbcTemplateName>
+        <jndiDataSourceName>JDBC/...</jndiDataSourceName>
+        <objectSuffix>Object</objectSuffix>
+        <arraySuffix>Array</arraySuffix>
+        <outputDirectory>...</outputDirectory>
+        <outputDirectoryResource>...</outputDirectoryResource>
+        <folderNameGenerator>...</folderNameGenerator>
+        <folderNameResourceGenerator>...</folderNameResourceGenerator>
+        <outputConfigFileName>...</outputConfigFileName>
+        <outParameterCode>...</outParameterCode>
+        <outParameterMessage>...</outParameterMessage>
+        <javaPackageName>...</javaPackageName>
+        <jsonNonNull>...</jsonNonNull>
+        <includes>
+            <param>...</param>
+            <param>...</param>
+        </includes>
+        <excludes>
+            <param>...</param>
+            <param>...</param>
+        </excludes>
+        <mappers>
+            <param>...</param>
+            <param>...</param>
+        </mappers>
+        <resultset>
+            <param>...</param>
+            <param>...</param>
+        </resultset>
+        <tables>
+            <param>...</param>
+            <param>...</param>
+        </tables>
+    </configuration>
     <dependencies>
         <dependency>
             <groupId>...driver..</groupId>

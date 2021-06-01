@@ -88,6 +88,9 @@ public final class JavaGenerator extends TemplateGenerator {
     private static final String DRIVER_VERSION = "driverVersion";
     private static final String DRIVER_VERSION_NAME = "driverVersionName";
     private static final String PREFIX_UTILITY_NAME = "prefixUtilityName";
+    private static final String JAVA_8 = "java8";
+    private static final String BUILDER = "builder";
+    private static final String DOCUMENTATION = "documentation";
 
     private boolean checkResult;
     private boolean processClob;
@@ -130,6 +133,9 @@ public final class JavaGenerator extends TemplateGenerator {
      * @param driverVersion driver version
      * @param driverVersionName driver version name.
      * @param prefixUtilityName prefix utility name.
+     * @param java8 Java 8 flag compatibility.
+     * @param builder Builder support.
+     * @param documentation Documentation support.
      */
     public JavaGenerator(
             final String outputDir,
@@ -157,7 +163,11 @@ public final class JavaGenerator extends TemplateGenerator {
             final String driverName,
             final String driverVersion,
             final String driverVersionName,
-            final String prefixUtilityName) {
+            final String prefixUtilityName,
+            final Boolean java8,
+            final Boolean builder,
+            final Boolean documentation
+    ) {
 
         super(outputDir, outputTestDir);
 
@@ -189,6 +199,9 @@ public final class JavaGenerator extends TemplateGenerator {
         INPUT_MAP.put(OUT_CODE_NAME, outParameterCode);
         INPUT_MAP.put(OUT_MESSAGE_NAME, outParameterMessage);
         INPUT_MAP.put(PREFIX_UTILITY_NAME, prefixUtilityName);
+        INPUT_MAP.put(JAVA_8, java8);
+        INPUT_MAP.put(BUILDER, builder);
+        INPUT_MAP.put(DOCUMENTATION, documentation);
     }
 
     /**

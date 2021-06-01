@@ -438,10 +438,40 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.prefixUtilityName",
-            defaultValue = "",
+            defaultValue = "Util",
             readonly = true,
             required = false)
     private String prefixUtilityName;
+
+    /**
+     * Builder support.
+     */
+    @Parameter(
+            property = "autoplsp.builder",
+            defaultValue = "true",
+            readonly = true,
+            required = false)
+    private String builder;
+
+    /**
+     * Java 8 compatibility.
+     */
+    @Parameter(
+            property = "autoplsp.java8",
+            defaultValue = "false",
+            readonly = true,
+            required = false)
+    private String java8;
+
+    /**
+     * Documentation.
+     */
+    @Parameter(
+            property = "autoplsp.documentation",
+            defaultValue = "true",
+            readonly = true,
+            required = false)
+    private String documentation;
 
     /**
      * Maven execute method.
@@ -487,6 +517,9 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
         getLog().info("[AutoGenerator] PrefixUtilityName: " + prefixUtilityName);
+        getLog().info("[AutoGenerator] Java8: " + java8);
+        getLog().info("[AutoGenerator] Builder: " + builder);
+        getLog().info("[AutoGenerator] Documentation: " + documentation);
 
         if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
             throw new MojoExecutionException("Fail make " + outputDirectory + " directory.");
@@ -651,7 +684,10 @@ public class AutoGenerator extends AbstractMojo {
                     generator.getName(),
                     connManager.getVersion(),
                     driverVersionName,
-                    prefixUtilityName
+                    prefixUtilityName,
+                    java8.equalsIgnoreCase("true"),
+                    builder.equalsIgnoreCase("true"),
+                    documentation.equalsIgnoreCase("true")
             );
 
             List<Table> fullTables = new ArrayList<Table>();

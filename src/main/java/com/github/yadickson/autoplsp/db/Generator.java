@@ -210,11 +210,11 @@ public abstract class Generator {
         LoggerManager.getInstance().info("[SPGenerator] Force find resultset (" + rs + ") " + procedure.getName());
 
         if (!procedure.isFunction() && rs) {
-            found = findRetunResultSet(maker, connection, procedure, list, objectSuffix, arraySuffix);
+            found = findReturnResultSet(maker, connection, procedure, list, objectSuffix, arraySuffix);
         }
 
-        if (!found && procedure.isFunctionInline() && !procedure.getHasOutput() && rs) {
-            found = findRetunResultTable(maker, connection, procedure, list, objectSuffix, arraySuffix);
+        if (!found && /*procedure.isFunctionInline() &&*/ !procedure.getHasOutput() && rs) {
+            found = findReturnResultTable(maker, connection, procedure, list, objectSuffix, arraySuffix);
         }
 
         if (!found && procedure.getHasResultSet()) {
@@ -285,7 +285,7 @@ public abstract class Generator {
         }
     }
 
-    public boolean findRetunResultSet(
+    public boolean findReturnResultSet(
             final MakeParameter maker,
             final Connection connection,
             final Procedure procedure,
@@ -310,7 +310,7 @@ public abstract class Generator {
             }
 
             boolean isResult = statement.execute();
-            LoggerManager.getInstance().info("(findRetunResultSet) Has result set [" + isResult + "]");
+            LoggerManager.getInstance().info("(findReturnResultSet) Has result set [" + isResult + "]");
 
             if (isResult) {
 
@@ -352,7 +352,7 @@ public abstract class Generator {
         return false;
     }
 
-    public boolean findRetunResultTable(
+    public boolean findReturnResultTable(
             final MakeParameter maker,
             final Connection connection,
             final Procedure procedure,
@@ -373,7 +373,7 @@ public abstract class Generator {
             }
 
             ResultSet result = statement.executeQuery();
-            LoggerManager.getInstance().info("(findRetunResultTable) Has result set [true]");
+            LoggerManager.getInstance().info("(findReturnResultTable) Has result set [true]");
 
             if (result == null) {
                 return false;

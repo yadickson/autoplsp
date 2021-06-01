@@ -1,3 +1,4 @@
+<#if documentation>
 <#if header>
 /*
  * Copyright (C) 2019 Yadickson Soto
@@ -16,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
+</#if>
 package ${javaPackage}.domain;
 
 <#list proc.arrayImports as parameter>
@@ -32,7 +34,11 @@ import ${javaPackage}.object.${parameter.javaTypeName};
 <#if importSafeDate??>
 import ${javaPackage}.util.${prefixUtilityName}SafeDate;
 
+<#if java8>
+import java.time.LocalDateTime;
+<#else>
 import java.util.Date;
+</#if>
 
 </#if>
 <#if lombok>
@@ -50,6 +56,7 @@ import lombok.Setter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 </#if>
+<#if documentation>
 /**
  * Input parameters for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -58,6 +65,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+ </#if>
 <#if lombok>
 <#if fullConstructor>
 @NoArgsConstructor
@@ -68,38 +76,44 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-public final class ${proc.className}IN<#if serialization> implements java.io.Serializable</#if> {
+public class ${proc.className}IN<#if serialization> implements java.io.Serializable</#if> {
 <#if serialization>
-
+<#if documentation>
     /**
      * Serialization.
      */
     static final long serialVersionUID = 1L;
 </#if>
+</#if>
 <#list proc.inputParameters as parameter>
+<#if documentation>
 
     /**
      * Input parameter ${parameter.name}.
      *
      * ${proc.fullName}
      */
+</#if>
 <#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
 </#if>
     private ${parameter.javaTypeName} ${parameter.fieldName};
 </#list>
-<#if !lombok>
+<#if !lombok || builder>
+<#if documentation>
 
     /**
      * Class constructor ${proc.className}IN.
      *
      * ${proc.fullName}
      */
+</#if>
     public ${proc.className}IN() {
     }
 </#if>
-<#if fullConstructor>
+<#if !builder && fullConstructor>
+<#if documentation>
 
     /**
      * Class constructor ${proc.className}IN.
@@ -110,6 +124,7 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      * @param p${parameter.propertyName} set value of ${parameter.name}
 </#list>
      */
+</#if>
     public ${proc.className}IN(${'\n'}            <#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
 <#list proc.inputParameters as parameter>
         set${parameter.propertyName}(p${parameter.propertyName});
@@ -117,7 +132,25 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
     }
 </#if>
 <#list proc.inputParameters as parameter>
+<#if builder>
+<#if documentation>
+
+    /**
+     * Setter of ${parameter.name}.
+     *
+     * ${proc.fullName}
+     *
+     * @param p${parameter.propertyName} ${parameter.name} to set
+     * @return The instance class
+     */
+</#if>
+    public void ${parameter.fieldName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
+        this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
+        return this;
+    }
+</#if>
 <#if !lombok || parameter.date>
+<#if documentation>
 
     /**
      * Getter of ${parameter.name}.
@@ -126,9 +159,12 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      *
      * @return The ${parameter.name} value
      */
+</#if>
     public ${parameter.javaTypeName} get${parameter.propertyName}() {
         return <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
+<#if !builder>
+<#if documentation>
 
     /**
      * Setter of ${parameter.name}.
@@ -137,9 +173,11 @@ public final class ${proc.className}IN<#if serialization> implements java.io.Ser
      *
      * @param p${parameter.propertyName} ${parameter.name} to set
      */
+</#if>
     public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
         this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
     }
+</#if>
 </#if>
 </#list>
 }

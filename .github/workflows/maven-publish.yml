@@ -21,7 +21,7 @@ jobs:
           architecture: x64
           cache: maven
       - name: Publish package
-        run: echo "${PUBLISH_KEY}" | base64 -d > key.gpg && gpg --import key.gpg && rm -f key.gpg && echo "${MAVEN_SETTINGS}" | base64 -d > settings.xml && mvn versions:set -DnewVersion=$(echo ${GITHUB_REF:10}) && mvn --batch-mode deploy --settings settings.xml -Prelease
+        run: echo "${PUBLISH_KEY}" | base64 -d > key.gpg && cat key.gpg && gpg --import key.gpg && rm -f key.gpg && echo "${MAVEN_SETTINGS}" | base64 -d > settings.xml && mvn versions:set -DnewVersion=$(echo ${GITHUB_REF:10}) && mvn --batch-mode deploy --settings settings.xml -Prelease
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}

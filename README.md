@@ -1,7 +1,5 @@
 # Maven Auto PLSQL/SP Generator Plugin
 
-[![TravisCI Status][travis-image]][travis-url]
-[![Codecov Status][codecov-image]][codecov-url]
 [![Central OSSRH][oss-nexus-image]][oss-nexus-url]
 [![Central Maven][central-image]][central-url]
 

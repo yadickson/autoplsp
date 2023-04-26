@@ -5,9 +5,10 @@
  */
 package com.github.yadickson.autoplsp.db.common;
 
-import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 import java.io.Serializable;
 import java.util.Locale;
+
+import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 
 /**
  *

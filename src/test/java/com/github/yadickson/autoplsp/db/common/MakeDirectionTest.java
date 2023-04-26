@@ -16,9 +16,11 @@
  */
 package com.github.yadickson.autoplsp.db.common;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
+
 import org.junit.Before;
+import org.junit.Test;
+
 import com.github.yadickson.autoplsp.db.MakeDirection;
 import com.github.yadickson.autoplsp.handler.BusinessException;
 

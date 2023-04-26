@@ -33,6 +33,7 @@ import ${javaPackage}.repository.sp.${proc.className}SP;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Repository;
 
+<#if documentation>
 /**
  * Mapper implementation for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -41,6 +42,7 @@ import org.springframework.stereotype.Repository;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Repository
 @SuppressWarnings({"rawtypes", "unchecked", "deprecated"})
 public final class ${proc.className}MapperImpl implements ${proc.className}Mapper {
@@ -50,11 +52,13 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
     </#if>
     private ${proc.className}SP sp = null;
 
+<#if documentation>
     /**
      * Setter for jdbcTemplate.
      *
      * @param pjdbcTemplate jdbcTemplate
      */
+</#if>
     @Resource(name="${jdbcTemplate}")
     public void setJdbcTemplate(final org.springframework.jdbc.core.JdbcTemplate pjdbcTemplate) {
         <#if proc.hasObject || proc.hasArray>
@@ -63,6 +67,7 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
         this.sp = new ${proc.className}SP(pjdbcTemplate);
     }
 
+<#if documentation>
     /**
      * Execute stored procedure.
      *
@@ -70,6 +75,7 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
      * <#if proc.hasOutput>@return output parameters</#if>
      * @throws java.sql.SQLException if error.
      */
+</#if>
     @Override
     public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>final ${proc.className}IN params</#if>) throws java.sql.SQLException {
 
@@ -145,12 +151,14 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
     }
     <#if proc.hasOutput>
 
+<#if documentation>
     /**
      * Evaluate output parameters from database.
      *
      * @param result map to evaluate.
      * @throws java.sql.SQLException if error.
      */
+</#if>
     private java.util.Map evaluateResult(final java.util.Map result) throws java.sql.SQLException {
 
         if (result == null) {

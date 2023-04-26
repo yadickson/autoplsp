@@ -30,27 +30,33 @@ import oracle.sql.DATE;
 
 import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * Utility to process date class.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Component
 public final class ${prefixUtilityName}DateUtilImpl
         implements ${prefixUtilityName}DateUtil {
 <#if logger>
 
+<#if documentation>
     /**
      * Logger.
      */
+</#if>
     private static final Logger LOGGER
             = LoggerFactory.getLogger(${prefixUtilityName}DateUtilImpl.class);
 </#if>
 
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public Object process(final Date param) {
 <#if driverName != 'oracle' >

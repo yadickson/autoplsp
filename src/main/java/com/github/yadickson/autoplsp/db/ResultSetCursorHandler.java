@@ -8,6 +8,7 @@ package com.github.yadickson.autoplsp.db;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+
 import org.apache.commons.dbutils.ResultSetHandler;
 
 /**

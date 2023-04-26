@@ -20,27 +20,33 @@ package ${javaPackage}.util;
 
 import java.sql.Connection;
 
+<#if documentation>
 /**
  * Interface to process connection transaction.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${prefixUtilityName}ConnectionUtil {
 
+<#if documentation>
     /**
      * Getter current connection.
      *
      * @return Connection class.
      */
+</#if>
     Connection process();
 
+<#if documentation>
     /**
      * Release connection.
      *
      * @param connection connection.
      * @return true if connection were closed.
      */
+</#if>
     boolean release(Connection connection);
 
 }

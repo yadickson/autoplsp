@@ -16,12 +16,14 @@
  */
 package com.github.yadickson.autoplsp.db;
 
-import com.github.yadickson.autoplsp.handler.BusinessException;
-import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 import org.apache.commons.dbutils.DbUtils;
+
+import com.github.yadickson.autoplsp.handler.BusinessException;
+import com.github.yadickson.autoplsp.logger.LoggerManager;
 
 /**
  * Database connection manager

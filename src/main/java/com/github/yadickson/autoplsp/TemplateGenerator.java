@@ -16,19 +16,20 @@
  */
 package com.github.yadickson.autoplsp;
 
-import com.github.yadickson.autoplsp.handler.BusinessException;
-import com.github.yadickson.autoplsp.logger.LoggerManager;
 import java.io.File;
-
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.Version;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Map;
+
+import com.github.yadickson.autoplsp.handler.BusinessException;
+import com.github.yadickson.autoplsp.logger.LoggerManager;
+
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.Version;
 
 /**
  * Template freemarker class manager.

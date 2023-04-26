@@ -37,17 +37,29 @@ import ${javaPackage}.util.${prefixUtilityName}ArrayUtil;
 import java.util.Date;
 
 </#if>
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
+<#if junit == 'junit5'>
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+<#else>
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
+</#if>
+
+<#if junit == 'junit5'>
+@ExtendWith(MockitoExtension.class)
+<#else>
 @RunWith(MockitoJUnitRunner.class)
+</#if>
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ${parameter.javaTypeName}BuilderTest {
 
@@ -114,8 +126,8 @@ public class ${parameter.javaTypeName}BuilderTest {
 
         Object result = builder.process(connection, array);
 
-        Assert.assertNotNull(result);
-        Assert.assertSame(obj, result);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(obj, result);
 
 <#if importObjectBuilder??>
         Mockito.verify(objectBuilder, Mockito.times(1)).process(Mockito.same(connection), Mockito.same(object));
@@ -129,13 +141,13 @@ public class ${parameter.javaTypeName}BuilderTest {
 
         Object[] objParamsResult = captorObjects.getValue();
 
-        Assert.assertNotNull(objParamsResult);
-        Assert.assertEquals(${parameter.parameters?size}, objParamsResult.length);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(objParamsResult);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${parameter.parameters?size}, objParamsResult.length);
 
 <#if parameter.parameters[parameter.parameters?size - 1].date>
-        Assert.assertEquals(object, objParamsResult[0]);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(object, objParamsResult[0]);
 <#else>
-        Assert.assertSame(object, objParamsResult[0]);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(object, objParamsResult[0]);
 </#if>
     }
 }

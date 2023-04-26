@@ -19,22 +19,28 @@ package ${javaPackage}.table.column;
 
 import ${javaPackage}.table.column.type.FieldType;
 
+<#if documentation>
 /**
  * Class definition for ${table.name} - ${field.name}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${table.propertyName}${field.propertyName} <#if field.charUsed??><#if field.charUsed == 'BYTE' >extends ${javaPackage}.table.column.type.BinaryField <#elseif field.charUsed == 'CHAR'>extends ${javaPackage}.table.column.type.CharacterField </#if><#elseif field.type == 'NUMERIC'>extends ${javaPackage}.table.column.type.NumericField <#elseif field.type == 'DATE'>extends ${javaPackage}.table.column.type.DateField </#if>{
 
+<#if documentation>
     /**
      * @return the type
      */
+</#if>
     FieldType getType();
 
+<#if documentation>
     /**
      * @return the position
      */
+</#if>
     int getPosition();
 
 }

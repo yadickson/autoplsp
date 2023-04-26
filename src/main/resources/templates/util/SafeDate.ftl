@@ -19,27 +19,33 @@ package ${javaPackage}.util;
 
 import java.util.Date;
 
+<#if documentation>
 /**
  * Utility to process date class.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public final class ${prefixUtilityName}SafeDate {
 
+<#if documentation>
     /**
      * Class constructor.
      */
+</#if>
     protected ${prefixUtilityName}SafeDate() {
 
     }
 
+<#if documentation>
     /**
      * Process date.
      *
      * @param <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Input<#else>input</#if> input date to process.
      * @return date.
      */
+</#if>
     public static Date process(final Date <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Input<#else>input</#if>) {
 
         if (<#if prefixUtilityName??>${prefixUtilityName?uncap_first}Input<#else>input</#if> == null) {

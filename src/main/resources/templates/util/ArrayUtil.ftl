@@ -21,14 +21,17 @@ package ${javaPackage}.util;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+<#if documentation>
 /**
  * Interface to create array.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${prefixUtilityName}ArrayUtil {
 
+<#if documentation>
     /**
      * Getter database array type.
      *
@@ -38,6 +41,7 @@ public interface ${prefixUtilityName}ArrayUtil {
      * @return array.
      * @throws SQLException if error
      */
+</#if>
     Object process(
             Connection connection,
             String name,

@@ -39,35 +39,43 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * Class to process connection transaction.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Component
 public final class ${prefixUtilityName}ConnectionUtilImpl implements
         ${prefixUtilityName}ConnectionUtil {
 <#if logger>
 
+<#if documentation>
     /**
      * Logger.
      */
+</#if>
     private static final Logger LOGGER
             = LoggerFactory.getLogger(${prefixUtilityName}ConnectionUtilImpl.class);
 </#if>
 <#if importDataSourceUtils??>
 
+<#if documentation>
     /**
      * JDBC template to use.
      */
+</#if>
     @Resource(name = "${jdbcTemplate}")
     private JdbcTemplate jdbcTemplate;
 </#if>
 
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public Connection process() {
 
@@ -89,9 +97,11 @@ public final class ${prefixUtilityName}ConnectionUtilImpl implements
         return <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if>;
     }
 
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public boolean release(final Connection connection) {
 

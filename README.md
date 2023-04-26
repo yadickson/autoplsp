@@ -13,14 +13,17 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 - Oracle DataBase 11g and 12c
 - Basic PostgresSQL
 - Basic SQL Server (Tested 2017, Driver jTDS)
-- Java >= 7
+- Java >= 8
 - Spring Framework >= 4
 - Auto package name detection
 - Configuration file generation for Spring
 - Use output parameters to evaluate process
 - Transaction annotation
-- Command line for driver, user, pass and connectionString parameters
+- Command line for all parameters
 - JsonNonNull support
+- Parameter IN builder support
+- Disable documentation generation
+- JUnit5 support
 
 [Examples](https://github.com/yadickson/autoplsp-examples)
 
@@ -70,24 +73,32 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 ## POM dependencies
 
 ```xml
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-core</artifactId>
+    <version>5.3.26</version>
+    <scope>provided</scope>
+</dependency>
+
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-context</artifactId>
-    <version>4.x.x.RELEASE</version>
+    <version>5.3.26</version>
     <scope>provided</scope>
-</dependency> 
+</dependency>
 
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-jdbc</artifactId>
-    <version>4.x.x.RELEASE</version>
+    <version>5.3.26</version>
     <scope>provided</scope>
-</dependency> 
-        
+</dependency>
+
 <dependency>
-    <groupId>commons-io</groupId>
-    <artifactId>commons-io</artifactId>
-    <version>2.5</version>
+    <groupId>org.slf4j</groupId>
+    <artifactId>log4j-over-slf4j</artifactId>
+    <version>1.7.36</version>
     <scope>provided</scope>
 </dependency>
 
@@ -99,18 +110,61 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
 </dependency>
 
 <dependency>
-    <groupId>com.fasterxml.jackson.core</groupId>
-    <artifactId>jackson-databind</artifactId>
-    <version>2.5.0</version>
+    <groupId>commons-lang</groupId>
+    <artifactId>commons-lang</artifactId>
+    <version>2.6</version>
     <scope>provided</scope>
+</dependency>
+
+<!-- Unit Testing -->
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-api</artifactId>
+    <version>5.8.2</version>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+    <version>5.8.2</version>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.junit.vintage</groupId>
+    <artifactId>junit-vintage-engine</artifactId>
+    <version>5.8.2</version>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-params</artifactId>
+    <version>5.8.2</version>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-core</artifactId>
+    <version>4.6.1</version>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-junit-jupiter</artifactId>
+    <version>4.6.1</version>
+    <scope>test</scope>
 </dependency>
 ```
 ## Oracle
 ```xml
 <dependency>
-    <groupId>com.jslsolucoes</groupId>
-    <artifactId>ojdbc6</artifactId>
-    <version>11.2.0.1.0</version>
+    <groupId>com.oracle.database.jdbc</groupId>
+    <artifactId>ojdbc8</artifactId>
+    <version>23.2.0.0</version>
     <scope>provided</scope>
 </dependency>
 ```
@@ -166,6 +220,17 @@ Maven plugin to generate Java classes from StoredProcedure and Functions in Data
         <outParameterMessage>...</outParameterMessage>
         <javaPackageName>...</javaPackageName>
         <jsonNonNull>...</jsonNonNull>
+        <lombok>true/false</lombok>
+        <header>true/false</header>
+        <builder>true/false</builder>
+        <serialization>true/false</serialization>
+        <test>true/false</test>
+        <junit>junit4/junit5</junit>
+        <position>true/false</position>
+        <diamond>true/false</diamond>
+        <documentation>true/false</documentation>
+        <logger>true/false</logger>
+        <fullConstructor>true/false</fullConstructor>
         <includes>
             <param>...</param>
             <param>...</param>
@@ -281,10 +346,38 @@ Regular expression to exclude procedure and functions names, example SP_NOT.*
 
 Regular expression to find resultset on procedure and functions names, example SP_YES.*
 
+### test (true/false) (default false)
+
+Include test folder and test classes
+
+### junit (junit4/junit5) (default junit5)
+
+Include junit configuration
+
+### header (true/false) (default true)
+
+Add header documentation class
+
+### documentation (true/false) (default true)
+
+Add documentation classes
+
+### builder (true/false) (default false)
+
+Include builder parameters only for IN
+
+### lombok (true/false) (default false)
+
+Include lombok definitions
+
+### serialization (true/false)
+
+Add serialization class support
+
 
 # Command line support
 
-> mvn clean package -Dautoplsp.driver=... -Dautoplsp.connectionString=... -Dautoplsp.user=... -Dautoplsp.pass=...
+> mvn clean package -Dautoplsp.driver=... -Dautoplsp.connectionString=... -Dautoplsp.user=... -Dautoplsp.pass=... -Dautoplsp.<others>=...
 
 ## POM Basic Configuration (include all procedure and function)
 
@@ -542,7 +635,62 @@ public class CustomServiceImpl implements CustomService {
         dao2.execute(...);
     }
 }
+
 ```
+
+# Example with unit test and persistence into src folder 
+
+```
+            <plugin>
+                <groupId>com.github.yadickson</groupId>
+                <artifactId>autoplsp</artifactId>
+                <version>1.8.0</version>
+                <configuration>
+                    <driver>oracle.jdbc.driver.OracleDriver</driver>
+                    <javaDataSourceName>...</javaDataSourceName>
+                    <jndiDataSourceName>...</jndiDataSourceName>
+                    <outParameterCode>...</outParameterCode>
+                    <outParameterMessage>...</outParameterMessage>
+                    <javaPackageName>plsql</javaPackageName>
+                    <outputDirectory>src/main/java</outputDirectory>
+                    <outputDirectoryResource>src/main/resources</outputDirectoryResource>
+                    <folderNameGenerator>.</folderNameGenerator>
+                    <folderNameResourceGenerator>.</folderNameResourceGenerator>
+                    <jsonNonNull>false</jsonNonNull>
+                    <lombok>false</lombok>
+                    <header>false</header>
+                    <builder>true</builder>
+                    <serialization>false</serialization>
+                    <test>true</test>
+                    <junit>junit5</junit>
+                    <position>true</position>
+                    <diamond>true</diamond>
+                    <documentation>false</documentation>
+                    <logger>false</logger>
+                    <fullConstructor>true</fullConstructor>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>...</groupId>
+                        <artifactId>...</artifactId>
+                        <version>...</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+```
+
+# Run command line to persistence into src folder
+
+```
+$ mvn clean autoplsp:generator -Dautoplsp.user=... -Dautoplsp.pass=... -Dautoplsp.connectionString=jdbc:oracle:thin:@...:...:...
+```
+
+# Run test
+
+```
+$ mvn test
+```
+
 
 [travis-image]: https://travis-ci.org/yadickson/autoplsp.svg?branch=master
 [travis-url]: https://travis-ci.org/yadickson/autoplsp

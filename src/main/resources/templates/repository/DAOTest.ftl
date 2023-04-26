@@ -63,11 +63,7 @@ import ${javaPackage}.util.${prefixUtilityName}ConnectionUtil;
 import java.util.Date;
 
 </#if>
-<#if proc.hasInput || proc.hasOutput>
-import org.junit.Assert;
-</#if>
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
 <#if proc.hasInput>
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -76,9 +72,28 @@ import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
+<#if junit == 'junit5'>
+<#if proc.hasInput || proc.hasOutput>
+import org.junit.jupiter.api.Assertions;
+</#if>
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+<#else>
+<#if proc.hasInput || proc.hasOutput>
+import org.junit.Assert;
+</#if>
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
+</#if>
+
+<#if junit == 'junit5'>
+@ExtendWith(MockitoExtension.class)
+<#else>
 @RunWith(MockitoJUnitRunner.class)
+</#if>
 @SuppressWarnings({"unchecked"})
 public class ${proc.className}DAOTest {
 
@@ -210,17 +225,17 @@ public class ${proc.className}DAOTest {
         <#if proc.hasOutput>out = </#if>repository.execute(<#if proc.hasInput>params</#if>);
 <#if proc.hasOutput>
 
-        Assert.assertNotNull(out);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(out);
 
 <#list proc.outputParameters as parameter>
 <#if parameter.date>
-        Assert.assertEquals(obj${parameter.propertyName}, out.get${parameter.propertyName}());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(obj${parameter.propertyName}, out.get${parameter.propertyName}());
 <#elseif parameter.clob>
-        Assert.assertEquals("${parameter.name}", out.get${parameter.propertyName}());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals("${parameter.name}", out.get${parameter.propertyName}());
 <#elseif parameter.blob>
-        Assert.assertNotNull(out.get${parameter.propertyName}());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(out.get${parameter.propertyName}());
 <#else>
-        Assert.assertSame(obj${parameter.propertyName}, out.get${parameter.propertyName}());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(obj${parameter.propertyName}, out.get${parameter.propertyName}());
 </#if>
 </#list>
 </#if>
@@ -249,21 +264,21 @@ public class ${proc.className}DAOTest {
 
         java.util.Map<String, Object> mapParamsResult = captorParameters.getValue();
 
-        Assert.assertNotNull(mapParamsResult);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(mapParamsResult);
 
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
-        Assert.assertSame(${parameter.fieldName}Builder, mapParamsResult.get("${parameter.name}"));
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameter.fieldName}Builder, mapParamsResult.get("${parameter.name}"));
 <#elseif parameter.date>
-        Assert.assertEquals(${parameter.fieldName}, mapParamsResult.get("${parameter.name}"));
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${parameter.fieldName}, mapParamsResult.get("${parameter.name}"));
 <#else>
-        Assert.assertSame(${parameter.fieldName}, mapParamsResult.get("${parameter.name}"));
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameter.fieldName}, mapParamsResult.get("${parameter.name}"));
 </#if>
 </#list>
 </#if>
     }
 
-    @Test(expected = java.sql.SQLException.class)
+    @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
     public void testExecute${proc.className}DAOError() throws java.sql.SQLException {
 <#if proc.hasInput>
         ${proc.className}IN params = new ${proc.className}IN();
@@ -283,11 +298,11 @@ public class ${proc.className}DAOTest {
 </#list>
         Mockito.when(<#if proc.function>function<#else>procedure</#if>.execute(Mockito.anyMap())).thenThrow(new RuntimeException());
 
-        repository.execute(<#if proc.hasInput>params</#if>);
+        <#if junit == 'junit5'>Assertions.assertThrows(java.sql.SQLException.class,() -> </#if>repository.execute(<#if proc.hasInput>params</#if>)<#if junit == 'junit5'>)</#if>;
     }
 <#if proc.hasInput>
 
-    @Test(expected = java.sql.SQLException.class)
+    @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
     public void testExecute${proc.className}DAOInputNullParameterError() throws java.sql.SQLException {
         ${proc.className}IN params = null;
 <#if importConnectionUtils??>
@@ -295,7 +310,7 @@ public class ${proc.className}DAOTest {
         Mockito.when(connectionUtil.process()).thenReturn(connection);
 
 </#if>
-        repository.execute(params);
+        <#if junit == 'junit5'>Assertions.assertThrows(java.sql.SQLException.class,() -> </#if>repository.execute(params)<#if junit == 'junit5'>)</#if>;
     }
 </#if>
 }

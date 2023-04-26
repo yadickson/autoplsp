@@ -1,13 +1,25 @@
 package ${javaPackage}.repository.sp;
 
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+<#if junit == 'junit5'>
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+<#else>
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+</#if>
 
+<#if junit == 'junit5'>
+@ExtendWith(MockitoExtension.class)
+<#else>
 @RunWith(MockitoJUnitRunner.class)
+</#if>
 public class ${proc.className}SPTest {
 
     @Mock
@@ -23,8 +35,8 @@ public class ${proc.className}SPTest {
 
         ${proc.className}SPImpl sp = new ${proc.className}SPImpl(jdbcTemplate);
 
-        Assert.assertSame(dataSource, sp.getJdbcTemplate().getDataSource());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(dataSource, sp.getJdbcTemplate().getDataSource());
 
-        Assert.assertEquals("{<#if proc.function>? = </#if>call ${proc.fullName}(<#list proc.parameters as parameter><#if parameter.position != 0>?<#sep>, </#sep></#if></#list>)}", sp.getCallString());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals("{<#if proc.function>? = </#if>call ${proc.fullName}(<#list proc.parameters as parameter><#if parameter.position != 0>?<#sep>, </#sep></#if></#list>)}", sp.getCallString());
     }
 }

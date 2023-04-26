@@ -100,6 +100,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 </#if>
 import org.springframework.stereotype.Repository;
 
+<#if documentation>
 /**
  * DAO implementation for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -108,92 +109,114 @@ import org.springframework.stereotype.Repository;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Repository
 @SuppressWarnings({"unchecked"})
 public final class ${proc.className}DAOImpl
         implements ${proc.className}DAO {
 
 <#if logger>
+<#if documentation>
     /**
      * Logger.
      */
+</#if>
     private static final Logger LOGGER
             = LoggerFactory.getLogger(${proc.className}DAOImpl.class);
 
 </#if>
 <#list proc.arrayImports as parameter>
+<#if documentation>
     /**
      * ${parameter.javaTypeName} builder utility.
      */
+</#if>
     @Autowired
     private ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder;
 
 </#list>
 <#list proc.objectImports as parameter>
+<#if documentation>
     /**
      * ${parameter.javaTypeName} builder utility.
      */
+</#if>
     @Autowired
     private ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder;
 
 </#list>
 <#if importArrayUtil??>
+<#if documentation>
     /**
      * Array utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}ArrayUtil arrayUtil;
 
 </#if>
 <#if importBlobUtil??>
+<#if documentation>
     /**
      * Blob utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}BlobUtil blobUtil;
 
 </#if>
 <#if proc.checkResult>
+<#if documentation>
     /**
      * Check result utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}CheckResult checkResult;
 
 </#if>
 <#if importClobUtil??>
+<#if documentation>
     /**
      * Clob utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}ClobUtil clobUtil;
 
 </#if>
 <#if importConnectionUtils??>
+<#if documentation>
     /**
      * The connection util.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}ConnectionUtil connectionUtil;
 
 </#if>
 <#if importObjectUtil??>
+<#if documentation>
     /**
      * Object utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}ObjectUtil objectUtil;
 
 </#if>
+<#if documentation>
     /**
      * <#if proc.function>Function<#else>Stored procedure</#if>.
      *
      * ${proc.fullName}
      *
      */
+</#if>
     @Resource(name = "${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
     private ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if>;
 
+<#if documentation>
     /**
      * Execute <#if proc.function>function<#else>stored procedure</#if>.
      *
@@ -207,6 +230,7 @@ public final class ${proc.className}DAOImpl
 </#if>
      * @throws SQLException if error.
      */
+</#if>
     @Override
     public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>
             final ${proc.className}IN params

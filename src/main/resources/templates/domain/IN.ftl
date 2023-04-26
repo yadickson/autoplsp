@@ -78,16 +78,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 </#if>
 public class ${proc.className}IN<#if serialization> implements java.io.Serializable</#if> {
 <#if serialization>
+
 <#if documentation>
     /**
      * Serialization.
      */
+</#if>
     static final long serialVersionUID = 1L;
 </#if>
-</#if>
 <#list proc.inputParameters as parameter>
-<#if documentation>
 
+<#if documentation>
     /**
      * Input parameter ${parameter.name}.
      *
@@ -101,8 +102,8 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
     private ${parameter.javaTypeName} ${parameter.fieldName};
 </#list>
 <#if !lombok || builder>
-<#if documentation>
 
+<#if documentation>
     /**
      * Class constructor ${proc.className}IN.
      *
@@ -113,45 +114,45 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
     }
 </#if>
 <#if !builder && fullConstructor>
-<#if documentation>
 
+<#if documentation>
     /**
      * Class constructor ${proc.className}IN.
      *
      * ${proc.fullName}
      *
 <#list proc.inputParameters as parameter>
-     * @param p${parameter.propertyName} set value of ${parameter.name}
+     * @param ${parameter.fieldName} set value of ${parameter.name}
 </#list>
      */
 </#if>
-    public ${proc.className}IN(${'\n'}            <#list proc.inputParameters as parameter>final ${parameter.javaTypeName} p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
+    public ${proc.className}IN(${'\n'}            <#list proc.inputParameters as parameter>final ${parameter.javaTypeName} ${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
 <#list proc.inputParameters as parameter>
-        set${parameter.propertyName}(p${parameter.propertyName});
+        set${parameter.propertyName}(${parameter.fieldName});
 </#list>
     }
 </#if>
 <#list proc.inputParameters as parameter>
 <#if builder>
-<#if documentation>
 
+<#if documentation>
     /**
      * Setter of ${parameter.name}.
      *
      * ${proc.fullName}
      *
-     * @param p${parameter.propertyName} ${parameter.name} to set
+     * @param ${parameter.fieldName} ${parameter.name} to set
      * @return The instance class
      */
 </#if>
-    public void ${parameter.fieldName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
-        this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
+    public ${proc.className}IN ${parameter.fieldName}(final ${parameter.javaTypeName} ${parameter.fieldName}) {
+        set${parameter.propertyName}(${parameter.fieldName});
         return this;
     }
 </#if>
 <#if !lombok || parameter.date>
-<#if documentation>
 
+<#if documentation>
     /**
      * Getter of ${parameter.name}.
      *
@@ -163,9 +164,9 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
     public ${parameter.javaTypeName} get${parameter.propertyName}() {
         return <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
-<#if !builder>
-<#if documentation>
 
+<#if documentation>
+    /**
     /**
      * Setter of ${parameter.name}.
      *
@@ -174,10 +175,9 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
      * @param p${parameter.propertyName} ${parameter.name} to set
      */
 </#if>
-    public void set${parameter.propertyName}(final ${parameter.javaTypeName} p${parameter.propertyName}) {
-        this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
+    public void set${parameter.propertyName}(final ${parameter.javaTypeName} ${parameter.fieldName}) {
+        this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
-</#if>
 </#if>
 </#list>
 }

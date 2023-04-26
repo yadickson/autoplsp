@@ -36,12 +36,14 @@ import oracle.sql.STRUCT;
 
 import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * Class to process object element.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Component
 <#if driverVersionName == 'ojdbc6' >
 @SuppressWarnings({"deprecation"})
@@ -50,16 +52,20 @@ public final class ${prefixUtilityName}ObjectUtilImpl
         implements ${prefixUtilityName}ObjectUtil {
 <#if logger>
 
+<#if documentation>
     /**
      * Logger.
      */
+</#if>
     private static final Logger LOGGER
             = LoggerFactory.getLogger(${prefixUtilityName}ObjectUtilImpl.class);
 </#if>
 
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public Object process(
             final Connection connection,

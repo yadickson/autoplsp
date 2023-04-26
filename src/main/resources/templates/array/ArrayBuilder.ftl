@@ -21,14 +21,17 @@ package ${javaPackage}.array;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+<#if documentation>
 /**
  * Interface array for build datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${parameter.javaTypeName}Builder {
 
+<#if documentation>
     /**
      * Getter data object type.
      *
@@ -37,6 +40,7 @@ public interface ${parameter.javaTypeName}Builder {
      * @return array object processed.
      * @throws SQLException if error
      */
+</#if>
     Object process(
             Connection connection,
             ${parameter.javaTypeName} array

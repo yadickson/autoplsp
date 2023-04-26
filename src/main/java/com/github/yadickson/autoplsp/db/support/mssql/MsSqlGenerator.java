@@ -16,8 +16,8 @@
  */
 package com.github.yadickson.autoplsp.db.support.mssql;
 
-import com.github.yadickson.autoplsp.db.MakeParameter;
 import com.github.yadickson.autoplsp.db.Generator;
+import com.github.yadickson.autoplsp.db.MakeParameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 
 /**

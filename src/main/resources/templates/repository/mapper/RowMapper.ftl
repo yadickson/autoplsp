@@ -34,6 +34,7 @@ import java.util.Date;
 
 import org.springframework.jdbc.core.RowMapper;
 
+<#if documentation>
 /**
  * Resultset mapper for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -44,16 +45,20 @@ import org.springframework.jdbc.core.RowMapper;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public final class ${parameter.javaTypeName}RowMapper
         implements RowMapper<${parameter.javaTypeName}> {
 
 <#list parameter.parameters as paramrs>
+<#if documentation>
     /**
      * Column <#if position>position<#else>name</#if>.
      */
+</#if>
     private static final <#if position>int<#else>String</#if> ${paramrs.name} = <#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>;
 
 </#list>
+<#if documentation>
     /**
      * Resultset mapper.
      *
@@ -62,6 +67,7 @@ public final class ${parameter.javaTypeName}RowMapper
      * @throws SQLException if error.
      * @return object
      */
+</#if>
     @Override
     public ${parameter.javaTypeName} mapRow(
             final ResultSet resultSet,
@@ -107,6 +113,7 @@ public final class ${parameter.javaTypeName}RowMapper
 <#list parameter.parameters?chunk(10) as childs>
 <#assign step++ >
 
+<#if documentation>
     /**
      * Fill row values for step ${step}.
      *
@@ -114,6 +121,7 @@ public final class ${parameter.javaTypeName}RowMapper
      * @param row row to fill.
      * @throws SQLException if error.
      */
+</#if>
     private void fillStep${step}(
         final ResultSet resultSet,
         final ${parameter.javaTypeName} row

@@ -1,12 +1,24 @@
 package ${javaPackage}.util;
 
+import org.mockito.InjectMocks;
+
+<#if junit == 'junit5'>
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+<#else>
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
+</#if>
 
+<#if junit == 'junit5'>
+@ExtendWith(MockitoExtension.class)
+<#else>
 @RunWith(MockitoJUnitRunner.class)
+</#if>
 public class ${prefixUtilityName}ClobUtilTest {
 
     @InjectMocks
@@ -14,6 +26,6 @@ public class ${prefixUtilityName}ClobUtilTest {
 
     @Test
     public void testInputNull() {
-        Assert.assertNull(clobUtil.process(null));
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNull(clobUtil.process(null));
     }
 }

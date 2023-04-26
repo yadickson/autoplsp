@@ -19,20 +19,24 @@ package ${javaPackage}.util;
 
 import java.util.Date;
 
+<#if documentation>
 /**
  * Interface utility to process date database.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${prefixUtilityName}DateUtil {
 
+<#if documentation>
     /**
      * Process date.
      *
      * @param param date to process.
      * @return object date.
      */
+</#if>
     Object process(final Date param);
 
 }

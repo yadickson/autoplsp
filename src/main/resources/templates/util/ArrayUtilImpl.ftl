@@ -32,12 +32,14 @@ import oracle.jdbc.OracleConnection;
 
 import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * Class to process array element.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Component
 <#if driverVersionName == 'ojdbc6' >
 @SuppressWarnings({"deprecation"})
@@ -46,16 +48,20 @@ public final class ${prefixUtilityName}ArrayUtilImpl
         implements ${prefixUtilityName}ArrayUtil {
 <#if logger>
 
+<#if documentation>
     /**
      * Logger.
      */
+</#if>
     private static final Logger LOGGER
             = LoggerFactory.getLogger(${prefixUtilityName}ArrayUtilImpl.class);
 </#if>
 
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public Object process(
             final Connection connection,

@@ -37,26 +37,30 @@ import ${javaPackage}.object.${parameter.parameters[parameter.parameters?size - 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 </#if>
+<#if documentation>
 /**
  * Bean array for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
 <#if !serialization>
 @SuppressWarnings({"serial"})
 </#if>
-public final class ${parameter.javaTypeName}
+public class ${parameter.javaTypeName}
         extends ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}><#if serialization>
         implements java.io.Serializable</#if> {
 <#if serialization> 
 
+<#if documentation>
     /**
      * Serialization.
      */
+</#if>
     static final long serialVersionUID = 1L;
 </#if>
 }

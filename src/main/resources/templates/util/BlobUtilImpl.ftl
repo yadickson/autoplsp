@@ -42,12 +42,14 @@ import oracle.sql.BLOB;
 
 import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * Class to process blob element.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Component
 <#if driverVersionName == 'ojdbc6' >
 @SuppressWarnings({"deprecation"})
@@ -56,16 +58,20 @@ public final class ${prefixUtilityName}BlobUtilImpl
         implements ${prefixUtilityName}BlobUtil {
 <#if logger>
 
+<#if documentation>
     /**
      * Logger.
      */
+</#if>
     private static final Logger LOGGER
             = LoggerFactory.getLogger(${prefixUtilityName}BlobUtilImpl.class);
 </#if>
 
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public byte[] process(final Object object) {
 
@@ -88,9 +94,11 @@ public final class ${prefixUtilityName}BlobUtilImpl
         return result;
     }
     
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public Object process(
         final Connection connection,

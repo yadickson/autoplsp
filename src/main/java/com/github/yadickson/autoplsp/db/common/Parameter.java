@@ -17,10 +17,10 @@
 package com.github.yadickson.autoplsp.db.common;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
-import java.util.ArrayList;
 
 /**
  * Parameter class

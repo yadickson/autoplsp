@@ -31,6 +31,7 @@ import ${javaPackage}.domain.${proc.className}OUT;
 </#if>
 import java.sql.SQLException;
 
+<#if documentation>
 /**
  * DAO interface for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -39,8 +40,10 @@ import java.sql.SQLException;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${proc.className}DAO {
 
+<#if documentation>
     /**
      * Execute stored procedure.
      *
@@ -52,6 +55,7 @@ public interface ${proc.className}DAO {
 </#if>
      * @throws SQLException if error
      */
+</#if>
     <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>
             ${proc.className}IN params
     </#if>) throws SQLException;

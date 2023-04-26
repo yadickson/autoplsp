@@ -51,6 +51,7 @@ import lombok.Setter;
 <#if jsonNonNull>import com.fasterxml.jackson.annotation.JsonInclude;
 
 </#if>
+<#if documentation>
 /**
  * Output parameters for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -59,6 +60,7 @@ import lombok.Setter;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 <#if lombok>
 <#if fullConstructor>
 @NoArgsConstructor
@@ -69,21 +71,25 @@ import lombok.Setter;
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-public final class ${proc.className}OUT<#if serialization> implements java.io.Serializable</#if> {
+public class ${proc.className}OUT<#if serialization> implements java.io.Serializable</#if> {
 <#if serialization> 
 
+<#if documentation>
     /**
      * Serialization.
      */
+</#if>
     static final long serialVersionUID = 1L;
 </#if>
 <#list proc.outputParameters as parameter>
 
+<#if documentation>
     /**
      * Output parameter ${parameter.name}.
      *
      * ${proc.fullName}
      */
+</#if>
 <#if lombok && parameter.date>
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -92,16 +98,19 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
 </#list>
 <#if !lombok>
 
+<#if documentation>
     /**
      * Class constructor ${proc.className}OUT.
      *
      * ${proc.fullName}
      */
+</#if>
     public ${proc.className}OUT() {
     }
 </#if>
 <#if fullConstructor>
 
+<#if documentation>
     /**
      * Class constructor ${proc.className}OUT.
      *
@@ -111,15 +120,17 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
      * @param p${parameter.propertyName} set value of ${parameter.name}
     </#list>
      */
-    public ${proc.className}OUT(${'\n'}            <#list proc.outputParameters as parameter>final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
+</#if>
+    public ${proc.className}OUT(${'\n'}            <#list proc.outputParameters as parameter>final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
 <#list proc.outputParameters as parameter>
-        set${parameter.propertyName}(p${parameter.propertyName});
+        set${parameter.propertyName}(${parameter.fieldName});
 </#list>
     }
 </#if>
 <#list proc.outputParameters as parameter>
 <#if !lombok || parameter.date>
 
+<#if documentation>
     /**
      * Getter of ${parameter.name}.
      *
@@ -127,10 +138,12 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
      *
      * @return The ${parameter.name} value.
      */
+</#if>
     public <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
         return <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
     }
 
+<#if documentation>
     /**
      * Setter of ${parameter.name}.
      *
@@ -138,6 +151,7 @@ public final class ${proc.className}OUT<#if serialization> implements java.io.Se
      *
      * @param p${parameter.propertyName} ${parameter.name} to set
      */
+</#if>
     public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
         this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
     }

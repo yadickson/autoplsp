@@ -12,15 +12,27 @@ import java.sql.Array;
 </#if>
 </#if>
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
+<#if junit == 'junit5'>
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+<#else>
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
+</#if>
+
+<#if junit == 'junit5'>
+@ExtendWith(MockitoExtension.class)
+<#else>
 @RunWith(MockitoJUnitRunner.class)
+</#if>
 public class ${prefixUtilityName}ArrayUtilTest {
 
     @InjectMocks
@@ -47,12 +59,12 @@ public class ${prefixUtilityName}ArrayUtilTest {
 
         Object result = arrayUtil.process(connection, "NAME", objects);
 
-        Assert.assertNotNull(result);
-        Assert.assertSame(array, result);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(array, result);
     }
 </#if>
 
-    @Test(expected = SQLException.class)
+    @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
     public void testProcessArrayError() throws SQLException {
         Object[] objects = new Object[0];
 <#if driverName == 'oracle' >
@@ -61,6 +73,6 @@ public class ${prefixUtilityName}ArrayUtilTest {
         Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(Mockito.eq("NAME"), Mockito.same(objects))).thenThrow(new RuntimeException());
 
 </#if>
-        arrayUtil.process(connection, "NAME", objects);
+        <#if junit == 'junit5'>Assertions.assertThrows(java.sql.SQLException.class,() -> </#if>arrayUtil.process(connection, "NAME", objects)<#if junit == 'junit5'>)</#if>;
     }
 }

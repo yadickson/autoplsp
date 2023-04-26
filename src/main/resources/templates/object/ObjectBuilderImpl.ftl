@@ -44,49 +44,61 @@ import ${javaPackage}.util.${prefixUtilityName}ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * Bean object for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Component
 public final class ${parameter.javaTypeName}BuilderImpl
         implements ${parameter.javaTypeName}Builder {
 <#if importBlobUtil??>
 
+<#if documentation>
     /**
      * Blob utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}BlobUtil blobUtil;
 </#if>
 <#if importClobUtil??>
 
+<#if documentation>
     /**
      * Clob utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}ClobUtil clobUtil;
 </#if>
 <#if importDateUtil??>
 
+<#if documentation>
     /**
      * Date utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}DateUtil dateUtil;
 </#if>
 
+<#if documentation>
     /**
      * Object utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}ObjectUtil objectUtil;
 
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public Object process(
             final Connection connection,

@@ -16,8 +16,10 @@
  */
 package com.github.yadickson.autoplsp.generator.util;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
+
+import org.junit.Test;
+
 import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 
 /**

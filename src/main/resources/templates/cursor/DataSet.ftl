@@ -44,6 +44,7 @@ import lombok.Setter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 </#if>
+<#if documentation>
 /**
  * DataSet parameter for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -54,6 +55,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 <#if lombok>
 <#if fullConstructor>
 @NoArgsConstructor
@@ -64,16 +66,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-public final class ${parameter.javaTypeName}<#if serialization> implements java.io.Serializable</#if> {
+public class ${parameter.javaTypeName}<#if serialization> implements java.io.Serializable</#if> {
 <#if serialization> 
 
+<#if documentation>
     /**
      * Serialization.
      */
+</#if>
     static final long serialVersionUID = 1L;
 </#if>
 <#list parameter.parameters as parameter2>
 
+<#if documentation>
     /**
      * Column ${parameter2.name}.
      *
@@ -81,6 +86,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      *
      * ${parameter.name}
      */
+</#if>
 <#if lombok && parameter2.date>
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -89,6 +95,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 </#list>
 <#if !lombok>
 
+<#if documentation>
     /**
      * Class constructor ${parameter.javaTypeName}.
      *
@@ -96,12 +103,14 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      *
      * ${parameter.name}
      */
+</#if>
     public ${parameter.javaTypeName}() {
 
     }
 </#if>
 <#if fullConstructor>
 
+<#if documentation>
     /**
      * Class constructor ${parameter.javaTypeName}.
      *
@@ -113,6 +122,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      * @param c${parameter2.propertyName} set value of ${parameter2.name}
     </#list>
      */
+</#if>
     public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} c${parameter2.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
 <#list parameter.parameters as parameter2>
         set${parameter2.propertyName}(c${parameter2.propertyName});
@@ -122,6 +132,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
 <#list parameter.parameters as parameter2>
 <#if !lombok || parameter2.date>
 
+<#if documentation>
     /**
      * Getter of ${parameter2.name}.
      *
@@ -131,10 +142,12 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      *
      * @return The ${parameter2.name} value.
      */
+</#if>
     public ${parameter2.javaTypeName} get${parameter2.propertyName}() {
         return <#if parameter2.date>${prefixUtilityName}SafeDate.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
     }
 
+<#if documentation>
     /**
      * Setter of ${parameter2.name}.
      *
@@ -144,6 +157,7 @@ public final class ${parameter.javaTypeName}<#if serialization> implements java.
      *
      * @param c${parameter2.propertyName} ${parameter2.name} to set
      */
+</#if>
     public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} c${parameter2.propertyName}) {
         this.${parameter2.fieldName} = <#if parameter2.date>${prefixUtilityName}SafeDate.process(</#if>c${parameter2.propertyName}<#if parameter2.date>)</#if>;
     }

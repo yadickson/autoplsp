@@ -29,42 +29,54 @@ import org.slf4j.Marker;
 
 import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * Check result from store procedure or function.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Component
 public final class ${prefixUtilityName}CheckResultImpl
         implements ${prefixUtilityName}CheckResult {
 <#if logger>
 
+<#if documentation>
     /**
      * Logger.
      */
+</#if>
     private static final Logger LOGGER
             = LoggerFactory.getLogger(${prefixUtilityName}CheckResultImpl.class);
 </#if>
 
+<#if documentation>
     /**
      * Success constant value.
      */
+</#if>
     private static final String <#if prefixUtilityName??>${prefixUtilityName?upper_case}_</#if>SUCCESS_CODE = "${successCode}";
 
+<#if documentation>
     /**
      * Code to check.
      */
+</#if>
     private static final String <#if prefixUtilityName??>${prefixUtilityName?upper_case}_</#if>CODE = "${outParameterCode}";
 
+<#if documentation>
     /**
      * Message to check.
      */
+</#if>
     private static final String <#if prefixUtilityName??>${prefixUtilityName?upper_case}_</#if>MESSAGE = "${outParameterMessage}";
 
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public void check(final Map<String, Object> map) throws SQLException {
 

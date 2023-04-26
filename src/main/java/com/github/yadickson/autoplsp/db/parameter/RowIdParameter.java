@@ -16,8 +16,8 @@
  */
 package com.github.yadickson.autoplsp.db.parameter;
 
-import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Direction;
+import com.github.yadickson.autoplsp.db.common.Parameter;
 import com.github.yadickson.autoplsp.db.common.Procedure;
 
 /**

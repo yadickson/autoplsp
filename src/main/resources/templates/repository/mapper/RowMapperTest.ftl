@@ -11,14 +11,29 @@ import ${javaPackage}.cursor.${parameter.javaTypeName};
 import java.util.Date;
 </#if>
 
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+<#if junit == 'junit5'>
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+<#else>
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+</#if>
 
+<#if junit == 'junit5'>
+@ExtendWith(MockitoExtension.class)
+<#else>
 @RunWith(MockitoJUnitRunner.class)
+</#if>
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ${parameter.javaTypeName}RowMapperTest {
 
@@ -57,12 +72,12 @@ public class ${parameter.javaTypeName}RowMapperTest {
 
         ${parameter.javaTypeName} result = mapper.mapRow(resultSet, 0);
 
-        Assert.assertNotNull(result);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
 <#list parameter.parameters as paramrs>
 <#if paramrs.date>
-        Assert.assertEquals(${paramrs.fieldName}, result.get${paramrs.propertyName}());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${paramrs.fieldName}, result.get${paramrs.propertyName}());
 <#else>
-        Assert.assertSame(${paramrs.fieldName}, result.get${paramrs.propertyName}());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${paramrs.fieldName}, result.get${paramrs.propertyName}());
 </#if>
 </#list>
     }

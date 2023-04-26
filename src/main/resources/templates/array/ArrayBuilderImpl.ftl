@@ -49,54 +49,68 @@ import ${javaPackage}.util.${prefixUtilityName}ArrayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * Builder class to make array for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Component
 public final class ${parameter.javaTypeName}BuilderImpl
         implements ${parameter.javaTypeName}Builder {
 
+<#if documentation>
     /**
      * Array utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}ArrayUtil arrayUtil;
 <#if importObjectBuilder??>
 
+<#if documentation>
     /**
      * Object utility to build ${parameter.parameters[parameter.parameters?size - 1].realObjectName}.
      */
+</#if>
     @Autowired
     private ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder objectBuilder;
 <#elseif importDateUtil??>
 
+<#if documentation>
     /**
      * Date utility.
      */
     @Autowired
+</#if>
     private ${prefixUtilityName}DateUtil dateUtil;
 <#elseif importBlobUtil??>
 
+<#if documentation>
     /**
      * Blob utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}BlobUtil blobUtil;
 <#elseif importClobUtil??>
 
+<#if documentation>
     /**
      * Clob utility.
      */
+</#if>
     @Autowired
     private ${prefixUtilityName}ClobUtil clobUtil;
 </#if>
 
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public Object process(
             final Connection connection,

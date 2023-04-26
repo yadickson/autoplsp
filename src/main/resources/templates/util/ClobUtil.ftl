@@ -19,22 +19,27 @@ package ${javaPackage}.util;
 
 import java.sql.Connection;
 
+<#if documentation>
 /**
  * Interface to process clob element.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${prefixUtilityName}ClobUtil {
 
+<#if documentation>
     /**
      * Process clob parameter from database.
      *
      * @param object to process.
      * @return string representation.
      */
+</#if>
     String process(Object object);
 
+<#if documentation>
     /**
      * Process clob parameter from database.
      *
@@ -42,6 +47,7 @@ public interface ${prefixUtilityName}ClobUtil {
      * @param param to process.
      * @return clob representation.
      */
+</#if>
     Object process(Connection connection, String param);
 
 }

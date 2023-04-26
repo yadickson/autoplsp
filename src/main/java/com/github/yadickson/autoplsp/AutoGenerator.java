@@ -16,32 +16,32 @@
  */
 package com.github.yadickson.autoplsp;
 
-import com.github.yadickson.autoplsp.db.common.Procedure;
-import com.github.yadickson.autoplsp.db.DriverConnection;
-import com.github.yadickson.autoplsp.db.GeneratorFactory;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
-
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.lang.StringUtils;
-import com.github.yadickson.autoplsp.db.Generator;
-import com.github.yadickson.autoplsp.db.common.Table;
-import com.github.yadickson.autoplsp.logger.LoggerManager;
-import com.github.yadickson.autoplsp.util.ProcedureSort;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.apache.maven.model.Resource;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.maven.model.Resource;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+
+import com.github.yadickson.autoplsp.db.DriverConnection;
+import com.github.yadickson.autoplsp.db.Generator;
+import com.github.yadickson.autoplsp.db.GeneratorFactory;
+import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.db.common.Table;
+import com.github.yadickson.autoplsp.logger.LoggerManager;
+import com.github.yadickson.autoplsp.util.ProcedureSort;
 
 /**
  * Maven plugin to java classes and config spring file generator from database.
@@ -65,6 +65,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.driver",
+            alias = "driver",
             required = true)
     private String driver;
 
@@ -73,6 +74,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.connectionString",
+            alias = "connectionString",
             required = true)
     private String connectionString;
 
@@ -81,6 +83,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.user",
+            alias = "user",
             required = true)
     private String user;
 
@@ -89,6 +92,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.pass",
+            alias = "pass",
             required = true)
     private String pass;
 
@@ -96,7 +100,9 @@ public class AutoGenerator extends AbstractMojo {
      * Output source directory.
      */
     @Parameter(
+            property = "autoplsp.outputDirectory",
             defaultValue = "${project.build.directory}/generated-sources",
+            alias = "outputDirectory",
             readonly = true,
             required = false)
     private File outputDirectory;
@@ -105,6 +111,8 @@ public class AutoGenerator extends AbstractMojo {
      * Output test directory.
      */
     @Parameter(
+            property = "autoplsp.outputTestDirectory",
+            alias = "outputTestDirectory",
             defaultValue = "./src/test/java",
             readonly = true,
             required = false)
@@ -114,6 +122,8 @@ public class AutoGenerator extends AbstractMojo {
      * Output resource directory.
      */
     @Parameter(
+            property = "autoplsp.outputDirectoryResource",
+            alias = "outputDirectoryResource",
             defaultValue = "${project.build.directory}/generated-resources",
             readonly = true,
             required = false)
@@ -123,6 +133,8 @@ public class AutoGenerator extends AbstractMojo {
      * Output folder name directory.
      */
     @Parameter(
+            property = "autoplsp.folderNameGenerator",
+            alias = "folderNameGenerator",
             defaultValue = "autosp-generator",
             readonly = true,
             required = false)
@@ -132,6 +144,8 @@ public class AutoGenerator extends AbstractMojo {
      * Output folder name spring resource directory.
      */
     @Parameter(
+            property = "autoplsp.folderNameResourceGenerator",
+            alias = "folderNameResourceGenerator",
             defaultValue = "database",
             readonly = true,
             required = false)
@@ -141,6 +155,8 @@ public class AutoGenerator extends AbstractMojo {
      * Spring configuration file name.
      */
     @Parameter(
+            property = "autoplsp.outputConfigFileName",
+            alias = "outputConfigFileName",
             defaultValue = "${project.artifactId}-context.xml",
             readonly = true,
             required = false)
@@ -150,6 +166,8 @@ public class AutoGenerator extends AbstractMojo {
      * SQL readme definition file name.
      */
     @Parameter(
+            property = "autoplsp.outputDefinitionFileName",
+            alias = "outputDefinitionFileName",
             defaultValue = "SQL.md",
             readonly = true,
             required = false)
@@ -158,6 +176,9 @@ public class AutoGenerator extends AbstractMojo {
      * Java package name.
      */
     @Parameter(
+            property = "autoplsp.javaPackageName",
+            alias = "javaPackageName",
+            defaultValue = "plsql",
             readonly = true,
             required = true)
     private String javaPackageName;
@@ -167,6 +188,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.transactionName",
+            alias = "transactionName",
             defaultValue = "transactionManager",
             readonly = true,
             required = false)
@@ -177,6 +199,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.transactionQualityName",
+            alias = "transactionQualityName",
             defaultValue = "false",
             readonly = true,
             required = false)
@@ -187,6 +210,8 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.javaDataSourceName",
+            alias = "javaDataSourceName",
+            defaultValue = "jdbcDataSource",
             readonly = true,
             required = true)
     private String javaDataSourceName;
@@ -196,6 +221,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.javaJdbcTemplateName",
+            alias = "javaJdbcTemplateName",
             defaultValue = "jdbcTemplate",
             readonly = true,
             required = false)
@@ -206,7 +232,8 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.arraySuffix",
-            defaultValue = "Table",
+            alias = "arraySuffix",
+            defaultValue = "Array",
             readonly = true,
             required = false)
     private String arraySuffix;
@@ -216,6 +243,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.objectSuffix",
+            alias = "objectSuffix",
             defaultValue = "Object",
             readonly = true,
             required = false)
@@ -226,7 +254,8 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.tableSuffix",
-            defaultValue = "Td",
+            alias = "tableSuffix",
+            defaultValue = "Table",
             readonly = true,
             required = false)
     private String tableSuffix;
@@ -236,6 +265,8 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.jndiDataSourceName",
+            alias = "jndiDataSourceName",
+            defaultValue = "jndiDataSource",
             readonly = true,
             required = true)
     private String jndiDataSourceName;
@@ -262,6 +293,8 @@ public class AutoGenerator extends AbstractMojo {
      * Output parameter code to evaluate process.
      */
     @Parameter(
+            property = "autoplsp.outParameterCode",
+            alias = "outParameterCode",
             defaultValue = "OUT_RETURN_CODE",
             readonly = true,
             required = false)
@@ -272,6 +305,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.successCode",
+            alias = "successCode",
             defaultValue = "0",
             readonly = true,
             required = true)
@@ -281,6 +315,8 @@ public class AutoGenerator extends AbstractMojo {
      * Output parameter message.
      */
     @Parameter(
+            property = "autoplsp.outParameterMessage",
+            alias = "outParameterMessage",
             defaultValue = "OUT_RETURN_MSG",
             readonly = true,
             required = false)
@@ -300,6 +336,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.encode",
+            alias = "encode",
             defaultValue = "UTF-8",
             readonly = true,
             required = false)
@@ -310,6 +347,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.jsonNonNull",
+            alias = "jsonNonNull",
             defaultValue = "false",
             readonly = true,
             required = true)
@@ -338,6 +376,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.addPackagename",
+            alias = "addPackagename",
             defaultValue = "true",
             readonly = true,
             required = false)
@@ -348,6 +387,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.lombok",
+            alias = "lombok",
             defaultValue = "false",
             readonly = true,
             required = false)
@@ -358,6 +398,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.header",
+            alias = "header",
             defaultValue = "true",
             readonly = true,
             required = false)
@@ -368,26 +409,40 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.serialization",
-            defaultValue = "true",
+            alias = "serialization",
+            defaultValue = "false",
             readonly = true,
             required = false)
     private String serialization;
 
     /**
-     * Add serialization support.
+     * Add test support.
      */
     @Parameter(
             property = "autoplsp.test",
+            alias = "test",
             defaultValue = "false",
             readonly = true,
             required = false)
     private String test;
 
     /**
+     * Add junit test support.
+     */
+    @Parameter(
+            property = "autoplsp.junit",
+            alias = "junit",
+            defaultValue = "junit5",
+            readonly = true,
+            required = false)
+    private String junit;
+
+    /**
      * Use position instance name support.
      */
     @Parameter(
             property = "autoplsp.position",
+            alias = "position",
             defaultValue = "true",
             readonly = true,
             required = false)
@@ -398,6 +453,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.diamond",
+            alias = "diamond",
             defaultValue = "true",
             readonly = true,
             required = false)
@@ -408,6 +464,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.logger",
+            alias = "logger",
             defaultValue = "false",
             readonly = true,
             required = false)
@@ -418,6 +475,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.fullConstructor",
+            alias = "fullConstructor",
             defaultValue = "true",
             readonly = true,
             required = false)
@@ -428,6 +486,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.driverVersionName",
+            alias = "driverVersionName",
             defaultValue = "ojdbc6",
             readonly = true,
             required = false)
@@ -438,6 +497,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.prefixUtilityName",
+            alias = "prefixUtilityName",
             defaultValue = "Util",
             readonly = true,
             required = false)
@@ -448,7 +508,8 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.builder",
-            defaultValue = "true",
+            alias = "builder",
+            defaultValue = "false",
             readonly = true,
             required = false)
     private String builder;
@@ -458,6 +519,7 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.java8",
+            alias = "java8",
             defaultValue = "false",
             readonly = true,
             required = false)
@@ -468,7 +530,8 @@ public class AutoGenerator extends AbstractMojo {
      */
     @Parameter(
             property = "autoplsp.documentation",
-            defaultValue = "true",
+            alias = "documentation",
+            defaultValue = "false",
             readonly = true,
             required = false)
     private String documentation;
@@ -483,7 +546,7 @@ public class AutoGenerator extends AbstractMojo {
     public void execute() throws MojoExecutionException {
 
         getLog().info("[AutoGenerator] Driver: " + driver);
-        getLog().info("[AutoGenerator] DriverVersionName: " + driverVersionName);
+        getLog().info("[AutoGenerator] DriverVersionName (ojdbc6/ojdbc8): " + driverVersionName);
         getLog().info("[AutoGenerator] ConnectionString: " + connectionString);
         getLog().info("[AutoGenerator] User: " + user);
         getLog().info("[AutoGenerator] Pass: ****");
@@ -513,6 +576,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] Logger: " + logger);
         getLog().info("[AutoGenerator] FullConstructor: " + fullConstructor);
         getLog().info("[AutoGenerator] Test: " + test);
+        getLog().info("[AutoGenerator] JUnit (junit4/junit5): " + junit);
         getLog().info("[AutoGenerator] SuccessCode: " + successCode);
         getLog().info("[AutoGenerator] OutParameterCode: " + outParameterCode);
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
@@ -673,6 +737,7 @@ public class AutoGenerator extends AbstractMojo {
                     header.equalsIgnoreCase("true"),
                     serialization.equalsIgnoreCase("true"),
                     test.equalsIgnoreCase("true"),
+                    junit,
                     position.equalsIgnoreCase("true"),
                     diamond.equalsIgnoreCase("true"),
                     logger.equalsIgnoreCase("true"),

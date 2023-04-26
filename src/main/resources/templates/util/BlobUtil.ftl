@@ -20,22 +20,27 @@ package ${javaPackage}.util;
 
 import java.sql.Connection;
 
+<#if documentation>
 /**
  * Interface to process blob element.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${prefixUtilityName}BlobUtil {
 
+<#if documentation>
     /**
      * Process blob parameter from database.
      *
      * @param object to process.
      * @return byte array representation.
      */
+</#if>
     byte[] process(Object object);
 
+<#if documentation>
     /**
      * Process blob parameter from database.
      *
@@ -43,6 +48,7 @@ public interface ${prefixUtilityName}BlobUtil {
      * @param param to process.
      * @return blob representation.
      */
+</#if>
     Object process(Connection connection, byte[] param);
 
 }

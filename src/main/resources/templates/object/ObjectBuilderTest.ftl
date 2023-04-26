@@ -30,17 +30,29 @@ import ${javaPackage}.util.${prefixUtilityName}ObjectUtil;
 import java.util.Date;
 
 </#if>
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
+<#if junit == 'junit5'>
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+<#else>
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
+</#if>
+
+<#if junit == 'junit5'>
+@ExtendWith(MockitoExtension.class)
+<#else>
 @RunWith(MockitoJUnitRunner.class)
+</#if>
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ${parameter.javaTypeName}BuilderTest {
 
@@ -107,18 +119,18 @@ public class ${parameter.javaTypeName}BuilderTest {
 
         Object result = builder.process(connection, object);
 
-        Assert.assertNotNull(result);
-        Assert.assertSame(obj, result);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(obj, result);
 
         Object[] objParamsResult = captorObjects.getValue();
 
-        Assert.assertNotNull(objParamsResult);
-        Assert.assertEquals(${parameter.parameters?size}, objParamsResult.length);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(objParamsResult);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${parameter.parameters?size}, objParamsResult.length);
 <#list parameter.parameters as parameter>
 <#if parameter.date>
-        Assert.assertEquals(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
 <#else>
-        Assert.assertSame(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
 </#if>
 </#list>
 

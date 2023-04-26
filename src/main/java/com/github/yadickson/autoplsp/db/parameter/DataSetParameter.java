@@ -16,12 +16,13 @@
  */
 package com.github.yadickson.autoplsp.db.parameter;
 
-import com.github.yadickson.autoplsp.db.common.Parameter;
-import com.github.yadickson.autoplsp.db.common.Direction;
-import com.github.yadickson.autoplsp.db.common.Procedure;
-import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.github.yadickson.autoplsp.db.common.Direction;
+import com.github.yadickson.autoplsp.db.common.Parameter;
+import com.github.yadickson.autoplsp.db.common.Procedure;
+import com.github.yadickson.autoplsp.util.CapitalizeUtil;
 
 /**
  * Dataset parameter class

@@ -24,28 +24,34 @@ import ${javaPackage}.table.column.${table.propertyName}${field.propertyName};
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * Table definitions for ${table.name}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Component
 public final class ${table.propertyName}Impl implements ${table.propertyName} {
 <#list table.fields as field>
+<#if documentation>
     /**
      * Field name ${field.name}.
      */
+</#if>
     @Autowired
     private ${table.propertyName}${field.propertyName} ${field.fieldName};
 
 </#list>
 <#list table.fields as field>
+<#if documentation>
     /**
      * Getter field name definination for ${field.name}.
      *
      * @return the ${field.name}.
      */
+</#if>
     @Override
     public ${table.propertyName}${field.propertyName} get${field.propertyName}() {
         return ${field.fieldName};

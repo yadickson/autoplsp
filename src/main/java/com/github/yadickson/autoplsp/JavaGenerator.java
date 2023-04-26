@@ -91,6 +91,7 @@ public final class JavaGenerator extends TemplateGenerator {
     private static final String JAVA_8 = "java8";
     private static final String BUILDER = "builder";
     private static final String DOCUMENTATION = "documentation";
+    private static final String JUNIT = "junit";
 
     private boolean checkResult;
     private boolean processClob;
@@ -152,6 +153,7 @@ public final class JavaGenerator extends TemplateGenerator {
             final Boolean header,
             final Boolean serialization,
             final Boolean test,
+            final String junit,
             final Boolean position,
             final Boolean diamond,
             final Boolean logger,
@@ -202,6 +204,7 @@ public final class JavaGenerator extends TemplateGenerator {
         INPUT_MAP.put(JAVA_8, java8);
         INPUT_MAP.put(BUILDER, builder);
         INPUT_MAP.put(DOCUMENTATION, documentation);
+        INPUT_MAP.put(JUNIT, junit);
     }
 
     /**

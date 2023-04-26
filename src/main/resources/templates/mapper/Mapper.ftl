@@ -25,6 +25,7 @@ import ${javaPackage}.domain.${proc.className}IN;
 import ${javaPackage}.domain.${proc.className}OUT;
 </#if>
 
+<#if documentation>
 /**
  * Mapper interface for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -33,13 +34,16 @@ import ${javaPackage}.domain.${proc.className}OUT;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${map.className}Mapper {
 
+<#if documentation>
     /**
      * Process mapper for stored procedure.
      *
      * <#if proc.hasInput>@param params input parameters</#if>
      * <#if proc.hasOutput>@return output parameters</#if>
      */
+</#if>
     ${map.className}OUT process(<#if proc.hasInput>${proc.className}IN params</#if>);
 }

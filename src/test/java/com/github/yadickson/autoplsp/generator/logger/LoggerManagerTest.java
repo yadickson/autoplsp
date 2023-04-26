@@ -16,13 +16,14 @@
  */
 package com.github.yadickson.autoplsp.generator.logger;
 
-import com.github.yadickson.autoplsp.logger.LoggerManager;
 import org.apache.maven.plugin.logging.Log;
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import com.github.yadickson.autoplsp.logger.LoggerManager;
 
 /**
  * Logger application test

@@ -1,14 +1,25 @@
 package ${javaPackage}.repository.sp;
 
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+<#if junit == 'junit5'>
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+<#else>
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+</#if>
 
+<#if junit == 'junit5'>
+@ExtendWith(MockitoExtension.class)
+<#else>
 @RunWith(MockitoJUnitRunner.class)
-@SuppressWarnings({"rawtypes", "unchecked"})
+</#if>
 public class ${proc.className}SqlQueryTest {
 
     @Mock
@@ -24,6 +35,6 @@ public class ${proc.className}SqlQueryTest {
 
         ${proc.className}SqlQueryImpl sp = new ${proc.className}SqlQueryImpl(jdbcTemplate);
 
-        Assert.assertSame(dataSource, sp.getJdbcTemplate().getDataSource());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(dataSource, sp.getJdbcTemplate().getDataSource());
     }
 }

@@ -5,9 +5,10 @@
  */
 package com.github.yadickson.autoplsp.util;
 
-import com.github.yadickson.autoplsp.db.common.Parameter;
 import java.io.Serializable;
 import java.util.Comparator;
+
+import com.github.yadickson.autoplsp.db.common.Parameter;
 
 /**
  * The parameter sort class.

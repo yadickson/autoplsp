@@ -21,20 +21,24 @@ package ${javaPackage}.util;
 import java.sql.SQLException;
 import java.util.Map;
 
+<#if documentation>
 /**
  * Interface to check result from store procedure or function.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${prefixUtilityName}CheckResult {
 
+<#if documentation>
     /**
      * Evaluate output parameters from database.
      *
      * @param map map to evaluate.
      * @throws SQLException if error.
      */
+</#if>
     void check(Map<String, Object> map) throws SQLException;
 
 }

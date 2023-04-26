@@ -21,14 +21,17 @@ package ${javaPackage}.util;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+<#if documentation>
 /**
  * Interface to create object.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${prefixUtilityName}ObjectUtil {
 
+<#if documentation>
     /**
      * Getter data object type.
      *
@@ -38,6 +41,7 @@ public interface ${prefixUtilityName}ObjectUtil {
      * @return object
      * @throws SQLException if error
      */
+</#if>
     Object process(
             Connection connection,
             String name,

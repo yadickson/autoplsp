@@ -16,11 +16,12 @@
  */
 package com.github.yadickson.autoplsp.db;
 
+import java.util.regex.Pattern;
+
 import com.github.yadickson.autoplsp.db.support.mssql.MsSqlGenerator;
 import com.github.yadickson.autoplsp.db.support.oracle.OracleGenerator;
 import com.github.yadickson.autoplsp.db.support.postgresql.PostgreSqlGenerator;
 import com.github.yadickson.autoplsp.handler.BusinessException;
-import java.util.regex.Pattern;
 
 /**
  * Store procedure and function generator factory from driver class name

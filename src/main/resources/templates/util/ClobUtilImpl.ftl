@@ -42,12 +42,14 @@ import oracle.sql.CLOB;
 
 import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * Class to process clob element.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 @Component
 <#if driverVersionName == 'ojdbc6' >
 @SuppressWarnings({"deprecation"})
@@ -56,16 +58,20 @@ public final class ${prefixUtilityName}ClobUtilImpl
         implements ${prefixUtilityName}ClobUtil {
 <#if logger>
 
+<#if documentation>
     /**
      * Logger.
      */
+</#if>
     private static final Logger LOGGER
             = LoggerFactory.getLogger(${prefixUtilityName}ClobUtilImpl.class);
 </#if>
 
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public String process(final Object object) {
 
@@ -88,9 +94,11 @@ public final class ${prefixUtilityName}ClobUtilImpl
         return result;
     }
     
+<#if documentation>
     /**
      * {@inheritDoc}
      */
+</#if>
     @Override
     public Object process(
         final Connection connection,

@@ -21,19 +21,23 @@ package ${javaPackage}.table;
 import ${javaPackage}.table.column.${table.propertyName}${field.propertyName};
 </#list>
 
+<#if documentation>
 /**
  * Table definitions for ${table.name}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${table.propertyName} {
 <#list table.fields as field>
+<#if documentation>
     /**
      * Getter field name definination for ${field.name}.
      *
      * @return the ${table.propertyName}${field.propertyName}
      */
+</#if>
     ${table.propertyName}${field.propertyName} get${field.propertyName}();
 
 </#list>

@@ -15,6 +15,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Publish Library
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          architecture: x64
+          cache: maven
+      - name: Set up JDK 8 for x64
+        run: |
+          echo "${PUBLISH_KEY}" | base64 -d > key.gpg
+          gpg --import key.gpg
+          rm -f key.gpg
+          echo "${MAVEN_SETTINGS}" | base64 -d > settings.xml
+          mvn versions:set -DnewVersion=$(echo ${GITHUB_REF:10})
+          mvn --batch-mode deploy --settings settings.xml -Prelease
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
@@ -22,18 +36,3 @@ jobs:
           PUBLISH_KEY: ${{ secrets.GPG_KEY }}
           PUBLISH_ID: ${{ secrets.GPG_ID }}
           PUBLISH_PASS: ${{ secrets.GPG_PASS }}
-        run: |
-          echo "${PUBLISH_KEY}" | base64 -d > key.gpg
-          gpg --import key.gpg
-          rm -f key.gpg
-          echo "${MAVEN_SETTINGS}" | base64 -d > settings.xml
-      - uses: actions/setup-java@v3
-      - name: Set up JDK 8 for x64
-        with:
-          java-version: '8'
-          distribution: 'adopt'
-          architecture: x64
-          cache: maven
-        run: |
-          mvn versions:set -DnewVersion=$(echo ${GITHUB_REF:10})
-          mvn --batch-mode deploy --settings settings.xml -Prelease

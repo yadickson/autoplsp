@@ -9,3 +9,5 @@ nbactions.xml
 .project
 .idea
 *.iml
+settings.xml
+*.gpg

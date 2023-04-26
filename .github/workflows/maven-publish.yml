@@ -20,12 +20,13 @@ jobs:
           distribution: 'adopt'
           architecture: x64
           cache: maven
+      - shell: bash
       - name: Publish package
         run: |
-          echo "${secrets.GPG_KEY}" | base64 -d > key.gpg
+          echo "${PUBLISH_KEY}" | base64 -d > key.gpg
           gpg --import key.gpg
           rm -f key.gpg
-          echo "${secrets.SETTINGS}" | base64 -d > settings.xml
+          echo "${MAVEN_SETTINGS}" | base64 -d > settings.xml
           mvn versions:set -DnewVersion=$(echo ${GITHUB_REF:10})
           mvn --batch-mode deploy --settings settings.xml -Prelease
         env:

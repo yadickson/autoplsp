@@ -28,7 +28,7 @@ jobs:
           rm -f key.gpg
           echo "${MAVEN_SETTINGS}" | base64 -d > settings.xml
           mvn versions:set -DnewVersion=$(echo ${GITHUB_REF:10})
-          mvn --batch-mode deploy --settings settings.xml -Prelease
+          mvn --batch-mode deploy --settings settings.xml -Prelease -Dgpg.executable=gpg -Dgpg.keyname=${PUBLISH_ID} -Dgpg.passphrase=${PUBLISH_PASS}
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}

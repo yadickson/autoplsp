@@ -21,9 +21,12 @@ jobs:
           distribution: 'adopt'
           architecture: x64
           cache: maven
-      - name: Configure GPG Key
-        run: |
-          echo -n "${{ secrets.GPG_KEY }}" | base64 -d | GPG_TTY=$(tty) gpg --import
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_KEY }}
+          passphrase: ${{ secrets.GPG_PASS }}
       - name: Configure settings
         run: |
           echo "${{ secrets.SETTINGS }}" | base64 -d > settings.xml

@@ -11,3 +11,4 @@ nbactions.xml
 *.iml
 settings.xml
 *.gpg
+*.key

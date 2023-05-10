@@ -163,6 +163,17 @@ public class AutoGenerator extends AbstractMojo {
     private String outputConfigFileName;
 
     /**
+     * Java configuration file name.
+     */
+    @Parameter(
+            property = "autoplsp.outputBeanConfigFileName",
+            alias = "outputBeanConfigFileName",
+            defaultValue = "SqlConfiguration",
+            readonly = true,
+            required = false)
+    private String outputBeanConfigFileName;
+
+    /**
      * SQL readme definition file name.
      */
     @Parameter(
@@ -270,6 +281,17 @@ public class AutoGenerator extends AbstractMojo {
             readonly = true,
             required = true)
     private String jndiDataSourceName;
+
+    /**
+     * JNDI datasource name.
+     */
+    @Parameter(
+            property = "autoplsp.credentialsDataSource",
+            alias = "credentialsDataSource",
+            defaultValue = "false",
+            readonly = true,
+            required = true)
+    private String credentialsDataSource;
 
     /**
      * Regular expression to include procedure names.
@@ -556,6 +578,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] OutputTestDirectory: " + outputTestDirectory.getPath());
         getLog().info("[AutoGenerator] OutputDirectoryResource: " + outputDirectoryResource.getPath());
         getLog().info("[AutoGenerator] OutputConfigFileName: " + outputConfigFileName);
+        getLog().info("[AutoGenerator] OutputBeanConfigFileName: " + outputBeanConfigFileName);
         getLog().info("[AutoGenerator] OutputDefinitionFileName: " + outputDefinitionFileName);
         getLog().info("[AutoGenerator] TransactionName: " + transactionName);
         getLog().info("[AutoGenerator] TransactionQualityName: " + transactionQualityName);
@@ -563,6 +586,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] JavaDataSourceName: " + javaDataSourceName);
         getLog().info("[AutoGenerator] JavaJdbcTemplateName: " + javaJdbcTemplateName);
         getLog().info("[AutoGenerator] JNDIDataSourceName: " + jndiDataSourceName);
+        getLog().info("[AutoGenerator] CredentialsDataSource: " + credentialsDataSource);
         getLog().info("[AutoGenerator] ArraySuffix: " + arraySuffix);
         getLog().info("[AutoGenerator] ObjectSuffix: " + objectSuffix);
         getLog().info("[AutoGenerator] TableSuffix: " + tableSuffix);
@@ -787,12 +811,30 @@ public class AutoGenerator extends AbstractMojo {
                     javaDataSourceName,
                     javaJdbcTemplateName,
                     jndiDataSourceName,
+                    credentialsDataSource.equalsIgnoreCase("true"),
                     folderNameResourceGenerator,
                     outputConfigFileName,
                     spList
             );
 
             config.process();
+
+            BeanConfigGenerator beanConfig;
+            beanConfig = new BeanConfigGenerator(
+                    outputDirectory.getPath(),
+                    javaPackageName,
+                    transactionName,
+                    transactionQualityName.equalsIgnoreCase("true"),
+                    javaDataSourceName,
+                    javaJdbcTemplateName,
+                    jndiDataSourceName,
+                    credentialsDataSource.equalsIgnoreCase("true"),
+                    folderNameGenerator,
+                    outputBeanConfigFileName,
+                    spList
+            );
+
+            beanConfig.process();
 
             DefinitionGenerator definition;
             definition = new DefinitionGenerator(

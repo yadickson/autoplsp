@@ -30,7 +30,8 @@ import ${javaPackage}.domain.${parameter.javaTypeName};
 </#if>
 </#list>
 import ${javaPackage}.repository.sp.${proc.className}SP;
-import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 <#if documentation>
@@ -47,10 +48,7 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings({"rawtypes", "unchecked", "deprecated"})
 public final class ${proc.className}MapperImpl implements ${proc.className}Mapper {
 
-    <#if proc.hasObject || proc.hasArray>
-    private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
-    </#if>
-    private ${proc.className}SP sp = null;
+    private final ${proc.className}SP sp;
 
 <#if documentation>
     /**
@@ -59,12 +57,8 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
      * @param pjdbcTemplate jdbcTemplate
      */
 </#if>
-    @Resource(name="${jdbcTemplate}")
-    public void setJdbcTemplate(final org.springframework.jdbc.core.JdbcTemplate pjdbcTemplate) {
-        <#if proc.hasObject || proc.hasArray>
-        this.jdbcTemplate = pjdbcTemplate;
-        </#if>
-        this.sp = new ${proc.className}SP(pjdbcTemplate);
+    public ${proc.className}MapperImpl(@Qualifier("${jdbcTemplate}") final ${proc.className}SP sp) {
+        this.sp = sp;
     }
 
 <#if documentation>

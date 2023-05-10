@@ -53,6 +53,7 @@ import org.springframework.jdbc.core.SqlReturnResultSet;
 </#if>
 import org.springframework.jdbc.object.GenericSqlQuery;
 
+<#if documentation>
 /**
  * DAO for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -61,21 +62,26 @@ import org.springframework.jdbc.object.GenericSqlQuery;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public final class ${proc.className}SqlQueryImpl
         extends GenericSqlQuery
         implements ${proc.className}SqlQuery {
 
+<#if documentation>
     /**
      * Full <#if proc.function>function<#else>stored procedure</#if> name.
      */
+</#if>
     public static final String SPROC_NAME
             = "${proc.fullName}";
 
+<#if documentation>
     /**
      * Class constructor from jdbcTemplate.
      *
      * @param jdbcTemplate jdbcTemplate
      */
+</#if>
     public ${proc.className}SqlQueryImpl(final JdbcTemplate jdbcTemplate) {
         super();
 
@@ -114,12 +120,14 @@ public final class ${proc.className}SqlQueryImpl
         compile();
     }
 
+<#if documentation>
     /**
      * Execute the <#if proc.function>function<#else>stored procedure</#if>.
      *
      * @return response.
      * @param params input parameters.
      */
+</#if>
     public Map<String, Object> execute(final Map<String, Object> params) {
         Map map<String, Object> = new HashMap<<#if !diamond>String, Object</#if>>();
 <#list proc.parameters as parameter>

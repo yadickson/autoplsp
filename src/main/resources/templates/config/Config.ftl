@@ -11,11 +11,20 @@
             http://www.springframework.org/schema/tx
             http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+<#if !credentialsDataSource>
     <bean id="${dataSource}" name="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" >
         <property name="jndiName" value="${jndi}" />
         <property name="resourceRef" value="true" />
         <property name="proxyInterface" value="javax.sql.DataSource" />
     </bean>
+<#else>
+	<bean id="${dataSource}" name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${r"${spring.datasource.driver-class-name}"}" />
+		<property name="url" value="${r"${spring.datasource.url}"}" />
+		<property name="username" value="${r"${spring.datasource.username}"}" />
+		<property name="password" value="${r"${spring.datasource.password}"}" />
+	</bean>
+</#if>
 
 <#if transactionQualityName >
     <tx:annotation-driven />

@@ -50,7 +50,9 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.SqlReturnResultSet;
 </#if>
 import org.springframework.jdbc.object.StoredProcedure;
+import org.springframework.stereotype.Component;
 
+<#if documentation>
 /**
  * DAO for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -59,22 +61,28 @@ import org.springframework.jdbc.object.StoredProcedure;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
+@Component
 public final class ${proc.className}SPImpl
         extends StoredProcedure
         implements ${proc.className}SP {
 
+<#if documentation>
     /**
      * Full <#if proc.function>function<#else>stored procedure</#if> name.
      */
+</#if>
     public static final String SPROC_NAME
             = "${proc.fullName}";
 
+<#if documentation>
     /**
      * Class constructor from jdbcTemplate.
      *
      * @param jdbcTemplate jdbcTemplate
      */
-    public ${proc.className}SPImpl(final JdbcTemplate jdbcTemplate) {
+</#if>
+    public ${proc.className}SPImpl(@Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate) {
 
         super(jdbcTemplate.getDataSource(), SPROC_NAME);
 
@@ -112,9 +120,11 @@ public final class ${proc.className}SPImpl
 <#list proc.parameters?chunk(10) as childs>
 <#assign step++ >
 
+<#if documentation>
     /**
      * Fill parameters declaration for step ${step}.
      */
+</#if>
     private void fillStep${step}() {
 
 <#list childs as paramrs>

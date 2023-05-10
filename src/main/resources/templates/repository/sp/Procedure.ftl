@@ -20,6 +20,7 @@ package ${javaPackage}.repository.sp;
 
 import java.util.Map;
 
+<#if documentation>
 /**
  * DAO interface for <#if proc.function>function<#else>stored procedure</#if>.
  *
@@ -28,13 +29,16 @@ import java.util.Map;
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
+</#if>
 public interface ${proc.className}SP {
 
+<#if documentation>
     /**
      * Execute the function or stored procedure.
      *
      * @return response.
      * @param params input parameters.
      */
+</#if>
     Map<String, Object> execute(Map<String, ?> params);
 }

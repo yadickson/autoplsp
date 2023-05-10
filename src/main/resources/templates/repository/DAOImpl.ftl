@@ -87,7 +87,7 @@ import java.util.List;
 </#if>
 import java.util.Map;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 <#if logger>
 import org.slf4j.Logger;
@@ -213,7 +213,8 @@ public final class ${proc.className}DAOImpl
      *
      */
 </#if>
-    @Resource(name = "${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
+    @Autowired
+    @Qualifier("${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
     private ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if>;
 
 <#if documentation>

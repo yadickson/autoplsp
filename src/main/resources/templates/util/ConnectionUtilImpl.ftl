@@ -25,7 +25,8 @@ package ${javaPackage}.util;
 
 import java.sql.Connection;
 
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 <#if logger>
 
 import org.slf4j.Logger;
@@ -67,9 +68,18 @@ public final class ${prefixUtilityName}ConnectionUtilImpl implements
      * JDBC template to use.
      */
 </#if>
-    @Resource(name = "${jdbcTemplate}")
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 </#if>
+
+<#if documentation>
+    /**
+     * Class constructor.
+     * @param jdbcTemplate jdbcTemplate.
+     */
+</#if>
+    public ${prefixUtilityName}ConnectionUtilImpl(@Qualifier("${jdbcTemplate}" final JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
 <#if documentation>
     /**

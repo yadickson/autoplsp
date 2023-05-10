@@ -26,18 +26,20 @@ import com.github.yadickson.autoplsp.handler.BusinessException;
 import com.github.yadickson.autoplsp.logger.LoggerManager;
 
 /**
- * Configuration spring file generator.
+ * Java Configuration file generator.
  *
  * @author Yadickson Soto
  */
-public final class ConfigGenerator extends TemplateGenerator {
+public final class BeanConfigGenerator extends TemplateGenerator {
 
+    private final String javaPackage;
     private final String fileName;
-    private final String folderNameResourceGenerator;
+    private final String folderNameGenerator;
     private final Boolean credentialsDataSource;
 
     private static final String JAVA_PACKAGE_NAME = "javaPackage";
     private static final String CREDENTIALS_DATA_SOURCE = "credentialsDataSource";
+    private static final String JAVA_FILE_NAME = "javaFileName";
     private static final String TRANSACTION_NAME = "transactionName";
     private static final String TRANSACTION_QUALITY_NAME = "transactionQualityName";
 
@@ -53,28 +55,30 @@ public final class ConfigGenerator extends TemplateGenerator {
      * @param dataSource Datasource name
      * @param jdbcTemplate JdbcTemplate name
      * @param jndi JNDI datasource name
-     * @param folderNameResourceGenerator folder name spring resource directory
+     * @param folderNameGenerator folder name spring resource directory
      * @param outputFileName Spring configuration file name
      * @param procedures procedure list
      */
-    public ConfigGenerator(String outputDir,
-            final String javaPackage,
-            final String transactionName,
-            final Boolean transactionQualityName,
-            final String dataSource,
-            final String jdbcTemplate,
-            final String jndi,
-            final Boolean credentialsDataSource,
-            final String folderNameResourceGenerator,
-            final String outputFileName,
-            final List<Procedure> procedures) {
+    public BeanConfigGenerator(String outputDir,
+                               final String javaPackage,
+                               final String transactionName,
+                               final Boolean transactionQualityName,
+                               final String dataSource,
+                               final String jdbcTemplate,
+                               final String jndi,
+                               final Boolean credentialsDataSource,
+                               final String folderNameGenerator,
+                               final String outputFileName,
+                               final List<Procedure> procedures) {
         super(outputDir, null);
+        this.javaPackage = javaPackage;
         this.fileName = outputFileName;
-        this.folderNameResourceGenerator = folderNameResourceGenerator;
+        this.folderNameGenerator = folderNameGenerator;
         this.credentialsDataSource = credentialsDataSource;
 
         INPUT_MAP.put(JAVA_PACKAGE_NAME, javaPackage);
         INPUT_MAP.put(CREDENTIALS_DATA_SOURCE, credentialsDataSource);
+        INPUT_MAP.put(JAVA_FILE_NAME, fileName);
         INPUT_MAP.put(TRANSACTION_NAME, transactionName);
         INPUT_MAP.put(TRANSACTION_QUALITY_NAME, transactionQualityName);
         INPUT_MAP.put("dataSource", dataSource);
@@ -90,8 +94,8 @@ public final class ConfigGenerator extends TemplateGenerator {
      * error
      */
     public void process() throws BusinessException {
-        LoggerManager.getInstance().info("[ConfigGenerator] Process spring template config");
-        createTemplate(INPUT_MAP, "/config/Config.ftl", getFileNamePath(folderNameResourceGenerator, fileName));
+        LoggerManager.getInstance().info("[BeanConfigGenerator] Process spring template config");
+        createTemplate(INPUT_MAP, "/config/BeanConfig.ftl", getFileNamePath(folderNameGenerator + File.separatorChar + "config", fileName + ".java"));
     }
 
     /**
@@ -103,7 +107,11 @@ public final class ConfigGenerator extends TemplateGenerator {
      */
     @Override
     protected String getOutputPath(String path) throws BusinessException {
-        return super.getOutputPath("spring" + File.separatorChar + path);
+        return super.getOutputPath(File.separatorChar + folderNameGenerator + File.separatorChar + getDirectoryPackage() + File.separatorChar + path);
+    }
+
+    private String getDirectoryPackage() {
+        return this.javaPackage.replace('.', File.separatorChar);
     }
 
 }

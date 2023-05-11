@@ -32,21 +32,13 @@ public class ${javaFileName} {
 
     @Bean
     @Qualifier("${transactionName}")
-    public org.springframework.jdbc.datasource.DataSourceTransactionManager transactionManager(@Qualifier("${dataSource}") javax.sql.DataSource dataSource) {
+    public org.springframework.jdbc.datasource.DataSourceTransactionManager transactionManager(@Qualifier("${dataSource}") final javax.sql.DataSource dataSource) {
         return new org.springframework.jdbc.datasource.DataSourceTransactionManager(dataSource);
     }
 
     @Bean
     @Qualifier("${jdbcTemplate}")
-    public JdbcTemplate jdbcTemplate(@Qualifier("${dataSource}") javax.sql.DataSource dataSource) {
+    public JdbcTemplate jdbcTemplate(@Qualifier("${dataSource}") final javax.sql.DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
-<#list procedures as proc>
-
-    @Bean
-    @Qualifier("${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
-    public ${javaPackage}.repository.sp.${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> bean${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>(@Qualifier("${jdbcTemplate}") JdbcTemplate jdbcTemplate) {
-        return new ${javaPackage}.repository.sp.${proc.className}<#if !proc.functionInline>SPImpl<#else>SqlQueryImpl</#if>(jdbcTemplate);
-    }
-</#list>
 }

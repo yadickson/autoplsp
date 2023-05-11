@@ -21,7 +21,6 @@ package ${javaPackage}.table;
 import ${javaPackage}.table.column.${table.propertyName}${field.propertyName};
 </#list>
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 <#if documentation>
@@ -40,10 +39,22 @@ public final class ${table.propertyName}Impl implements ${table.propertyName} {
      * Field name ${field.name}.
      */
 </#if>
-    @Autowired
-    private ${table.propertyName}${field.propertyName} ${field.fieldName};
+    private final ${table.propertyName}${field.propertyName} ${field.fieldName};
 
 </#list>
+<#if documentation>
+    /**
+     * Class constructor.
+     *
+     * ${table.propertyName}Impl
+     */
+</#if>
+    public ${table.propertyName}Impl(<#list table.fields as field>${'\n'}            final ${table.propertyName}${field.propertyName} ${field.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
+<#list table.fields as field>
+        this.${field.fieldName} = ${field.fieldName};
+</#list>
+    }
+
 <#list table.fields as field>
 <#if documentation>
     /**

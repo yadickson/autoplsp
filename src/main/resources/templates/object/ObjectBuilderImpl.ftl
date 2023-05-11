@@ -41,7 +41,6 @@ import ${javaPackage}.util.${prefixUtilityName}DateUtil;
 </#if>
 import ${javaPackage}.util.${prefixUtilityName}ObjectUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 <#if documentation>
@@ -62,8 +61,7 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Blob utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}BlobUtil blobUtil;
+    private final ${prefixUtilityName}BlobUtil blobUtil;
 </#if>
 <#if importClobUtil??>
 
@@ -72,8 +70,7 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Clob utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}ClobUtil clobUtil;
+    private final ${prefixUtilityName}ClobUtil clobUtil;
 </#if>
 <#if importDateUtil??>
 
@@ -82,8 +79,7 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Date utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}DateUtil dateUtil;
+    private final ${prefixUtilityName}DateUtil dateUtil;
 </#if>
 
 <#if documentation>
@@ -91,8 +87,27 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Object utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}ObjectUtil objectUtil;
+    private final ${prefixUtilityName}ObjectUtil objectUtil;
+
+<#if documentation>
+    /**
+     * Class constructor.
+     *
+     * ${parameter.javaTypeName}BuilderImpl
+     */
+</#if>
+    public ${parameter.javaTypeName}BuilderImpl(${'\n'}            final ${prefixUtilityName}ObjectUtil objectUtil<#if importBlobUtil??>,${'\n'}            final ${prefixUtilityName}BlobUtil blobUtil</#if><#if importClobUtil??>,${'\n'}            final ${prefixUtilityName}ClobUtil clobUtil</#if><#if importDateUtil??>,${'\n'}            final ${prefixUtilityName}DateUtil dateUtil</#if>${'\n'}    ) {
+        this.objectUtil = objectUtil;
+<#if importBlobUtil??>
+        this.blobUtil = blobUtil;
+</#if>
+<#if importClobUtil??>
+        this.clobUtil = clobUtil;
+</#if>
+<#if importDateUtil??>
+        this.dateUtil = dateUtil;
+</#if>
+    }
 
 <#if documentation>
     /**

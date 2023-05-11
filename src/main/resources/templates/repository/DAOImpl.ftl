@@ -87,17 +87,12 @@ import java.util.List;
 </#if>
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-
 <#if logger>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 </#if>
-<#if importBlobUtil?? || proc.checkResult || importClobUtil?? || importConnectionUtils?? || importArrayUtil?? || importObjectUtil??>
-import org.springframework.beans.factory.annotation.Autowired;
 
-</#if>
 import org.springframework.stereotype.Repository;
 
 <#if documentation>
@@ -131,8 +126,7 @@ public final class ${proc.className}DAOImpl
      * ${parameter.javaTypeName} builder utility.
      */
 </#if>
-    @Autowired
-    private ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder;
+    private final ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder;
 
 </#list>
 <#list proc.objectImports as parameter>
@@ -141,8 +135,7 @@ public final class ${proc.className}DAOImpl
      * ${parameter.javaTypeName} builder utility.
      */
 </#if>
-    @Autowired
-    private ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder;
+    private final ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder;
 
 </#list>
 <#if importArrayUtil??>
@@ -151,8 +144,7 @@ public final class ${proc.className}DAOImpl
      * Array utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}ArrayUtil arrayUtil;
+    private final ${prefixUtilityName}ArrayUtil arrayUtil;
 
 </#if>
 <#if importBlobUtil??>
@@ -161,8 +153,7 @@ public final class ${proc.className}DAOImpl
      * Blob utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}BlobUtil blobUtil;
+    private final ${prefixUtilityName}BlobUtil blobUtil;
 
 </#if>
 <#if proc.checkResult>
@@ -171,8 +162,7 @@ public final class ${proc.className}DAOImpl
      * Check result utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}CheckResult checkResult;
+    private final ${prefixUtilityName}CheckResult checkResult;
 
 </#if>
 <#if importClobUtil??>
@@ -181,8 +171,7 @@ public final class ${proc.className}DAOImpl
      * Clob utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}ClobUtil clobUtil;
+    private final ${prefixUtilityName}ClobUtil clobUtil;
 
 </#if>
 <#if importConnectionUtils??>
@@ -191,8 +180,7 @@ public final class ${proc.className}DAOImpl
      * The connection util.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}ConnectionUtil connectionUtil;
+    private final ${prefixUtilityName}ConnectionUtil connectionUtil;
 
 </#if>
 <#if importObjectUtil??>
@@ -201,8 +189,7 @@ public final class ${proc.className}DAOImpl
      * Object utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}ObjectUtil objectUtil;
+    private final ${prefixUtilityName}ObjectUtil objectUtil;
 
 </#if>
 <#if documentation>
@@ -213,9 +200,42 @@ public final class ${proc.className}DAOImpl
      *
      */
 </#if>
-    @Autowired
-    @Qualifier("${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if>")
-    private ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if>;
+    private final ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if>;
+
+<#if documentation>
+    /**
+     * Class constructor.
+     *
+     * ${proc.className}DAOImpl
+     */
+</#if>
+    public ${proc.className}DAOImpl(${'\n'}            final ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if><#if importObjectUtil??>,${'\n'}            final ${prefixUtilityName}ObjectUtil objectUtil</#if><#if importConnectionUtils??>,${'\n'}            final ${prefixUtilityName}ConnectionUtil connectionUtil</#if><#if importClobUtil??>,${'\n'}            final ${prefixUtilityName}ClobUtil clobUtil</#if><#if proc.checkResult>,${'\n'}            final ${prefixUtilityName}CheckResult checkResult</#if><#if importBlobUtil??>,${'\n'}            final ${prefixUtilityName}BlobUtil blobUtil</#if><#if importArrayUtil??>,${'\n'}            final ${prefixUtilityName}ArrayUtil arrayUtil</#if><#list proc.objectImports as parameter>,${'\n'}            final ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder<#sep>,${'\n'}            </#sep></#list><#list proc.arrayImports as parameter>,${'\n'}            final ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
+        this.<#if proc.function>function<#else>procedure</#if> = <#if proc.function>function<#else>procedure</#if>;
+<#if importObjectUtil??>
+        this.objectUtil = objectUtil;
+</#if>
+<#if importConnectionUtils??>
+        this.connectionUtil = connectionUtil;
+</#if>
+<#if importClobUtil??>
+        this.clobUtil = clobUtil;
+</#if>
+<#if proc.checkResult>
+        this.checkResult = checkResult;
+</#if>
+<#if importBlobUtil??>
+        this.blobUtil = blobUtil;
+</#if>
+<#if importArrayUtil??>
+        this.arrayUtil = arrayUtil;
+</#if>
+<#list proc.objectImports as parameter>
+        this.${parameter.javaTypeFieldName}Builder = ${parameter.javaTypeFieldName}Builder;
+</#list>
+<#list proc.arrayImports as parameter>
+        this.${parameter.javaTypeFieldName}Builder = ${parameter.javaTypeFieldName}Builder;
+</#list>
+    }
 
 <#if documentation>
     /**

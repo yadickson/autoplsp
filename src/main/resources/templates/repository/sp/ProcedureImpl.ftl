@@ -36,6 +36,7 @@ import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
 <#if fillSpace??>
 
 </#if>
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 <#if fillInOut??>
 import org.springframework.jdbc.core.SqlInOutParameter;
@@ -50,7 +51,7 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.SqlReturnResultSet;
 </#if>
 import org.springframework.jdbc.object.StoredProcedure;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 <#if documentation>
 /**
@@ -62,7 +63,7 @@ import org.springframework.stereotype.Component;
  * @version @GENERATOR.VERSION@
  */
 </#if>
-@Component
+@Repository
 public final class ${proc.className}SPImpl
         extends StoredProcedure
         implements ${proc.className}SP {

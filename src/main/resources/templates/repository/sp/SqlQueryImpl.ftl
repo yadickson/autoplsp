@@ -38,6 +38,7 @@ import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
 </#if>
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 <#if fillInOut??>
 import org.springframework.jdbc.core.SqlInOutParameter;
@@ -52,6 +53,7 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.SqlReturnResultSet;
 </#if>
 import org.springframework.jdbc.object.GenericSqlQuery;
+import org.springframework.stereotype.Repository;
 
 <#if documentation>
 /**
@@ -63,6 +65,7 @@ import org.springframework.jdbc.object.GenericSqlQuery;
  * @version @GENERATOR.VERSION@
  */
 </#if>
+@Repository
 public final class ${proc.className}SqlQueryImpl
         extends GenericSqlQuery
         implements ${proc.className}SqlQuery {
@@ -82,7 +85,7 @@ public final class ${proc.className}SqlQueryImpl
      * @param jdbcTemplate jdbcTemplate
      */
 </#if>
-    public ${proc.className}SqlQueryImpl(final JdbcTemplate jdbcTemplate) {
+    public ${proc.className}SqlQueryImpl(@Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate) {
         super();
 
         setDataSource(jdbcTemplate.getDataSource());

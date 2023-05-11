@@ -77,7 +77,7 @@ public final class ${prefixUtilityName}ConnectionUtilImpl implements
      * @param jdbcTemplate jdbcTemplate.
      */
 </#if>
-    public ${prefixUtilityName}ConnectionUtilImpl(@Qualifier("${jdbcTemplate}" final JdbcTemplate jdbcTemplate) {
+    public ${prefixUtilityName}ConnectionUtilImpl(@Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

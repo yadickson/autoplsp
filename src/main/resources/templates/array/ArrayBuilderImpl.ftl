@@ -46,7 +46,6 @@ import ${javaPackage}.util.${prefixUtilityName}BlobUtil;
 </#if>
 import ${javaPackage}.util.${prefixUtilityName}ArrayUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 <#if documentation>
@@ -66,8 +65,7 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Array utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}ArrayUtil arrayUtil;
+    private final ${prefixUtilityName}ArrayUtil arrayUtil;
 <#if importObjectBuilder??>
 
 <#if documentation>
@@ -75,17 +73,15 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Object utility to build ${parameter.parameters[parameter.parameters?size - 1].realObjectName}.
      */
 </#if>
-    @Autowired
-    private ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder objectBuilder;
+    private final ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder objectBuilder;
 <#elseif importDateUtil??>
 
 <#if documentation>
     /**
      * Date utility.
      */
-    @Autowired
 </#if>
-    private ${prefixUtilityName}DateUtil dateUtil;
+    private final ${prefixUtilityName}DateUtil dateUtil;
 <#elseif importBlobUtil??>
 
 <#if documentation>
@@ -93,8 +89,7 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Blob utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}BlobUtil blobUtil;
+    private final ${prefixUtilityName}BlobUtil blobUtil;
 <#elseif importClobUtil??>
 
 <#if documentation>
@@ -102,9 +97,31 @@ public final class ${parameter.javaTypeName}BuilderImpl
      * Clob utility.
      */
 </#if>
-    @Autowired
-    private ${prefixUtilityName}ClobUtil clobUtil;
+    private final ${prefixUtilityName}ClobUtil clobUtil;
 </#if>
+
+<#if documentation>
+    /**
+     * Class constructor.
+     *
+     * ${parameter.javaTypeName}BuilderImpl
+     */
+</#if>
+    public ${parameter.javaTypeName}BuilderImpl(${'\n'}            final ${prefixUtilityName}ArrayUtil arrayUtil<#if importObjectBuilder??>,${'\n'}            final ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder objectBuilder</#if><#if importBlobUtil??>,${'\n'}            final ${prefixUtilityName}BlobUtil blobUtil</#if><#if importClobUtil??>,${'\n'}            final ${prefixUtilityName}ClobUtil clobUtil</#if><#if importDateUtil??>,${'\n'}            final ${prefixUtilityName}DateUtil dateUtil</#if>${'\n'}    ) {
+        this.arrayUtil = arrayUtil;
+<#if importObjectBuilder??>
+        this.objectBuilder = objectBuilder;
+</#if>
+<#if importBlobUtil??>
+        this.blobUtil = blobUtil;
+</#if>
+<#if importClobUtil??>
+        this.clobUtil = clobUtil;
+</#if>
+<#if importDateUtil??>
+        this.dateUtil = dateUtil;
+</#if>
+    }
 
 <#if documentation>
     /**

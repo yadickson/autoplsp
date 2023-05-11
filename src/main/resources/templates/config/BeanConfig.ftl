@@ -13,11 +13,13 @@ public class ${javaFileName} {
 
     @Bean
     @Qualifier("${dataSource}")
-    public javax.sql.DataSource dataSource(<#if credentialsDataSource>@Value("spring.datasource.driver-class-name") final String driver, @Value("spring.datasource.url") final String url, @Value("spring.datasource.username") final String username, @Value("spring.datasource.password") final String password</#if>) {
+    public javax.sql.DataSource dataSource(<#if credentialsDataSource>@Value("spring.datasource.driver-class-name") final String driver, @Value("spring.datasource.url") final String url, @Value("spring.datasource.username") final String username, @Value("spring.datasource.password") final String password</#if>)<#if !credentialsDataSource> throws javax.naming.NamingException</#if> {
 <#if !credentialsDataSource>
         org.springframework.jndi.JndiObjectFactoryBean jndiBeanDataSource = new org.springframework.jndi.JndiObjectFactoryBean();
         jndiBeanDataSource.setJndiName("${jndi}");
         jndiBeanDataSource.setResourceRef(true);
+        jndiBeanDataSource.setExpectedType(javax.sql.DataSource.class);
+        jndiBeanDataSource.afterPropertiesSet();
         jndiBeanDataSource.setProxyInterface(javax.sql.DataSource.class);
         return (javax.sql.DataSource) jndiBeanDataSource.getObject();
 <#else>

@@ -19,8 +19,8 @@ public class ${javaFileName} {
         jndiBeanDataSource.setJndiName("${jndi}");
         jndiBeanDataSource.setResourceRef(true);
         jndiBeanDataSource.setExpectedType(javax.sql.DataSource.class);
-        jndiBeanDataSource.afterPropertiesSet();
         jndiBeanDataSource.setProxyInterface(javax.sql.DataSource.class);
+        jndiBeanDataSource.afterPropertiesSet();
         return (javax.sql.DataSource) jndiBeanDataSource.getObject();
 <#else>
         org.springframework.jdbc.datasource.DriverManagerDataSource driverManagerDataSource = new org.springframework.jdbc.datasource.DriverManagerDataSource();

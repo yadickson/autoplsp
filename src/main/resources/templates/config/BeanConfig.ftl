@@ -35,7 +35,9 @@ public class ${javaFileName} {
     }
 
     @Bean
+<#if transactionQualityName >
     @Qualifier("${transactionName}")
+</#if>
     public org.springframework.jdbc.datasource.DataSourceTransactionManager transactionManager(@Qualifier("${dataSource}") final javax.sql.DataSource dataSource) {
         return new org.springframework.jdbc.datasource.DataSourceTransactionManager(dataSource);
     }

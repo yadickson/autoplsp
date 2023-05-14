@@ -33,6 +33,7 @@ package ${javaPackage}.repository;
 </#if>
 </#list>
 <#list proc.arrayImports as parameter>
+import ${javaPackage}.array.${parameter.javaTypeName};
 import ${javaPackage}.array.${parameter.javaTypeName}Builder;
 </#list>
 <#list proc.parameters as parameter>
@@ -70,6 +71,7 @@ import ${javaPackage}.util.${prefixUtilityName}ConnectionUtil;
 import ${javaPackage}.util.${prefixUtilityName}ObjectUtil;
 </#if>
 <#list proc.objectImports as parameter>
+import ${javaPackage}.object.${parameter.javaTypeName};
 import ${javaPackage}.object.${parameter.javaTypeName}Builder;
 </#list>
 
@@ -236,6 +238,30 @@ public final class ${proc.className}DAOImpl
         this.${parameter.javaTypeFieldName}Builder = ${parameter.javaTypeFieldName}Builder;
 </#list>
     }
+<#if proc.hasInput>
+
+<#if documentation>
+    /**
+     * Execute stored procedure.
+     *
+<#list proc.inputParameters as parameter>
+     * @param ${parameter.fieldName} set value of ${parameter.name}
+</#list>
+<#if proc.hasOutput>
+     * @return output parameters
+</#if>
+     * @throws SQLException if error.
+     */
+</#if>
+    @Override
+    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(${'\n'}            <#list proc.inputParameters as parameter>final ${parameter.javaTypeName} ${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) throws SQLException {
+        ${proc.className}IN params = new ${proc.className}IN();
+<#list proc.inputParameters as parameter>
+        params.set${parameter.propertyName}(${parameter.fieldName});
+</#list>
+        <#if proc.hasOutput>return </#if>this.execute(params);
+    }
+</#if>
 
 <#if documentation>
     /**
@@ -253,9 +279,7 @@ public final class ${proc.className}DAOImpl
      */
 </#if>
     @Override
-    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>
-            final ${proc.className}IN params
-    </#if>) throws SQLException {
+    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>${'\n'}            final ${proc.className}IN params${'\n'}    </#if>) throws SQLException {
 
         Map<String, Object> in = new HashMap<<#if !diamond>String, Object</#if>>();
 <#if proc.hasOutput>

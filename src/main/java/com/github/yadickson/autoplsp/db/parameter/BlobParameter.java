@@ -69,7 +69,7 @@ public class BlobParameter extends Parameter {
      */
     @Override
     public int getSqlType() {
-        return java.sql.Types.BLOB;
+        return java.sql.Types.BINARY;
     }
 
     /**
@@ -79,7 +79,7 @@ public class BlobParameter extends Parameter {
      */
     @Override
     public String getSqlTypeName() {
-        return "java.sql.Types.BLOB";
+        return "java.sql.Types.BINARY";
     }
     
     /**

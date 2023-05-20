@@ -60,14 +60,14 @@ public class BlobParameterTest {
     @Test
     public void testGetSqlType() throws BusinessException {
         int sqlType = parameter.getSqlType();
-        assertEquals(java.sql.Types.BLOB, sqlType);
+        assertEquals(java.sql.Types.BINARY, sqlType);
     }
 
     @Test
     public void testGetSqlTypeName() throws BusinessException {
         String sqlType = parameter.getSqlTypeName();
         assertNotNull(sqlType);
-        assertEquals("java.sql.Types.BLOB", sqlType);
+        assertEquals("java.sql.Types.BINARY", sqlType);
     }
 
     @Test

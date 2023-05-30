@@ -53,6 +53,8 @@ import org.springframework.jdbc.core.SqlReturnResultSet;
 import org.springframework.jdbc.object.StoredProcedure;
 import org.springframework.stereotype.Repository;
 
+import java.util.Objects;
+
 <#if documentation>
 /**
  * DAO for <#if proc.function>function<#else>stored procedure</#if>.
@@ -85,7 +87,7 @@ public final class ${proc.className}SPImpl
 </#if>
     public ${proc.className}SPImpl(@Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate) {
 
-        super(jdbcTemplate.getDataSource(), SPROC_NAME);
+        super(Objects.requireNonNull(jdbcTemplate.getDataSource()), SPROC_NAME);
 
         setFunction(<#if proc.function>true<#else>false</#if>);
 

@@ -22,6 +22,9 @@ package ${javaPackage}.domain;
 <#if parameter.date>
 <#assign importSafeDate = 1>
 </#if>
+<#if parameter.blob>
+<#assign importSafeByteArray = 1>
+</#if>
 </#list>
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
@@ -30,6 +33,11 @@ import ${javaPackage}.cursor.${parameter.javaTypeName};
 </#list>
 <#if importSafeDate??>
 import ${javaPackage}.util.${prefixUtilityName}SafeDate;
+</#if>
+<#if importSafeByteArray??>
+import ${javaPackage}.util.${prefixUtilityName}SafeByteArray;
+</#if>
+<#if importSafeDate??>
 
 import java.util.Date;
 
@@ -140,7 +148,13 @@ public class ${proc.className}OUT<#if serialization> implements java.io.Serializ
      */
 </#if>
     public <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}() {
-        return <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
+<#if parameter.date>
+        return ${prefixUtilityName}SafeDate.process(${parameter.fieldName});
+<#elseif parameter.blob>
+        return ${prefixUtilityName}SafeByteArray.process(${parameter.fieldName});
+<#else>
+        return ${parameter.fieldName};
+</#if>
     }
 
 <#if documentation>
@@ -149,11 +163,17 @@ public class ${proc.className}OUT<#if serialization> implements java.io.Serializ
      *
      * ${proc.fullName}
      *
-     * @param p${parameter.propertyName} ${parameter.name} to set
+     * @param ${parameter.fieldName} ${parameter.name} to set
      */
 </#if>
-    public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> p${parameter.propertyName}) {
-        this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>p${parameter.propertyName}<#if parameter.date>)</#if>;
+    public void set${parameter.propertyName}(final <#if parameter.resultSet || parameter.returnResultSet>List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName}) {
+<#if parameter.date>
+        this.${parameter.fieldName} = ${prefixUtilityName}SafeDate.process(${parameter.fieldName});
+<#elseif parameter.blob>
+        this.${parameter.fieldName} = ${prefixUtilityName}SafeByteArray.process(${parameter.fieldName});
+<#else>
+        this.${parameter.fieldName} = ${parameter.fieldName};
+</#if>
     }
 </#if>
 </#list>

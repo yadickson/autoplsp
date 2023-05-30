@@ -19,18 +19,18 @@ import org.mockito.runners.MockitoJUnitRunner;
 <#else>
 @RunWith(MockitoJUnitRunner.class)
 </#if>
-public class ${prefixUtilityName}DateUtilTest {
+class ${prefixUtilityName}DateUtilTest {
 
     @InjectMocks
     ${prefixUtilityName}DateUtilImpl dateUtil;
 
     @Test
-    public void testInputNull() {
+    void testInputNull() {
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNull(dateUtil.process(null));
     }
 
     @Test
-    public void testInputNotNull() {
+    void testInputNotNull() {
         java.util.Date date = new java.util.Date();
         Object result = dateUtil.process(date);
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);

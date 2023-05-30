@@ -20,24 +20,24 @@ import org.mockito.runners.MockitoJUnitRunner;
 <#else>
 @RunWith(MockitoJUnitRunner.class)
 </#if>
-public class ${prefixUtilityName}CheckResultTest {
+class ${prefixUtilityName}CheckResultTest {
 
     @InjectMocks
     ${prefixUtilityName}CheckResultImpl checkResult;
 
     @Test
-    public void testInputNull() throws java.sql.SQLException {
+    void testInputNull() throws java.sql.SQLException {
         checkResult.check(null);
     }
 
     @Test
-    public void testInputNotNullFail() throws java.sql.SQLException {
+    void testInputNotNullFail() throws java.sql.SQLException {
         java.util.Map<String, Object> map = new java.util.HashMap<<#if !diamond>String, Object</#if>>();
         checkResult.check(map);
     }
 
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
-    public void testInputResponseError() throws java.sql.SQLException {
+    void testInputResponseError() throws java.sql.SQLException {
         java.util.Map<String, Object> map = new java.util.HashMap<<#if !diamond>String, Object</#if>>();
 
         map.put("${outParameterCode}", 1${successCode}1);
@@ -47,7 +47,7 @@ public class ${prefixUtilityName}CheckResultTest {
     }
 
     @Test
-    public void testInputOk() throws java.sql.SQLException {
+    void testInputOk() throws java.sql.SQLException {
         java.util.Map<String, Object> map = new java.util.HashMap<<#if !diamond>String, Object</#if>>();
 
         map.put("${outParameterCode}", ${successCode});

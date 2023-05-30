@@ -20,7 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 <#else>
 @RunWith(MockitoJUnitRunner.class)
 </#if>
-public class ${proc.className}SqlQueryTest {
+class ${proc.className}SqlQueryTest {
 
     @Mock
     private javax.sql.DataSource dataSource;
@@ -29,7 +29,7 @@ public class ${proc.className}SqlQueryTest {
     private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
 
     @Test
-    public void test${proc.className}SqlQueryDataSource() throws java.sql.SQLException {
+    void test${proc.className}SqlQueryDataSource() throws java.sql.SQLException {
 
         Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
 

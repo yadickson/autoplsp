@@ -33,7 +33,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 <#else>
 @RunWith(MockitoJUnitRunner.class)
 </#if>
-public class ${prefixUtilityName}ArrayUtilTest {
+class ${prefixUtilityName}ArrayUtilTest {
 
     @InjectMocks
     ${prefixUtilityName}ArrayUtilImpl arrayUtil;
@@ -51,7 +51,7 @@ public class ${prefixUtilityName}ArrayUtilTest {
 <#if driverName == 'oracle' >
 
     @Test
-    public void testProcessArray() throws SQLException {
+    void testProcessArray() throws SQLException {
         Object[] objects = new Object[0];
 
         Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
@@ -65,7 +65,7 @@ public class ${prefixUtilityName}ArrayUtilTest {
 </#if>
 
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
-    public void testProcessArrayError() throws SQLException {
+    void testProcessArrayError() throws SQLException {
         Object[] objects = new Object[0];
 <#if driverName == 'oracle' >
 

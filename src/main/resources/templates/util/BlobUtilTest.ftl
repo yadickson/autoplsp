@@ -21,13 +21,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 <#else>
 @RunWith(MockitoJUnitRunner.class)
 </#if>
-public class ${prefixUtilityName}BlobUtilTest {
+class ${prefixUtilityName}BlobUtilTest {
 
     @InjectMocks
     ${prefixUtilityName}BlobUtilImpl blobUtil;
 
     @Test
-    public void testInputNull() {
+    void testInputNull() {
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNull(blobUtil.process(null));
     }
 }

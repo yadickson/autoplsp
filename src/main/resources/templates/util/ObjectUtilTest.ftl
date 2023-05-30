@@ -30,7 +30,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 <#else>
 @RunWith(MockitoJUnitRunner.class)
 </#if>
-public class ${prefixUtilityName}ObjectUtilTest {
+class ${prefixUtilityName}ObjectUtilTest {
 
     @InjectMocks
     ${prefixUtilityName}ObjectUtilImpl objectUtil;
@@ -50,7 +50,7 @@ public class ${prefixUtilityName}ObjectUtilTest {
 <#if driverName == 'oracle' && driverVersionName != 'ojdbc6' >
 
     @Test
-    public void testProcessObject() throws java.sql.SQLException {
+    void testProcessObject() throws java.sql.SQLException {
         Object[] objects = new Object[0];
 
         Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
@@ -64,7 +64,7 @@ public class ${prefixUtilityName}ObjectUtilTest {
 </#if>
 
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
-    public void testProcessObjectError() throws java.sql.SQLException {
+    void testProcessObjectError() throws java.sql.SQLException {
         Object[] objects = new Object[0];
 <#if driverName == 'oracle' >
 

@@ -92,4 +92,8 @@ public class BlobParameter extends Parameter {
         return true;
     }
 
+    @Override
+    public String getJavaFileNameInterface() {
+        return "ByteArray" + getPropertyName();
+    }
 }

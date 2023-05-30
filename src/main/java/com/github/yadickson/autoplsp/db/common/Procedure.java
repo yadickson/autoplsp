@@ -230,6 +230,16 @@ public class Procedure implements Serializable {
         return getHasClob(this.outputParameters);
     }
 
+    public boolean getHasBlob() throws BusinessException {
+        for (Parameter param : this.parameters) {
+            if (param.isBlob() || param.hasBlob()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Getter is procedure has blob type parameter.
      *
@@ -287,7 +297,7 @@ public class Procedure implements Serializable {
      *
      * @return true is has return void parameter
      */
-    public boolean getReturVoid() {
+    public boolean getReturnVoid() {
         for (Parameter param : this.getParameters()) {
             if (param.isOutput() && param.isVoid()) {
                 return true;

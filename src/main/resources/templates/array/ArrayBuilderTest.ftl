@@ -45,15 +45,19 @@ import org.mockito.Mockito;
 
 <#if junit == 'junit5'>
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 <#else>
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 </#if>
+
+import com.github.javafaker.Faker;
 
 <#if junit == 'junit5'>
 @ExtendWith(MockitoExtension.class)
@@ -61,7 +65,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 </#if>
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class ${parameter.javaTypeName}BuilderTest {
+class ${parameter.javaTypeName}BuilderTest {
 
     @InjectMocks
     ${parameter.javaTypeName}BuilderImpl builder;
@@ -92,19 +96,26 @@ public class ${parameter.javaTypeName}BuilderTest {
     @Captor
     private ArgumentCaptor<Object[]> captorObjects;
 
+    Faker faker;
+
+    @<#if junit == 'junit5'>BeforeEach<#else>Before</#if>
+    void setUp() {
+        faker = new Faker();
+    }
+
     @Test
-    public void test${parameter.javaTypeName}BuilderProcess() throws SQLException {
+    void test${parameter.javaTypeName}BuilderProcess() throws SQLException {
 
         ${parameter.javaTypeName} array = new ${parameter.javaTypeName}();
 
 <#if parameter.parameters[parameter.parameters?size - 1].string>
-        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = "${parameter.parameters[parameter.parameters?size - 1].javaTypeName}";
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = faker.internet().uuid();
 <#elseif parameter.parameters[parameter.parameters?size - 1].number>
-        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = ${parameter.parameters[parameter.parameters?size - 1].position};
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = faker.random().nextLong();
 <#elseif parameter.parameters[parameter.parameters?size - 1].date>
-        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = new ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}(${parameter.parameters[parameter.parameters?size - 1].position});
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = faker.date().birthday();
 <#elseif parameter.parameters[parameter.parameters?size - 1].blob>
-        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = new byte[0];
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = new byte[faker.random().nextInt(${parameter.parameters[parameter.parameters?size - 1].position} * 100)];
 <#else>
         ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = new ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}();
 </#if>
@@ -146,6 +157,8 @@ public class ${parameter.javaTypeName}BuilderTest {
 
 <#if parameter.parameters[parameter.parameters?size - 1].date>
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(object, objParamsResult[0]);
+<#elseif parameter.parameters[parameter.parameters?size - 1].blob>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals((byte[]) object, (byte[]) objParamsResult[0])<#else>assertTrue(java.util.Arrays.equals((byte[]) object, (byte[]) objParamsResult[0]))</#if>;
 <#else>
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(object, objParamsResult[0]);
 </#if>

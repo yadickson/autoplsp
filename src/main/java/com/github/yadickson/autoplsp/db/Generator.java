@@ -425,7 +425,7 @@ public abstract class Generator {
             final List<Parameter> parameters) {
         boolean isFunction = procedure.isFunction();
         boolean isFunctionInline = procedure.isFunctionInline();
-        boolean hasReturnVoid = procedure.getReturVoid();
+        boolean hasReturnVoid = procedure.getReturnVoid();
 
         String sql = isFunctionInline ? getSqlSelect() : getSqlKeys()[0] + " call ";
 

@@ -74,6 +74,7 @@ public final class JavaGenerator extends TemplateGenerator {
 
     private static final String REPOSITORY_PATH = File.separatorChar + "repository" + File.separatorChar;
     private static final String DOMAIN_PATH = File.separatorChar + "domain" + File.separatorChar;
+    private static final String INTERFACE_PATH = File.separatorChar + "interfaces" + File.separatorChar;
     private static final String ARRAY_PATH = File.separatorChar + "array" + File.separatorChar;
     private static final String OBJECT_PATH = File.separatorChar + "object" + File.separatorChar;
     private static final String CURSOR_PATH = File.separatorChar + "cursor" + File.separatorChar;
@@ -99,6 +100,7 @@ public final class JavaGenerator extends TemplateGenerator {
     private boolean processConnection;
     private boolean addTypeTable;
     private boolean addSafeDate;
+    private boolean addSafeByteArray;
     private boolean addObjectUtil;
     private boolean addArrayUtil;
     private boolean addDateUtil;
@@ -223,6 +225,7 @@ public final class JavaGenerator extends TemplateGenerator {
         processConnection = false;
         addTypeTable = false;
         addSafeDate = false;
+        addSafeByteArray = false;
         addObjectUtil = false;
         addArrayUtil = false;
         addDateUtil = false;
@@ -256,6 +259,16 @@ public final class JavaGenerator extends TemplateGenerator {
 
         if (procedure.getHasDate() && !addSafeDate) {
             addSafeDate = true;
+            createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
+            createTemplate(INPUT_MAP, UTIL_PATH + "SafeByteArray.ftl", getUtilOutputFilePath(this.prefixUtilityName + "SafeByteArray.java"));
+
+            if (test) {
+                createTemplate(INPUT_MAP, UTIL_PATH + "SafeByteArrayTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "SafeByteArrayTest.java"));
+            }
+        }
+
+        if (procedure.getHasBlob() && !addSafeByteArray) {
+            addSafeByteArray = true;
             createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
             createTemplate(INPUT_MAP, UTIL_PATH + "SafeDate.ftl", getUtilOutputFilePath(this.prefixUtilityName + "SafeDate.java"));
 
@@ -351,6 +364,8 @@ public final class JavaGenerator extends TemplateGenerator {
             createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
             createTemplate(INPUT_MAP, DOMAIN_PATH + "OUT.ftl", getFileNamePath(parameterPath, procedure, "OUT"));
         }
+
+        makeInterfaces(procedure.getParameters());
     }
 
     private void processStoredProcedureParameterRS(Procedure procedure) throws BusinessException {
@@ -366,6 +381,7 @@ public final class JavaGenerator extends TemplateGenerator {
                 INPUT_MAP.put(PARAMETER_NAME, param);
                 createTemplate(INPUT_MAP, CURSOR_PATH + "package-info.ftl", getCursorOutputFilePath("package-info.java"));
                 createTemplate(INPUT_MAP, CURSOR_PATH + "DataSet.ftl", getFileNamePath(getCursorOutputPath(""), procedure, param, "RS"));
+                makeInterfaces(param.getParameters());
             }
         }
     }
@@ -640,6 +656,10 @@ public final class JavaGenerator extends TemplateGenerator {
         return this.getOutputPath(ARRAY_PATH + path);
     }
 
+    private String getInterfaceOutputPath(String path) throws BusinessException {
+        return this.getOutputPath(INTERFACE_PATH + path);
+    }
+
     private String getCursorOutputPath(String path) throws BusinessException {
         return this.getOutputPath(CURSOR_PATH + path);
     }
@@ -676,6 +696,10 @@ public final class JavaGenerator extends TemplateGenerator {
         return path + File.separatorChar + procedure.getClassName() + param.getPropertyName() + type + EXT_FILE;
     }
 
+    private String getInterfaceFileNamePath(String path, Parameter param) {
+        return path + File.separatorChar + param.getJavaFileNameInterface() + "Interface" + EXT_FILE;
+    }
+
     private String getFileNameTablePath(String path, Table table, String type) {
         return path + File.separatorChar + table.getPropertyName() + type + EXT_FILE;
     }
@@ -696,4 +720,12 @@ public final class JavaGenerator extends TemplateGenerator {
         return this.javaPackage.replace('.', File.separatorChar);
     }
 
+    private void makeInterfaces(List<Parameter> parameters) throws BusinessException {
+//        for(Parameter param : parameters) {
+//            if (param.isInterface()) {
+//                INPUT_MAP.put(PARAMETER_NAME, param);
+//                createTemplate(INPUT_MAP, INTERFACE_PATH + "Interface.ftl", getInterfaceFileNamePath(getInterfaceOutputPath(""), param));
+//            }
+//        }
+    }
 }

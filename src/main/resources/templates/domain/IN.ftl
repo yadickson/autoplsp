@@ -30,9 +30,17 @@ import ${javaPackage}.object.${parameter.javaTypeName};
 <#if parameter.date>
 <#assign importSafeDate = 1>
 </#if>
+<#if parameter.blob>
+<#assign importSafeByteArray = 1>
+</#if>
 </#list>
 <#if importSafeDate??>
 import ${javaPackage}.util.${prefixUtilityName}SafeDate;
+</#if>
+<#if importSafeByteArray??>
+import ${javaPackage}.util.${prefixUtilityName}SafeByteArray;
+</#if>
+<#if importSafeDate??>
 
 <#if java8>
 import java.time.LocalDateTime;
@@ -162,7 +170,13 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
      */
 </#if>
     public ${parameter.javaTypeName} get${parameter.propertyName}() {
-        return <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
+<#if parameter.date>
+        return ${prefixUtilityName}SafeDate.process(${parameter.fieldName});
+<#elseif parameter.blob>
+        return ${prefixUtilityName}SafeByteArray.process(${parameter.fieldName});
+<#else>
+        return ${parameter.fieldName};
+</#if>
     }
 
 <#if documentation>
@@ -172,11 +186,17 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
      *
      * ${proc.fullName}
      *
-     * @param p${parameter.propertyName} ${parameter.name} to set
+     * @param ${parameter.fieldName} ${parameter.name} to set
      */
 </#if>
     public void set${parameter.propertyName}(final ${parameter.javaTypeName} ${parameter.fieldName}) {
-        this.${parameter.fieldName} = <#if parameter.date>${prefixUtilityName}SafeDate.process(</#if>${parameter.fieldName}<#if parameter.date>)</#if>;
+<#if parameter.date>
+        this.${parameter.fieldName} = ${prefixUtilityName}SafeDate.process(${parameter.fieldName});
+<#elseif parameter.blob>
+        this.${parameter.fieldName} = ${prefixUtilityName}SafeByteArray.process(${parameter.fieldName});
+<#else>
+        this.${parameter.fieldName} = ${parameter.fieldName};
+</#if>
     }
 </#if>
 </#list>

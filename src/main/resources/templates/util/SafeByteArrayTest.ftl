@@ -17,24 +17,24 @@ import org.mockito.runners.MockitoJUnitRunner;
 <#else>
 @RunWith(MockitoJUnitRunner.class)
 </#if>
-class ${prefixUtilityName}SafeDateTest {
+class ${prefixUtilityName}SafeByteArrayTest {
 
     @Test
     void testCreate() {
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(new ${prefixUtilityName}SafeDate());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(new ${prefixUtilityName}SafeByteArray());
     }
 
     @Test
     void testInputNull() {
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNull(${prefixUtilityName}SafeDate.process(null));
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNull(${prefixUtilityName}SafeByteArray.process(null));
     }
 
     @Test
     void testInputNotNull() {
-        java.util.Date date = new java.util.Date();
-        java.util.Date result = ${prefixUtilityName}SafeDate.process(date);
+        byte[] byteArray = new byte[10];
+        byte[] result = ${prefixUtilityName}SafeByteArray.process(byteArray);
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotSame(date, result);
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(date, result);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotSame(byteArray, result);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(byteArray, result)<#else>assertTrue(java.util.Arrays.equals(byteArray, result))</#if>;
     }
 }

@@ -22,9 +22,21 @@ package ${javaPackage}.cursor;
 <#if parameter2.date>
 <#assign importSafeDate = 1>
 </#if>
+<#if parameter2.blob>
+<#assign importSafeByteArray = 1>
+</#if>
 </#list>
 <#if importSafeDate??>
 import ${javaPackage}.util.${prefixUtilityName}SafeDate;
+</#if>
+<#if importSafeByteArray??>
+import ${javaPackage}.util.${prefixUtilityName}SafeByteArray;
+<#if importSafeDate??>
+<#else>
+
+</#if>
+</#if>
+<#if importSafeDate??>
 
 import java.util.Date;
 
@@ -119,13 +131,13 @@ public class ${parameter.javaTypeName}<#if serialization> implements java.io.Ser
      * ${parameter.name}
      *
     <#list parameter.parameters as parameter2>
-     * @param c${parameter2.propertyName} set value of ${parameter2.name}
+     * @param ${parameter2.fieldName} set value of ${parameter2.name}
     </#list>
      */
 </#if>
-    public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} c${parameter2.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
+    public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} ${parameter2.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
 <#list parameter.parameters as parameter2>
-        set${parameter2.propertyName}(c${parameter2.propertyName});
+        set${parameter2.propertyName}(${parameter2.fieldName});
 </#list>
     }
 </#if>
@@ -144,7 +156,13 @@ public class ${parameter.javaTypeName}<#if serialization> implements java.io.Ser
      */
 </#if>
     public ${parameter2.javaTypeName} get${parameter2.propertyName}() {
-        return <#if parameter2.date>${prefixUtilityName}SafeDate.process(</#if>${parameter2.fieldName}<#if parameter2.date>)</#if>;
+<#if parameter2.date>
+        return ${prefixUtilityName}SafeDate.process(${parameter2.fieldName});
+<#elseif parameter2.blob>
+        return ${prefixUtilityName}SafeByteArray.process(${parameter2.fieldName});
+<#else>
+        return ${parameter2.fieldName};
+</#if>
     }
 
 <#if documentation>
@@ -155,11 +173,17 @@ public class ${parameter.javaTypeName}<#if serialization> implements java.io.Ser
      *
      * ${parameter.name}
      *
-     * @param c${parameter2.propertyName} ${parameter2.name} to set
+     * @param ${parameter2.fieldName} ${parameter2.name} to set
      */
 </#if>
-    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} c${parameter2.propertyName}) {
-        this.${parameter2.fieldName} = <#if parameter2.date>${prefixUtilityName}SafeDate.process(</#if>c${parameter2.propertyName}<#if parameter2.date>)</#if>;
+    public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} ${parameter2.fieldName}) {
+<#if parameter2.date>
+        this.${parameter2.fieldName} = ${prefixUtilityName}SafeDate.process(${parameter2.fieldName});
+<#elseif parameter2.blob>
+        this.${parameter2.fieldName} = ${prefixUtilityName}SafeByteArray.process(${parameter2.fieldName});
+<#else>
+        this.${parameter2.fieldName} = ${parameter2.fieldName};
+</#if>
     }
 </#if>
 </#list>

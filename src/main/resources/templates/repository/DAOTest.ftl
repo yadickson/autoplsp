@@ -76,6 +76,7 @@ import org.mockito.Mockito;
 <#if junit == 'junit5'>
 <#if proc.hasInput || proc.hasOutput>
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 </#if>
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,19 +84,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 <#else>
 <#if proc.hasInput || proc.hasOutput>
 import org.junit.Assert;
+import org.junit.Before;
 </#if>
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 </#if>
+<#if proc.hasInput || proc.hasOutput>
 
+import com.github.javafaker.Faker;
+
+</#if>
 <#if junit == 'junit5'>
 @ExtendWith(MockitoExtension.class)
 <#else>
 @RunWith(MockitoJUnitRunner.class)
 </#if>
 @SuppressWarnings({"unchecked"})
-public class ${proc.className}DAOTest {
+class ${proc.className}DAOTest {
 
     @InjectMocks
     ${proc.className}DAOImpl repository;
@@ -142,21 +148,28 @@ public class ${proc.className}DAOTest {
 </#if>
 <#if proc.hasInput>
 
+    Faker faker;
+
+    @<#if junit == 'junit5'>BeforeEach<#else>Before</#if>
+    void setUp() {
+        faker = new Faker();
+    }
+
     @Test
-    public void should_check_${proc.className}_dao_execute_with_input_parameters() throws java.sql.SQLException {
+    void should_check_${proc.className}_dao_execute_with_input_parameters() throws java.sql.SQLException {
 <#if proc.hasInput>
 
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
-        ${parameter.javaTypeName} ${parameter.fieldName} = new ${parameter.javaTypeName}(${parameter.position});
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.date().birthday();
 <#elseif parameter.blob>
-        byte[] ${parameter.fieldName} = new byte[0];
+        byte[] ${parameter.fieldName} = new byte[faker.random().nextInt(${parameter.position} * 100)];
 <#elseif parameter.number>
-        ${parameter.javaTypeName} ${parameter.fieldName} = ${parameter.position};
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.random().nextLong();
 <#elseif parameter.array || parameter.object>
         ${parameter.javaTypeName} ${parameter.fieldName} = new ${parameter.javaTypeName}();
 <#else>
-        ${parameter.javaTypeName} ${parameter.fieldName} = "${parameter.name}";
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.internet().uuid();
 </#if>
 </#list>
 
@@ -267,6 +280,8 @@ public class ${proc.className}DAOTest {
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameter.fieldName}Builder, mapParamsResult.get("${parameter.name}"));
 <#elseif parameter.date>
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${parameter.fieldName}, mapParamsResult.get("${parameter.name}"));
+<#elseif parameter.blob>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(${parameter.fieldName}, (byte[]) mapParamsResult.get("${parameter.name}"))<#else>assertTrue(java.util.Arrays.equals(${parameter.fieldName}, (byte[])mapParamsResult.get("${parameter.name}")))</#if>;
 <#else>
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameter.fieldName}, mapParamsResult.get("${parameter.name}"));
 </#if>
@@ -276,22 +291,22 @@ public class ${proc.className}DAOTest {
 </#if>
 
     @Test
-    public void test${proc.className}DAOExecute() throws java.sql.SQLException {
+    void test${proc.className}DAOExecute() throws java.sql.SQLException {
 <#if proc.hasInput>
 
         ${proc.className}IN params = new ${proc.className}IN();
 
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
-        ${parameter.javaTypeName} ${parameter.fieldName} = new ${parameter.javaTypeName}(${parameter.position});
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.date().birthday();
 <#elseif parameter.blob>
-        byte[] ${parameter.fieldName} = new byte[0];
+        byte[] ${parameter.fieldName} = new byte[faker.random().nextInt(${parameter.position} * 100)];
 <#elseif parameter.number>
-        ${parameter.javaTypeName} ${parameter.fieldName} = ${parameter.position};
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.random().nextLong();
 <#elseif parameter.array || parameter.object>
         ${parameter.javaTypeName} ${parameter.fieldName} = new ${parameter.javaTypeName}();
 <#else>
-        ${parameter.javaTypeName} ${parameter.fieldName} = "${parameter.name}";
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.internet().uuid();
 </#if>
 </#list>
 
@@ -405,6 +420,8 @@ public class ${proc.className}DAOTest {
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameter.fieldName}Builder, mapParamsResult.get("${parameter.name}"));
 <#elseif parameter.date>
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${parameter.fieldName}, mapParamsResult.get("${parameter.name}"));
+<#elseif parameter.blob>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(${parameter.fieldName}, (byte[]) mapParamsResult.get("${parameter.name}"))<#else>assertTrue(java.util.Arrays.equals(${parameter.fieldName}, (byte[])mapParamsResult.get("${parameter.name}")))</#if>;
 <#else>
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameter.fieldName}, mapParamsResult.get("${parameter.name}"));
 </#if>
@@ -413,7 +430,7 @@ public class ${proc.className}DAOTest {
     }
 
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
-    public void testExecute${proc.className}DAOError() throws java.sql.SQLException {
+    void testExecute${proc.className}DAOError() throws java.sql.SQLException {
 <#if proc.hasInput>
         ${proc.className}IN params = new ${proc.className}IN();
 
@@ -437,7 +454,7 @@ public class ${proc.className}DAOTest {
 <#if proc.hasInput>
 
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
-    public void testExecute${proc.className}DAOInputNullParameterError() throws java.sql.SQLException {
+    void testExecute${proc.className}DAOInputNullParameterError() throws java.sql.SQLException {
         ${proc.className}IN params = null;
 <#if importConnectionUtils??>
 

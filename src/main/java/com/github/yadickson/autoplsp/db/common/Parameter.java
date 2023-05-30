@@ -383,6 +383,10 @@ public abstract class Parameter implements Serializable {
      */
     public abstract String getJavaTypeName();
 
+    public String getJavaFileNameInterface() {
+        return getJavaTypeName() + getPropertyName();
+    }
+
     /**
      * Getter the sql type.
      *
@@ -409,6 +413,10 @@ public abstract class Parameter implements Serializable {
      */
     public String getSqlNativeTypeName() {
         return sqlNativeTypeName;
+    }
+
+    public Boolean isInterface() {
+        return !(isResultSet() || isReturnResultSet() || isObject() || isArray());
     }
 
 }

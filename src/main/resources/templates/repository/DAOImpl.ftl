@@ -33,7 +33,6 @@ package ${javaPackage}.repository;
 </#if>
 </#list>
 <#list proc.arrayImports as parameter>
-import ${javaPackage}.array.${parameter.javaTypeName};
 import ${javaPackage}.array.${parameter.javaTypeName}Builder;
 </#list>
 <#list proc.parameters as parameter>
@@ -72,7 +71,6 @@ import ${javaPackage}.util.${prefixUtilityName}ConnectionUtil;
 import ${javaPackage}.util.${prefixUtilityName}ObjectUtil;
 </#if>
 <#list proc.objectImports as parameter>
-import ${javaPackage}.object.${parameter.javaTypeName};
 import ${javaPackage}.object.${parameter.javaTypeName}Builder;
 </#list>
 

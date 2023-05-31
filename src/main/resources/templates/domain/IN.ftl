@@ -107,9 +107,9 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
 </#if>
-    private ${parameter.javaTypeName} ${parameter.fieldName};
+    private <#if fullConstructor>final </#if>${parameter.javaTypeName} ${parameter.fieldName}${proc.className}<#if !fullConstructor> = null</#if>;
 </#list>
-<#if !lombok || builder>
+<#if (!lombok || builder) && !fullConstructor>
 
 <#if documentation>
     /**
@@ -121,7 +121,7 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
     public ${proc.className}IN() {
     }
 </#if>
-<#if !builder && fullConstructor>
+<#if fullConstructor>
 
 <#if documentation>
     /**
@@ -136,7 +136,13 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
 </#if>
     public ${proc.className}IN(${'\n'}            <#list proc.inputParameters as parameter>final ${parameter.javaTypeName} ${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
 <#list proc.inputParameters as parameter>
-        set${parameter.propertyName}(${parameter.fieldName});
+<#if parameter.date>
+        this.${parameter.fieldName}${proc.className} = ${prefixUtilityName}SafeDate.process(${parameter.fieldName});
+<#elseif parameter.blob>
+        this.${parameter.fieldName}${proc.className} = ${prefixUtilityName}SafeByteArray.process(${parameter.fieldName});
+<#else>
+        this.${parameter.fieldName}${proc.className} = ${parameter.fieldName};
+</#if>
 </#list>
     }
 </#if>
@@ -171,13 +177,14 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
 </#if>
     public ${parameter.javaTypeName} get${parameter.propertyName}() {
 <#if parameter.date>
-        return ${prefixUtilityName}SafeDate.process(${parameter.fieldName});
+        return ${prefixUtilityName}SafeDate.process(${parameter.fieldName}${proc.className});
 <#elseif parameter.blob>
-        return ${prefixUtilityName}SafeByteArray.process(${parameter.fieldName});
+        return ${prefixUtilityName}SafeByteArray.process(${parameter.fieldName}${proc.className});
 <#else>
-        return ${parameter.fieldName};
+        return ${parameter.fieldName}${proc.className};
 </#if>
     }
+<#if !fullConstructor>
 
 <#if documentation>
     /**
@@ -191,13 +198,14 @@ public class ${proc.className}IN<#if serialization> implements java.io.Serializa
 </#if>
     public void set${parameter.propertyName}(final ${parameter.javaTypeName} ${parameter.fieldName}) {
 <#if parameter.date>
-        this.${parameter.fieldName} = ${prefixUtilityName}SafeDate.process(${parameter.fieldName});
+        this.${parameter.fieldName}${proc.className} = ${prefixUtilityName}SafeDate.process(${parameter.fieldName});
 <#elseif parameter.blob>
-        this.${parameter.fieldName} = ${prefixUtilityName}SafeByteArray.process(${parameter.fieldName});
+        this.${parameter.fieldName}${proc.className} = ${prefixUtilityName}SafeByteArray.process(${parameter.fieldName});
 <#else>
-        this.${parameter.fieldName} = ${parameter.fieldName};
+        this.${parameter.fieldName}${proc.className} = ${parameter.fieldName};
 </#if>
     }
+</#if>
 </#if>
 </#list>
 }

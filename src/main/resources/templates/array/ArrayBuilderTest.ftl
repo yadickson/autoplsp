@@ -117,7 +117,7 @@ class ${parameter.javaTypeName}BuilderTest {
 <#elseif parameter.parameters[parameter.parameters?size - 1].blob>
         ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = new byte[faker.random().nextInt(${parameter.parameters[parameter.parameters?size - 1].position} * 100)];
 <#else>
-        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = new ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}();
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = Mockito.mock(${parameter.parameters[parameter.parameters?size - 1].javaTypeName}.class);
 </#if>
 
         array.add(object);

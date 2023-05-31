@@ -73,6 +73,7 @@ public final class ${parameter.javaTypeName}RowMapper
             final ResultSet resultSet,
             final int i
     ) throws SQLException {
+<#if !fullConstructor>
 
         ${parameter.javaTypeName} row;
         row = new ${parameter.javaTypeName}();
@@ -107,7 +108,28 @@ public final class ${parameter.javaTypeName}RowMapper
 </#if>
 
         return row;
+<#else>
+
+<#list parameter.parameters as paramrs>
+        ${paramrs.javaTypeName} ${paramrs.fieldName};
+</#list>
+
+<#list parameter.parameters as paramrs>
+<#if paramrs.string || paramrs.clob>
+        ${paramrs.fieldName} = resultSet.getString(${paramrs.name});
+<#elseif paramrs.blob>
+        ${paramrs.fieldName} = resultSet.getBytes(${paramrs.name});
+<#elseif paramrs.date>
+        ${paramrs.fieldName} = resultSet.getTimestamp(${paramrs.name});
+<#else>
+        ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
+</#if>
+</#list>
+
+        return new ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+</#if>
     }
+<#if !fullConstructor>
 <#if ! noFullChunk?? >
 <#assign step = 0 >
 <#list parameter.parameters?chunk(10) as childs>
@@ -148,5 +170,6 @@ public final class ${parameter.javaTypeName}RowMapper
 </#list>
     }
 </#list>
+</#if>
 </#if>
 }

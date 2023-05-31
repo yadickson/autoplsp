@@ -18,15 +18,19 @@ import org.mockito.Mockito;
 
 <#if junit == 'junit5'>
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 <#else>
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 </#if>
+
+import com.github.javafaker.Faker;
 
 <#if junit == 'junit5'>
 @ExtendWith(MockitoExtension.class)
@@ -50,14 +54,22 @@ class ${prefixUtilityName}ArrayUtilTest {
     private Connection connection;
 <#if driverName == 'oracle' >
 
+    Faker faker;
+
+    @<#if junit == 'junit5'>BeforeEach<#else>Before</#if>
+    void setUp() {
+        faker = new Faker();
+    }
+
     @Test
     void testProcessArray() throws SQLException {
         Object[] objects = new Object[0];
+        String nameValue = faker.internet().uuid();
 
         Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
-        Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(Mockito.eq("NAME"), Mockito.same(objects))).thenReturn(array);
+        Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(nameValue, Mockito.same(objects))).thenReturn(array);
 
-        Object result = arrayUtil.process(connection, "NAME", objects);
+        Object result = arrayUtil.process(connection, nameValue, objects);
 
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(array, result);
@@ -67,12 +79,13 @@ class ${prefixUtilityName}ArrayUtilTest {
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
     void testProcessArrayError() throws SQLException {
         Object[] objects = new Object[0];
+        String nameValue = faker.internet().uuid();
 <#if driverName == 'oracle' >
 
         Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
-        Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(Mockito.eq("NAME"), Mockito.same(objects))).thenThrow(new RuntimeException());
+        Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(nameValue, Mockito.same(objects))).thenThrow(new RuntimeException());
 
 </#if>
-        <#if junit == 'junit5'>Assertions.assertThrows(java.sql.SQLException.class,() -> </#if>arrayUtil.process(connection, "NAME", objects)<#if junit == 'junit5'>)</#if>;
+        <#if junit == 'junit5'>Assertions.assertThrows(java.sql.SQLException.class,() -> </#if>arrayUtil.process(connection, nameValue, objects)<#if junit == 'junit5'>)</#if>;
     }
 }

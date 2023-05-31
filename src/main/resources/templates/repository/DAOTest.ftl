@@ -218,7 +218,6 @@ class ${proc.className}DAOTest {
 </#list>
 </#if>
 <#if proc.hasOutput>
-
 <#list proc.outputParameters as parameter>
 <#if parameter.blob>
         Mockito.when(blobUtil.process(Mockito.same(obj${parameter.propertyName}))).thenReturn(new byte[0]);
@@ -294,7 +293,10 @@ class ${proc.className}DAOTest {
     void test${proc.className}DAOExecute() throws java.sql.SQLException {
 <#if proc.hasInput>
 
-        ${proc.className}IN params = new ${proc.className}IN();
+        ${proc.className}IN params;
+<#if !fullConstructor>
+        params = new ${proc.className}IN();
+</#if>
 
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
@@ -310,9 +312,13 @@ class ${proc.className}DAOTest {
 </#if>
 </#list>
 
+<#if !fullConstructor>
 <#list proc.inputParameters as parameter>
         params.set${parameter.propertyName}(${parameter.fieldName});
 </#list>
+<#else>
+        params = new ${proc.className}IN(${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+</#if>
 <#if importConnectionUtils??>
 
 <#list proc.inputParameters as parameter>
@@ -432,11 +438,7 @@ class ${proc.className}DAOTest {
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
     void testExecute${proc.className}DAOError() throws java.sql.SQLException {
 <#if proc.hasInput>
-        ${proc.className}IN params = new ${proc.className}IN();
-
-<#list proc.inputParameters as parameter>
-        params.set${parameter.propertyName}(null);
-</#list>
+        ${proc.className}IN params = Mockito.mock(${proc.className}IN.class);
 
 </#if>
 <#if importConnectionUtils??>
@@ -454,7 +456,7 @@ class ${proc.className}DAOTest {
 <#if proc.hasInput>
 
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
-    void testExecute${proc.className}DAOInputNullParameterError() throws java.sql.SQLException {
+    void testExecute${proc.className}DAOInputNullParameterError()<#if importConnectionUtils??> throws java.sql.SQLException</#if> {
         ${proc.className}IN params = null;
 <#if importConnectionUtils??>
 

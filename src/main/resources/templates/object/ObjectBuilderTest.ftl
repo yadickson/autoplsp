@@ -96,8 +96,10 @@ class ${parameter.javaTypeName}BuilderTest {
 
     @Test
     void test${parameter.javaTypeName}BuilderProcess() throws SQLException {
-
-        ${parameter.javaTypeName} object = new ${parameter.javaTypeName}();
+        ${parameter.javaTypeName} object;
+<#if !fullConstructor>
+        object = new ${parameter.javaTypeName}();
+</#if>
 
 <#list parameter.parameters as parameter>
 <#if parameter.number>
@@ -111,15 +113,19 @@ class ${parameter.javaTypeName}BuilderTest {
 </#if>
 </#list>
 
+<#if !fullConstructor>
 <#list parameter.parameters as parameter>
         object.set${parameter.propertyName}(obj${parameter.propertyName});
 </#list>
+<#else>
+        object = new ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+</#if>
 
         Object[] obj = new Object[0];
 
 <#list parameter.parameters as parameter>
 <#if parameter.date>
-        Mockito.when(dateUtil.process(Mockito.eq(obj${parameter.propertyName}))).thenReturn(obj${parameter.propertyName});
+        Mockito.when(dateUtil.process(obj${parameter.propertyName})).thenReturn(obj${parameter.propertyName});
 <#elseif parameter.blob>
         Mockito.when(blobUtil.process(Mockito.same(connection), Mockito.same(obj${parameter.propertyName}))).thenReturn(obj${parameter.propertyName});
 <#elseif parameter.clob>
@@ -141,7 +147,7 @@ class ${parameter.javaTypeName}BuilderTest {
 <#if parameter.date>
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
 <#elseif parameter.blob>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(${parameter.fieldName}, result.get${parameter.propertyName}())<#else>assertTrue(java.util.Arrays.equals(${parameter.fieldName}, result.get${parameter.propertyName}()))</#if>;
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(obj${parameter.propertyName}, result.get${parameter.propertyName}())<#else>assertTrue(java.util.Arrays.equals(obj${parameter.propertyName}, result.get${parameter.propertyName}()))</#if>;
 <#else>
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
 </#if>

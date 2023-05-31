@@ -46,6 +46,7 @@ public interface ${parameter.javaFileNameInterface}Interface {
      */
 </#if>
     ${parameter.javaTypeName} get${parameter.propertyName}();
+<#if fullConstructor>
 
 <#if documentation>
     /**
@@ -57,4 +58,5 @@ public interface ${parameter.javaFileNameInterface}Interface {
      */
 </#if>
     void set${parameter.propertyName}(${parameter.javaTypeName} ${parameter.fieldName});
+</#if>
 }

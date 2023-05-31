@@ -103,9 +103,9 @@ public class ${parameter.javaTypeName}<#if serialization> implements java.io.Ser
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
 </#if>
-    private ${parameter2.javaTypeName} ${parameter2.fieldName};
+    private <#if fullConstructor>final </#if>${parameter2.javaTypeName} ${parameter2.fieldName}${parameter.javaTypeName}<#if !fullConstructor> = null</#if>;
 </#list>
-<#if !lombok>
+<#if (!lombok || builder) && !fullConstructor>
 
 <#if documentation>
     /**
@@ -137,7 +137,13 @@ public class ${parameter.javaTypeName}<#if serialization> implements java.io.Ser
 </#if>
     public ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} ${parameter2.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
 <#list parameter.parameters as parameter2>
-        set${parameter2.propertyName}(${parameter2.fieldName});
+<#if parameter2.date>
+        this.${parameter2.fieldName}${parameter.javaTypeName} = ${prefixUtilityName}SafeDate.process(${parameter2.fieldName});
+<#elseif parameter2.blob>
+        this.${parameter2.fieldName}${parameter.javaTypeName} = ${prefixUtilityName}SafeByteArray.process(${parameter2.fieldName});
+<#else>
+        this.${parameter2.fieldName}${parameter.javaTypeName} = ${parameter2.fieldName};
+</#if>
 </#list>
     }
 </#if>
@@ -157,13 +163,14 @@ public class ${parameter.javaTypeName}<#if serialization> implements java.io.Ser
 </#if>
     public ${parameter2.javaTypeName} get${parameter2.propertyName}() {
 <#if parameter2.date>
-        return ${prefixUtilityName}SafeDate.process(${parameter2.fieldName});
+        return ${prefixUtilityName}SafeDate.process(${parameter2.fieldName}${parameter.javaTypeName});
 <#elseif parameter2.blob>
-        return ${prefixUtilityName}SafeByteArray.process(${parameter2.fieldName});
+        return ${prefixUtilityName}SafeByteArray.process(${parameter2.fieldName}${parameter.javaTypeName});
 <#else>
-        return ${parameter2.fieldName};
+        return ${parameter2.fieldName}${parameter.javaTypeName};
 </#if>
     }
+<#if !fullConstructor>
 
 <#if documentation>
     /**
@@ -178,13 +185,14 @@ public class ${parameter.javaTypeName}<#if serialization> implements java.io.Ser
 </#if>
     public void set${parameter2.propertyName}(final ${parameter2.javaTypeName} ${parameter2.fieldName}) {
 <#if parameter2.date>
-        this.${parameter2.fieldName} = ${prefixUtilityName}SafeDate.process(${parameter2.fieldName});
+        this.${parameter2.fieldName}${parameter.javaTypeName} = ${prefixUtilityName}SafeDate.process(${parameter2.fieldName});
 <#elseif parameter2.blob>
-        this.${parameter2.fieldName} = ${prefixUtilityName}SafeByteArray.process(${parameter2.fieldName});
+        this.${parameter2.fieldName}${parameter.javaTypeName} = ${prefixUtilityName}SafeByteArray.process(${parameter2.fieldName});
 <#else>
-        this.${parameter2.fieldName} = ${parameter2.fieldName};
+        this.${parameter2.fieldName}${parameter.javaTypeName} = ${parameter2.fieldName};
 </#if>
     }
+</#if>
 </#if>
 </#list>
 }

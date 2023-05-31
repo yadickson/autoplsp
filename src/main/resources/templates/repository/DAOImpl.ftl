@@ -255,10 +255,15 @@ public final class ${proc.className}DAOImpl
 </#if>
     @Override
     public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(${'\n'}            <#list proc.inputParameters as parameter>final ${parameter.javaTypeName} ${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) throws SQLException {
-        ${proc.className}IN params = new ${proc.className}IN();
+        ${proc.className}IN params;
+<#if !fullConstructor>
+        params = new ${proc.className}IN();
 <#list proc.inputParameters as parameter>
         params.set${parameter.propertyName}(${parameter.fieldName});
 </#list>
+<#else>
+        params = new ${proc.className}IN(${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+</#if>
         <#if proc.hasOutput>return </#if>this.execute(params);
     }
 </#if>
@@ -344,9 +349,11 @@ public final class ${proc.className}DAOImpl
 
         checkResult.check(out);
 </#if>
+<#if !fullConstructor>
 
         ${proc.className}OUT result;
         result = new ${proc.className}OUT();
+</#if>
 
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
@@ -367,12 +374,17 @@ public final class ${proc.className}DAOImpl
         ${parameter.fieldName} = (${parameter.javaTypeName}) out.get("${parameter.prefix}${parameter.name}");
 </#if>
 </#list>
+<#if !fullConstructor>
 
 <#list proc.outputParameters as parameter>
         result.set${parameter.propertyName}(${parameter.fieldName});
 </#list>
 
         return result;
+<#else>
+
+        return new ${proc.className}OUT(${'\n'}            <#list proc.outputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+</#if>
 </#if>
     }
 

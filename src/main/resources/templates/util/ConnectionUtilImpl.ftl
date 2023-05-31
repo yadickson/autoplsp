@@ -40,6 +40,8 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 <#if documentation>
 /**
  * Class to process connection transaction.
@@ -94,7 +96,7 @@ public final class ${prefixUtilityName}ConnectionUtilImpl implements
         try {
 
             <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Conn<#else>conn</#if> = DataSourceUtils.getConnection(
-                    jdbcTemplate.getDataSource()
+                    Objects.requireNonNull(jdbcTemplate.getDataSource())
             );
 
         } catch (Exception ex) {

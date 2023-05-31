@@ -343,6 +343,10 @@ public class Procedure implements Serializable {
         return (getHasPackage() ? getPackageName() + "." : "") + getName();
     }
 
+    public String getConstantFullName() {
+        return (getHasPackage() ? getPackageName() + "_" : "") + getName();
+    }
+
     /**
      * Getter the input parameters
      *

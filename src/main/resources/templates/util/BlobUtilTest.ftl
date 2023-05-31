@@ -28,6 +28,6 @@ class ${prefixUtilityName}BlobUtilTest {
 
     @Test
     void testInputNull() {
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNull(blobUtil.process(null));
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(blobUtil.process(null));
     }
 }

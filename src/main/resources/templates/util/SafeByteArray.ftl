@@ -47,7 +47,7 @@ public final class ${prefixUtilityName}SafeByteArray {
     public static byte[] process(final byte[] <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Input<#else>input</#if>) {
 
         if (<#if prefixUtilityName??>${prefixUtilityName?uncap_first}Input<#else>input</#if> == null) {
-            return null;
+            return new byte[0];
         }
 
         return <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Input<#else>input</#if>.clone();

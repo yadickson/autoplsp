@@ -94,11 +94,11 @@ public final class ${proc.className}SPImpl
 <#if proc.parameters?size <= 10 >
 <#assign noFullChunk = 1>
 <#list proc.parameters as parameter>
-        <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ${parameter.fieldName};
+        <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ${parameter.fieldName}${proc.className};
 </#list>
 
 <#list proc.parameters as parameter>
-        ${parameter.fieldName} = new <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>(
+        ${parameter.fieldName}${proc.className} = new <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>(
                 "${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >,
                 ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >,
                 new ${parameter.javaTypeName}RowMapper()</#if>
@@ -106,7 +106,7 @@ public final class ${proc.className}SPImpl
 
 </#list>
 <#list proc.parameters as parameter>
-        declareParameter(${parameter.fieldName});
+        declareParameter(${parameter.fieldName}${proc.className});
 </#list>
 <#else>
 <#assign step = 0 >
@@ -131,11 +131,11 @@ public final class ${proc.className}SPImpl
     private void fillStep${step}() {
 
 <#list childs as paramrs>
-        <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if> ${paramrs.fieldName};
+        <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if> ${paramrs.fieldName}${proc.className};
 </#list>
 
 <#list childs as paramrs>
-        ${paramrs.fieldName} = new <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if>(
+        ${paramrs.fieldName}${proc.className} = new <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if>(
                 "${paramrs.prefix}${paramrs.name}"<#if ! paramrs.returnResultSet >,
                 ${paramrs.sqlTypeName}</#if><#if paramrs.resultSet || paramrs.returnResultSet >,
                 new ${paramrs.javaTypeName}RowMapper()</#if>
@@ -143,7 +143,7 @@ public final class ${proc.className}SPImpl
 
 </#list>
 <#list childs as paramrs>
-        declareParameter(${paramrs.fieldName});
+        declareParameter(${paramrs.fieldName}${proc.className});
 </#list>
     }
 </#list>

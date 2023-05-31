@@ -55,7 +55,7 @@ public final class ${parameter.javaTypeName}RowMapper
      * Column <#if position>position<#else>name</#if>.
      */
 </#if>
-    private static final <#if position>int<#else>String</#if> ${paramrs.name} = <#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>;
+    private static final <#if position>int<#else>String</#if> ${proc.constantFullName}_${paramrs.name} = <#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>;
 
 </#list>
 <#if documentation>
@@ -81,23 +81,23 @@ public final class ${parameter.javaTypeName}RowMapper
 <#if parameter.parameters?size <= 10 >
 <#assign noFullChunk = 1>
 <#list parameter.parameters as paramrs>
-        ${paramrs.javaTypeName} ${paramrs.fieldName};
+        ${paramrs.javaTypeName} ${paramrs.fieldName}${parameter.javaTypeName};
 </#list>
 
 <#list parameter.parameters as paramrs>
 <#if paramrs.string || paramrs.clob>
-        ${paramrs.fieldName} = resultSet.getString(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getString(${proc.constantFullName}_${paramrs.name});
 <#elseif paramrs.blob>
-        ${paramrs.fieldName} = resultSet.getBytes(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getBytes(${proc.constantFullName}_${paramrs.name});
 <#elseif paramrs.date>
-        ${paramrs.fieldName} = resultSet.getTimestamp(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getTimestamp(${proc.constantFullName}_${paramrs.name});
 <#else>
-        ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = (${paramrs.javaTypeName}) resultSet.getObject(${proc.constantFullName}_${paramrs.name});
 </#if>
 </#list>
 
 <#list parameter.parameters as paramrs>
-        row.set${paramrs.propertyName}(${paramrs.fieldName});
+        row.set${paramrs.propertyName}(${paramrs.fieldName}${parameter.javaTypeName});
 </#list>
 <#else>
 <#assign step = 0 >
@@ -111,22 +111,22 @@ public final class ${parameter.javaTypeName}RowMapper
 <#else>
 
 <#list parameter.parameters as paramrs>
-        ${paramrs.javaTypeName} ${paramrs.fieldName};
+        ${paramrs.javaTypeName} ${paramrs.fieldName}${parameter.javaTypeName};
 </#list>
 
 <#list parameter.parameters as paramrs>
 <#if paramrs.string || paramrs.clob>
-        ${paramrs.fieldName} = resultSet.getString(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getString(${proc.constantFullName}_${paramrs.name});
 <#elseif paramrs.blob>
-        ${paramrs.fieldName} = resultSet.getBytes(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getBytes(${proc.constantFullName}_${paramrs.name});
 <#elseif paramrs.date>
-        ${paramrs.fieldName} = resultSet.getTimestamp(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getTimestamp(${proc.constantFullName}_${paramrs.name});
 <#else>
-        ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = (${paramrs.javaTypeName}) resultSet.getObject(${proc.constantFullName}_${paramrs.name});
 </#if>
 </#list>
 
-        return new ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        return new ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>${parameter2.fieldName}${parameter.javaTypeName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 </#if>
     }
 <#if !fullConstructor>
@@ -150,23 +150,23 @@ public final class ${parameter.javaTypeName}RowMapper
     ) throws SQLException {
 
 <#list childs as paramrs>
-        ${paramrs.javaTypeName} ${paramrs.fieldName};
+        ${paramrs.javaTypeName} ${paramrs.fieldName}${parameter.javaTypeName};
 </#list>
 
 <#list childs as paramrs>
 <#if paramrs.string || paramrs.clob>
-        ${paramrs.fieldName} = resultSet.getString(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getString(${proc.constantconstantFullName}_${paramrs.name});
 <#elseif paramrs.blob>
-        ${paramrs.fieldName} = resultSet.getBytes(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getBytes(${proc.constantFullName}_${paramrs.name});
 <#elseif paramrs.date>
-        ${paramrs.fieldName} = resultSet.getTimestamp(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getTimestamp(${proc.constantFullName}_${paramrs.name});
 <#else>
-        ${paramrs.fieldName} = (${paramrs.javaTypeName}) resultSet.getObject(${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = (${paramrs.javaTypeName}) resultSet.getObject(${proc.constantFullName}_${paramrs.name});
 </#if>
 </#list>
 
 <#list childs as paramrs>
-        row.set${paramrs.propertyName}(${paramrs.fieldName});
+        row.set${paramrs.propertyName}(${paramrs.fieldName}${parameter.javaTypeName});
 </#list>
     }
 </#list>

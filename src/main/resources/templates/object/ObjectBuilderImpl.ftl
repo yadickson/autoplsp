@@ -121,23 +121,23 @@ public final class ${parameter.javaTypeName}BuilderImpl
     ) throws SQLException {
 
 <#list parameter.parameters as parameter>
-        Object ${parameter.fieldName};
+        Object ${parameter.fieldName}${parameter.javaTypeName};
 </#list>
 
 <#list parameter.parameters as parameter>
 <#if parameter.clob>
-        ${parameter.fieldName} = clobUtil.process(connection, object.get${parameter.propertyName}());
+        ${parameter.fieldName}${parameter.javaTypeName} = clobUtil.process(connection, object.get${parameter.propertyName}());
 <#elseif parameter.blob>
-        ${parameter.fieldName} = blobUtil.process(connection, object.get${parameter.propertyName}());
+        ${parameter.fieldName}${parameter.javaTypeName} = blobUtil.process(connection, object.get${parameter.propertyName}());
 <#elseif parameter.date>
-        ${parameter.fieldName} = dateUtil.process(object.get${parameter.propertyName}());
+        ${parameter.fieldName}${parameter.javaTypeName} = dateUtil.process(object.get${parameter.propertyName}());
 <#else>
-        ${parameter.fieldName} = object.get${parameter.propertyName}();
+        ${parameter.fieldName}${parameter.javaTypeName} = object.get${parameter.propertyName}();
 </#if>
 </#list>
 
         Object[] objs = new Object[]{
-<#list parameter.parameters as parameter>            ${parameter.fieldName}<#sep>,</#sep>
+<#list parameter.parameters as parameter>            ${parameter.fieldName}${parameter.javaTypeName}<#sep>,</#sep>
 </#list>        };
 
         return objectUtil.process(

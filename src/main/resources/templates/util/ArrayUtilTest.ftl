@@ -66,13 +66,15 @@ class ${prefixUtilityName}ArrayUtilTest {
         Object[] objects = new Object[0];
         String nameValue = faker.internet().uuid();
 
-        Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
-        Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(nameValue, Mockito.same(objects))).thenReturn(array);
+        Mockito.when(connection.unwrap(OracleConnection.class)).thenReturn(oracleConnection);
+        Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(Mockito.anyString(), Mockito.same(objects))).thenReturn(array);
 
         Object result = arrayUtil.process(connection, nameValue, objects);
 
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(array, result);
+
+        Mockito.verify(oracleConnection).<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(Mockito.eq(nameValue), Mockito.same(objects));
     }
 </#if>
 
@@ -82,8 +84,8 @@ class ${prefixUtilityName}ArrayUtilTest {
         String nameValue = faker.internet().uuid();
 <#if driverName == 'oracle' >
 
-        Mockito.when(connection.unwrap(Mockito.eq(OracleConnection.class))).thenReturn(oracleConnection);
-        Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(nameValue, Mockito.same(objects))).thenThrow(new RuntimeException());
+        Mockito.when(connection.unwrap(OracleConnection.class)).thenReturn(oracleConnection);
+        Mockito.when(oracleConnection.<#if driverVersionName == 'ojdbc6' >createARRAY<#else>createOracleArray</#if>(Mockito.anyString(), Mockito.same(objects))).thenThrow(new RuntimeException());
 
 </#if>
         <#if junit == 'junit5'>Assertions.assertThrows(java.sql.SQLException.class,() -> </#if>arrayUtil.process(connection, nameValue, objects)<#if junit == 'junit5'>)</#if>;

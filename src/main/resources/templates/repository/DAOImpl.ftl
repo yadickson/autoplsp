@@ -286,9 +286,9 @@ public final class ${proc.className}DAOImpl
     @Override
     public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>${'\n'}            final ${proc.className}IN params${'\n'}    </#if>) throws SQLException {
 
-        Map<String, Object> in = new HashMap<<#if !diamond>String, Object</#if>>();
+        Map<String, Object> in${proc.className} = new HashMap<<#if !diamond>String, Object</#if>>();
 <#if proc.hasOutput>
-        Map<String, Object> out;
+        Map<String, Object> out${proc.className};
 </#if>
 <#if importConnectionUtils??>
 
@@ -318,11 +318,11 @@ public final class ${proc.className}DAOImpl
 
 <#list proc.inputParameters as parameter>
 <#if parameter.array || parameter.object>
-            in.put("${parameter.prefix}${parameter.name}",
+            in${proc.className}.put("${parameter.prefix}${parameter.name}",
                     ${parameter.fieldName}
             );
 <#else>
-            in.put("${parameter.prefix}${parameter.name}",
+            in${proc.className}.put("${parameter.prefix}${parameter.name}",
                     params.get${parameter.propertyName}()
             );
 </#if>
@@ -330,7 +330,7 @@ public final class ${proc.className}DAOImpl
 <#if proc.hasInput>
 
 </#if>
-            <#if proc.hasOutput>out = </#if><#if proc.function>function<#else>procedure</#if>.execute(in);
+            <#if proc.hasOutput>out${proc.className} = </#if><#if proc.function>function<#else>procedure</#if>.execute(in${proc.className});
 
         } catch (Exception ex) {
 <#if logger>
@@ -347,7 +347,7 @@ public final class ${proc.className}DAOImpl
 <#if proc.hasOutput>
 <#if proc.checkResult>
 
-        checkResult.check(out);
+        checkResult.check(out${proc.className});
 </#if>
 <#if !fullConstructor>
 
@@ -357,33 +357,33 @@ public final class ${proc.className}DAOImpl
 
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
-        List<${parameter.javaTypeName}> ${parameter.fieldName};
+        List<${parameter.javaTypeName}> ${parameter.fieldName}${proc.className};
 <#else>
-        ${parameter.javaTypeName} ${parameter.fieldName};
+        ${parameter.javaTypeName} ${parameter.fieldName}${proc.className};
 </#if>
 </#list>
 
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
-        ${parameter.fieldName} = (List) out.get("${parameter.prefix}${parameter.name}");
+        ${parameter.fieldName}${proc.className} = (List) out${proc.className}.get("${parameter.prefix}${parameter.name}");
 <#elseif parameter.clob>
-        ${parameter.fieldName} = clobUtil.process(out.get("${parameter.prefix}${parameter.name}"));
+        ${parameter.fieldName}${proc.className} = clobUtil.process(out${proc.className}.get("${parameter.prefix}${parameter.name}"));
 <#elseif parameter.blob>
-        ${parameter.fieldName} = blobUtil.process(out.get("${parameter.prefix}${parameter.name}"));
+        ${parameter.fieldName}${proc.className} = blobUtil.process(out${proc.className}.get("${parameter.prefix}${parameter.name}"));
 <#else>
-        ${parameter.fieldName} = (${parameter.javaTypeName}) out.get("${parameter.prefix}${parameter.name}");
+        ${parameter.fieldName}${proc.className} = (${parameter.javaTypeName}) out${proc.className}.get("${parameter.prefix}${parameter.name}");
 </#if>
 </#list>
 <#if !fullConstructor>
 
 <#list proc.outputParameters as parameter>
-        result.set${parameter.propertyName}(${parameter.fieldName});
+        result.set${parameter.propertyName}(${parameter.fieldName}${proc.className});
 </#list>
 
         return result;
 <#else>
 
-        return new ${proc.className}OUT(${'\n'}            <#list proc.outputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        return new ${proc.className}OUT(${'\n'}            <#list proc.outputParameters as parameter>${parameter.fieldName}${proc.className}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 </#if>
 </#if>
     }

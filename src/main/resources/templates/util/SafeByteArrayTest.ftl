@@ -37,7 +37,7 @@ class ${prefixUtilityName}SafeByteArrayTest {
 
     @Test
     void testInputNull() {
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNull(${prefixUtilityName}SafeByteArray.process(null));
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(${prefixUtilityName}SafeByteArray.process(null));
     }
 
     @Test

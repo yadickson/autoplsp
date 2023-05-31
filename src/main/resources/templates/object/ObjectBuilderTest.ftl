@@ -95,7 +95,7 @@ class ${parameter.javaTypeName}BuilderTest {
     }
 
     @Test
-    void test${parameter.javaTypeName}BuilderProcess() throws SQLException {
+    void test_${parameter.javaTypeName}_builder_process_check_parameters() throws SQLException {
         ${parameter.javaTypeName} object;
 <#if !fullConstructor>
         object = new ${parameter.javaTypeName}();
@@ -143,24 +143,74 @@ class ${parameter.javaTypeName}BuilderTest {
 
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(objParamsResult);
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${parameter.parameters?size}, objParamsResult.length);
-<#list parameter.parameters as parameter>
-<#if parameter.date>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
-<#elseif parameter.blob>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(obj${parameter.propertyName}, result.get${parameter.propertyName}())<#else>assertTrue(java.util.Arrays.equals(obj${parameter.propertyName}, result.get${parameter.propertyName}()))</#if>;
-<#else>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(obj${parameter.propertyName}, objParamsResult[${parameter.position - 1}]);
-</#if>
-</#list>
 
-<#list parameter.parameters as parameter>
-<#if parameter.date>
-        Mockito.verify(dateUtil, Mockito.times(1)).process(Mockito.eq(obj${parameter.propertyName}));
-<#elseif parameter.blob>
-        Mockito.verify(blobUtil, Mockito.times(1)).process(Mockito.same(connection), Mockito.same(obj${parameter.propertyName}));
-<#elseif parameter.clob>
-        Mockito.verify(clobUtil, Mockito.times(1)).process(Mockito.same(connection), Mockito.same(obj${parameter.propertyName}));
+<#list parameter.parameters as parameterTest>
+<#if parameterTest.date>
+        Mockito.verify(dateUtil, Mockito.times(1)).process(Mockito.eq(obj${parameterTest.propertyName}));
+<#elseif parameterTest.blob>
+        Mockito.verify(blobUtil, Mockito.times(1)).process(Mockito.same(connection), Mockito.same(obj${parameterTest.propertyName}));
+<#elseif parameterTest.clob>
+        Mockito.verify(clobUtil, Mockito.times(1)).process(Mockito.same(connection), Mockito.same(obj${parameterTest.propertyName}));
 </#if>
 </#list>
     }
+<#list parameter.parameters as parameterTest>
+
+    @Test
+    void test_${parameter.javaTypeName}_builder_process_check_parameter_${parameterTest.fieldName}_value() throws SQLException {
+        ${parameter.javaTypeName} object;
+<#if !fullConstructor>
+        object = new ${parameter.javaTypeName}();
+</#if>
+
+<#list parameter.parameters as parameter>
+<#if parameter.number>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = faker.random().nextLong();
+<#elseif parameter.date>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = faker.date().birthday();
+<#elseif parameter.blob>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = new byte[faker.random().nextInt(${parameter.position} * 100)];
+<#else>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = faker.internet().uuid();
+</#if>
+</#list>
+
+<#if !fullConstructor>
+<#list parameter.parameters as parameter>
+        object.set${parameter.propertyName}(obj${parameter.propertyName});
+</#list>
+<#else>
+        object = new ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+</#if>
+
+        Object[] obj = new Object[0];
+
+<#list parameter.parameters as parameter>
+<#if parameter.date>
+        Mockito.when(dateUtil.process(obj${parameter.propertyName})).thenReturn(obj${parameter.propertyName});
+<#elseif parameter.blob>
+        Mockito.when(blobUtil.process(Mockito.same(connection), Mockito.same(obj${parameter.propertyName}))).thenReturn(obj${parameter.propertyName});
+<#elseif parameter.clob>
+        Mockito.when(clobUtil.process(Mockito.same(connection), Mockito.same(obj${parameter.propertyName}))).thenReturn(obj${parameter.propertyName});
+</#if>
+</#list>
+        Mockito.when(objectUtil.process(Mockito.same(connection), Mockito.eq("${parameter.realObjectName}"), captorObjects.capture())).thenReturn(obj);
+
+        Object result = builder.process(connection, object);
+
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(obj, result);
+
+        Object[] objParamsResult = captorObjects.getValue();
+
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(objParamsResult);
+<#if parameterTest.date>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(obj${parameterTest.propertyName}, objParamsResult[${parameterTest.position - 1}]);
+<#elseif parameterTest.blob>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(obj${parameterTest.propertyName}, result.get${parameterTest.propertyName}())<#else>assertTrue(java.util.Arrays.equals(obj${parameter.propertyName}, result.get${parameter.propertyName}()))</#if>;
+<#else>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(obj${parameterTest.propertyName}, objParamsResult[${parameterTest.position - 1}]);
+</#if>
+    }
+</#list>
 }

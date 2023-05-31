@@ -88,19 +88,19 @@ public final class ${proc.className}SqlQueryImpl
     public ${proc.className}SqlQueryImpl(@Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate) {
         super();
 
-        setDataSource(jdbcTemplate.getDataSource());
+        setDataSource(Objects.requireNonNull(jdbcTemplate.getDataSource()));
 
         setSql("select * from ${proc.fullName}(<#list proc.inputParameters as parameter>?<#sep>, </#sep></#list>)");
 
 <#list proc.parameters as parameter>
 <#if !parameter.returnResultSet>
-        Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter sql${parameter.propertyName};
+        Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter sql${parameter.propertyName}${proc.className};
 </#if>
 </#list>
 
 <#list proc.parameters as parameter>
 <#if !parameter.returnResultSet>
-        sql${parameter.propertyName} = new Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter(
+        sql${parameter.propertyName}${proc.className} = new Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter(
                 "${parameter.prefix}${parameter.name}",
                 ${parameter.sqlTypeName}
         );
@@ -110,7 +110,7 @@ public final class ${proc.className}SqlQueryImpl
 
 <#list proc.parameters as parameter>
 <#if !parameter.returnResultSet>
-        declareParameter(sql${parameter.propertyName});
+        declareParameter(sql${parameter.propertyName}${proc.className});
 <#else>
         try {
             setRowMapperClass(new ${parameter.javaTypeName}RowMapper().getClass());

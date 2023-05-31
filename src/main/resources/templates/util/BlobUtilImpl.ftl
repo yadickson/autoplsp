@@ -76,7 +76,7 @@ public final class ${prefixUtilityName}BlobUtilImpl
     public byte[] process(final Object object) {
 
         if (object == null) {
-            return null;
+            return new byte[0];
         }
 
         Blob blob = (Blob) object;
@@ -88,7 +88,7 @@ public final class ${prefixUtilityName}BlobUtilImpl
 <#if logger>
             LOGGER.error(ex.getMessage(), ex);
 </#if>
-            result = null;
+            result = new byte[0];
         }
 
         return result;
@@ -124,14 +124,7 @@ public final class ${prefixUtilityName}BlobUtilImpl
             );
 </#if>
 
-            try (OutputStream <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Stream<#else>stream</#if> = blob.<#if driverVersionName != 'ojdbc6' >setBinaryStream(0)<#else>getBinaryOutputStream()</#if>) {
-                <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Stream<#else>stream</#if>.write(param);
-            } catch (Exception ex) {
-<#if logger>
-                LOGGER.error(ex.getMessage(), ex);
-</#if>
-                blob = null;
-            }
+            blob = write(blob, param);
 
         } catch (Exception ex) {
 <#if logger>
@@ -144,4 +137,16 @@ public final class ${prefixUtilityName}BlobUtilImpl
 </#if>
     }
 
+    private <#if driverVersionName == 'ojdbc6' >BLOB<#else>Blob</#if> write(final <#if driverVersionName == 'ojdbc6' >BLOB<#else>Blob</#if> blob, final byte[] param) {
+        try (OutputStream <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Stream<#else>stream</#if> = blob.<#if driverVersionName != 'ojdbc6' >setBinaryStream(0)<#else>getBinaryOutputStream()</#if>) {
+            <#if prefixUtilityName??>${prefixUtilityName?uncap_first}Stream<#else>stream</#if>.write(param);
+            return blob;
+        } catch (Exception ex) {
+<#if logger>
+            LOGGER.error(ex.getMessage(), ex);
+<#else>
+            return null;
+</#if>
+        }
+    }
 }

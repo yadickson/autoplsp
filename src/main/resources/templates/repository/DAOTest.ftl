@@ -173,20 +173,19 @@ class ${proc.className}DAOTest {
         ${parameter.javaTypeName} ${parameter.fieldName} = faker.internet().uuid();
 </#if>
 </#list>
-
 <#if importConnectionUtils??>
+
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
         Object[] ${parameter.fieldName}Builder = new Object[0];
 </#if>
 </#list>
 </#if>
-
 </#if>
-<#if proc.hasOutput>
 
         java.util.Map<String, Object> mapResult = new java.util.HashMap<<#if !diamond>String, Object</#if>>();
 
+<#if proc.hasOutput>
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
         java.util.List<${parameter.javaTypeName}> obj${parameter.propertyName} = new java.util.ArrayList<<#if !diamond>${parameter.javaTypeName}</#if>>();
@@ -217,7 +216,7 @@ class ${proc.className}DAOTest {
 </#if>
 </#list>
 </#if>
-<#if proc.hasOutput>
+<#if proc.hasInput || proc.hasOutput>
 <#list proc.outputParameters as parameter>
 <#if parameter.blob>
         Mockito.when(blobUtil.process(Mockito.same(obj${parameter.propertyName}))).thenReturn(new byte[0]);
@@ -271,7 +270,6 @@ class ${proc.className}DAOTest {
         ${parameter.javaTypeName} ${parameter.fieldName} = faker.internet().uuid();
 </#if>
 </#list>
-
 <#if importConnectionUtils??>
 
 <#list proc.inputParameters as parameter>
@@ -281,9 +279,102 @@ class ${proc.className}DAOTest {
 </#list>
 </#if>
 
+        java.util.Map<String, Object> mapResult = new java.util.HashMap<<#if !diamond>String, Object</#if>>();
+
 <#if proc.hasOutput>
+<#list proc.outputParameters as parameter>
+<#if parameter.resultSet || parameter.returnResultSet>
+        java.util.List<${parameter.javaTypeName}> obj${parameter.propertyName} = new java.util.ArrayList<<#if !diamond>${parameter.javaTypeName}</#if>>();
+<#elseif parameter.clob>
+        java.sql.Clob obj${parameter.propertyName} = Mockito.mock(java.sql.Clob.class);
+<#elseif parameter.blob>
+        java.sql.Blob obj${parameter.propertyName} = Mockito.mock(java.sql.Blob.class);
+<#elseif parameter.number>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = faker.random().nextLong();
+<#elseif parameter.date>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = faker.date().birthday();
+<#else>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = faker.internet().uuid();
+</#if>
+</#list>
+
+<#list proc.outputParameters as parameter>
+        mapResult.put("${parameter.name}", obj${parameter.propertyName});
+</#list>
+
+</#if>
+<#if importConnectionUtils??>
+
+        Mockito.when(connectionUtil.process()).thenReturn(connection);
+<#list proc.inputParameters as parameter>
+<#if parameter.object || parameter.array>
+        Mockito.when(${parameter.javaTypeFieldName}Builder.process(Mockito.same(connection), Mockito.same(${parameter.fieldName}))).thenReturn(${parameter.fieldName}Builder);
+</#if>
+</#list>
+</#if>
+<#if proc.hasInput || proc.hasOutput>
+<#list proc.outputParameters as parameter>
+<#if parameter.blob>
+        Mockito.when(blobUtil.process(Mockito.same(obj${parameter.propertyName}))).thenReturn(new byte[0]);
+<#elseif parameter.clob>
+        Mockito.when(clobUtil.process(Mockito.same(obj${parameter.propertyName}))).thenReturn("${parameter.name}");
+</#if>
+</#list>
+        Mockito.when(<#if proc.function>function<#else>procedure</#if>.execute(<#if proc.hasInput>captorParameters.capture()<#else>Mockito.anyMap()</#if>)).thenReturn(mapResult);
+</#if>
+<#if proc.hasInput || proc.hasOutput>
+
+</#if>
+        repository.execute(<#if proc.hasInput>${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        </#if>);
+
+        java.util.Map<String, Object> mapParamsResult = captorParameters.getValue();
+
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(mapParamsResult);
+
+<#if parameterTest.object || parameterTest.array>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameterTest.fieldName}Builder, mapParamsResult.get("${parameterTest.name}"));
+<#elseif parameterTest.date>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${parameterTest.fieldName}, mapParamsResult.get("${parameterTest.name}"));
+<#elseif parameterTest.blob>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(${parameterTest.fieldName}, (byte[]) mapParamsResult.get("${parameterTest.name}"))<#else>assertTrue(java.util.Arrays.equals(${parameterTest.fieldName}, (byte[])mapParamsResult.get("${parameterTest.name}")))</#if>;
+<#else>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameterTest.fieldName}, mapParamsResult.get("${parameterTest.name}"));
+</#if>
+    }
+</#list>
+<#list proc.outputParameters as parameterTest>
+
+    @Test
+    void should_check_${proc.constantFullName?lower_case}_dao_execute_with_output_parameters_check_parameter_${parameterTest.name?lower_case}_value() throws java.sql.SQLException {
+<#if proc.hasInput>
+
+<#list proc.inputParameters as parameter>
+<#if parameter.date>
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.date().birthday();
+<#elseif parameter.blob>
+        byte[] ${parameter.fieldName} = new byte[faker.random().nextInt(${parameter.position} * 100)];
+<#elseif parameter.number>
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.random().nextLong();
+<#elseif parameter.array || parameter.object>
+        ${parameter.javaTypeName} ${parameter.fieldName} = new ${parameter.javaTypeName}();
+<#else>
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.internet().uuid();
+</#if>
+</#list>
+<#if importConnectionUtils??>
+
+<#list proc.inputParameters as parameter>
+<#if parameter.object || parameter.array>
+        Object[] ${parameter.fieldName}Builder = new Object[0];
+</#if>
+</#list>
+</#if>
+</#if>
 
         java.util.Map<String, Object> mapResult = new java.util.HashMap<<#if !diamond>String, Object</#if>>();
+
+<#if proc.hasOutput>
+        ${proc.className}OUT out;
 
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
@@ -315,7 +406,7 @@ class ${proc.className}DAOTest {
 </#if>
 </#list>
 </#if>
-<#if proc.hasOutput>
+<#if proc.hasInput || proc.hasOutput>
 <#list proc.outputParameters as parameter>
 <#if parameter.blob>
         Mockito.when(blobUtil.process(Mockito.same(obj${parameter.propertyName}))).thenReturn(new byte[0]);
@@ -328,20 +419,18 @@ class ${proc.className}DAOTest {
 <#if proc.hasInput || proc.hasOutput>
 
 </#if>
-        repository.execute(<#if proc.hasInput>${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        </#if>);
+        <#if proc.hasOutput>out = </#if>repository.execute(<#if proc.hasInput>${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        </#if>);
 
-        java.util.Map<String, Object> mapParamsResult = captorParameters.getValue();
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(out);
 
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(mapParamsResult);
-
-<#if parameterTest.object || parameterTest.array>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameterTest.fieldName}Builder, mapParamsResult.get("${parameterTest.name}"));
-<#elseif parameterTest.date>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${parameterTest.fieldName}, mapParamsResult.get("${parameterTest.name}"));
+<#if parameterTest.date>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(obj${parameterTest.propertyName}, out.get${parameterTest.propertyName}());
+<#elseif parameterTest.clob>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals("${parameterTest.name}", out.get${parameterTest.propertyName}());
 <#elseif parameterTest.blob>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(${parameterTest.fieldName}, (byte[]) mapParamsResult.get("${parameterTest.name}"))<#else>assertTrue(java.util.Arrays.equals(${parameterTest.fieldName}, (byte[])mapParamsResult.get("${parameterTest.name}")))</#if>;
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(out.get${parameterTest.propertyName}());
 <#else>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameterTest.fieldName}, mapParamsResult.get("${parameterTest.name}"));
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(obj${parameterTest.propertyName}, out.get${parameterTest.propertyName}());
 </#if>
     }
 </#list>

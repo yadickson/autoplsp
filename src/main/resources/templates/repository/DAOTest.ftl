@@ -157,7 +157,7 @@ class ${proc.className}DAOTest {
 </#if>
 
     @Test
-    void should_check_${proc.className}_dao_execute() throws java.sql.SQLException {
+    void should_check_${proc.constantFullName?lower_case}_dao_execute() throws java.sql.SQLException {
 <#if proc.hasInput>
 
 <#list proc.inputParameters as parameter>
@@ -175,7 +175,6 @@ class ${proc.className}DAOTest {
 </#list>
 
 <#if importConnectionUtils??>
-
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
         Object[] ${parameter.fieldName}Builder = new Object[0];
@@ -254,6 +253,98 @@ class ${proc.className}DAOTest {
 </#list>
 </#if>
     }
+<#list proc.inputParameters as parameterTest>
+
+    @Test
+    void should_check_${proc.constantFullName?lower_case}_dao_execute_with_check_input_parameter_${parameterTest.name?lower_case}_value() throws java.sql.SQLException {
+
+<#list proc.inputParameters as parameter>
+<#if parameter.date>
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.date().birthday();
+<#elseif parameter.blob>
+        byte[] ${parameter.fieldName} = new byte[faker.random().nextInt(${parameter.position} * 100)];
+<#elseif parameter.number>
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.random().nextLong();
+<#elseif parameter.array || parameter.object>
+        ${parameter.javaTypeName} ${parameter.fieldName} = new ${parameter.javaTypeName}();
+<#else>
+        ${parameter.javaTypeName} ${parameter.fieldName} = faker.internet().uuid();
+</#if>
+</#list>
+
+<#if importConnectionUtils??>
+
+<#list proc.inputParameters as parameter>
+<#if parameter.object || parameter.array>
+        Object[] ${parameter.fieldName}Builder = new Object[0];
+</#if>
+</#list>
+</#if>
+
+<#if proc.hasOutput>
+
+        java.util.Map<String, Object> mapResult = new java.util.HashMap<<#if !diamond>String, Object</#if>>();
+
+<#list proc.outputParameters as parameter>
+<#if parameter.resultSet || parameter.returnResultSet>
+        java.util.List<${parameter.javaTypeName}> obj${parameter.propertyName} = new java.util.ArrayList<<#if !diamond>${parameter.javaTypeName}</#if>>();
+<#elseif parameter.clob>
+        java.sql.Clob obj${parameter.propertyName} = Mockito.mock(java.sql.Clob.class);
+<#elseif parameter.blob>
+        java.sql.Blob obj${parameter.propertyName} = Mockito.mock(java.sql.Blob.class);
+<#elseif parameter.number>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = ${parameter.position};
+<#elseif parameter.date>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = new ${parameter.javaTypeName}(${parameter.javaTypeName});
+<#else>
+        ${parameter.javaTypeName} obj${parameter.propertyName} = "${parameter.name}";
+</#if>
+</#list>
+
+<#list proc.outputParameters as parameter>
+        mapResult.put("${parameter.name}", obj${parameter.propertyName});
+</#list>
+
+</#if>
+<#if importConnectionUtils??>
+
+        Mockito.when(connectionUtil.process()).thenReturn(connection);
+<#list proc.inputParameters as parameter>
+<#if parameter.object || parameter.array>
+        Mockito.when(${parameter.javaTypeFieldName}Builder.process(Mockito.same(connection), Mockito.same(${parameter.fieldName}))).thenReturn(${parameter.fieldName}Builder);
+</#if>
+</#list>
+</#if>
+<#if proc.hasOutput>
+<#list proc.outputParameters as parameter>
+<#if parameter.blob>
+        Mockito.when(blobUtil.process(Mockito.same(obj${parameter.propertyName}))).thenReturn(new byte[0]);
+<#elseif parameter.clob>
+        Mockito.when(clobUtil.process(Mockito.same(obj${parameter.propertyName}))).thenReturn("${parameter.name}");
+</#if>
+</#list>
+        Mockito.when(<#if proc.function>function<#else>procedure</#if>.execute(<#if proc.hasInput>captorParameters.capture()<#else>Mockito.anyMap()</#if>)).thenReturn(mapResult);
+</#if>
+<#if proc.hasInput || proc.hasOutput>
+
+</#if>
+        repository.execute(<#if proc.hasInput>${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        </#if>);
+
+        java.util.Map<String, Object> mapParamsResult = captorParameters.getValue();
+
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(mapParamsResult);
+
+<#if parameterTest.object || parameterTest.array>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameterTest.fieldName}Builder, mapParamsResult.get("${parameterTest.name}"));
+<#elseif parameterTest.date>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${parameterTest.fieldName}, mapParamsResult.get("${parameterTest.name}"));
+<#elseif parameterTest.blob>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(${parameterTest.fieldName}, (byte[]) mapParamsResult.get("${parameterTest.name}"))<#else>assertTrue(java.util.Arrays.equals(${parameterTest.fieldName}, (byte[])mapParamsResult.get("${parameterTest.name}")))</#if>;
+<#else>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameterTest.fieldName}, mapParamsResult.get("${parameterTest.name}"));
+</#if>
+    }
+</#list>
 
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
     void testExecute${proc.className}DAOError() throws java.sql.SQLException {

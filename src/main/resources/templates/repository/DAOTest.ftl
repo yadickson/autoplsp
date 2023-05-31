@@ -436,7 +436,7 @@ class ${proc.className}DAOTest {
 </#list>
 
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
-    void testExecute${proc.className}DAOError() throws java.sql.SQLException {
+    void should_check_${proc.constantFullName?lower_case}_dao_error() throws java.sql.SQLException {
 <#if proc.hasInput>
         ${proc.className}IN params = Mockito.mock(${proc.className}IN.class);
 
@@ -456,7 +456,7 @@ class ${proc.className}DAOTest {
 <#if proc.hasInput>
 
     @Test<#if junit != 'junit5'>(expected = java.sql.SQLException.class)</#if>
-    void testExecute${proc.className}DAOInputNullParameterError()<#if importConnectionUtils??> throws java.sql.SQLException</#if> {
+    void should_check_${proc.constantFullName?lower_case}_dao_input_null_parameter_error()<#if importConnectionUtils??> throws java.sql.SQLException</#if> {
         ${proc.className}IN params = null;
 <#if importConnectionUtils??>
 

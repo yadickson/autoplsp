@@ -136,9 +136,7 @@ public final class ${parameter.javaTypeName}BuilderImpl
 </#if>
 </#list>
 
-        Object[] objs = new Object[]{
-<#list parameter.parameters as parameter>            ${parameter.fieldName}${parameter.javaTypeName}<#sep>,</#sep>
-</#list>        };
+        Object[] objs = new Object[]{<#list parameter.parameters as parameter>${'\n'}            ${parameter.fieldName}${parameter.javaTypeName}<#sep>,</#sep>${'\n'}        </#list>${'\n'}        };
 
         return objectUtil.process(
                 connection,

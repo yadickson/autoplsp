@@ -358,11 +358,13 @@ public final class JavaGenerator extends TemplateGenerator {
         if (procedure.getHasInput()) {
             createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
             createTemplate(INPUT_MAP, DOMAIN_PATH + "IN.ftl", getFileNamePath(parameterPath, procedure, "IN"));
+            createTemplate(INPUT_MAP, DOMAIN_PATH + "INImpl.ftl", getFileNamePath(parameterPath, procedure, "INImpl"));
         }
 
         if (procedure.getHasOutput()) {
             createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
             createTemplate(INPUT_MAP, DOMAIN_PATH + "OUT.ftl", getFileNamePath(parameterPath, procedure, "OUT"));
+            createTemplate(INPUT_MAP, DOMAIN_PATH + "OUTImpl.ftl", getFileNamePath(parameterPath, procedure, "OUTImpl"));
         }
 
         makeInterfaces(procedure.getParameters());
@@ -381,6 +383,7 @@ public final class JavaGenerator extends TemplateGenerator {
                 INPUT_MAP.put(PARAMETER_NAME, param);
                 createTemplate(INPUT_MAP, CURSOR_PATH + "package-info.ftl", getCursorOutputFilePath("package-info.java"));
                 createTemplate(INPUT_MAP, CURSOR_PATH + "DataSet.ftl", getFileNamePath(getCursorOutputPath(""), procedure, param, "RS"));
+                createTemplate(INPUT_MAP, CURSOR_PATH + "DataSetImpl.ftl", getFileNamePath(getCursorOutputPath(""), procedure, param, "RSImpl"));
                 makeInterfaces(param.getParameters());
             }
         }
@@ -424,6 +427,7 @@ public final class JavaGenerator extends TemplateGenerator {
                 INPUT_MAP.put(PARAMETER_NAME, param);
                 createTemplate(INPUT_MAP, OBJECT_PATH + "package-info.ftl", getObjectOutputFilePath("package-info.java"));
                 createTemplate(INPUT_MAP, OBJECT_PATH + "Object.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName()));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectImpl.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName() + "Impl"));
                 createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilder.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName() + "Builder"));
                 createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderImpl.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName() + "BuilderImpl"));
 
@@ -444,6 +448,7 @@ public final class JavaGenerator extends TemplateGenerator {
                 checkDateUtil(param);
                 checkBlodUtil(param);
                 checkClodUtil(param);
+                makeInterfaces(param.getParameters());
             }
 
             if (param.isArray()) {
@@ -470,6 +475,7 @@ public final class JavaGenerator extends TemplateGenerator {
                 checkDateUtil(param);
                 checkBlodUtil(param);
                 checkClodUtil(param);
+                makeInterfaces(param.getParameters());
             }
         }
     }
@@ -697,7 +703,7 @@ public final class JavaGenerator extends TemplateGenerator {
     }
 
     private String getInterfaceFileNamePath(String path, Parameter param) {
-        return path + File.separatorChar + param.getJavaFileNameInterface() + "Interface" + EXT_FILE;
+        return path + File.separatorChar + param.getJavaFileNameInterface() + EXT_FILE;
     }
 
     private String getFileNameTablePath(String path, Table table, String type) {
@@ -721,11 +727,11 @@ public final class JavaGenerator extends TemplateGenerator {
     }
 
     private void makeInterfaces(List<Parameter> parameters) throws BusinessException {
-//        for(Parameter param : parameters) {
-//            if (param.isInterface()) {
-//                INPUT_MAP.put(PARAMETER_NAME, param);
-//                createTemplate(INPUT_MAP, INTERFACE_PATH + "Interface.ftl", getInterfaceFileNamePath(getInterfaceOutputPath(""), param));
-//            }
-//        }
+        for(Parameter param : parameters) {
+            //if (param.isInterface()) {
+                INPUT_MAP.put(PARAMETER_NAME, param);
+                createTemplate(INPUT_MAP, INTERFACE_PATH + "Interface.ftl", getInterfaceFileNamePath(getInterfaceOutputPath(""), param));
+            //}
+        }
     }
 }

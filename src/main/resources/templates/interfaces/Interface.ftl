@@ -18,23 +18,28 @@
 </#if>
 package ${javaPackage}.interfaces;
 
-<#if parameter.date>
-<#assign importSafeDate = 1>
-</#if>
-<#if importSafeDate??>
+<#if parameter.array>
+import ${javaPackage}.array.${parameter.javaTypeName};
 
+<#elseif parameter.object>
+import ${javaPackage}.object.${parameter.javaTypeName};
+
+<#elseif parameter.resultSet || parameter.returnResultSet>
+import ${javaPackage}.cursor.${parameter.javaTypeName};
+
+<#elseif parameter.date>
 import java.util.Date;
 
 </#if>
 <#if documentation>
 /**
- * ${parameter.javaFileNameInterface}Interface.
+ * ${parameter.javaFileNameInterface}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
 </#if>
-public interface ${parameter.javaFileNameInterface}Interface {
+public interface ${parameter.javaFileNameInterface} {
 
 <#if documentation>
     /**
@@ -45,18 +50,5 @@ public interface ${parameter.javaFileNameInterface}Interface {
      * @return The ${parameter.name} value.
      */
 </#if>
-    ${parameter.javaTypeName} get${parameter.propertyName}();
-<#if fullConstructor>
-
-<#if documentation>
-    /**
-     * Setter of ${parameter.name}.
-     *
-     * ${parameter.name}
-     *
-     * @param ${parameter.fieldName} ${parameter.name} to set
-     */
-</#if>
-    void set${parameter.propertyName}(${parameter.javaTypeName} ${parameter.fieldName});
-</#if>
+    <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> get${parameter.propertyName}();
 }

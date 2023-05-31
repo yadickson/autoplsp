@@ -11,9 +11,6 @@ import ${javaPackage}.cursor.${parameter.javaTypeName};
 import java.util.Date;
 </#if>
 
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 

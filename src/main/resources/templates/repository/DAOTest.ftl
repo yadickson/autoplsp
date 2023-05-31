@@ -33,6 +33,7 @@ import ${javaPackage}.cursor.${parameter.javaTypeName};
 </#list>
 <#if proc.hasInput>
 import ${javaPackage}.domain.${proc.className}IN;
+import ${javaPackage}.domain.${proc.className}INImpl;
 </#if>
 <#if proc.hasOutput>
 import ${javaPackage}.domain.${proc.className}OUT;
@@ -160,6 +161,11 @@ class ${proc.className}DAOTest {
     void should_check_${proc.constantFullName?lower_case}_dao_execute() throws java.sql.SQLException {
 <#if proc.hasInput>
 
+        ${proc.className}INImpl params;
+<#if !fullConstructor>
+        params = new ${proc.className}INImpl();
+</#if>
+
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
         ${parameter.javaTypeName} ${parameter.fieldName} = faker.date().birthday();
@@ -173,6 +179,14 @@ class ${proc.className}DAOTest {
         ${parameter.javaTypeName} ${parameter.fieldName} = faker.internet().uuid();
 </#if>
 </#list>
+
+<#if !fullConstructor>
+<#list proc.inputParameters as parameter>
+        params.set${parameter.propertyName}(${parameter.fieldName});
+</#list>
+<#else>
+        params = new ${proc.className}INImpl(${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+</#if>
 <#if importConnectionUtils??>
 
 <#list proc.inputParameters as parameter>
@@ -229,7 +243,7 @@ class ${proc.className}DAOTest {
 <#if proc.hasInput || proc.hasOutput>
 
 </#if>
-        repository.execute(<#if proc.hasInput>${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        </#if>);
+        repository.execute(<#if proc.hasInput>params</#if>);
 
         InOrder inOrder = Mockito.inOrder(<#if proc.function>function<#else>procedure</#if><#if proc.checkResult>, checkResult</#if><#if importConnectionUtils??>, connectionUtil</#if>);
 
@@ -257,6 +271,11 @@ class ${proc.className}DAOTest {
     @Test
     void should_check_${proc.constantFullName?lower_case}_dao_execute_with_check_input_parameter_${parameterTest.name?lower_case}_value() throws java.sql.SQLException {
 
+        ${proc.className}INImpl params;
+<#if !fullConstructor>
+        params = new ${proc.className}INImpl();
+</#if>
+
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
         ${parameter.javaTypeName} ${parameter.fieldName} = faker.date().birthday();
@@ -270,6 +289,14 @@ class ${proc.className}DAOTest {
         ${parameter.javaTypeName} ${parameter.fieldName} = faker.internet().uuid();
 </#if>
 </#list>
+
+<#if !fullConstructor>
+<#list proc.inputParameters as parameter>
+        params.set${parameter.propertyName}(${parameter.fieldName});
+</#list>
+<#else>
+        params = new ${proc.className}INImpl(${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+</#if>
 <#if importConnectionUtils??>
 
 <#list proc.inputParameters as parameter>
@@ -325,7 +352,7 @@ class ${proc.className}DAOTest {
 <#if proc.hasInput || proc.hasOutput>
 
 </#if>
-        repository.execute(<#if proc.hasInput>${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        </#if>);
+        repository.execute(<#if proc.hasInput>params</#if>);
 
         java.util.Map<String, Object> mapParamsResult = captorParameters.getValue();
 
@@ -348,6 +375,11 @@ class ${proc.className}DAOTest {
     void should_check_${proc.constantFullName?lower_case}_dao_execute_with_output_parameters_check_parameter_${parameterTest.name?lower_case}_value() throws java.sql.SQLException {
 <#if proc.hasInput>
 
+        ${proc.className}INImpl params;
+<#if !fullConstructor>
+        params = new ${proc.className}INImpl();
+</#if>
+
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
         ${parameter.javaTypeName} ${parameter.fieldName} = faker.date().birthday();
@@ -361,6 +393,14 @@ class ${proc.className}DAOTest {
         ${parameter.javaTypeName} ${parameter.fieldName} = faker.internet().uuid();
 </#if>
 </#list>
+<#if !fullConstructor>
+
+<#list proc.inputParameters as parameter>
+        params.set${parameter.propertyName}(${parameter.fieldName});
+</#list>
+<#else>
+        params = new ${proc.className}INImpl(${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+</#if>
 <#if importConnectionUtils??>
 
 <#list proc.inputParameters as parameter>
@@ -419,7 +459,7 @@ class ${proc.className}DAOTest {
 <#if proc.hasInput || proc.hasOutput>
 
 </#if>
-        <#if proc.hasOutput>out = </#if>repository.execute(<#if proc.hasInput>${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        </#if>);
+        <#if proc.hasOutput>out = </#if>repository.execute(<#if proc.hasInput>params</#if>);
 
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(out);
 

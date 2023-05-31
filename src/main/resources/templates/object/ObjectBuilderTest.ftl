@@ -96,9 +96,9 @@ class ${parameter.javaTypeName}BuilderTest {
 
     @Test
     void should_check_${parameter.realObjectName?lower_case}_builder_process_check_parameters() throws SQLException {
-        ${parameter.javaTypeName} object;
+        ${parameter.javaTypeName}Impl object;
 <#if !fullConstructor>
-        object = new ${parameter.javaTypeName}();
+        object = new ${parameter.javaTypeName}Impl();
 </#if>
 
 <#list parameter.parameters as parameter>
@@ -118,7 +118,7 @@ class ${parameter.javaTypeName}BuilderTest {
         object.set${parameter.propertyName}(obj${parameter.propertyName});
 </#list>
 <#else>
-        object = new ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        object = new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 </#if>
 
         Object[] obj = new Object[0];
@@ -158,9 +158,9 @@ class ${parameter.javaTypeName}BuilderTest {
 
     @Test
     void should_check_${parameter.realObjectName?lower_case}_builder_process_check_parameter_${parameterTest.name?lower_case}_value() throws SQLException {
-        ${parameter.javaTypeName} object;
+        ${parameter.javaTypeName}Impl object;
 <#if !fullConstructor>
-        object = new ${parameter.javaTypeName}();
+        object = new ${parameter.javaTypeName}Impl();
 </#if>
 
 <#list parameter.parameters as parameter>
@@ -180,7 +180,7 @@ class ${parameter.javaTypeName}BuilderTest {
         object.set${parameter.propertyName}(obj${parameter.propertyName});
 </#list>
 <#else>
-        object = new ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        object = new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 </#if>
 
         Object[] obj = new Object[0];

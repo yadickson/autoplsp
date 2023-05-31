@@ -19,12 +19,6 @@
 package ${javaPackage}.repository;
 
 <#if proc.hasInput>
-<#list proc.arrayImports as parameter>
-import ${javaPackage}.array.${parameter.javaTypeName};
-</#list>
-<#list proc.objectImports as parameter>
-import ${javaPackage}.object.${parameter.javaTypeName};
-</#list>
 <#assign fillSpace = 1>
 import ${javaPackage}.domain.${proc.className}IN;
 </#if>
@@ -48,23 +42,6 @@ import java.sql.SQLException;
  */
 </#if>
 public interface ${proc.className}DAO {
-<#if proc.hasInput>
-
-<#if documentation>
-    /**
-     * Execute stored procedure.
-     *
-<#list proc.inputParameters as parameter>
-     * @param ${parameter.fieldName} set value of ${parameter.name}
-</#list>
-<#if proc.hasOutput>
-     * @return output parameters
-</#if>
-     * @throws SQLException if error
-     */
-</#if>
-    <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(${'\n'}            <#list proc.inputParameters as parameter>${parameter.javaTypeName} ${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) throws SQLException;
-</#if>
 
 <#if documentation>
     /**

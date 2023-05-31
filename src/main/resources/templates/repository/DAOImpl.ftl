@@ -43,9 +43,11 @@ import ${javaPackage}.cursor.${parameter.javaTypeName};
 </#list>
 <#if proc.hasInput>
 import ${javaPackage}.domain.${proc.className}IN;
+import ${javaPackage}.domain.${proc.className}INImpl;
 </#if>
 <#if proc.hasOutput>
 import ${javaPackage}.domain.${proc.className}OUT;
+import ${javaPackage}.domain.${proc.className}OUTImpl;
 </#if>
 <#if !proc.functionInline>
 import ${javaPackage}.repository.sp.${proc.className}SP;
@@ -238,35 +240,6 @@ public final class ${proc.className}DAOImpl
         this.${parameter.javaTypeFieldName}Builder = ${parameter.javaTypeFieldName}Builder;
 </#list>
     }
-<#if proc.hasInput>
-
-<#if documentation>
-    /**
-     * Execute stored procedure.
-     *
-<#list proc.inputParameters as parameter>
-     * @param ${parameter.fieldName} set value of ${parameter.name}
-</#list>
-<#if proc.hasOutput>
-     * @return output parameters
-</#if>
-     * @throws SQLException if error.
-     */
-</#if>
-    @Override
-    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(${'\n'}            <#list proc.inputParameters as parameter>final ${parameter.javaTypeName} ${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) throws SQLException {
-        ${proc.className}IN params;
-<#if !fullConstructor>
-        params = new ${proc.className}IN();
-<#list proc.inputParameters as parameter>
-        params.set${parameter.propertyName}(${parameter.fieldName});
-</#list>
-<#else>
-        params = new ${proc.className}IN(${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
-        <#if proc.hasOutput>return </#if>this.execute(params);
-    }
-</#if>
 
 <#if documentation>
     /**
@@ -351,8 +324,8 @@ public final class ${proc.className}DAOImpl
 </#if>
 <#if !fullConstructor>
 
-        ${proc.className}OUT result;
-        result = new ${proc.className}OUT();
+        ${proc.className}OUTImpl result;
+        result = new ${proc.className}OUTImpl();
 </#if>
 
 <#list proc.outputParameters as parameter>
@@ -383,7 +356,7 @@ public final class ${proc.className}DAOImpl
         return result;
 <#else>
 
-        return new ${proc.className}OUT(${'\n'}            <#list proc.outputParameters as parameter>${parameter.fieldName}${proc.className}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        return new ${proc.className}OUTImpl(${'\n'}            <#list proc.outputParameters as parameter>${parameter.fieldName}${proc.className}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 </#if>
 </#if>
     }

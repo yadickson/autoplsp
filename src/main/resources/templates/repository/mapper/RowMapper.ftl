@@ -24,6 +24,7 @@ package ${javaPackage}.repository.mapper;
 </#list>
 
 import ${javaPackage}.cursor.${parameter.javaTypeName};
+import ${javaPackage}.cursor.${parameter.javaTypeName}Impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -75,8 +76,8 @@ public final class ${parameter.javaTypeName}RowMapper
     ) throws SQLException {
 <#if !fullConstructor>
 
-        ${parameter.javaTypeName} row;
-        row = new ${parameter.javaTypeName}();
+        ${parameter.javaTypeName}Impl row;
+        row = new ${parameter.javaTypeName}Impl();
 
 <#if parameter.parameters?size <= 10 >
 <#assign noFullChunk = 1>
@@ -126,7 +127,7 @@ public final class ${parameter.javaTypeName}RowMapper
 </#if>
 </#list>
 
-        return new ${parameter.javaTypeName}(${'\n'}            <#list parameter.parameters as parameter2>${parameter2.fieldName}${parameter.javaTypeName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        return new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter2>${parameter2.fieldName}${parameter.javaTypeName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 </#if>
     }
 <#if !fullConstructor>
@@ -146,7 +147,7 @@ public final class ${parameter.javaTypeName}RowMapper
 </#if>
     private void fillStep${step}(
         final ResultSet resultSet,
-        final ${parameter.javaTypeName} row
+        final ${parameter.javaTypeName}Impl row
     ) throws SQLException {
 
 <#list childs as paramrs>
@@ -155,7 +156,7 @@ public final class ${parameter.javaTypeName}RowMapper
 
 <#list childs as paramrs>
 <#if paramrs.string || paramrs.clob>
-        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getString(${proc.constantconstantFullName}_${paramrs.name});
+        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getString(${proc.constantFullName}_${paramrs.name});
 <#elseif paramrs.blob>
         ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getBytes(${proc.constantFullName}_${paramrs.name});
 <#elseif paramrs.date>

@@ -29,7 +29,7 @@ class ${proc.className}SPTest {
     private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
 
     @Test
-    void test${proc.className}SPDataSource() throws java.sql.SQLException {
+    void should_check_${proc.constantFullName?lower_case}_sp_data_source() throws java.sql.SQLException {
 
         Mockito.when(jdbcTemplate.getDataSource()).thenReturn(dataSource);
 

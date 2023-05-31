@@ -95,7 +95,7 @@ class ${parameter.javaTypeName}BuilderTest {
     }
 
     @Test
-    void test_${parameter.javaTypeName}_builder_process_check_parameters() throws SQLException {
+    void should_check_${parameter.realObjectName?lower_case}_builder_process_check_parameters() throws SQLException {
         ${parameter.javaTypeName} object;
 <#if !fullConstructor>
         object = new ${parameter.javaTypeName}();
@@ -157,7 +157,7 @@ class ${parameter.javaTypeName}BuilderTest {
 <#list parameter.parameters as parameterTest>
 
     @Test
-    void test_${parameter.javaTypeName}_builder_process_check_parameter_${parameterTest.fieldName}_value() throws SQLException {
+    void should_check_${parameter.realObjectName?lower_case}_builder_process_check_parameter_${parameterTest.name?lower_case}_value() throws SQLException {
         ${parameter.javaTypeName} object;
 <#if !fullConstructor>
         object = new ${parameter.javaTypeName}();

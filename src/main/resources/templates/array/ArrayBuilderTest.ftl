@@ -104,7 +104,7 @@ class ${parameter.javaTypeName}BuilderTest {
     }
 
     @Test
-    void test${parameter.javaTypeName}BuilderProcess() throws SQLException {
+    void should_check_${parameter.realObjectName?lower_case}_builder_process() throws SQLException {
 
         ${parameter.javaTypeName} array = new ${parameter.javaTypeName}();
 

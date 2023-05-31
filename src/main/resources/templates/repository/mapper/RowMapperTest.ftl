@@ -50,9 +50,10 @@ class ${parameter.javaTypeName}RowMapperTest {
     void setUp() {
         faker = new Faker();
     }
+<#list parameter.parameters as parameterTest>
 
     @Test
-    void test${parameter.javaTypeName}RowMapper() throws java.sql.SQLException {
+    void should_check_${proc.constantFullName?lower_case}_row_mapper_check_${parameterTest.name?lower_case}_value() throws java.sql.SQLException {
         ${parameter.javaTypeName}RowMapper mapper = new ${parameter.javaTypeName}RowMapper();
 
 <#list parameter.parameters as paramrs>
@@ -84,14 +85,13 @@ class ${parameter.javaTypeName}RowMapperTest {
         ${parameter.javaTypeName} result = mapper.mapRow(resultSet, 0);
 
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
-<#list parameter.parameters as paramrs>
-<#if paramrs.date>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${paramrs.fieldName}, result.get${paramrs.propertyName}());
-<#elseif paramrs.blob>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(${paramrs.fieldName}, result.get${paramrs.propertyName}())<#else>assertTrue(java.util.Arrays.equals(${paramrs.fieldName}, result.get${paramrs.propertyName}()))</#if>;
+<#if parameterTest.date>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertEquals(${parameterTest.fieldName}, result.get${parameterTest.propertyName}());
+<#elseif parameterTest.blob>
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(${parameterTest.fieldName}, result.get${parameterTest.propertyName}())<#else>assertTrue(java.util.Arrays.equals(${parameterTest.fieldName}, result.get${parameterTest.propertyName}()))</#if>;
 <#else>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${paramrs.fieldName}, result.get${paramrs.propertyName}());
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameterTest.fieldName}, result.get${parameterTest.propertyName}());
 </#if>
-</#list>
     }
+</#list>
 }

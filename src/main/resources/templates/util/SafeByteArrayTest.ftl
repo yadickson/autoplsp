@@ -2,15 +2,19 @@ package ${javaPackage}.util;
 
 <#if junit == 'junit5'>
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 <#else>
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 </#if>
+
+import com.github.javafaker.Faker;
 
 <#if junit == 'junit5'>
 @ExtendWith(MockitoExtension.class)
@@ -18,6 +22,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 </#if>
 class ${prefixUtilityName}SafeByteArrayTest {
+
+    Faker faker;
+
+    @<#if junit == 'junit5'>BeforeEach<#else>Before</#if>
+    void setUp() {
+        faker = new Faker();
+    }
 
     @Test
     void testCreate() {
@@ -31,7 +42,7 @@ class ${prefixUtilityName}SafeByteArrayTest {
 
     @Test
     void testInputNotNull() {
-        byte[] byteArray = new byte[10];
+        byte[] byteArray = new byte[faker.random().nextInt(100)];
         byte[] result = ${prefixUtilityName}SafeByteArray.process(byteArray);
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotSame(byteArray, result);

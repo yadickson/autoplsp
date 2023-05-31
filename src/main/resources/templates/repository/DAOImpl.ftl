@@ -43,7 +43,6 @@ import ${javaPackage}.cursor.${parameter.javaTypeName};
 </#list>
 <#if proc.hasInput>
 import ${javaPackage}.domain.${proc.className}IN;
-import ${javaPackage}.domain.${proc.className}INImpl;
 </#if>
 <#if proc.hasOutput>
 import ${javaPackage}.domain.${proc.className}OUT;

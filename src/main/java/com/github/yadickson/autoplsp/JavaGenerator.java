@@ -38,6 +38,7 @@ public final class JavaGenerator extends TemplateGenerator {
 
     private final String javaPackage;
     private final Boolean test;
+    private final Boolean builder;
     private final String folderNameGenerator;
     private final String prefixUtilityName;
 
@@ -179,6 +180,7 @@ public final class JavaGenerator extends TemplateGenerator {
         this.folderNameGenerator = folderNameGenerator;
         this.prefixUtilityName = prefixUtilityName;
 
+        this.builder = builder;
         this.test = test;
         this.mappers = mappers;
 
@@ -359,6 +361,7 @@ public final class JavaGenerator extends TemplateGenerator {
             createTemplate(INPUT_MAP, DOMAIN_PATH + "package-info.ftl", getDomainOutputFilePath("package-info.java"));
             createTemplate(INPUT_MAP, DOMAIN_PATH + "IN.ftl", getFileNamePath(parameterPath, procedure, "IN"));
             createTemplate(INPUT_MAP, DOMAIN_PATH + "INImpl.ftl", getFileNamePath(parameterPath, procedure, "INImpl"));
+            createTemplate(INPUT_MAP, DOMAIN_PATH + "INBuilder.ftl", getFileNamePath(parameterPath, procedure, "INBuilder"));
         }
 
         if (procedure.getHasOutput()) {
@@ -728,10 +731,8 @@ public final class JavaGenerator extends TemplateGenerator {
 
     private void makeInterfaces(List<Parameter> parameters) throws BusinessException {
         for(Parameter param : parameters) {
-            //if (param.isInterface()) {
-                INPUT_MAP.put(PARAMETER_NAME, param);
-                createTemplate(INPUT_MAP, INTERFACE_PATH + "Interface.ftl", getInterfaceFileNamePath(getInterfaceOutputPath(""), param));
-            //}
+            INPUT_MAP.put(PARAMETER_NAME, param);
+            createTemplate(INPUT_MAP, INTERFACE_PATH + "Interface.ftl", getInterfaceFileNamePath(getInterfaceOutputPath(""), param));
         }
     }
 }

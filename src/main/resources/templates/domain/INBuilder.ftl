@@ -34,11 +34,13 @@ import ${javaPackage}.object.${parameter.javaTypeName};
 <#assign importSafeByteArray = 1>
 </#if>
 </#list>
+<#if fullConstructor>
 <#if importSafeDate??>
 import ${javaPackage}.util.${prefixUtilityName}SafeDate;
 </#if>
 <#if importSafeByteArray??>
 import ${javaPackage}.util.${prefixUtilityName}SafeByteArray;
+</#if>
 </#if>
 <#if importSafeDate??>
 
@@ -121,7 +123,13 @@ public final class ${proc.className}INBuilder<#if serialization>${'\n'}        j
 <#if !fullConstructor>
         this.input.set${parameter.propertyName}(${parameter.fieldName});
 <#else>
+<#if parameter.date>
+        this.${parameter.fieldName}${proc.className} = ${prefixUtilityName}SafeDate.process(${parameter.fieldName});
+<#elseif parameter.blob>
+        this.${parameter.fieldName}${proc.className} = ${prefixUtilityName}SafeByteArray.process(${parameter.fieldName});
+<#else>
         this.${parameter.fieldName}${proc.className} = ${parameter.fieldName};
+</#if>
 </#if>
         return this;
     }

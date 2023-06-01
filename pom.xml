@@ -5,7 +5,7 @@
     <groupId>com.github.yadickson</groupId>
     <artifactId>autoplsp</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.8.12-SNAPSHOT</version>
+    <version>1.8.13-SNAPSHOT</version>
     <name>Maven Auto PLSQL/SP Generator Plugin</name>
     <description>Maven plugin to generate Java classes from StoredProcedure and Functions in Database</description>
     <url>https://github.com/yadickson/autoplsp</url>
@@ -146,16 +146,6 @@
         </dependency>
 
     </dependencies>
-
-<!--    <dependencyManagement>-->
-<!--        <dependencies>-->
-<!--            <dependency>-->
-<!--                <groupId>com.google.guava</groupId>-->
-<!--                <artifactId>guava</artifactId>-->
-<!--                <version>31.1-jre</version>-->
-<!--            </dependency>-->
-<!--        </dependencies>-->
-<!--    </dependencyManagement>-->
 
     <build>
         <plugins>

@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,10 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.table.column;
+package ${javaPackage}.${tableFolderName}.column;
+<#assign importList = ["${javaPackage}.${tableFolderName}.column.type.FieldType"]>
+<#if field.charUsed??>
+<#if field.charUsed == 'BYTE' >
+<#assign extendField = 'BinaryField'>
+<#elseif field.charUsed == 'CHAR'>
+<#assign extendField = 'CharacterField'>
+</#if>
+<#elseif field.type == 'NUMERIC'>
+<#assign extendField = 'NumericField'>
+<#elseif field.type == 'DATE'>
+<#assign extendField = 'DateField'>
+</#if>
+<#if extendField??>
+<#assign importList = importList + ["${javaPackage}.${tableFolderName}.column.type.${extendField}"]>
+</#if>
 
-import ${javaPackage}.table.column.type.FieldType;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Class definition for ${table.name} - ${field.name}.
@@ -27,7 +51,7 @@ import ${javaPackage}.table.column.type.FieldType;
  * @version @GENERATOR.VERSION@
  */
 </#if>
-public interface ${table.propertyName}${field.propertyName} <#if field.charUsed??><#if field.charUsed == 'BYTE' >extends ${javaPackage}.table.column.type.BinaryField <#elseif field.charUsed == 'CHAR'>extends ${javaPackage}.table.column.type.CharacterField </#if><#elseif field.type == 'NUMERIC'>extends ${javaPackage}.table.column.type.NumericField <#elseif field.type == 'DATE'>extends ${javaPackage}.table.column.type.DateField </#if>{
+public interface ${table.propertyName}${field.propertyName}<#if extendField??> extends ${extendField}</#if> {
 
 <#if documentation>
     /**

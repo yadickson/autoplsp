@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,12 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.table;
-
+package ${javaPackage}.${tableFolderName};
+<#assign importList = []>
 <#list table.fields as field>
-import ${javaPackage}.table.column.${table.propertyName}${field.propertyName};
+<#assign importList = importList + ["${javaPackage}.${tableFolderName}.column.${table.propertyName}${field.propertyName}"]>
 </#list>
 
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
+
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Table definitions for ${table.name}.

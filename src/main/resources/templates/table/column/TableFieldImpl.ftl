@@ -1,4 +1,5 @@
-<#if header>/*
+<#if header>
+/*
  * Copyright (C) 2019 Yadickson Soto
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,11 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.table.column;
+package ${javaPackage}.${tableFolderName}.column;
+<#assign importList = ["${javaPackage}.${tableFolderName}.column.type.FieldType", "org.springframework.stereotype.Component"]>
+<#if field.type == 'DATE'>
+<#assign importList = importList + ["java.util.Date"]>
+</#if>
 
-import ${javaPackage}.table.column.type.FieldType;
-import org.springframework.stereotype.Component;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Class definition for ${table.name} - ${field.name}.
@@ -36,14 +48,14 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
      * Field type.
      */
 </#if>
-    private final FieldType type = FieldType.${field.type};
+    private static final FieldType ${table.name}_${field.name}_TYPE = FieldType.${field.type};
 
 <#if documentation>
     /**
      * Field position.
      */
 </#if>
-    private final int position = ${field.position};
+    private static final int ${table.name}_${field.name}_POSITION = ${field.position};
 <#if field.type == 'STRING' || field.type == 'NUMERIC' >
 
 <#if documentation>
@@ -51,14 +63,14 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
      * Field minSize.
      */
 </#if>
-    private final int minSize = <#if field.maxSize??>${field.minSize}<#else>0</#if>;
+    private static final int ${table.name}_${field.name}_MIN_SIZE = <#if field.minSize??>${field.minSize}<#else>0</#if>;
 
 <#if documentation>
     /**
      * Field maxSize.
      */
 </#if>
-    private final int maxSize = <#if field.maxSize??>${field.maxSize}<#else>Integer.MAX_VALUE</#if>;
+    private static final int ${table.name}_${field.name}_MAX_SIZE = <#if field.maxSize??>${field.maxSize}<#else>Integer.MAX_VALUE</#if>;
 </#if>
 
 <#if documentation>
@@ -66,15 +78,15 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
      * Field notNull.
      */
 </#if>
-    private final Boolean notNull = ${field.notNull?c};
-<#if field.defaultValue?? && (field.type == 'STRING' || field.type == 'NUMERIC' || field.type == 'DATE')>
+    private static final boolean ${table.name}_${field.name}_NOT_NULL = ${field.notNull?c};
+<#if field.type == 'STRING' || field.type == 'NUMERIC' || field.type == 'DATE'>
 
 <#if documentation>
     /**
      * Field defaultValue.
      */
 </#if>
-    private final <#if field.type == 'STRING'><#if field.charUsed == 'BYTE'>byte[]<#else>String</#if><#elseif field.type == 'NUMERIC'>Number<#elseif field.type == 'DATE'>java.util.Date<#else>Object</#if> defaultValue = <#if field.type == 'STRING'>"${field.defaultValue}"<#if field.charUsed == 'BYTE'>.getBytes("${encode}")</#if><#elseif field.type == 'NUMERIC'>${field.defaultValue}<#elseif field.type == 'DATE'>new java.util.Date()<#else>null</#if>;
+    private static final <#if field.type == 'STRING'><#if field.charUsed == 'BYTE'>byte[]<#else>String</#if><#elseif field.type == 'NUMERIC'>Number<#elseif field.type == 'DATE'>Date<#else>Object</#if> ${table.name}_${field.name}_DEFAULT_VALUE = <#if field.type == 'STRING'>"${field.defaultValue}"<#if field.charUsed == 'BYTE'>.getBytes("${encode}")</#if><#elseif field.type == 'NUMERIC'>${field.defaultValue}<#elseif field.type == 'DATE'>new Date()<#else>null</#if>;
 </#if>
 
 <#if documentation>
@@ -84,7 +96,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
 </#if>
     @Override
     public FieldType getType() {
-        return type;
+        return ${table.name}_${field.name}_TYPE;
     }
 
 <#if documentation>
@@ -94,7 +106,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
 </#if>
     @Override
     public int getPosition() {
-        return position;
+        return ${table.name}_${field.name}_POSITION;
     }
 <#if field.type == 'STRING' || field.type == 'NUMERIC' >
 
@@ -105,7 +117,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
 </#if>
     @Override
     public int getMinSize() {
-        return minSize;
+        return ${table.name}_${field.name}_MIN_SIZE;
     }
 <#if field.charUsed??>
 <#if field.charUsed == 'BYTE' >
@@ -117,7 +129,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
 </#if>
     @Override
     public int getMaxByteSize() {
-        return maxSize;
+        return ${table.name}_${field.name}_MAX_SIZE;
     }
 <#elseif field.charUsed == 'CHAR'>
 
@@ -128,7 +140,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
 </#if>
     @Override
     public int getMaxCharSize() {
-        return maxSize;
+        return ${table.name}_${field.name}_MAX_SIZE;
     }
 </#if>
 <#elseif field.type == 'NUMERIC'>
@@ -140,7 +152,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
 </#if>
     @Override
     public int getMaxSize() {
-        return maxSize;
+        return ${table.name}_${field.name}_MAX_SIZE;
     }
 </#if>
 </#if>
@@ -152,7 +164,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
 </#if>
     @Override
     public Boolean getNotNull() {
-        return notNull;
+        return ${table.name}_${field.name}_NOT_NULL;
     }
 <#if field.type == 'STRING' || field.type == 'NUMERIC' || field.type == 'DATE'>
 
@@ -162,8 +174,8 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
      */
 </#if>
     @Override
-    public <#if field.type == 'STRING'><#if field.charUsed == 'BYTE'>byte[]<#else>String</#if><#elseif field.type == 'NUMERIC'>Number<#elseif field.type == 'DATE'>java.util.Date<#else>Object</#if> getDefaultValue() {
-        return <#if field.defaultValue??>defaultValue<#else>null</#if>;
+    public <#if field.type == 'STRING'><#if field.charUsed == 'BYTE'>byte[]<#else>String</#if><#elseif field.type == 'NUMERIC'>Number<#elseif field.type == 'DATE'>Date<#else>Object</#if> getDefaultValue() {
+        return ${table.name}_${field.name}_DEFAULT_VALUE;
     }
 </#if>
 

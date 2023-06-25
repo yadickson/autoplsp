@@ -625,6 +625,17 @@ public class AutoGenerator extends AbstractMojo {
     private String utilFolderName;
 
     /**
+     * Util folder name.
+     */
+    @Parameter(
+            property = "autoplsp.tableFolderName",
+            alias = "tableFolderName",
+            defaultValue = "table",
+            readonly = true,
+            required = false)
+    private String tableFolderName;
+
+    /**
      * Maven execute method.
      *
      * @throws MojoExecutionException Launch if the generation process throws an
@@ -680,6 +691,7 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] Array folder name: " + arrayFolderName);
         getLog().info("[AutoGenerator] Cursor folder name: " + cursorFolderName);
         getLog().info("[AutoGenerator] Util folder name: " + utilFolderName);
+        getLog().info("[AutoGenerator] Table folder name: " + tableFolderName);
 
         if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
             throw new MojoExecutionException("Fail make " + outputDirectory + " directory.");
@@ -853,7 +865,8 @@ public class AutoGenerator extends AbstractMojo {
                     objectFolderName,
                     arrayFolderName,
                     cursorFolderName,
-                    utilFolderName
+                    utilFolderName,
+                    tableFolderName
             );
 
             List<Table> fullTables = new ArrayList<Table>();

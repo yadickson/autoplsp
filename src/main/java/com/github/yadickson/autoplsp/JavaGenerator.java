@@ -50,6 +50,7 @@ public final class JavaGenerator extends TemplateGenerator {
     private final String objectFolderName;
     private final String cursorFolderName;
     private final String utilFolderName;
+    private final String tableFolderName;
 
     private static final String DOMAIN_FOLDER_NAME = "domainFolderName";
     private static final String REPOSITORY_FOLDER_NAME = "repositoryFolderName";
@@ -58,12 +59,14 @@ public final class JavaGenerator extends TemplateGenerator {
     private static final String OBJECT_FOLDER_NAME =  "objectFolderName";
     private static final String CURSOR_FOLDER_NAME =  "cursorFolderName";
     private static final String UTIL_FOLDER_NAME =  "utilFolderName";
+    private static final String TABLE_FOLDER_NAME =  "tableFolderName";
 
     private static final String PROCEDURE_NAME = "proc";
     private static final String PARAMETER_NAME = "parameter";
     private static final String TABLE_NAME = "table";
     private static final String TABLE_FIELD_NAME = "field";
     private static final String COLUMN_NAME = "column";
+    private static final String TYPE_NAME = "type";
 
     private static final String FOLDER_MAPPER_NAME = "mapper";
     private static final String FOLDER_SP_NAME = "sp";
@@ -97,7 +100,7 @@ public final class JavaGenerator extends TemplateGenerator {
 
     private static final String TABLE_PATH = File.separatorChar + TABLE_NAME + File.separatorChar;
     private static final String TABLE_COLUMN_PATH = TABLE_PATH + COLUMN_NAME + File.separatorChar;
-    private static final String TYPE_PATH = TABLE_COLUMN_PATH + "type" + File.separatorChar;
+    private static final String TYPE_PATH = TABLE_COLUMN_PATH + TYPE_NAME + File.separatorChar;
     private static final String MAPPER_PATH = File.separatorChar + FOLDER_MAPPER_NAME + File.separatorChar;
 
     private static final String DRIVER_NAME = "driverName";
@@ -188,7 +191,8 @@ public final class JavaGenerator extends TemplateGenerator {
             final String objectFolderName,
             final String arrayFolderName,
             final String cursorFolderName,
-            final String utilFolderName
+            final String utilFolderName,
+            final String tableFolderName
     ) {
 
         super(outputDir, outputTestDir);
@@ -200,6 +204,7 @@ public final class JavaGenerator extends TemplateGenerator {
         this.arrayFolderName = arrayFolderName;
         this.cursorFolderName = cursorFolderName;
         this.utilFolderName = utilFolderName;
+        this.tableFolderName = tableFolderName;
 
         this.addDocumentation = documentation;
 
@@ -240,6 +245,7 @@ public final class JavaGenerator extends TemplateGenerator {
         INPUT_MAP.put(ARRAY_FOLDER_NAME, arrayFolderName);
         INPUT_MAP.put(CURSOR_FOLDER_NAME, cursorFolderName);
         INPUT_MAP.put(UTIL_FOLDER_NAME, utilFolderName);
+        INPUT_MAP.put(TABLE_FOLDER_NAME, tableFolderName);
         INPUT_MAP.put("importSort", new ImportSort());
     }
 
@@ -607,7 +613,7 @@ public final class JavaGenerator extends TemplateGenerator {
         }
 
         String tablePath = getTableOutputPath("");
-        String tableFieldPath = getTableOutputPath(COLUMN_NAME);
+        String tableFieldPath = getColumnOutputPath("");
 
         for (Table table : tables) {
             LoggerManager.getInstance().info("[JavaGenerator] Process template for " + table.getName());
@@ -661,6 +667,7 @@ public final class JavaGenerator extends TemplateGenerator {
      * @param path path
      * @return full directory path
      * @exception BusinessException if error
+     * @exception BusinessException if error
      */
     @Override
     protected String getOutputTestPath(String path) throws BusinessException {
@@ -668,11 +675,15 @@ public final class JavaGenerator extends TemplateGenerator {
     }
 
     private String getTableOutputPath(String path) throws BusinessException {
-        return this.getOutputPath(TABLE_PATH + path);
+        return this.getOutputPath(tableFolderName + File.separatorChar + path);
+    }
+
+    private String getColumnOutputPath(String path) throws BusinessException {
+        return this.getTableOutputPath(COLUMN_NAME + File.separatorChar + path);
     }
 
     private String getTypeOutputPath(String path) throws BusinessException {
-        return this.getOutputPath(TYPE_PATH + path);
+        return this.getColumnOutputPath(TYPE_NAME + File.separatorChar + path);
     }
 
     private String getMapperOutputPath(String path) throws BusinessException {

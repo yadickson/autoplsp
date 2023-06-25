@@ -86,7 +86,7 @@ public final class ${table.propertyName}${field.propertyName}Impl implements ${t
      * Field defaultValue.
      */
 </#if>
-    private static final <#if field.type == 'STRING'><#if field.charUsed == 'BYTE'>byte[]<#else>String</#if><#elseif field.type == 'NUMERIC'>Number<#elseif field.type == 'DATE'>Date<#else>Object</#if> ${table.name}_${field.name}_DEFAULT_VALUE = <#if field.type == 'STRING'>"${field.defaultValue}"<#if field.charUsed == 'BYTE'>.getBytes("${encode}")</#if><#elseif field.type == 'NUMERIC'>${field.defaultValue}<#elseif field.type == 'DATE'>new Date()<#else>null</#if>;
+    private static final <#if field.type == 'STRING'><#if field.charUsed == 'BYTE'>byte[]<#else>String</#if><#elseif field.type == 'NUMERIC'>Number<#elseif field.type == 'DATE'>Date<#else>Object</#if> ${table.name}_${field.name}_DEFAULT_VALUE = <#if field.defaultValue??><#if field.type == 'STRING'>"${field.defaultValue}"<#if field.charUsed == 'BYTE'>.getBytes("${encode}")</#if><#elseif field.type == 'NUMERIC'>${field.defaultValue}<#elseif field.type == 'DATE'>new Date()</#if><#else>null</#if>;
 </#if>
 
 <#if documentation>

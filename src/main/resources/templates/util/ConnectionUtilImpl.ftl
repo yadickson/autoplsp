@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.util;
+package ${javaPackage}.${utilFolderName};
 <#list proc.parameters as parameter>
 <#if parameter.object || parameter.array>
 <#assign importDataSourceUtils = 1>

@@ -16,12 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.object;
-
+package ${javaPackage}.${objectFolderName};
+<#assign importList = []>
 <#list parameter.parameters as parameter2>
-import ${javaPackage}.interfaces.${parameter2.javaFileNameInterface};
+<#if interfaceFolderName != objectFolderName>
+<#assign importList = importList + ["${javaPackage}.${interfaceFolderName}.${parameter2.javaFileNameInterface}"]>
+</#if>
 </#list>
 
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
+
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Bean object interface for datatype ${parameter.realObjectName}.

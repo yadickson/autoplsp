@@ -16,11 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.object;
+package ${javaPackage}.${objectFolderName};
+<#assign importList = ["java.sql.Connection", "java.sql.SQLException"]>
 
-import java.sql.Connection;
-import java.sql.SQLException;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Interface to build object for datatype ${parameter.realObjectName}.
@@ -41,8 +49,5 @@ public interface ${parameter.javaTypeName}Builder {
      * @throws SQLException if error
      */
 </#if>
-    Object process(
-            Connection connection,
-            ${parameter.javaTypeName} object
-    ) throws SQLException;
+    Object process(${'\n'}            Connection connection,${'\n'}            ${parameter.javaTypeName} object${'\n'}    ) throws SQLException;
 }

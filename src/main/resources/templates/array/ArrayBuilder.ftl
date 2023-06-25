@@ -16,11 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.array;
+package ${javaPackage}.${arrayFolderName};
+<#assign importList = ["java.sql.Connection", "java.sql.SQLException"]>
 
-import java.sql.Connection;
-import java.sql.SQLException;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Interface array for build datatype ${parameter.realObjectName}.

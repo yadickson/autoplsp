@@ -16,22 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.util;
-
-import java.sql.Connection;
-import java.sql.SQLException;
+package ${javaPackage}.${utilFolderName};
+<#assign importList = ["java.sql.Connection", "java.sql.SQLException", "org.springframework.stereotype.Component"]>
 <#if logger>
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+<#assign importList = importList + ["org.slf4j.Logger", "org.slf4j.LoggerFactory"]>
 </#if>
 <#if driverName == 'oracle'>
-
-import oracle.jdbc.OracleConnection;
+<#assign importList = importList + ["oracle.jdbc.OracleConnection"]>
 </#if>
 
-import org.springframework.stereotype.Component;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Class to process array element.
@@ -44,8 +47,7 @@ import org.springframework.stereotype.Component;
 <#if driverVersionName == 'ojdbc6' >
 @SuppressWarnings({"deprecation"})
 </#if>
-public final class ${prefixUtilityName}ArrayUtilImpl
-        implements ${prefixUtilityName}ArrayUtil {
+public final class ${prefixUtilityName}ArrayUtilImpl${'\n'}        implements ${prefixUtilityName}ArrayUtil {
 <#if logger>
 
 <#if documentation>
@@ -63,11 +65,7 @@ public final class ${prefixUtilityName}ArrayUtilImpl
      */
 </#if>
     @Override
-    public Object process(
-            final Connection connection,
-            final String name,
-            final Object[] objects
-    ) throws SQLException {
+    public Object process(${'\n'}            final Connection connection,${'\n'}            final String name,${'\n'}            final Object[] objects${'\n'}    ) throws SQLException {
 
 <#if driverName != 'oracle' >
         throw new SQLException(

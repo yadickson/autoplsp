@@ -35,6 +35,8 @@ public final class BeanConfigGenerator extends TemplateGenerator {
     private final String javaPackage;
     private final String fileName;
     private final String folderNameGenerator;
+    private final String configFolderName;
+
     private final Boolean credentialsDataSource;
 
     private static final String JAVA_PACKAGE_NAME = "javaPackage";
@@ -42,6 +44,7 @@ public final class BeanConfigGenerator extends TemplateGenerator {
     private static final String JAVA_FILE_NAME = "javaFileName";
     private static final String TRANSACTION_NAME = "transactionName";
     private static final String TRANSACTION_QUALITY_NAME = "transactionQualityName";
+    private static final String CONFIG_FOLDER_NAME = "configFolderName";
 
     private static final Map<String, Object> INPUT_MAP = new HashMap<String, Object>();
 
@@ -69,12 +72,14 @@ public final class BeanConfigGenerator extends TemplateGenerator {
                                final Boolean credentialsDataSource,
                                final String folderNameGenerator,
                                final String outputFileName,
+                               final String configFolderName,
                                final List<Procedure> procedures) {
         super(outputDir, null);
         this.javaPackage = javaPackage;
         this.fileName = outputFileName;
         this.folderNameGenerator = folderNameGenerator;
         this.credentialsDataSource = credentialsDataSource;
+        this.configFolderName = configFolderName;
 
         INPUT_MAP.put(JAVA_PACKAGE_NAME, javaPackage);
         INPUT_MAP.put(CREDENTIALS_DATA_SOURCE, credentialsDataSource);
@@ -85,6 +90,7 @@ public final class BeanConfigGenerator extends TemplateGenerator {
         INPUT_MAP.put("jdbcTemplate", jdbcTemplate);
         INPUT_MAP.put("jndi", jndi);
         INPUT_MAP.put("procedures", procedures);
+        INPUT_MAP.put(CONFIG_FOLDER_NAME, configFolderName);
     }
 
     /**
@@ -95,7 +101,7 @@ public final class BeanConfigGenerator extends TemplateGenerator {
      */
     public void process() throws BusinessException {
         LoggerManager.getInstance().info("[BeanConfigGenerator] Process spring template config");
-        createTemplate(INPUT_MAP, "/config/BeanConfig.ftl", getFileNamePath(folderNameGenerator + File.separatorChar + "config", fileName + ".java"));
+        createTemplate(INPUT_MAP, File.separatorChar + "config" + File.separatorChar + "BeanConfig.ftl", getFileNamePath(folderNameGenerator + File.separatorChar + configFolderName, fileName + ".java"));
     }
 
     /**

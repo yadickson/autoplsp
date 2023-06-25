@@ -20,4 +20,4 @@
 /**
  * Resultset mapper package folder.
  */
-package ${javaPackage}.repository.mapper;
+package ${javaPackage}.${repositoryFolderName}.mapper;

@@ -20,4 +20,4 @@
 /**
  * Object package folder.
  */
-package ${javaPackage}.object;
+package ${javaPackage}.${objectFolderName};

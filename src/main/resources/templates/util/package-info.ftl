@@ -19,4 +19,4 @@
 /**
  * Utility package folder.
  */
-package ${javaPackage}.util;
+package ${javaPackage}.${utilFolderName};

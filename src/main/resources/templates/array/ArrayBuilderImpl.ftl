@@ -16,38 +16,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.array;
+package ${javaPackage}.${arrayFolderName};
+<#assign importList = ["java.sql.Connection", "java.sql.SQLException", "org.springframework.stereotype.Component"]>
+<#if utilFolderName != arrayFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}ArrayUtil"]>
+</#if>
 <#if parameter.parameters[parameter.parameters?size - 1].object>
 <#assign importObjectBuilder = 1>
+<#if objectFolderName != arrayFolderName>
+<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}"]>
+<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder"]>
+</#if>
 <#elseif parameter.parameters[parameter.parameters?size - 1].date>
 <#assign importDateUtil = 1>
+<#assign importList = importList + ["java.util.Date"]>
+<#if utilFolderName != arrayFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}DateUtil"]>
+</#if>
 <#elseif parameter.parameters[parameter.parameters?size - 1].clob>
 <#assign importClobUtil = 1>
+<#if utilFolderName != arrayFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}ClobUtil"]>
+</#if>
 <#elseif parameter.parameters[parameter.parameters?size - 1].blob>
 <#assign importBlobUtil = 1>
+<#if utilFolderName != arrayFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}BlobUtil"]>
+</#if>
 </#if>
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-<#if importObjectBuilder??>
-import ${javaPackage}.object.${parameter.parameters[parameter.parameters?size - 1].javaTypeName};
-import ${javaPackage}.object.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder;
-
-<#elseif importDateUtil??>
-import ${javaPackage}.util.${prefixUtilityName}DateUtil;
-
-<#elseif importClobUtil??>
-import ${javaPackage}.util.${prefixUtilityName}ClobUtil;
-
-<#elseif importBlobUtil??>
-import ${javaPackage}.util.${prefixUtilityName}BlobUtil;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
 </#if>
-import ${javaPackage}.util.${prefixUtilityName}ArrayUtil;
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
 
-import org.springframework.stereotype.Component;
-
+</#if>
 <#if documentation>
 /**
  * Builder class to make array for datatype ${parameter.realObjectName}.
@@ -57,8 +64,7 @@ import org.springframework.stereotype.Component;
  */
 </#if>
 @Component
-public final class ${parameter.javaTypeName}BuilderImpl
-        implements ${parameter.javaTypeName}Builder {
+public final class ${parameter.javaTypeName}BuilderImpl${'\n'}        implements ${parameter.javaTypeName}Builder {
 
 <#if documentation>
     /**

@@ -16,36 +16,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.domain;
-
+package ${javaPackage}.${domainFolderName};
+<#assign importList = []>
+<#if serialization>
+<#assign importList = importList + ["java.io.Serializable"]>
+</#if>
+<#if jsonNonNull>
+<#assign importList = importList + ["com.fasterxml.jackson.annotation.JsonInclude"]>
+</#if>
 <#list proc.outputParameters as parameter>
 <#if parameter.date>
-<#assign importSafeDate = 1>
+<#assign importList = importList + ["java.util.Date"]>
+<#if utilFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeDate"]>
+</#if>
 </#if>
 <#if parameter.blob>
 <#assign importSafeByteArray = 1>
+<#if utilFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeByteArray"]>
+</#if>
 </#if>
 </#list>
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
-import ${javaPackage}.cursor.${parameter.javaTypeName};
+<#if cursorFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${cursorFolderName}.${parameter.javaTypeName}"]>
+</#if>
 </#if>
 </#list>
-<#if importSafeDate??>
-import ${javaPackage}.util.${prefixUtilityName}SafeDate;
-</#if>
-<#if importSafeByteArray??>
-import ${javaPackage}.util.${prefixUtilityName}SafeByteArray;
-</#if>
-<#if importSafeDate??>
 
-import java.util.Date;
-</#if>
-<#if jsonNonNull>
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 </#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
 
+</#if>
 <#if documentation>
 /**
  * Output parameters for <#if proc.function>function<#else>stored procedure</#if>.
@@ -59,7 +69,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-public class ${proc.className}OUTImpl implements${'\n'}        ${proc.className}OUT<#if serialization>,${'\n'}        java.io.Serializable</#if> {
+public class ${proc.className}OUTImpl implements${'\n'}        ${proc.className}OUT<#if serialization>,${'\n'}        Serializable</#if> {
 <#if serialization> 
 
 <#if documentation>

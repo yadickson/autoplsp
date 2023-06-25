@@ -405,17 +405,6 @@ public class AutoGenerator extends AbstractMojo {
     private String addPackagename;
 
     /**
-     * Add lombok support.
-     */
-    @Parameter(
-            property = "autoplsp.lombok",
-            alias = "lombok",
-            defaultValue = "false",
-            readonly = true,
-            required = false)
-    private String lombok;
-
-    /**
      * Add header support.
      */
     @Parameter(
@@ -526,17 +515,6 @@ public class AutoGenerator extends AbstractMojo {
     private String prefixUtilityName;
 
     /**
-     * Builder support.
-     */
-    @Parameter(
-            property = "autoplsp.builder",
-            alias = "builder",
-            defaultValue = "false",
-            readonly = true,
-            required = false)
-    private String builder;
-
-    /**
      * Java 8 compatibility.
      */
     @Parameter(
@@ -557,6 +535,94 @@ public class AutoGenerator extends AbstractMojo {
             readonly = true,
             required = false)
     private String documentation;
+
+    /**
+     * Config folder name.
+     */
+    @Parameter(
+            property = "autoplsp.configFolderName",
+            alias = "configFolderName",
+            defaultValue = "config",
+            readonly = true,
+            required = false)
+    private String configFolderName;
+
+    /**
+     * Domain folder name.
+     */
+    @Parameter(
+            property = "autoplsp.domainFolderName",
+            alias = "domainFolderName",
+            defaultValue = "domain",
+            readonly = true,
+            required = false)
+    private String domainFolderName;
+
+    /**
+     * Cursor folder name.
+     */
+    @Parameter(
+            property = "autoplsp.cursorFolderName",
+            alias = "cursorFolderName",
+            defaultValue = "cursor",
+            readonly = true,
+            required = false)
+    private String cursorFolderName;
+
+    /**
+     * Array folder name.
+     */
+    @Parameter(
+            property = "autoplsp.arrayFolderName",
+            alias = "arrayFolderName",
+            defaultValue = "array",
+            readonly = true,
+            required = false)
+    private String arrayFolderName;
+
+    /**
+     * Object folder name.
+     */
+    @Parameter(
+            property = "autoplsp.objectFolderName",
+            alias = "objectFolderName",
+            defaultValue = "config",
+            readonly = true,
+            required = false)
+    private String objectFolderName;
+
+    /**
+     * Repository folder name.
+     */
+    @Parameter(
+            property = "autoplsp.repositoryFolderName",
+            alias = "repositoryFolderName",
+            defaultValue = "repository",
+            readonly = true,
+            required = false)
+    private String repositoryFolderName;
+
+    /**
+     * Interfaces folder name.
+     */
+    @Parameter(
+            property = "autoplsp.interfaceFolderName",
+            alias = "interfaceFolderName",
+            defaultValue = "interfaces",
+            readonly = true,
+            required = false)
+    private String interfaceFolderName;
+
+    /**
+     * Util folder name.
+     */
+    @Parameter(
+            property = "autoplsp.utilFolderName",
+            alias = "utilFolderName",
+            defaultValue = "util",
+            readonly = true,
+            required = false)
+    private String utilFolderName;
 
     /**
      * Maven execute method.
@@ -593,7 +659,6 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] Encode: " + encode);
         getLog().info("[AutoGenerator] JsonNonNull: " + jsonNonNull);
         getLog().info("[AutoGenerator] AddPackagename: " + addPackagename);
-        getLog().info("[AutoGenerator] Lombok: " + lombok);
         getLog().info("[AutoGenerator] Header: " + header);
         getLog().info("[AutoGenerator] Serialization: " + serialization);
         getLog().info("[AutoGenerator] Diamond: " + diamond);
@@ -606,8 +671,15 @@ public class AutoGenerator extends AbstractMojo {
         getLog().info("[AutoGenerator] OutParameterMessage: " + outParameterMessage);
         getLog().info("[AutoGenerator] PrefixUtilityName: " + prefixUtilityName);
         getLog().info("[AutoGenerator] Java8: " + java8);
-        getLog().info("[AutoGenerator] Builder: " + builder);
         getLog().info("[AutoGenerator] Documentation: " + documentation);
+        getLog().info("[AutoGenerator] Config folder name: " + configFolderName);
+        getLog().info("[AutoGenerator] Repository folder name: " + repositoryFolderName);
+        getLog().info("[AutoGenerator] Domain folder name: " + domainFolderName);
+        getLog().info("[AutoGenerator] Interfaces folder name: " + interfaceFolderName);
+        getLog().info("[AutoGenerator] Object folder name: " + objectFolderName);
+        getLog().info("[AutoGenerator] Array folder name: " + arrayFolderName);
+        getLog().info("[AutoGenerator] Cursor folder name: " + cursorFolderName);
+        getLog().info("[AutoGenerator] Util folder name: " + utilFolderName);
 
         if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
             throw new MojoExecutionException("Fail make " + outputDirectory + " directory.");
@@ -757,7 +829,6 @@ public class AutoGenerator extends AbstractMojo {
                     javaJdbcTemplateName,
                     encode,
                     jsonNonNull.equalsIgnoreCase("true"),
-                    lombok.equalsIgnoreCase("true"),
                     header.equalsIgnoreCase("true"),
                     serialization.equalsIgnoreCase("true"),
                     test.equalsIgnoreCase("true"),
@@ -775,8 +846,14 @@ public class AutoGenerator extends AbstractMojo {
                     driverVersionName,
                     prefixUtilityName,
                     java8.equalsIgnoreCase("true"),
-                    builder.equalsIgnoreCase("true"),
-                    documentation.equalsIgnoreCase("true")
+                    documentation.equalsIgnoreCase("true"),
+                    domainFolderName,
+                    repositoryFolderName,
+                    interfaceFolderName,
+                    objectFolderName,
+                    arrayFolderName,
+                    cursorFolderName,
+                    utilFolderName
             );
 
             List<Table> fullTables = new ArrayList<Table>();
@@ -831,6 +908,7 @@ public class AutoGenerator extends AbstractMojo {
                     credentialsDataSource.equalsIgnoreCase("true"),
                     folderNameGenerator,
                     outputBeanConfigFileName,
+                    configFolderName,
                     spList
             );
 

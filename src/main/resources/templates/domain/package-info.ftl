@@ -20,4 +20,4 @@
 /**
  * Domain package folder.
  */
-package ${javaPackage}.domain;
+package ${javaPackage}.${domainFolderName};

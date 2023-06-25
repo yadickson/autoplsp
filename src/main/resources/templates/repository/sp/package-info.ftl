@@ -20,4 +20,4 @@
 /**
  * Procedure and function package folder.
  */
-package ${javaPackage}.repository.sp;
+package ${javaPackage}.${repositoryFolderName}.sp;

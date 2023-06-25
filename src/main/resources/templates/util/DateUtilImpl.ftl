@@ -15,21 +15,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.util;
-
-import java.util.Date; 
+package ${javaPackage}.${utilFolderName};
+<#assign importList = ["java.util.Date", "org.springframework.stereotype.Component"]>
 <#if logger>
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+<#assign importList = importList + ["org.slf4j.Logger", "org.slf4j.LoggerFactory"]>
 </#if>
 <#if driverName == 'oracle'>
-
-import oracle.sql.DATE;
+<#assign importList = importList + ["oracle.sql.DATE"]>
 </#if>
 
-import org.springframework.stereotype.Component;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Utility to process date class.

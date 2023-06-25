@@ -16,21 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.repository;
-
+package ${javaPackage}.${repositoryFolderName};
+<#assign importList = ["java.sql.SQLException"]>
 <#if proc.hasInput>
 <#assign fillSpace = 1>
-import ${javaPackage}.domain.${proc.className}IN;
+<#assign importList = importList + ["${javaPackage}.${domainFolderName}.${proc.className}IN"]>
 </#if>
 <#if proc.hasOutput>
 <#assign fillSpace = 1>
-import ${javaPackage}.domain.${proc.className}OUT;
+<#assign importList = importList + ["${javaPackage}.${domainFolderName}.${proc.className}OUT"]>
 </#if>
-<#if fillSpace??>
+
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
 </#if>
-import java.sql.SQLException;
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
 
+</#if>
 <#if documentation>
 /**
  * DAO interface for <#if proc.function>function<#else>stored procedure</#if>.

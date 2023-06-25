@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.util;
+package ${javaPackage}.${utilFolderName};
 
 import java.sql.Connection;
 import java.sql.SQLException;

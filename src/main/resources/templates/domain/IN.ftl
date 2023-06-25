@@ -18,12 +18,24 @@
  */
 </#if>
 </#if>
-package ${javaPackage}.domain;
-
+package ${javaPackage}.${domainFolderName};
+<#assign importList = []>
 <#list proc.inputParameters as parameter2>
-import ${javaPackage}.interfaces.${parameter2.javaFileNameInterface};
+<#if interfaceFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${interfaceFolderName}.${parameter2.javaFileNameInterface}"]>
+</#if>
 </#list>
 
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
+
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Input parameters for <#if proc.function>function<#else>stored procedure</#if>.

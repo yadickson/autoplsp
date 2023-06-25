@@ -20,4 +20,4 @@
 /**
  * Array package folder.
  */
-package ${javaPackage}.array;
+package ${javaPackage}.${arrayFolderName};

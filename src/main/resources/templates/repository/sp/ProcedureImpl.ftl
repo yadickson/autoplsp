@@ -16,45 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.repository.sp;
-
+package ${javaPackage}.${repositoryFolderName}.sp;
+<#assign importList = ["org.springframework.stereotype.Repository", "org.springframework.jdbc.object.StoredProcedure", "java.util.Objects", "org.springframework.beans.factory.annotation.Qualifier", "org.springframework.jdbc.core.JdbcTemplate"]>
 <#list proc.parameters as parameter>
 <#if parameter.inputOutput>
-<#assign fillInOut = 1>
+<#assign importList = importList + ["org.springframework.jdbc.core.SqlInOutParameter"]>
 <#elseif parameter.output>
-<#assign fillOut = 1>
+<#assign importList = importList + ["org.springframework.jdbc.core.SqlOutParameter"]>
 <#elseif parameter.input>
-<#assign fillIn = 1>
+<#assign importList = importList + ["org.springframework.jdbc.core.SqlParameter"]>
 <#elseif parameter.returnResultSet>
-<#assign fillResultSet = 1>
+<#assign importList = importList + ["org.springframework.jdbc.core.SqlReturnResultSet"]>
 </#if>
 <#if parameter.resultSet || parameter.returnResultSet>
-<#assign fillSpace = 1>
-import ${javaPackage}.repository.mapper.${parameter.javaTypeName}RowMapper;
+<#assign importList = importList + ["${javaPackage}.${repositoryFolderName}.mapper.${parameter.javaTypeName}RowMapperImpl"]>
 </#if>
 </#list>
-<#if fillSpace??>
+
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
 </#if>
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.JdbcTemplate;
-<#if fillInOut??>
-import org.springframework.jdbc.core.SqlInOutParameter;
-</#if>
-<#if fillOut??>
-import org.springframework.jdbc.core.SqlOutParameter;
-</#if>
-<#if fillIn??>
-import org.springframework.jdbc.core.SqlParameter;
-</#if>
-<#if fillResultSet??>
-import org.springframework.jdbc.core.SqlReturnResultSet;
-</#if>
-import org.springframework.jdbc.object.StoredProcedure;
-import org.springframework.stereotype.Repository;
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
 
-import java.util.Objects;
-
+</#if>
 <#if documentation>
 /**
  * DAO for <#if proc.function>function<#else>stored procedure</#if>.
@@ -66,17 +54,14 @@ import java.util.Objects;
  */
 </#if>
 @Repository
-public final class ${proc.className}SPImpl
-        extends StoredProcedure
-        implements ${proc.className}SP {
+public final class ${proc.className}SPImpl${'\n'}        extends StoredProcedure${'\n'}        implements ${proc.className}SP {
 
 <#if documentation>
     /**
      * Full <#if proc.function>function<#else>stored procedure</#if> name.
      */
 </#if>
-    public static final String SPROC_NAME
-            = "${proc.fullName}";
+    public static final String SPROC_NAME = "${proc.fullName}";
 
 <#if documentation>
     /**
@@ -85,7 +70,7 @@ public final class ${proc.className}SPImpl
      * @param jdbcTemplate jdbcTemplate
      */
 </#if>
-    public ${proc.className}SPImpl(@Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate) {
+    public ${proc.className}SPImpl(${'\n'}        @Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate${'\n'}    ) {
 
         super(Objects.requireNonNull(jdbcTemplate.getDataSource()), SPROC_NAME);
 
@@ -101,7 +86,7 @@ public final class ${proc.className}SPImpl
         ${parameter.fieldName}${proc.className} = new <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>(
                 "${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >,
                 ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >,
-                new ${parameter.javaTypeName}RowMapper()</#if>
+                new ${parameter.javaTypeName}RowMapperImpl()</#if>
         );
 
 </#list>
@@ -138,7 +123,7 @@ public final class ${proc.className}SPImpl
         ${paramrs.fieldName}${proc.className} = new <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if>(
                 "${paramrs.prefix}${paramrs.name}"<#if ! paramrs.returnResultSet >,
                 ${paramrs.sqlTypeName}</#if><#if paramrs.resultSet || paramrs.returnResultSet >,
-                new ${paramrs.javaTypeName}RowMapper()</#if>
+                new ${paramrs.javaTypeName}RowMapperImpl()</#if>
         );
 
 </#list>

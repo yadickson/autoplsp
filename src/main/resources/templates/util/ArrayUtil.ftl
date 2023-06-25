@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.util;
+package ${javaPackage}.${utilFolderName};
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -42,9 +42,5 @@ public interface ${prefixUtilityName}ArrayUtil {
      * @throws SQLException if error
      */
 </#if>
-    Object process(
-            Connection connection,
-            String name,
-            Object[] objects
-    ) throws SQLException;
+    Object process(${'\n'}            Connection connection,${'\n'}            String name,${'\n'}            Object[] objects${'\n'}    ) throws SQLException;
 }

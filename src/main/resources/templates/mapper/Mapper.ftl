@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.repository;
+package ${javaPackage}.${repositoryFolderName};
 
 <#if proc.hasInput>
-import ${javaPackage}.domain.${proc.className}IN;
+import ${javaPackage}.${domainFolderName}.${proc.className}IN;
 </#if>
 <#if proc.hasOutput>
-import ${javaPackage}.domain.${proc.className}OUT;
+import ${javaPackage}.${domainFolderName}.${proc.className}OUT;
 </#if>
 
 <#if documentation>

@@ -18,40 +18,45 @@
  */
 </#if>
 </#if>
-package ${javaPackage}.domain;
-
+package ${javaPackage}.${domainFolderName};
+<#assign importList = []>
+<#if serialization>
+<#assign importList = importList + ["java.io.Serializable"]>
+</#if>
+<#if jsonNonNull>
+<#assign importList = importList + ["com.fasterxml.jackson.annotation.JsonInclude"]>
+</#if>
 <#list proc.arrayImports as parameter>
-import ${javaPackage}.array.${parameter.javaTypeName};
+<#if arrayFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${arrayFolderName}.${parameter.javaTypeName}"]>
+</#if>
 </#list>
 <#list proc.objectImports as parameter>
-import ${javaPackage}.object.${parameter.javaTypeName};
+<#if objectFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.javaTypeName}"]>
+</#if>
 </#list>
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
-<#assign importSafeDate = 1>
+<#assign importList = importList + ["java.util.Date"]>
+<#if utilFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeDate"]>
 </#if>
-<#if parameter.blob>
-<#assign importSafeByteArray = 1>
+<#elseif parameter.blob>
+<#if utilFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeByteArray"]>
+</#if>
 </#if>
 </#list>
-<#if importSafeDate??>
-import ${javaPackage}.util.${prefixUtilityName}SafeDate;
-</#if>
-<#if importSafeByteArray??>
-import ${javaPackage}.util.${prefixUtilityName}SafeByteArray;
-</#if>
-<#if importSafeDate??>
 
-<#if java8>
-import java.time.LocalDateTime;
-<#else>
-import java.util.Date;
-</#if>
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
 </#if>
-<#if jsonNonNull>
-
-import com.fasterxml.jackson.annotation.JsonInclude;
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
 
 </#if>
 <#if documentation>
@@ -67,7 +72,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-public final class ${proc.className}INImpl implements${'\n'}        ${proc.className}IN<#if serialization>,${'\n'}        java.io.Serializable</#if> {
+public final class ${proc.className}INImpl implements${'\n'}        ${proc.className}IN<#if serialization>,${'\n'}        Serializable</#if> {
 <#if serialization>
 
 <#if documentation>

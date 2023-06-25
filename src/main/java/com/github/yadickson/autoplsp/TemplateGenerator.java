@@ -66,9 +66,8 @@ public abstract class TemplateGenerator {
         this.outputDir = outputDir;
         this.outputTestDir = outputTestDir;
 
-        Version version = new Version(2, 3, 23);
-        cfg = new Configuration(version);
-        cfg.setObjectWrapper(new DefaultObjectWrapper(version));
+        cfg = new Configuration(new TemplateVersion().version());
+        cfg.setObjectWrapper(new TemplateObjectWrapper());
 
         cfg.setClassForTemplateLoading(this.getClass(), "/templates");
         cfg.setDefaultEncoding("UTF-8");

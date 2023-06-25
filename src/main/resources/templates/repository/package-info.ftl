@@ -20,4 +20,4 @@
 /**
  * Repository package folder.
  */
-package ${javaPackage}.repository;
+package ${javaPackage}.${repositoryFolderName};

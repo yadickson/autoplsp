@@ -16,20 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.repository;
+package ${javaPackage}.${repositoryFolderName};
 
 <#if proc.hasInput>
-import ${javaPackage}.domain.${proc.className}IN;
+import ${javaPackage}.${domainFolderName}.${proc.className}IN;
 </#if>
 <#if proc.hasOutput>
-import ${javaPackage}.domain.${proc.className}OUT;
+import ${javaPackage}.${domainFolderName}.${proc.className}OUT;
 </#if>
 <#list proc.parameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
-import ${javaPackage}.domain.${parameter.javaTypeName};
+import ${javaPackage}.${domainFolderName}.${parameter.javaTypeName};
 </#if>
 </#list>
-import ${javaPackage}.repository.sp.${proc.className}SP;
+import ${javaPackage}.${repositoryFolderName}.sp.${proc.className}SP;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -67,11 +67,11 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
      *
      * <#if proc.hasInput>@param params input parameters</#if>
      * <#if proc.hasOutput>@return output parameters</#if>
-     * @throws java.sql.SQLException if error.
+     * @throws SQLException if error.
      */
 </#if>
     @Override
-    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>final ${proc.className}IN params</#if>) throws java.sql.SQLException {
+    public <#if proc.hasOutput>${proc.className}OUT<#else>void</#if> execute(<#if proc.hasInput>final ${proc.className}IN params</#if>) throws SQLException {
 
         java.util.Map mparams = new java.util.HashMap();
         <#if proc.hasOutput>
@@ -150,10 +150,10 @@ public final class ${proc.className}MapperImpl implements ${proc.className}Mappe
      * Evaluate output parameters from database.
      *
      * @param result map to evaluate.
-     * @throws java.sql.SQLException if error.
+     * @throws SQLException if error.
      */
 </#if>
-    private java.util.Map evaluateResult(final java.util.Map result) throws java.sql.SQLException {
+    private java.util.Map evaluateResult(final java.util.Map result) throws SQLException {
 
         if (result == null) {
             return null;

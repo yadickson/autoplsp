@@ -18,37 +18,42 @@
  */
 </#if>
 </#if>
-package ${javaPackage}.domain;
-
+package ${javaPackage}.${domainFolderName};
+<#assign importList = []>
+<#if serialization>
+<#assign importList = importList + ["java.io.Serializable"]>
+</#if>
 <#list proc.arrayImports as parameter>
-import ${javaPackage}.array.${parameter.javaTypeName};
+<#if arrayFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${arrayFolderName}.${parameter.javaTypeName}"]>
+</#if>
 </#list>
 <#list proc.objectImports as parameter>
-import ${javaPackage}.object.${parameter.javaTypeName};
+<#if objectFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.javaTypeName}"]>
+</#if>
 </#list>
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
-<#assign importSafeDate = 1>
+<#assign importList = importList + ["java.util.Date"]>
+<#if fullConstructor && utilFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeDate"]>
 </#if>
-<#if parameter.blob>
-<#assign importSafeByteArray = 1>
+<#elseif parameter.blob>
+<#if fullConstructor && utilFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeByteArray"]>
+</#if>
 </#if>
 </#list>
-<#if fullConstructor>
-<#if importSafeDate??>
-import ${javaPackage}.util.${prefixUtilityName}SafeDate;
-</#if>
-<#if importSafeByteArray??>
-import ${javaPackage}.util.${prefixUtilityName}SafeByteArray;
-</#if>
-</#if>
-<#if importSafeDate??>
 
-<#if java8>
-import java.time.LocalDateTime;
-<#else>
-import java.util.Date;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
+
 </#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
 
 </#if>
 <#if documentation>
@@ -61,7 +66,7 @@ import java.util.Date;
  * @version @GENERATOR.VERSION@
  */
  </#if>
-public final class ${proc.className}INBuilder<#if serialization>${'\n'}        java.io.Serializable</#if> {
+public final class ${proc.className}INBuilder<#if serialization>${'\n'}        implements Serializable</#if> {
 <#if serialization>
 
 <#if documentation>

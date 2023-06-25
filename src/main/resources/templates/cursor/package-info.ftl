@@ -20,4 +20,4 @@
 /**
  * Cursor package folder.
  */
-package ${javaPackage}.cursor;
+package ${javaPackage}.${cursorFolderName};

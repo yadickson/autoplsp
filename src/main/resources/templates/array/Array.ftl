@@ -16,25 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.array;
-
+package ${javaPackage}.${arrayFolderName};
+<#assign importList = ["java.util.ArrayList"]>
 <#list parameter.parameters as parameter2>
 <#if parameter2.date>
 <#assign importSafeDate = 1>
 </#if>
 </#list>
 <#if importSafeDate??>
-import java.util.Date;
-
+<#assign importList = importList + ["java.util.Date"]>
 </#if>
-import java.util.ArrayList;
-
-<#if parameter.parameters[parameter.parameters?size - 1].object>
-import ${javaPackage}.object.${parameter.parameters[parameter.parameters?size - 1].javaTypeName};
-
+<#if parameter.parameters[parameter.parameters?size - 1].object && objectFolderName != arrayFolderName>
+<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}"]>
 </#if>
 <#if jsonNonNull>
-import com.fasterxml.jackson.annotation.JsonInclude;
+<#assign importList = importList + ["com.fasterxml.jackson.annotation.JsonInclude"]>
+</#if>
+<#if serialization>
+<#assign importList = importList + ["java.io.Serializable"]>
+</#if>
+
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
+
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
 
 </#if>
 <#if documentation>
@@ -51,9 +60,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 <#if !serialization>
 @SuppressWarnings({"serial"})
 </#if>
-public class ${parameter.javaTypeName}
-        extends ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}><#if serialization>
-        implements java.io.Serializable</#if> {
+public class ${parameter.javaTypeName}${'\n'}        extends ArrayList<${parameter.parameters[parameter.parameters?size - 1].javaTypeName}><#if serialization>${'\n'}        implements Serializable</#if> {
 <#if serialization> 
 
 <#if documentation>

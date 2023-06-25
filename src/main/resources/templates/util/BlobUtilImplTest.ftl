@@ -1,5 +1,6 @@
 package ${javaPackage}.${utilFolderName};
-<#assign importList = ["com.github.javafaker.Faker", "org.mockito.Mock", "org.mockito.Mockito"]>
+<#assign importList = []>
+<#assign importList = importList + ["org.mockito.Mock", "org.mockito.Mockito"]>
 <#if junit == 'junit5'>
 <#assign importList = importList + ["org.junit.jupiter.api.extension.ExtendWith", "org.mockito.junit.jupiter.MockitoExtension", "org.junit.jupiter.api.Assertions", "org.junit.jupiter.api.BeforeEach", "org.junit.jupiter.api.Test"]>
 <#else>
@@ -22,31 +23,17 @@ import ${import};
 <#else>
 @RunWith(MockitoJUnitRunner.class)
 </#if>
-class ${prefixUtilityName}SafeByteArrayTest {
+class ${prefixUtilityName}BlobUtilImplTest {
 
-    private Faker faker;
+    private ${prefixUtilityName}BlobUtil blobUtil;
 
     @<#if junit == 'junit5'>BeforeEach<#else>Before</#if>
     void setUp() {
-        faker = new Faker();
-    }
-
-    @Test
-    void testCreate() {
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(new ${prefixUtilityName}SafeByteArray());
+        blobUtil = new ${prefixUtilityName}BlobUtilImpl();
     }
 
     @Test
     void testInputNull() {
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(${prefixUtilityName}SafeByteArray.process(null));
-    }
-
-    @Test
-    void testInputNotNull() {
-        byte[] byteArray = new byte[faker.random().nextInt(100)];
-        byte[] result = ${prefixUtilityName}SafeByteArray.process(byteArray);
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotSame(byteArray, result);
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(byteArray, result)<#else>assertTrue(java.util.Arrays.equals(byteArray, result))</#if>;
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(blobUtil.process(null));
     }
 }

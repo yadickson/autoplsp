@@ -16,16 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.interfaces;
+package ${javaPackage}.${interfaceFolderName};
 
 <#if parameter.array>
-import ${javaPackage}.array.${parameter.javaTypeName};
+import ${javaPackage}.${arrayFolderName}.${parameter.javaTypeName};
 
 <#elseif parameter.object>
-import ${javaPackage}.object.${parameter.javaTypeName};
+import ${javaPackage}.${objectFolderName}.${parameter.javaTypeName};
 
 <#elseif parameter.resultSet || parameter.returnResultSet>
-import ${javaPackage}.cursor.${parameter.javaTypeName};
+import ${javaPackage}.${cursorFolderName}.${parameter.javaTypeName};
 
 <#elseif parameter.date>
 import java.util.Date;

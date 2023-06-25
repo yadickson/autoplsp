@@ -16,33 +16,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.object;
+package ${javaPackage}.${objectFolderName};
+<#assign importList = ["java.sql.Connection", "java.sql.SQLException", "org.springframework.stereotype.Component"]>
 <#list parameter.parameters as parameter>
 <#if parameter.clob>
 <#assign importClobUtil = 1>
-<#elseif parameter.blob>
+<#if utilFolderName != objectFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}ClobUtil"]>
+</#if>
+</#if>
+<#if parameter.blob>
 <#assign importBlobUtil = 1>
-<#elseif parameter.date>
+<#if utilFolderName != objectFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}BlobUtil"]>
+</#if>
+</#if>
+<#if parameter.date>
 <#assign importDateUtil = 1>
+<#if utilFolderName != objectFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}DateUtil"]>
+</#if>
 </#if>
 </#list>
-
-import java.sql.Connection;
-import java.sql.SQLException;
-
-<#if importBlobUtil??>
-import ${javaPackage}.util.${prefixUtilityName}BlobUtil;
-</#if>
-<#if importClobUtil??>
-import ${javaPackage}.util.${prefixUtilityName}ClobUtil;
-</#if>
 <#if importDateUtil??>
-import ${javaPackage}.util.${prefixUtilityName}DateUtil;
+import ${javaPackage}.${utilFolderName}.${prefixUtilityName}DateUtil;
 </#if>
-import ${javaPackage}.util.${prefixUtilityName}ObjectUtil;
+<#if utilFolderName != objectFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}ObjectUtil"]>
+</#if>
 
-import org.springframework.stereotype.Component;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Bean object for datatype ${parameter.realObjectName}.
@@ -52,8 +64,7 @@ import org.springframework.stereotype.Component;
  */
 </#if>
 @Component
-public final class ${parameter.javaTypeName}BuilderImpl
-        implements ${parameter.javaTypeName}Builder {
+public final class ${parameter.javaTypeName}BuilderImpl${'\n'}        implements ${parameter.javaTypeName}Builder {
 <#if importBlobUtil??>
 
 <#if documentation>
@@ -115,10 +126,7 @@ public final class ${parameter.javaTypeName}BuilderImpl
      */
 </#if>
     @Override
-    public Object process(
-            final Connection connection,
-            final ${parameter.javaTypeName} object
-    ) throws SQLException {
+    public Object process(${'\n'}            final Connection connection,${'\n'}            final ${parameter.javaTypeName} object${'\n'}    ) throws SQLException {
 
 <#list parameter.parameters as parameter>
         Object ${parameter.fieldName}${parameter.javaTypeName};
@@ -136,12 +144,8 @@ public final class ${parameter.javaTypeName}BuilderImpl
 </#if>
 </#list>
 
-        Object[] objs = new Object[]{<#list parameter.parameters as parameter>${'\n'}            ${parameter.fieldName}${parameter.javaTypeName}<#sep>,</#sep>${'\n'}        </#list>${'\n'}        };
+        Object[] objs = new Object[]{${'\n'}            <#list parameter.parameters as parameter>${parameter.fieldName}${parameter.javaTypeName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        };
 
-        return objectUtil.process(
-                connection,
-                "${parameter.realObjectName}",
-                objs
-        );
+        return objectUtil.process(${'\n'}                connection,${'\n'}                "${parameter.realObjectName}",${'\n'}                objs${'\n'}        );
     }
 }

@@ -1,5 +1,6 @@
 package ${javaPackage}.${utilFolderName};
-<#assign importList = ["com.github.javafaker.Faker", "org.mockito.Mock", "org.mockito.Mockito"]>
+<#assign importList = ["java.util.Date", "com.github.javafaker.Faker"]>
+<#assign importList = importList + ["org.mockito.Mock", "org.mockito.Mockito"]>
 <#if junit == 'junit5'>
 <#assign importList = importList + ["org.junit.jupiter.api.extension.ExtendWith", "org.mockito.junit.jupiter.MockitoExtension", "org.junit.jupiter.api.Assertions", "org.junit.jupiter.api.BeforeEach", "org.junit.jupiter.api.Test"]>
 <#else>
@@ -22,31 +23,33 @@ import ${import};
 <#else>
 @RunWith(MockitoJUnitRunner.class)
 </#if>
-class ${prefixUtilityName}SafeByteArrayTest {
+class ${prefixUtilityName}DateUtilImplTest {
 
     private Faker faker;
+
+    private ${prefixUtilityName}DateUtil dateUtil;
 
     @<#if junit == 'junit5'>BeforeEach<#else>Before</#if>
     void setUp() {
         faker = new Faker();
+        dateUtil = new ${prefixUtilityName}DateUtilImpl();
     }
 
     @Test
-    void testCreate() {
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(new ${prefixUtilityName}SafeByteArray());
+    void should_check_input_null() {
+        Object result = dateUtil.process(null);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNull(result);
     }
 
     @Test
-    void testInputNull() {
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(${prefixUtilityName}SafeByteArray.process(null));
-    }
+    void should_check_response() {
+        Date date = faker.date().birthday();
 
-    @Test
-    void testInputNotNull() {
-        byte[] byteArray = new byte[faker.random().nextInt(100)];
-        byte[] result = ${prefixUtilityName}SafeByteArray.process(byteArray);
+        Object result = dateUtil.process(date);
+
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotSame(byteArray, result);
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(byteArray, result)<#else>assertTrue(java.util.Arrays.equals(byteArray, result))</#if>;
+<#if driverName != 'oracle' >
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(result, date);
+</#if>
     }
 }

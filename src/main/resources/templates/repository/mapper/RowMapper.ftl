@@ -16,28 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.repository.mapper;
-<#list parameter.parameters as paramrs>
-<#if paramrs.date>
-<#assign importDate = 1>
+package ${javaPackage}.${repositoryFolderName}.mapper;
+<#assign importList = ["org.springframework.jdbc.core.RowMapper"]>
+<#if repositoryFolderName != cursorFolderName>
+<#assign importList = importList + ["${javaPackage}.${cursorFolderName}.${parameter.javaTypeName}"]>
 </#if>
+
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
+
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
 </#list>
+<#if importList?has_content>
 
-import ${javaPackage}.cursor.${parameter.javaTypeName};
-import ${javaPackage}.cursor.${parameter.javaTypeName}Impl;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-<#if importDate??>
-
-import java.util.Date;
 </#if>
-
-import org.springframework.jdbc.core.RowMapper;
-
 <#if documentation>
 /**
- * Resultset mapper for <#if proc.function>function<#else>stored procedure</#if>.
+ * ResultSet interface mapper for <#if proc.function>function<#else>stored procedure</#if>.
  *
  * ${proc.fullName}
  *
@@ -47,130 +44,5 @@ import org.springframework.jdbc.core.RowMapper;
  * @version @GENERATOR.VERSION@
  */
 </#if>
-public final class ${parameter.javaTypeName}RowMapper
-        implements RowMapper<${parameter.javaTypeName}> {
-
-<#list parameter.parameters as paramrs>
-<#if documentation>
-    /**
-     * Column <#if position>position<#else>name</#if>.
-     */
-</#if>
-    private static final <#if position>int<#else>String</#if> ${proc.constantFullName}_${paramrs.name} = <#if position>${paramrs.position}<#else>"${paramrs.name}"</#if>;
-
-</#list>
-<#if documentation>
-    /**
-     * Resultset mapper.
-     *
-     * @param resultSet resultset.
-     * @param i row number.
-     * @throws SQLException if error.
-     * @return object
-     */
-</#if>
-    @Override
-    public ${parameter.javaTypeName} mapRow(
-            final ResultSet resultSet,
-            final int i
-    ) throws SQLException {
-<#if !fullConstructor>
-
-        ${parameter.javaTypeName}Impl row;
-        row = new ${parameter.javaTypeName}Impl();
-
-<#if parameter.parameters?size <= 10 >
-<#assign noFullChunk = 1>
-<#list parameter.parameters as paramrs>
-        ${paramrs.javaTypeName} ${paramrs.fieldName}${parameter.javaTypeName};
-</#list>
-
-<#list parameter.parameters as paramrs>
-<#if paramrs.string || paramrs.clob>
-        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getString(${proc.constantFullName}_${paramrs.name});
-<#elseif paramrs.blob>
-        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getBytes(${proc.constantFullName}_${paramrs.name});
-<#elseif paramrs.date>
-        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getTimestamp(${proc.constantFullName}_${paramrs.name});
-<#else>
-        ${paramrs.fieldName}${parameter.javaTypeName} = (${paramrs.javaTypeName}) resultSet.getObject(${proc.constantFullName}_${paramrs.name});
-</#if>
-</#list>
-
-<#list parameter.parameters as paramrs>
-        row.set${paramrs.propertyName}(${paramrs.fieldName}${parameter.javaTypeName});
-</#list>
-<#else>
-<#assign step = 0 >
-<#list parameter.parameters?chunk(10) as childs>
-<#assign step++ >
-        fillStep${step}(resultSet, row);
-</#list>
-</#if>
-
-        return row;
-<#else>
-
-<#list parameter.parameters as paramrs>
-        ${paramrs.javaTypeName} ${paramrs.fieldName}${parameter.javaTypeName};
-</#list>
-
-<#list parameter.parameters as paramrs>
-<#if paramrs.string || paramrs.clob>
-        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getString(${proc.constantFullName}_${paramrs.name});
-<#elseif paramrs.blob>
-        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getBytes(${proc.constantFullName}_${paramrs.name});
-<#elseif paramrs.date>
-        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getTimestamp(${proc.constantFullName}_${paramrs.name});
-<#else>
-        ${paramrs.fieldName}${parameter.javaTypeName} = (${paramrs.javaTypeName}) resultSet.getObject(${proc.constantFullName}_${paramrs.name});
-</#if>
-</#list>
-
-        return new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter2>${parameter2.fieldName}${parameter.javaTypeName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
-    }
-<#if !fullConstructor>
-<#if ! noFullChunk?? >
-<#assign step = 0 >
-<#list parameter.parameters?chunk(10) as childs>
-<#assign step++ >
-
-<#if documentation>
-    /**
-     * Fill row values for step ${step}.
-     *
-     * @param resultSet resultset.
-     * @param row row to fill.
-     * @throws SQLException if error.
-     */
-</#if>
-    private void fillStep${step}(
-        final ResultSet resultSet,
-        final ${parameter.javaTypeName}Impl row
-    ) throws SQLException {
-
-<#list childs as paramrs>
-        ${paramrs.javaTypeName} ${paramrs.fieldName}${parameter.javaTypeName};
-</#list>
-
-<#list childs as paramrs>
-<#if paramrs.string || paramrs.clob>
-        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getString(${proc.constantFullName}_${paramrs.name});
-<#elseif paramrs.blob>
-        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getBytes(${proc.constantFullName}_${paramrs.name});
-<#elseif paramrs.date>
-        ${paramrs.fieldName}${parameter.javaTypeName} = resultSet.getTimestamp(${proc.constantFullName}_${paramrs.name});
-<#else>
-        ${paramrs.fieldName}${parameter.javaTypeName} = (${paramrs.javaTypeName}) resultSet.getObject(${proc.constantFullName}_${paramrs.name});
-</#if>
-</#list>
-
-<#list childs as paramrs>
-        row.set${paramrs.propertyName}(${paramrs.fieldName}${parameter.javaTypeName});
-</#list>
-    }
-</#list>
-</#if>
-</#if>
+public interface ${parameter.javaTypeName}RowMapper${'\n'}        extends RowMapper<${parameter.javaTypeName}> {
 }

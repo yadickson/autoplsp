@@ -16,35 +16,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.cursor;
-
+package ${javaPackage}.${cursorFolderName};
+<#assign importList = []>
+<#if jsonNonNull>
+<#assign importList = importList + ["com.fasterxml.jackson.annotation.JsonInclude"]>
+</#if>
+<#if serialization>
+<#assign importList = importList + ["java.io.Serializable"]>
+</#if>
 <#list parameter.parameters as parameter2>
 <#if parameter2.date>
 <#assign importSafeDate = 1>
+<#assign importList = importList + ["java.util.Date"]>
+<#if utilFolderName != cursorFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeDate"]>
+</#if>
 </#if>
 <#if parameter2.blob>
 <#assign importSafeByteArray = 1>
+<#if utilFolderName != cursorFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeByteArray"]>
+</#if>
 </#if>
 </#list>
-<#if importSafeDate??>
-import ${javaPackage}.util.${prefixUtilityName}SafeDate;
-</#if>
-<#if importSafeByteArray??>
-import ${javaPackage}.util.${prefixUtilityName}SafeByteArray;
-<#if importSafeDate??>
-<#else>
+
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
 </#if>
-</#if>
-<#if importSafeDate??>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
 
-import java.util.Date;
 </#if>
-<#if jsonNonNull>
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-</#if>
-
 <#if documentation>
 /**
  * DataSet parameter for <#if proc.function>function<#else>stored procedure</#if>.
@@ -60,7 +65,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-public final class ${parameter.javaTypeName}Impl implements${'\n'}        ${parameter.javaTypeName}<#if serialization>,${'\n'}        java.io.Serializable</#if> {
+public final class ${parameter.javaTypeName}Impl implements${'\n'}        ${parameter.javaTypeName}<#if serialization>,${'\n'}        Serializable</#if> {
 <#if serialization> 
 
 <#if documentation>

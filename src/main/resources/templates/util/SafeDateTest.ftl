@@ -1,21 +1,22 @@
-package ${javaPackage}.util;
-
+package ${javaPackage}.${utilFolderName};
+<#assign importList = ["com.github.javafaker.Faker", "org.mockito.Mock", "org.mockito.Mockito"]>
 <#if junit == 'junit5'>
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+<#assign importList = importList + ["org.junit.jupiter.api.extension.ExtendWith", "org.mockito.junit.jupiter.MockitoExtension", "org.junit.jupiter.api.Assertions", "org.junit.jupiter.api.BeforeEach", "org.junit.jupiter.api.Test"]>
 <#else>
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+<#assign importList = importList + ["org.junit.runner.RunWith", "org.mockito.runners.MockitoJUnitRunner", "org.junit.Assert", "org.junit.Before", "org.junit.Test"]>
 </#if>
+<#assign importList = importList + ["org.mockito.ArgumentCaptor", "org.mockito.Captor", "org.mockito.Mock", "org.mockito.Mockito"]>
 
-import com.github.javafaker.Faker;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if junit == 'junit5'>
 @ExtendWith(MockitoExtension.class)
 <#else>
@@ -23,7 +24,7 @@ import com.github.javafaker.Faker;
 </#if>
 class ${prefixUtilityName}SafeDateTest {
 
-    Faker faker;
+    private Faker faker;
 
     @<#if junit == 'junit5'>BeforeEach<#else>Before</#if>
     void setUp() {

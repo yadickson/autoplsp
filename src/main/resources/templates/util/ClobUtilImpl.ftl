@@ -104,7 +104,7 @@ public final class ${prefixUtilityName}ClobUtilImpl
         return param;
 <#else>
 
-        <#if driverVersionName == 'ojdbc6' >CLOB<#else>Clob</#if> clob = null;
+        <#if driverVersionName == 'ojdbc6' >CLOB<#else>Clob</#if> clob;
 
         try {
 

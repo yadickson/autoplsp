@@ -61,7 +61,7 @@ import ${import};
  */
 </#if>
 @Component
-public final class ${parameter.javaTypeName}BuilderImpl${'\n'}        implements ${parameter.javaTypeName}Builder {
+public final class ${parameter.javaTypeName}BuilderUtilImpl${'\n'}        implements ${parameter.javaTypeName}BuilderUtil {
 <#if importBlobUtil??>
 
 <#if documentation>
@@ -101,10 +101,10 @@ public final class ${parameter.javaTypeName}BuilderImpl${'\n'}        implements
     /**
      * Class constructor.
      *
-     * ${parameter.javaTypeName}BuilderImpl
+     * ${parameter.javaTypeName}BuilderUtilImpl
      */
 </#if>
-    public ${parameter.javaTypeName}BuilderImpl(${'\n'}            final ${prefixUtilityName}ObjectUtil objectUtil<#if importBlobUtil??>,${'\n'}            final ${prefixUtilityName}BlobUtil blobUtil</#if><#if importClobUtil??>,${'\n'}            final ${prefixUtilityName}ClobUtil clobUtil</#if><#if importDateUtil??>,${'\n'}            final ${prefixUtilityName}DateUtil dateUtil</#if>${'\n'}    ) {
+    public ${parameter.javaTypeName}BuilderUtilImpl(${'\n'}            final ${prefixUtilityName}ObjectUtil objectUtil<#if importBlobUtil??>,${'\n'}            final ${prefixUtilityName}BlobUtil blobUtil</#if><#if importClobUtil??>,${'\n'}            final ${prefixUtilityName}ClobUtil clobUtil</#if><#if importDateUtil??>,${'\n'}            final ${prefixUtilityName}DateUtil dateUtil</#if>${'\n'}    ) {
         this.objectUtil = objectUtil;
 <#if importBlobUtil??>
         this.blobUtil = blobUtil;

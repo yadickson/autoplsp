@@ -491,10 +491,11 @@ public final class JavaGenerator extends TemplateGenerator {
                 createTemplate(INPUT_MAP, OBJECT_PATH + "Object.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName()));
                 createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectImpl.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName() + "Impl"));
                 createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilder.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName() + "Builder"));
-                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderImpl.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName() + "BuilderImpl"));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderUtil.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName() + "BuilderUtil"));
+                createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderUtilImpl.ftl", getFileNameObjectPath(getObjectOutputPath(""), param.getJavaTypeName() + "BuilderUtilImpl"));
 
                 if (test) {
-                    createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderImplTest.ftl", getFileNameObjectPath(getObjectOutputTestPath(""), param.getJavaTypeName() + "BuilderImplTest"));
+                    createTemplate(INPUT_MAP, OBJECT_PATH + "ObjectBuilderUtilImplTest.ftl", getFileNameObjectPath(getObjectOutputTestPath(""), param.getJavaTypeName() + "BuilderUtilImplTest"));
                 }
 
                 if (!addObjectUtil) {
@@ -503,7 +504,7 @@ public final class JavaGenerator extends TemplateGenerator {
                     createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ObjectUtilImpl.java"));
 
                     if (test) {
-                        createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilImplTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "ObjectUtilTest.java"));
+                        createTemplate(INPUT_MAP, UTIL_PATH + "ObjectUtilImplTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "ObjectUtilImplTest.java"));
                     }
                 }
 
@@ -519,11 +520,11 @@ public final class JavaGenerator extends TemplateGenerator {
                     createTemplate(INPUT_MAP, ARRAY_PATH + "package-info.ftl", getArrayOutputFilePath("package-info.java"));
                 }
                 createTemplate(INPUT_MAP, ARRAY_PATH + "Array.ftl", getFileNameObjectPath(getArrayOutputPath(""), param.getJavaTypeName()));
-                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilder.ftl", getFileNameObjectPath(getArrayOutputPath(""), param.getJavaTypeName() + "Builder"));
-                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilderImpl.ftl", getFileNameObjectPath(getArrayOutputPath(""), param.getJavaTypeName() + "BuilderImpl"));
+                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilderUtil.ftl", getFileNameObjectPath(getArrayOutputPath(""), param.getJavaTypeName() + "BuilderUtil"));
+                createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilderUtilImpl.ftl", getFileNameObjectPath(getArrayOutputPath(""), param.getJavaTypeName() + "BuilderUtilImpl"));
 
                 if (test) {
-                    createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilderImplTest.ftl", getFileNameObjectPath(getArrayOutputTestPath(""), param.getJavaTypeName() + "BuilderImplTest"));
+                    createTemplate(INPUT_MAP, ARRAY_PATH + "ArrayBuilderUtilImplTest.ftl", getFileNameObjectPath(getArrayOutputTestPath(""), param.getJavaTypeName() + "BuilderUtilImplTest"));
                 }
 
                 if (!addArrayUtil) {
@@ -552,7 +553,7 @@ public final class JavaGenerator extends TemplateGenerator {
             createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "DateUtilImpl.java"));
 
             if (test) {
-                createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilImplTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "DateUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "DateUtilImplTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "DateUtilImplTest.java"));
             }
         }
     }
@@ -567,7 +568,7 @@ public final class JavaGenerator extends TemplateGenerator {
             createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "ClobUtilImpl.java"));
 
             if (test) {
-                createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilImplTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "ClobUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "ClobUtilImplTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "ClobUtilImplTest.java"));
             }
         }
     }
@@ -582,7 +583,7 @@ public final class JavaGenerator extends TemplateGenerator {
             createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilImpl.ftl", getUtilOutputFilePath(this.prefixUtilityName + "BlobUtilImpl.java"));
 
             if (test) {
-                createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilImplTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "BlobUtilTest.java"));
+                createTemplate(INPUT_MAP, UTIL_PATH + "BlobUtilImplTest.ftl", getUtilOutputFileTestPath(this.prefixUtilityName + "BlobUtilImplTest.java"));
             }
         }
     }

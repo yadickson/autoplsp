@@ -22,10 +22,10 @@ package ${javaPackage}.${arrayFolderName};
 <#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}ArrayUtil"]>
 </#if>
 <#if parameter.parameters[parameter.parameters?size - 1].object>
-<#assign importObjectBuilder = 1>
+<#assign importObjectBuilderUtil = 1>
 <#if objectFolderName != arrayFolderName>
 <#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}"]>
-<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder"]>
+<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}BuilderUtil"]>
 </#if>
 <#elseif parameter.parameters[parameter.parameters?size - 1].date>
 <#assign importDateUtil = 1>
@@ -64,7 +64,7 @@ import ${import};
  */
 </#if>
 @Component
-public final class ${parameter.javaTypeName}BuilderImpl${'\n'}        implements ${parameter.javaTypeName}Builder {
+public final class ${parameter.javaTypeName}BuilderUtilImpl${'\n'}        implements ${parameter.javaTypeName}BuilderUtil {
 
 <#if documentation>
     /**
@@ -72,14 +72,14 @@ public final class ${parameter.javaTypeName}BuilderImpl${'\n'}        implements
      */
 </#if>
     private final ${prefixUtilityName}ArrayUtil arrayUtil;
-<#if importObjectBuilder??>
+<#if importObjectBuilderUtil??>
 
 <#if documentation>
     /**
      * Object utility to build ${parameter.parameters[parameter.parameters?size - 1].realObjectName}.
      */
 </#if>
-    private final ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder objectBuilder;
+    private final ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}BuilderUtil objectBuilderUtil;
 <#elseif importDateUtil??>
 
 <#if documentation>
@@ -110,13 +110,13 @@ public final class ${parameter.javaTypeName}BuilderImpl${'\n'}        implements
     /**
      * Class constructor.
      *
-     * ${parameter.javaTypeName}BuilderImpl
+     * ${parameter.javaTypeName}BuilderUtilImpl
      */
 </#if>
-    public ${parameter.javaTypeName}BuilderImpl(${'\n'}            final ${prefixUtilityName}ArrayUtil arrayUtil<#if importObjectBuilder??>,${'\n'}            final ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder objectBuilder</#if><#if importBlobUtil??>,${'\n'}            final ${prefixUtilityName}BlobUtil blobUtil</#if><#if importClobUtil??>,${'\n'}            final ${prefixUtilityName}ClobUtil clobUtil</#if><#if importDateUtil??>,${'\n'}            final ${prefixUtilityName}DateUtil dateUtil</#if>${'\n'}    ) {
+    public ${parameter.javaTypeName}BuilderUtilImpl(${'\n'}            final ${prefixUtilityName}ArrayUtil arrayUtil<#if importObjectBuilderUtil??>,${'\n'}            final ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}BuilderUtil objectBuilderUtil</#if><#if importBlobUtil??>,${'\n'}            final ${prefixUtilityName}BlobUtil blobUtil</#if><#if importClobUtil??>,${'\n'}            final ${prefixUtilityName}ClobUtil clobUtil</#if><#if importDateUtil??>,${'\n'}            final ${prefixUtilityName}DateUtil dateUtil</#if>${'\n'}    ) {
         this.arrayUtil = arrayUtil;
-<#if importObjectBuilder??>
-        this.objectBuilder = objectBuilder;
+<#if importObjectBuilderUtil??>
+        this.objectBuilderUtil = objectBuilderUtil;
 </#if>
 <#if importBlobUtil??>
         this.blobUtil = blobUtil;
@@ -145,8 +145,8 @@ public final class ${parameter.javaTypeName}BuilderImpl${'\n'}        implements
         int i = 0;
 
         for (${parameter.parameters[parameter.parameters?size - 1].javaTypeName} obj : array) {
-<#if importObjectBuilder??>
-            input[i++] = objectBuilder.process(connection, obj);
+<#if importObjectBuilderUtil??>
+            input[i++] = objectBuilderUtil.process(connection, obj);
 <#elseif importDateUtil??>
             input[i++] = dateUtil.process(obj);
 <#elseif importBlobUtil??>

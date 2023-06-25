@@ -1,3 +1,4 @@
+<#if documentation>
 <#if header>
 /*
  * Copyright (C) 2019 Yadickson Soto
@@ -16,8 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
+</#if>
 package ${javaPackage}.${objectFolderName};
-<#assign importList = ["java.sql.Connection", "java.sql.SQLException"]>
+<#assign importList = []>
+<#list parameter.parameters as parameter2>
+<#if parameter2.date>
+<#assign importList = importList + ["java.util.Date"]>
+<#if utilFolderName != objectFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeDate"]>
+</#if>
+</#if>
+<#if parameter2.blob>
+<#if utilFolderName != objectFolderName>
+<#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeByteArray"]>
+</#if>
+</#if>
+</#list>
 
 <#list importSort(importList) as import>
 <#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
@@ -31,23 +46,80 @@ import ${import};
 </#if>
 <#if documentation>
 /**
- * Interface to build object for datatype ${parameter.realObjectName}.
+ * Bean object builder for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
-</#if>
-public interface ${parameter.javaTypeName}Builder {
+ </#if>
+public final class ${parameter.javaTypeName}Builder {
+<#if !fullConstructor>
 
 <#if documentation>
     /**
-     * Getter data object type.
-     *
-     * @param connection database connection.
-     * @param object object to process.
-     * @return object processed.
-     * @throws SQLException if error
+     * Bean object ${parameter.javaTypeName}Impl to build.
      */
 </#if>
-    Object process(${'\n'}            Connection connection,${'\n'}            ${parameter.javaTypeName} object${'\n'}    ) throws SQLException;
+    private final ${parameter.javaTypeName}Impl object;
+<#else>
+<#list parameter.parameters as parameter2>
+
+<#if documentation>
+    /**
+     * Field ${parameter2.name}.
+     */
+</#if>
+    private ${parameter2.javaTypeName} ${parameter2.fieldName}${proc.className} = null;
+</#list>
+</#if>
+<#if !fullConstructor>
+
+<#if documentation>
+    /**
+     * Class constructor ${parameter.javaTypeName}ObjectBuilder.
+     */
+</#if>
+    public ${parameter.javaTypeName}Builder() {
+        this.object = new ${parameter.javaTypeName}Impl();
+    }
+</#if>
+<#list parameter.parameters as parameter2>
+
+<#if documentation>
+    /**
+     * Getter of ${parameter2.name}.
+     *
+     * @return The ${parameter.javaTypeName}Builder instance.
+     */
+</#if>
+    public ${parameter.javaTypeName}Builder ${parameter2.fieldName}(final ${parameter2.javaTypeName} ${parameter2.fieldName}) {
+<#if !fullConstructor>
+        this.object.set${parameter2.propertyName}(${parameter2.fieldName});
+<#else>
+<#if parameter2.date>
+        this.${parameter2.fieldName}${parameter.javaTypeName}} = ${prefixUtilityName}SafeDate.process(${parameter2.fieldName});
+<#elseif parameter2.blob>
+        this.${parameter2.fieldName}${parameter.javaTypeName} = ${prefixUtilityName}SafeByteArray.process(${parameter2.fieldName});
+<#else>
+        this.${parameter2.fieldName}${parameter.javaTypeName} = ${parameter2.fieldName};
+</#if>
+</#if>
+        return this;
+    }
+</#list>
+
+<#if documentation>
+    /**
+     * Getter ${parameter.javaTypeName} instance.
+     *
+     * @return The ${parameter.javaTypeName}Object instance.
+     */
+</#if>
+    public ${parameter.javaTypeName} build() {
+<#if fullConstructor>
+        return new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter2>${parameter2.fieldName}${parameter.javaTypeName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+<#else>
+        return this.object;
+</#if>
+    }
 }

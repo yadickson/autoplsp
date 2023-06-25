@@ -44,7 +44,7 @@ package ${javaPackage}.${repositoryFolderName};
 </#list>
 <#list proc.arrayImports as parameter>
 <#if arrayFolderName != repositoryFolderName>
-<#assign importList = importList + ["${javaPackage}.${arrayFolderName}.${parameter.javaTypeName}Builder"]>
+<#assign importList = importList + ["${javaPackage}.${arrayFolderName}.${parameter.javaTypeName}BuilderUtil"]>
 </#if>
 </#list>
 <#list proc.parameters as parameter>
@@ -70,7 +70,7 @@ package ${javaPackage}.${repositoryFolderName};
 </#if>
 <#list proc.objectImports as parameter>
 <#if objectFolderName != repositoryFolderName>
-<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.javaTypeName}Builder"]>
+<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.javaTypeName}BuilderUtil"]>
 </#if>
 </#list>
 <#if proc.hasResultSet>
@@ -157,7 +157,7 @@ public final class ${proc.className}DAOImpl${'\n'}        implements ${proc.clas
      * ${parameter.javaTypeName} builder utility.
      */
 </#if>
-    private final ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder;
+    private final ${parameter.javaTypeName}BuilderUtil ${parameter.javaTypeFieldName}BuilderUtil;
 
 </#list>
 <#list proc.objectImports as parameter>
@@ -166,7 +166,7 @@ public final class ${proc.className}DAOImpl${'\n'}        implements ${proc.clas
      * ${parameter.javaTypeName} builder utility.
      */
 </#if>
-    private final ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder;
+    private final ${parameter.javaTypeName}BuilderUtil ${parameter.javaTypeFieldName}BuilderUtil;
 
 </#list>
 
@@ -186,7 +186,7 @@ public final class ${proc.className}DAOImpl${'\n'}        implements ${proc.clas
      * ${proc.className}DAOImpl
      */
 </#if>
-    public ${proc.className}DAOImpl(${'\n'}            final ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if><#if importConnectionUtils??>,${'\n'}            final ${prefixUtilityName}ConnectionUtil connectionUtil</#if><#if importBlobUtil??>,${'\n'}            final ${prefixUtilityName}BlobUtil blobUtil</#if><#if importClobUtil??>,${'\n'}            final ${prefixUtilityName}ClobUtil clobUtil</#if><#list proc.objectImports as parameter>,${'\n'}            final ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder</#list><#list proc.arrayImports as parameter>,${'\n'}            final ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}Builder</#list><#if proc.checkResult>,${'\n'}            final ${prefixUtilityName}CheckResult checkResult</#if>${'\n'}    ) {
+    public ${proc.className}DAOImpl(${'\n'}            final ${proc.className}<#if !proc.functionInline>SP<#else>SqlQuery</#if> <#if proc.function>function<#else>procedure</#if><#if importConnectionUtils??>,${'\n'}            final ${prefixUtilityName}ConnectionUtil connectionUtil</#if><#if importBlobUtil??>,${'\n'}            final ${prefixUtilityName}BlobUtil blobUtil</#if><#if importClobUtil??>,${'\n'}            final ${prefixUtilityName}ClobUtil clobUtil</#if><#list proc.objectImports as parameter>,${'\n'}            final ${parameter.javaTypeName}BuilderUtil ${parameter.javaTypeFieldName}BuilderUtil</#list><#list proc.arrayImports as parameter>,${'\n'}            final ${parameter.javaTypeName}BuilderUtil ${parameter.javaTypeFieldName}BuilderUtil</#list><#if proc.checkResult>,${'\n'}            final ${prefixUtilityName}CheckResult checkResult</#if>${'\n'}    ) {
         this.<#if proc.function>function<#else>procedure</#if> = <#if proc.function>function<#else>procedure</#if>;
 <#if importConnectionUtils??>
         this.connectionUtil = connectionUtil;
@@ -198,10 +198,10 @@ public final class ${proc.className}DAOImpl${'\n'}        implements ${proc.clas
         this.clobUtil = clobUtil;
 </#if>
 <#list proc.objectImports as parameter>
-        this.${parameter.javaTypeFieldName}Builder = ${parameter.javaTypeFieldName}Builder;
+        this.${parameter.javaTypeFieldName}BuilderUtil = ${parameter.javaTypeFieldName}BuilderUtil;
 </#list>
 <#list proc.arrayImports as parameter>
-        this.${parameter.javaTypeFieldName}Builder = ${parameter.javaTypeFieldName}Builder;
+        this.${parameter.javaTypeFieldName}BuilderUtil = ${parameter.javaTypeFieldName}BuilderUtil;
 </#list>
 <#if proc.checkResult>
         this.checkResult = checkResult;
@@ -248,7 +248,7 @@ public final class ${proc.className}DAOImpl${'\n'}        implements ${proc.clas
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
 
-            ${parameter.fieldName} = ${parameter.javaTypeFieldName}Builder.process(
+            ${parameter.fieldName} = ${parameter.javaTypeFieldName}BuilderUtil.process(
                     connection,
                     params.get${parameter.propertyName}()
             );

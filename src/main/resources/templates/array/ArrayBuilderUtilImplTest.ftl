@@ -4,10 +4,10 @@ package ${javaPackage}.${arrayFolderName};
 <#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}ArrayUtil"]>
 </#if>
 <#if parameter.parameters[parameter.parameters?size - 1].object>
-<#assign importObjectBuilder = 1>
+<#assign importObjectBuilderUtil = 1>
 <#if objectFolderName != arrayFolderName>
 <#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}"]>
-<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder"]>
+<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.parameters[parameter.parameters?size - 1].javaTypeName}BuilderUtil"]>
 </#if>
 <#elseif parameter.parameters[parameter.parameters?size - 1].date>
 <#assign importDateUtil = 1>
@@ -53,14 +53,14 @@ import ${import};
 @RunWith(MockitoJUnitRunner.class)
 </#if>
 @SuppressWarnings({"rawtypes", "unchecked"})
-class ${parameter.javaTypeName}BuilderImplTest {
+class ${parameter.javaTypeName}BuilderUtilImplTest {
 
     @Mock
     private ${prefixUtilityName}ArrayUtil arrayUtilMock;
-<#if importObjectBuilder??>
+<#if importObjectBuilderUtil??>
 
     @Mock
-    private ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}Builder objectBuilderMock;
+    private ${parameter.parameters[parameter.parameters?size - 1].javaTypeName}BuilderUtil objectBuilderUtilMock;
 <#elseif importDateUtil??>
 
     @Mock
@@ -85,16 +85,16 @@ class ${parameter.javaTypeName}BuilderImplTest {
     private Faker faker;
 </#if>
 
-    private ${parameter.javaTypeName}Builder builder;
+    private ${parameter.javaTypeName}BuilderUtil builder;
 
     @<#if junit == 'junit5'>BeforeEach<#else>Before</#if>
     void setUp() {
 <#if importFaker??>
         faker = new Faker();
 </#if>
-        builder = new ${parameter.javaTypeName}BuilderImpl(${'\n'}            arrayUtilMock<#if importObjectBuilder??>,${'\n'}            objectBuilderMock</#if><#if importBlobUtil??>,${'\n'}            blobUtilMock</#if><#if importClobUtil??>,${'\n'}            clobUtilMock</#if><#if importDateUtil??>,${'\n'}            dateUtilMock</#if>${'\n'}        );
+        builder = new ${parameter.javaTypeName}BuilderUtilImpl(${'\n'}            arrayUtilMock<#if importObjectBuilderUtil??>,${'\n'}            objectBuilderUtilMock</#if><#if importBlobUtil??>,${'\n'}            blobUtilMock</#if><#if importClobUtil??>,${'\n'}            clobUtilMock</#if><#if importDateUtil??>,${'\n'}            dateUtilMock</#if>${'\n'}        );
     }
-<#if importObjectBuilder??>
+<#if importObjectBuilderUtil??>
 
     @Test
     void should_check_${parameter.realObjectName?lower_case}_object_builder_process() throws SQLException {
@@ -117,7 +117,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
         builder.process(connectionMock, array);
 
-        Mockito.verify(objectBuilderMock, Mockito.times(1)).process(Mockito.same(connectionMock), Mockito.same(object));
+        Mockito.verify(objectBuilderUtilMock, Mockito.times(1)).process(Mockito.same(connectionMock), Mockito.same(object));
     }
 </#if>
 <#if importDateUtil??>
@@ -225,8 +225,8 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
         Object obj = new Object();
 
-<#if importObjectBuilder??>
-        Mockito.when(objectBuilderMock.process(Mockito.any(), Mockito.any())).thenReturn(objectProcessed);
+<#if importObjectBuilderUtil??>
+        Mockito.when(objectBuilderUtilMock.process(Mockito.any(), Mockito.any())).thenReturn(objectProcessed);
 <#elseif importDateUtil??>
         Mockito.when(dateUtilMock.process(Mockito.any())).thenReturn(objectProcessed);
 <#elseif importBlobUtil??>

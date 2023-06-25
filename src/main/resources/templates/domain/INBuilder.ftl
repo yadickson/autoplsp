@@ -20,9 +20,6 @@
 </#if>
 package ${javaPackage}.${domainFolderName};
 <#assign importList = []>
-<#if serialization>
-<#assign importList = importList + ["java.io.Serializable"]>
-</#if>
 <#list proc.arrayImports as parameter>
 <#if arrayFolderName != domainFolderName>
 <#assign importList = importList + ["${javaPackage}.${arrayFolderName}.${parameter.javaTypeName}"]>
@@ -66,16 +63,7 @@ import ${import};
  * @version @GENERATOR.VERSION@
  */
  </#if>
-public final class ${proc.className}INBuilder<#if serialization>${'\n'}        implements Serializable</#if> {
-<#if serialization>
-
-<#if documentation>
-    /**
-     * Serialization.
-     */
-</#if>
-    static final long serialVersionUID = 1L;
-</#if>
+public final class ${proc.className}INBuilder {
 <#if !fullConstructor>
 
 <#if documentation>
@@ -149,7 +137,7 @@ public final class ${proc.className}INBuilder<#if serialization>${'\n'}        i
      * @return The ${proc.className}IN instance.
      */
 </#if>
-    public ${proc.className}IN builder() {
+    public ${proc.className}IN build() {
 <#if fullConstructor>
         return new ${proc.className}INImpl(${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}${proc.className}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 <#else>

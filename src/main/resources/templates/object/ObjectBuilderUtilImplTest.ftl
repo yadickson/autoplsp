@@ -48,7 +48,7 @@ import ${import};
 @RunWith(MockitoJUnitRunner.class)
 </#if>
 @SuppressWarnings({"rawtypes", "unchecked"})
-class ${parameter.javaTypeName}BuilderImplTest {
+class ${parameter.javaTypeName}BuilderUtilImplTest {
 <#if importBlobUtil??>
 
     @Mock
@@ -76,21 +76,18 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
     private Faker faker;
 
-    private ${parameter.javaTypeName}Builder builder;
+    private ${parameter.javaTypeName}BuilderUtil builder;
 
     @<#if junit == 'junit5'>BeforeEach<#else>Before</#if>
     void setUp() {
         faker = new Faker();
-        builder = new ${parameter.javaTypeName}BuilderImpl(${'\n'}            objectUtilMock<#if importBlobUtil??>,${'\n'}            blobUtilMock</#if><#if importClobUtil??>,${'\n'}            clobUtilMock</#if><#if importDateUtil??>,${'\n'}            dateUtilMock</#if>${'\n'}        );
+        builder = new ${parameter.javaTypeName}BuilderUtilImpl(${'\n'}            objectUtilMock<#if importBlobUtil??>,${'\n'}            blobUtilMock</#if><#if importClobUtil??>,${'\n'}            clobUtilMock</#if><#if importDateUtil??>,${'\n'}            dateUtilMock</#if>${'\n'}        );
     }
 <#if importBlobUtil??>
 
     @Test
     void should_check_${parameter.realObjectName?lower_case}_builder_process_check_parameters_with_blob_util() throws SQLException {
-        ${parameter.javaTypeName}Impl object;
-<#if !fullConstructor>
-        object = new ${parameter.javaTypeName}Impl();
-</#if>
+        ${parameter.javaTypeName} object;
 
 <#list parameter.parameters as parameter>
 <#if parameter.number>
@@ -104,13 +101,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 </#if>
 </#list>
 
-<#if !fullConstructor>
-<#list parameter.parameters as parameter>
-        object.set${parameter.propertyName}(obj${parameter.propertyName});
-</#list>
-<#else>
-        object = new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
+        object = new ${parameter.javaTypeName}Builder()<#list parameter.parameters as parameter>${'\n'}            .${parameter.fieldName}(obj${parameter.propertyName})</#list>${'\n'}            .build();
 
         Object[] obj = new Object[0];
 
@@ -127,10 +118,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
     @Test
     void should_check_${parameter.realObjectName?lower_case}_builder_process_check_parameters_with_clob_util() throws SQLException {
-        ${parameter.javaTypeName}Impl object;
-<#if !fullConstructor>
-        object = new ${parameter.javaTypeName}Impl();
-</#if>
+        ${parameter.javaTypeName} object;
 
 <#list parameter.parameters as parameter>
 <#if parameter.number>
@@ -144,13 +132,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 </#if>
 </#list>
 
-<#if !fullConstructor>
-<#list parameter.parameters as parameter>
-        object.set${parameter.propertyName}(obj${parameter.propertyName});
-</#list>
-<#else>
-        object = new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
+        object = new ${parameter.javaTypeName}Builder()<#list parameter.parameters as parameter>${'\n'}            .${parameter.fieldName}(obj${parameter.propertyName})</#list>${'\n'}            .build();
 
         Object[] obj = new Object[0];
 
@@ -167,10 +149,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
     @Test
     void should_check_${parameter.realObjectName?lower_case}_builder_process_check_parameters_with_date_util() throws SQLException {
-        ${parameter.javaTypeName}Impl object;
-<#if !fullConstructor>
-        object = new ${parameter.javaTypeName}Impl();
-</#if>
+        ${parameter.javaTypeName} object;
 
 <#list parameter.parameters as parameter>
 <#if parameter.number>
@@ -184,13 +163,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 </#if>
 </#list>
 
-<#if !fullConstructor>
-<#list parameter.parameters as parameter>
-        object.set${parameter.propertyName}(obj${parameter.propertyName});
-</#list>
-<#else>
-        object = new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
+        object = new ${parameter.javaTypeName}Builder()<#list parameter.parameters as parameter>${'\n'}            .${parameter.fieldName}(obj${parameter.propertyName})</#list>${'\n'}            .build();
 
         Object[] obj = new Object[0];
 
@@ -206,10 +179,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
     @Test
     void should_check_${parameter.realObjectName?lower_case}_builder_process_response() throws SQLException {
-        ${parameter.javaTypeName}Impl object;
-<#if !fullConstructor>
-        object = new ${parameter.javaTypeName}Impl();
-</#if>
+        ${parameter.javaTypeName} object;
 
 <#list parameter.parameters as parameter>
 <#if parameter.number>
@@ -223,13 +193,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 </#if>
 </#list>
 
-<#if !fullConstructor>
-<#list parameter.parameters as parameter>
-        object.set${parameter.propertyName}(obj${parameter.propertyName});
-</#list>
-<#else>
-        object = new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
+        object = new ${parameter.javaTypeName}Builder()<#list parameter.parameters as parameter>${'\n'}            .${parameter.fieldName}(obj${parameter.propertyName})</#list>${'\n'}            .build();
 
         Object[] obj = new Object[0];
 
@@ -251,10 +215,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
     @Test
     void should_check_${parameter.realObjectName?lower_case}_builder_process_check_parameter_${parameterTest.name?lower_case}_value() throws SQLException {
-        ${parameter.javaTypeName}Impl object;
-<#if !fullConstructor>
-        object = new ${parameter.javaTypeName}Impl();
-</#if>
+        ${parameter.javaTypeName} object;
 
 <#list parameter.parameters as parameter>
 <#if parameter.number>
@@ -268,13 +229,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 </#if>
 </#list>
 
-<#if !fullConstructor>
-<#list parameter.parameters as parameter>
-        object.set${parameter.propertyName}(obj${parameter.propertyName});
-</#list>
-<#else>
-        object = new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter>obj${parameter.propertyName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
+        object = new ${parameter.javaTypeName}Builder()<#list parameter.parameters as parameter>${'\n'}            .${parameter.fieldName}(obj${parameter.propertyName})</#list>${'\n'}            .build();
 
         Object[] obj = new Object[0];
 

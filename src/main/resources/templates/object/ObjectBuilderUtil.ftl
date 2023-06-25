@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 </#if>
-package ${javaPackage}.${arrayFolderName};
+package ${javaPackage}.${objectFolderName};
 <#assign importList = ["java.sql.Connection", "java.sql.SQLException"]>
 
 <#list importSort(importList) as import>
@@ -31,26 +31,23 @@ import ${import};
 </#if>
 <#if documentation>
 /**
- * Interface array for build datatype ${parameter.realObjectName}.
+ * Interface to build object for datatype ${parameter.realObjectName}.
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
 </#if>
-public interface ${parameter.javaTypeName}Builder {
+public interface ${parameter.javaTypeName}BuilderUtil {
 
 <#if documentation>
     /**
      * Getter data object type.
      *
      * @param connection database connection.
-     * @param array array object to process.
-     * @return array object processed.
+     * @param object object to process.
+     * @return object processed.
      * @throws SQLException if error
      */
 </#if>
-    Object process(
-            Connection connection,
-            ${parameter.javaTypeName} array
-    ) throws SQLException;
+    Object process(${'\n'}            Connection connection,${'\n'}            ${parameter.javaTypeName} object${'\n'}    ) throws SQLException;
 }

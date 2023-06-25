@@ -27,7 +27,7 @@ package ${javaPackage}.${repositoryFolderName};
 </#list>
 <#list proc.arrayImports as parameter>
 <#if arrayFolderName != repositoryFolderName>
-<#assign importList = importList + ["${javaPackage}.${arrayFolderName}.${parameter.javaTypeName}", "${javaPackage}.${arrayFolderName}.${parameter.javaTypeName}Builder"]>
+<#assign importList = importList + ["${javaPackage}.${arrayFolderName}.${parameter.javaTypeName}", "${javaPackage}.${arrayFolderName}.${parameter.javaTypeName}BuilderUtil"]>
 </#if>
 </#list>
 <#list proc.parameters as parameter>
@@ -38,7 +38,7 @@ package ${javaPackage}.${repositoryFolderName};
 </#if>
 </#list>
 <#if proc.hasInput && domainFolderName != repositoryFolderName>
-<#assign importList = importList + ["${javaPackage}.${domainFolderName}.${proc.className}IN", "${javaPackage}.${domainFolderName}.${proc.className}INImpl", "${javaPackage}.${domainFolderName}.${proc.className}INBuilder"]>
+<#assign importList = importList + ["${javaPackage}.${domainFolderName}.${proc.className}IN", "${javaPackage}.${domainFolderName}.${proc.className}INBuilder"]>
 </#if>
 <#if proc.hasOutput && domainFolderName != repositoryFolderName>
 <#assign importList = importList + ["${javaPackage}.${domainFolderName}.${proc.className}OUT"]>
@@ -50,7 +50,7 @@ package ${javaPackage}.${repositoryFolderName};
 </#if>
 <#list proc.objectImports as parameter>
 <#if objectFolderName != repositoryFolderName>
-<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.javaTypeName}", "${javaPackage}.${objectFolderName}.${parameter.javaTypeName}Builder"]>
+<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.javaTypeName}", "${javaPackage}.${objectFolderName}.${parameter.javaTypeName}BuilderUtil"]>
 </#if>
 </#list>
 <#if proc.checkResult && utilFolderName != repositoryFolderName>
@@ -116,12 +116,12 @@ class ${proc.className}DAOImplTest {
 <#list proc.arrayImports as parameter>
 
     @Mock
-    private ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}BuilderMock;
+    private ${parameter.javaTypeName}BuilderUtil ${parameter.javaTypeFieldName}BuilderUtilMock;
 </#list>
 <#list proc.objectImports as parameter>
 
     @Mock
-    private ${parameter.javaTypeName}Builder ${parameter.javaTypeFieldName}BuilderMock;
+    private ${parameter.javaTypeName}BuilderUtil ${parameter.javaTypeFieldName}BuilderUtilMock;
 </#list>
 <#if proc.checkResult>
 
@@ -145,17 +145,14 @@ class ${proc.className}DAOImplTest {
 <#if proc.hasInput || proc.hasOutput>
         faker = new Faker();
 </#if>
-        repository = new ${proc.className}DAOImpl(${'\n'}            <#if proc.function>function<#else>procedure</#if>Mock<#if importConnectionUtils??>,${'\n'}            connectionUtilMock</#if><#if importBlobUtil??>,${'\n'}            blobUtilMock</#if><#if importClobUtil??>,${'\n'}            clobUtilMock</#if><#list proc.objectImports as parameter>,${'\n'}            ${parameter.javaTypeFieldName}BuilderMock</#list><#list proc.arrayImports as parameter>,${'\n'}            ${parameter.javaTypeFieldName}BuilderMock</#list><#if proc.checkResult>,${'\n'}            checkResultMock</#if>${'\n'}    );
+        repository = new ${proc.className}DAOImpl(${'\n'}            <#if proc.function>function<#else>procedure</#if>Mock<#if importConnectionUtils??>,${'\n'}            connectionUtilMock</#if><#if importBlobUtil??>,${'\n'}            blobUtilMock</#if><#if importClobUtil??>,${'\n'}            clobUtilMock</#if><#list proc.objectImports as parameter>,${'\n'}            ${parameter.javaTypeFieldName}BuilderUtilMock</#list><#list proc.arrayImports as parameter>,${'\n'}            ${parameter.javaTypeFieldName}BuilderUtilMock</#list><#if proc.checkResult>,${'\n'}            checkResultMock</#if>${'\n'}        );
     }
 
     @Test
     void should_check_${proc.constantFullName?lower_case}_dao_execute() throws SQLException {
 <#if proc.hasInput>
 
-        ${proc.className}INImpl params;
-<#if !fullConstructor>
-        params = new ${proc.className}INImpl();
-</#if>
+        ${proc.className}IN params;
 
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
@@ -171,13 +168,7 @@ class ${proc.className}DAOImplTest {
 </#if>
 </#list>
 
-<#if !fullConstructor>
-<#list proc.inputParameters as parameter>
-        params.set${parameter.propertyName}(${parameter.fieldName});
-</#list>
-<#else>
-        params = new ${proc.className}INImpl(${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
+        params = new ${proc.className}INBuilder()<#list proc.inputParameters as parameter>${'\n'}            .${parameter.fieldName}(${parameter.fieldName})</#list>${'\n'}            .build();
 <#if importConnectionUtils??>
 
 <#list proc.inputParameters as parameter>
@@ -217,7 +208,7 @@ class ${proc.className}DAOImplTest {
         Mockito.when(connectionUtilMock.process()).thenReturn(connectionMock);
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
-        Mockito.when(${parameter.javaTypeFieldName}BuilderMock.process(Mockito.same(connectionMock), Mockito.same(${parameter.fieldName}))).thenReturn(${parameter.fieldName}Builder);
+        Mockito.when(${parameter.javaTypeFieldName}BuilderUtilMock.process(Mockito.same(connectionMock), Mockito.same(${parameter.fieldName}))).thenReturn(${parameter.fieldName}Builder);
 </#if>
 </#list>
 </#if>
@@ -255,7 +246,7 @@ class ${proc.className}DAOImplTest {
         Mockito.verify(connectionMock, Mockito.never()).close();
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
-        Mockito.verify(${parameter.javaTypeFieldName}BuilderMock, Mockito.times(1)).process(Mockito.same(connectionMock), Mockito.same(${parameter.fieldName}));
+        Mockito.verify(${parameter.javaTypeFieldName}BuilderUtilMock, Mockito.times(1)).process(Mockito.same(connectionMock), Mockito.same(${parameter.fieldName}));
 </#if>
 </#list>
 </#if>
@@ -265,10 +256,7 @@ class ${proc.className}DAOImplTest {
     @Test
     void should_check_${proc.constantFullName?lower_case}_dao_execute_with_check_input_parameter_${parameterTest.name?lower_case}_value() throws SQLException {
 
-        ${proc.className}INImpl params;
-<#if !fullConstructor>
-        params = new ${proc.className}INImpl();
-</#if>
+        ${proc.className}IN params;
 
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
@@ -284,13 +272,7 @@ class ${proc.className}DAOImplTest {
 </#if>
 </#list>
 
-<#if !fullConstructor>
-<#list proc.inputParameters as parameter>
-        params.set${parameter.propertyName}(${parameter.fieldName});
-</#list>
-<#else>
-        params = new ${proc.className}INImpl(${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
+        params = new ${proc.className}INBuilder()<#list proc.inputParameters as parameter>${'\n'}            .${parameter.fieldName}(${parameter.fieldName})</#list>${'\n'}            .build();
 <#if importConnectionUtils??>
 
 <#list proc.inputParameters as parameter>
@@ -328,7 +310,7 @@ class ${proc.className}DAOImplTest {
         Mockito.when(connectionUtilMock.process()).thenReturn(connectionMock);
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
-        Mockito.when(${parameter.javaTypeFieldName}BuilderMock.process(Mockito.same(connectionMock), Mockito.same(${parameter.fieldName}))).thenReturn(${parameter.fieldName}Builder);
+        Mockito.when(${parameter.javaTypeFieldName}BuilderUtilMock.process(Mockito.same(connectionMock), Mockito.same(${parameter.fieldName}))).thenReturn(${parameter.fieldName}Builder);
 </#if>
 </#list>
 </#if>
@@ -364,7 +346,7 @@ class ${proc.className}DAOImplTest {
 <#list proc.inputParameters as parameterTest>
 
     @Test
-    void should_check_${proc.constantFullName?lower_case}_dao_execute_with_check_input_parameter_${parameterTest.name?lower_case}_value_from_builder() throws SQLException {
+    void should_check_${proc.constantFullName?lower_case}_dao_execute_with_check_input_parameter_${parameterTest.name?lower_case}_value_from_build() throws SQLException {
 
         ${proc.className}IN params;
 
@@ -382,7 +364,7 @@ class ${proc.className}DAOImplTest {
 </#if>
 </#list>
 
-        params = new ${proc.className}INBuilder()<#list proc.inputParameters as parameter>${'\n'}            .${parameter.fieldName}(${parameter.fieldName})</#list>${'\n'}            .builder();
+        params = new ${proc.className}INBuilder()<#list proc.inputParameters as parameter>${'\n'}            .${parameter.fieldName}(${parameter.fieldName})</#list>${'\n'}            .build();
 <#if importConnectionUtils??>
 
 <#list proc.inputParameters as parameter>
@@ -421,7 +403,7 @@ class ${proc.className}DAOImplTest {
         Mockito.when(connectionUtilMock.process()).thenReturn(connectionMock);
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
-        Mockito.when(${parameter.javaTypeFieldName}BuilderMock.process(Mockito.same(connectionMock), Mockito.same(${parameter.fieldName}))).thenReturn(${parameter.fieldName}Builder);
+        Mockito.when(${parameter.javaTypeFieldName}BuilderUtilMock.process(Mockito.same(connectionMock), Mockito.same(${parameter.fieldName}))).thenReturn(${parameter.fieldName}Builder);
 </#if>
 </#list>
 </#if>
@@ -460,10 +442,7 @@ class ${proc.className}DAOImplTest {
     void should_check_${proc.constantFullName?lower_case}_dao_execute_with_output_parameters_check_parameter_${parameterTest.name?lower_case}_value() throws SQLException {
 <#if proc.hasInput>
 
-        ${proc.className}INImpl params;
-<#if !fullConstructor>
-        params = new ${proc.className}INImpl();
-</#if>
+        ${proc.className}IN params;
 
 <#list proc.inputParameters as parameter>
 <#if parameter.date>
@@ -478,14 +457,8 @@ class ${proc.className}DAOImplTest {
         ${parameter.javaTypeName} ${parameter.fieldName} = faker.internet().uuid();
 </#if>
 </#list>
-<#if !fullConstructor>
 
-<#list proc.inputParameters as parameter>
-        params.set${parameter.propertyName}(${parameter.fieldName});
-</#list>
-<#else>
-        params = new ${proc.className}INImpl(${'\n'}            <#list proc.inputParameters as parameter>${parameter.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
+        params = new ${proc.className}INBuilder()<#list proc.inputParameters as parameter>${'\n'}            .${parameter.fieldName}(${parameter.fieldName})</#list>${'\n'}            .build();
 <#if importConnectionUtils??>
 
 <#list proc.inputParameters as parameter>
@@ -527,7 +500,7 @@ class ${proc.className}DAOImplTest {
         Mockito.when(connectionUtilMock.process()).thenReturn(connectionMock);
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
-        Mockito.when(${parameter.javaTypeFieldName}BuilderMock.process(Mockito.same(connectionMock), Mockito.same(${parameter.fieldName}))).thenReturn(${parameter.fieldName}Builder);
+        Mockito.when(${parameter.javaTypeFieldName}BuilderUtilMock.process(Mockito.same(connectionMock), Mockito.same(${parameter.fieldName}))).thenReturn(${parameter.fieldName}Builder);
 </#if>
 </#list>
 </#if>
@@ -570,7 +543,7 @@ class ${proc.className}DAOImplTest {
 </#if>
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>
-        Mockito.when(${parameter.javaTypeFieldName}BuilderMock.process(Mockito.same(connectionMock), Mockito.any(${parameter.javaTypeName}.class))).thenReturn(null);
+        Mockito.when(${parameter.javaTypeFieldName}BuilderUtilMock.process(Mockito.same(connectionMock), Mockito.any(${parameter.javaTypeName}.class))).thenReturn(null);
 </#if>
 </#list>
         Mockito.when(<#if proc.function>function<#else>procedure</#if>Mock.execute(Mockito.anyMap())).thenThrow(new RuntimeException());

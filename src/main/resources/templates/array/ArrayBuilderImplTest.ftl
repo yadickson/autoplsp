@@ -227,11 +227,11 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
 <#if importObjectBuilder??>
         Mockito.when(objectBuilderMock.process(Mockito.any(), Mockito.any())).thenReturn(objectProcessed);
-<#else importDateUtil??>
+<#elseif importDateUtil??>
         Mockito.when(dateUtilMock.process(Mockito.any())).thenReturn(objectProcessed);
-<#else importBlobUtil??>
+<#elseif importBlobUtil??>
         Mockito.when(blobUtilMock.process(Mockito.any(), Mockito.any())).thenReturn(objectProcessed);
-<#else importClobUtil??>
+<#elseif importClobUtil??>
         Mockito.when(clobUtilMock.process(Mockito.any(), Mockito.any())).thenReturn(object);
 </#if>
         Mockito.when(arrayUtilMock.process(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(obj);

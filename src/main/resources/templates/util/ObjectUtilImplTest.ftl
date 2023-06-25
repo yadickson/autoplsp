@@ -74,7 +74,7 @@ class ${prefixUtilityName}ObjectUtilImplTest {
 </#if>
 
     @Test<#if junit != 'junit5'>(expected = SQLException.class)</#if>
-    void testProcessObjectError()<#if junit != 'junit5'> throws SQLException</#if> {
+    void testProcessObjectError()<#if junit != 'junit5' || driverName == 'oracle'> throws SQLException</#if> {
         Object[] objects = new Object[0];
         String nameValue = faker.internet().uuid();
 <#if driverName == 'oracle' >

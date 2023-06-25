@@ -53,7 +53,7 @@ class ${parameter.javaTypeName}RowMapperImplTest {
 <#if parameterTest.date>
         ${parameterTest.javaTypeName} ${parameterTest.fieldName} = faker.date().birthday();
 <#elseif parameterTest.blob>
-        byte[] ${paramrs.fieldName} = new byte[faker.random().nextInt(${parameterTest.position} * 100)];
+        byte[] ${parameterTest.fieldName} = new byte[faker.random().nextInt(${parameterTest.position} * 100)];
 <#elseif parameterTest.number>
         ${parameterTest.javaTypeName} ${parameterTest.fieldName} = faker.random().nextLong();
 <#else>
@@ -61,15 +61,15 @@ class ${parameter.javaTypeName}RowMapperImplTest {
 </#if>
 
 <#if parameterTest.date>
-        Mockito.when(resultSetMock.getTimestamp(<#if position>${parameterTest.position}<#else>"${parameterTest.name}"</#if>)).thenReturn(new java.sql.Timestamp(${parameterTest.fieldName}.getTime()));
+        Mockito.when(resultSetMock.getTimestamp(<#if position>Mockito.anyInt()<#else>Mockito.anyString()</#if>)).thenReturn(new java.sql.Timestamp(${parameterTest.fieldName}.getTime()));
 <#elseif parameterTest.clob>
-        Mockito.when(resultSetMock.getString(<#if position>${parameterTest.position}<#else>"${parameterTest.name}"</#if>)).thenReturn(${parameterTest.fieldName});
+        Mockito.when(resultSetMock.getString(<#if position>Mockito.anyInt()<#else>Mockito.anyString()</#if>)).thenReturn(${parameterTest.fieldName});
 <#elseif parameterTest.blob>
-        Mockito.when(resultSetMock.getBytes(<#if position>${parameterTest.position}<#else>"${parameterTest.name}"</#if>)).thenReturn(${parameterTest.fieldName});
+        Mockito.when(resultSetMock.getBytes(<#if position>Mockito.anyInt()<#else>Mockito.anyString()</#if>)).thenReturn(${parameterTest.fieldName});
 <#elseif parameterTest.string>
-        Mockito.when(resultSetMock.getString(<#if position>${parameterTest.position}<#else>"${parameterTest.name}"</#if>)).thenReturn(${parameterTest.fieldName});
+        Mockito.when(resultSetMock.getString(<#if position>Mockito.anyInt()<#else>Mockito.anyString()</#if>)).thenReturn(${parameterTest.fieldName});
 <#else>
-        Mockito.when(resultSetMock.getObject(<#if position>${parameterTest.position}<#else>"${parameterTest.name}"</#if>)).thenReturn(${parameterTest.fieldName});
+        Mockito.when(resultSetMock.getObject(<#if position>Mockito.anyInt()<#else>Mockito.anyString()</#if>)).thenReturn(${parameterTest.fieldName});
 </#if>
 
         ${parameter.javaTypeName} result = mapper.mapRow(resultSetMock, 0);
@@ -81,6 +81,18 @@ class ${parameter.javaTypeName}RowMapperImplTest {
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals(${parameterTest.fieldName}, result.get${parameterTest.propertyName}())<#else>assertTrue(java.util.Arrays.equals(${parameterTest.fieldName}, result.get${parameterTest.propertyName}()))</#if>;
 <#else>
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(${parameterTest.fieldName}, result.get${parameterTest.propertyName}());
+</#if>
+
+<#if parameterTest.date>
+        Mockito.verify(resultSetMock, Mockito.times(1)).getTimestamp(<#if position>${parameterTest.position}<#else>"${parameterTest.name}"</#if>);
+<#elseif parameterTest.clob>
+        Mockito.verify(resultSetMock, Mockito.times(1)).getString(<#if position>${parameterTest.position}<#else>"${parameterTest.name}"</#if>);
+<#elseif parameterTest.blob>
+        Mockito.verify(resultSetMock, Mockito.times(1)).getBytes(<#if position>${parameterTest.position}<#else>"${parameterTest.name}"</#if>);
+<#elseif parameterTest.string>
+        Mockito.verify(resultSetMock, Mockito.times(1)).getString(<#if position>${parameterTest.position}<#else>"${parameterTest.name}"</#if>);
+<#else>
+        Mockito.verify(resultSetMock, Mockito.times(1)).getObject(<#if position>${parameterTest.position}<#else>"${parameterTest.name}"</#if>);
 </#if>
     }
 </#list>

@@ -115,8 +115,6 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
         array.add(object);
 
-        Mockito.when(objectBuilderMock.process(Mockito.any(), Mockito.any())).thenReturn(object);
-
         builder.process(connectionMock, array);
 
         Mockito.verify(objectBuilderMock, Mockito.times(1)).process(Mockito.same(connectionMock), Mockito.same(object));
@@ -142,8 +140,6 @@ class ${parameter.javaTypeName}BuilderImplTest {
 </#if>
 
         array.add(object);
-
-        Mockito.when(objectBuilderMock.process(Mockito.any(), Mockito.any())).thenReturn(object);
 
         builder.process(connectionMock, array);
 
@@ -171,8 +167,6 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
         array.add(object);
 
-        Mockito.when(blobUtilMock.process(Mockito.any(), Mockito.any())).thenReturn(object);
-
         builder.process(connectionMock, array);
 
         Mockito.verify(blobUtilMock, Mockito.times(1)).process(Mockito.same(connectionMock), Mockito.same(object));
@@ -199,8 +193,6 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
         array.add(object);
 
-        Mockito.when(clobUtilMock.process(Mockito.any(), Mockito.any())).thenReturn(object);
-
         builder.process(connectionMock, array);
 
         Mockito.verify(clobUtilMock, Mockito.times(1)).process(Mockito.same(connectionMock), Mockito.same(object));
@@ -214,20 +206,34 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
 <#if parameter.parameters[parameter.parameters?size - 1].string>
         ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = faker.internet().uuid();
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} objectProcessed = faker.internet().uuid();
 <#elseif parameter.parameters[parameter.parameters?size - 1].number>
         ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = faker.random().nextLong();
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} objectProcessed = faker.random().nextLong();
 <#elseif parameter.parameters[parameter.parameters?size - 1].date>
         ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = faker.date().birthday();
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} objectProcessed = faker.date().birthday();
 <#elseif parameter.parameters[parameter.parameters?size - 1].blob>
         ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = new byte[faker.random().nextInt(${parameter.parameters[parameter.parameters?size - 1].position} * 100)];
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} objectProcessed = new byte[faker.random().nextInt(${parameter.parameters[parameter.parameters?size - 1].position} * 100)];
 <#else>
         ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} object = Mockito.mock(${parameter.parameters[parameter.parameters?size - 1].javaTypeName}.class);
+        ${parameter.parameters[parameter.parameters?size - 1].javaTypeName} objectProcessed = Mockito.mock(${parameter.parameters[parameter.parameters?size - 1].javaTypeName}.class);
 </#if>
 
         array.add(object);
 
         Object obj = new Object();
 
+<#if importObjectBuilder??>
+        Mockito.when(objectBuilderMock.process(Mockito.any(), Mockito.any())).thenReturn(objectProcessed);
+<#else importDateUtil??>
+        Mockito.when(dateUtilMock.process(Mockito.any())).thenReturn(objectProcessed);
+<#else importBlobUtil??>
+        Mockito.when(blobUtilMock.process(Mockito.any(), Mockito.any())).thenReturn(objectProcessed);
+<#else importClobUtil??>
+        Mockito.when(clobUtilMock.process(Mockito.any(), Mockito.any())).thenReturn(object);
+</#if>
         Mockito.when(arrayUtilMock.process(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(obj);
 
         Object result = builder.process(connectionMock, array);
@@ -247,7 +253,7 @@ class ${parameter.javaTypeName}BuilderImplTest {
 <#elseif parameter.parameters[parameter.parameters?size - 1].blob>
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.<#if junit == 'junit5'>assertArrayEquals((byte[]) object, (byte[]) objParamsResult[0])<#else>assertTrue(java.util.Arrays.equals((byte[]) object, (byte[]) objParamsResult[0]))</#if>;
 <#else>
-        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(object, objParamsResult[0]);
+        <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(objectProcessed, objParamsResult[0]);
 </#if>
     }
 }

@@ -233,12 +233,14 @@ class ${parameter.javaTypeName}BuilderImplTest {
 
         Object[] obj = new Object[0];
 
-        Mockito.when(objectUtilMock.process(Mockito.same(connectionMock), Mockito.eq("${parameter.realObjectName}"), captorObjects.capture())).thenReturn(obj);
+        Mockito.when(objectUtilMock.process(Mockito.any(), Mockito.anyString(), Mockito.any())).thenReturn(obj);
 
         Object result = builder.process(connectionMock, object);
 
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertNotNull(result);
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(obj, result);
+
+        Mockito.verify(objectUtilMock, Mockito.times(1)).process(Mockito.same(connectionMock), Mockito.eq("${parameter.realObjectName}"), captorObjects.capture());
 
         Object[] objParamsResult = captorObjects.getValue();
 
@@ -285,9 +287,11 @@ class ${parameter.javaTypeName}BuilderImplTest {
         Mockito.when(clobUtilMock.process(Mockito.same(connectionMock), Mockito.same(obj${parameter.propertyName}))).thenReturn(obj${parameter.propertyName});
 </#if>
 </#list>
-        Mockito.when(objectUtilMock.process(Mockito.same(connectionMock), Mockito.eq("${parameter.realObjectName}"), captorObjects.capture())).thenReturn(obj);
+        Mockito.when(objectUtilMock.process(Mockito.any(), Mockito.anyString(), Mockito.any())).thenReturn(obj);
 
         builder.process(connectionMock, object);
+
+        Mockito.verify(objectUtilMock, Mockito.times(1)).process(Mockito.same(connectionMock), Mockito.eq("${parameter.realObjectName}"), captorObjects.capture());
 
         Object[] objParamsResult = captorObjects.getValue();
 

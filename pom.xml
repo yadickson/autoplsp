@@ -5,7 +5,7 @@
     <groupId>com.github.yadickson</groupId>
     <artifactId>autoplsp</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.8.15-SNAPSHOT</version>
+    <version>1.8.16-SNAPSHOT</version>
     <name>Maven Auto PLSQL/SP Generator Plugin</name>
     <description>Maven plugin to generate Java classes from StoredProcedure and Functions in Database</description>
     <url>https://github.com/yadickson/autoplsp</url>
@@ -291,6 +291,40 @@
             </plugin>
 
             <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.1.0</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <timestampedReports>false</timestampedReports>
+                    <outputFormats>
+                        <outputFormat>XML</outputFormat>
+                        <outputFormat>HTML</outputFormat>
+                    </outputFormats>
+                    <coverageThreshold>0</coverageThreshold>
+                    <mutationThreshold>0</mutationThreshold>
+                    <threads>1</threads>
+                    <verbose>false</verbose>
+                    <targetClasses>
+                        <param>com.*</param>
+                    </targetClasses>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.1</version>
@@ -330,40 +364,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>mutationCoverage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.pitest</groupId>
-                        <artifactId>pitest-junit5-plugin</artifactId>
-                        <version>1.1.0</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <timestampedReports>false</timestampedReports>
-                    <outputFormats>
-                        <outputFormat>XML</outputFormat>
-                        <outputFormat>HTML</outputFormat>
-                    </outputFormats>
-                    <coverageThreshold>0</coverageThreshold>
-                    <mutationThreshold>0</mutationThreshold>
-                    <threads>1</threads>
-                    <verbose>false</verbose>
-                    <targetClasses>
-                        <param>com.*</param>
-                    </targetClasses>
-                </configuration>
             </plugin>
 
             <plugin>

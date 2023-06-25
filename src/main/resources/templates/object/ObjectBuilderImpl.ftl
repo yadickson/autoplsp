@@ -38,9 +38,6 @@ package ${javaPackage}.${objectFolderName};
 </#if>
 </#if>
 </#list>
-<#if importDateUtil??>
-import ${javaPackage}.${utilFolderName}.${prefixUtilityName}DateUtil;
-</#if>
 <#if utilFolderName != objectFolderName>
 <#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}ObjectUtil"]>
 </#if>

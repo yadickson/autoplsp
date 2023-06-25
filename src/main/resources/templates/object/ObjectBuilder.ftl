@@ -23,12 +23,12 @@ package ${javaPackage}.${objectFolderName};
 <#list parameter.parameters as parameter2>
 <#if parameter2.date>
 <#assign importList = importList + ["java.util.Date"]>
-<#if utilFolderName != objectFolderName>
+<#if fullConstructor && utilFolderName != objectFolderName>
 <#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeDate"]>
 </#if>
 </#if>
 <#if parameter2.blob>
-<#if utilFolderName != objectFolderName>
+<#if fullConstructor && utilFolderName != objectFolderName>
 <#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeByteArray"]>
 </#if>
 </#if>

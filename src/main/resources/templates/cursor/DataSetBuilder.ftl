@@ -137,7 +137,7 @@ public final class ${parameter.javaTypeName}Builder {
 </#if>
     public ${parameter.javaTypeName}Builder ${parameter2.fieldName}(final ${parameter2.javaTypeName} ${parameter2.fieldName}) {
 <#if !fullConstructor>
-        this.output.set${parameter.propertyName}(${parameter.fieldName});
+        this.cursor.set${parameter.propertyName}(${parameter.fieldName});
 <#else>
 <#if parameter2.date>
         this.${parameter2.fieldName}${parameter.javaTypeName} = ${prefixUtilityName}SafeDate.process(${parameter2.fieldName});

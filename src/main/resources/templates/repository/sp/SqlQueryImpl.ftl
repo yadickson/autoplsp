@@ -70,7 +70,7 @@ final class ${proc.className}SqlQueryImpl${'\n'}        extends GenericSqlQuery$
      * @param jdbcTemplate jdbcTemplate
      */
 </#if>
-    public ${proc.className}SqlQueryImpl(${'\n'}        @Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate${'\n'}    ) {
+    public ${proc.className}SqlQueryImpl(${'\n'}        @Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate<#list proc.parameters as parameter><#if parameter.resultSet || parameter.returnResultSet>,${'\n'}        final ${parameter.javaTypeName}RowMapper ${parameter.fieldName}RowMapper</#if></#list>${'\n'}    ) {
         super();
 
         setDataSource(Objects.requireNonNull(jdbcTemplate.getDataSource()));
@@ -92,13 +92,12 @@ final class ${proc.className}SqlQueryImpl${'\n'}        extends GenericSqlQuery$
 
 </#if>
 </#list>
-
 <#list proc.parameters as parameter>
 <#if !parameter.returnResultSet>
         declareParameter(sql${parameter.propertyName}${proc.className});
 <#else>
         try {
-            setRowMapperClass(new ${parameter.javaTypeName}RowMapperImpl().getClass());
+            setRowMapperClass(${parameter.javaTypeName}RowMapper.getClass());
         } catch (Exception ex) {
             // do nothing
         }

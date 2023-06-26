@@ -80,8 +80,8 @@ final class ${proc.className}SPImpl${'\n'}        extends StoredProcedure${'\n'}
 <#assign noFullChunk = 1>
 <#list proc.parameters as parameter>
         <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ${parameter.fieldName}${proc.className};
-
 </#list>
+
 <#list proc.parameters as parameter>
         ${parameter.fieldName}${proc.className} = new <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>(
                 "${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >,
@@ -97,7 +97,7 @@ final class ${proc.className}SPImpl${'\n'}        extends StoredProcedure${'\n'}
 <#assign step = 0 >
 <#list proc.parameters?chunk(10) as childs>
 <#assign step++ >
-        fillStep${step}(<#list childs?filter(x -> x.resultSet || x.returnResultSet) as parameter>${parameter.fieldName}RowMapper<#sep>, </#sep></#list>);
+        fillStep${step}(<#assign jump = false><#list childs?filter(x -> x.resultSet || x.returnResultSet) as parameter><#assign jump = true>${'\n'}            ${parameter.fieldName}RowMapper<#sep>,</#sep></#list><#if jump>${'\n'}    </#if>);
 </#list>
 </#if>
 
@@ -113,12 +113,12 @@ final class ${proc.className}SPImpl${'\n'}        extends StoredProcedure${'\n'}
      * Fill parameters declaration for step ${step}.
      */
 </#if>
-    private void fillStep${step}(<#list childs?filter(x -> x.resultSet || x.returnResultSet) as parameter>${'\n'}        final ${parameter.javaTypeName}RowMapper ${parameter.fieldName}RowMapper<#sep>, </#sep></#list>) {
+    private void fillStep${step}(<#assign jump = false><#list childs?filter(x -> x.resultSet || x.returnResultSet) as parameter><#assign jump = true>${'\n'}            final ${parameter.javaTypeName}RowMapper ${parameter.fieldName}RowMapper<#sep>,</#sep></#list><#if jump>${'\n'}        </#if>) {
 
 <#list childs as paramrs>
         <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if> ${paramrs.fieldName}${proc.className};
-
 </#list>
+
 <#list childs as paramrs>
         ${paramrs.fieldName}${proc.className} = new <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if>(
                 "${paramrs.prefix}${paramrs.name}"<#if ! paramrs.returnResultSet >,

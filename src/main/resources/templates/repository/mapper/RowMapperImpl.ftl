@@ -166,7 +166,7 @@ final class ${parameter.javaTypeName}RowMapperImpl${'\n'}        implements ${pa
 </#list>
 
 <#list childs as paramrs>
-        builder.{paramrs.fieldName}(${paramrs.fieldName}${parameter.javaTypeName});
+        builder.${paramrs.fieldName}(${paramrs.fieldName}${parameter.javaTypeName});
 </#list>
     }
 </#list>

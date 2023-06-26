@@ -24,13 +24,13 @@ package ${javaPackage}.${cursorFolderName};
 <#if parameter2.date>
 <#assign importSafeDate = 1>
 <#assign importList = importList + ["java.util.Date"]>
-<#if utilFolderName != cursorFolderName>
+<#if fullConstructor && utilFolderName != cursorFolderName>
 <#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeDate"]>
 </#if>
 </#if>
 <#if parameter2.blob>
 <#assign importSafeByteArray = 1>
-<#if utilFolderName != cursorFolderName>
+<#if fullConstructor && utilFolderName != cursorFolderName>
 <#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeByteArray"]>
 </#if>
 </#if>

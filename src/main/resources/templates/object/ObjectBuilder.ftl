@@ -88,16 +88,16 @@ public final class ${parameter.javaTypeName}Builder {
     /**
      * Class constructor ${parameter.javaTypeName}Builder.
      *
-     * @param ${parameter.javaTypeName} ${parameter.fieldName}Instance
+     * @param ${parameter.javaTypeName} object${parameter.javaTypeName}Instance
      *
      */
 </#if>
-    public ${parameter.javaTypeName}Builder(final ${parameter.javaTypeName} ${parameter.fieldName}Instance) {
+    public ${parameter.javaTypeName}Builder(final ${parameter.javaTypeName} object${parameter.javaTypeName}Instance) {
 <#if !fullConstructor>
-        this.object = new ${parameter.javaTypeName}Impl(${parameter.fieldName}Instance);
+        this.object = new ${parameter.javaTypeName}Impl(object${parameter.javaTypeName}Instance);
 <#else>
 <#list parameter.parameters as parameter2>
-        this. ${parameter2.fieldName}(${parameter.fieldName}Instance.get${parameter2.propertyName}());
+        this. ${parameter2.fieldName}(object${parameter.javaTypeName}Instance.get${parameter2.propertyName}());
 </#list>
 </#if>
     }
@@ -107,7 +107,7 @@ public final class ${parameter.javaTypeName}Builder {
     /**
      * Getter of ${parameter2.name}.
      *
-     * @return The ${parameter.javaTypeName}Builder ${parameter.fieldName}Instance.
+     * @return The ${parameter.javaTypeName}Builder object${parameter.javaTypeName}Instance.
      */
 </#if>
     public ${parameter.javaTypeName}Builder ${parameter2.fieldName}(final ${parameter2.javaTypeName} ${parameter2.fieldName}) {
@@ -128,9 +128,9 @@ public final class ${parameter.javaTypeName}Builder {
 
 <#if documentation>
     /**
-     * Getter ${parameter.javaTypeName} ${parameter.fieldName}Instance.
+     * Getter ${parameter.javaTypeName} object${parameter.javaTypeName}Instance.
      *
-     * @return The ${parameter.javaTypeName}Object ${parameter.fieldName}Instance.
+     * @return The ${parameter.javaTypeName}Object object${parameter.javaTypeName}Instance.
      */
 </#if>
     public ${parameter.javaTypeName} build() {

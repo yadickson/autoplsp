@@ -104,15 +104,15 @@ final class ${parameter.javaTypeName}Impl implements${'\n'}        ${parameter.j
     /**
      * Class Constructor ${parameter.javaTypeName}Impl.
      *
-     * @param ${parameter.javaTypeName} ${parameter.fieldName}Instance
+     * @param ${parameter.javaTypeName} dataSet${parameter.javaTypeName}Instance
      */
 </#if>
-    public ${parameter.javaTypeName}Impl(final ${parameter.javaTypeName} ${parameter.fieldName}Instance) {
+    public ${parameter.javaTypeName}Impl(final ${parameter.javaTypeName} dataSet${parameter.javaTypeName}Instance) {
 <#if fullConstructor>
-        this(${'\n'}            <#list parameter.parameters as parameter2>${parameter.fieldName}Instance.get${parameter2.propertyName}()<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        this(${'\n'}            <#list parameter.parameters as parameter2>dataSet${parameter.javaTypeName}Instance.get${parameter2.propertyName}()<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 <#else>
 <#list parameter.parameters as parameter2>
-        this.set${parameter2.propertyName}(${parameter.fieldName}Instance.get${parameter2.propertyName}());
+        this.set${parameter2.propertyName}(dataSet${parameter.javaTypeName}Instance.get${parameter2.propertyName}());
 </#list>
 </#if>
     }

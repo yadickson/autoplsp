@@ -109,15 +109,15 @@ final class ${proc.className}INImpl implements${'\n'}        ${proc.className}IN
     /**
      * Class Constructor ${proc.className}INImpl.
      *
-     * @param ${proc.className}IN instance
+     * @param ${proc.className}IN in${proc.className}Instance
      */
 </#if>
-    public ${proc.className}INImpl(final ${proc.className}IN instance) {
+    public ${proc.className}INImpl(final ${proc.className}IN in${proc.className}Instance) {
 <#if fullConstructor>
-        this(${'\n'}            <#list proc.inputParameters as parameter2>instance.get${parameter2.propertyName}()<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        this(${'\n'}            <#list proc.inputParameters as parameter2>in${proc.className}Instance.get${parameter2.propertyName}()<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 <#else>
 <#list proc.inputParameters as parameter2>
-        this.set${parameter2.propertyName}(instance.get${parameter2.propertyName}());
+        this.set${parameter2.propertyName}(in${proc.className}Instance.get${parameter2.propertyName}());
 </#list>
 </#if>
     }

@@ -111,16 +111,16 @@ public final class ${parameter.javaTypeName}Builder {
      *
      * ${proc.fullName}
      *
-     * @param ${parameter.javaTypeName} instance
+     * @param ${parameter.javaTypeName} ${parameter.fieldName}Instance
      *
      */
 </#if>
-    public ${parameter.javaTypeName}Builder(final ${parameter.javaTypeName} instance) {
+    public ${parameter.javaTypeName}Builder(final ${parameter.javaTypeName} ${parameter.fieldName}Instance) {
 <#if !fullConstructor>
-        this.cursor = new ${parameter.javaTypeName}Impl(instance);
+        this.cursor = new ${parameter.javaTypeName}Impl(${parameter.fieldName}Instance);
 <#else>
 <#list parameter.parameters as parameter2>
-        this.${parameter2.fieldName}(instance.get${parameter2.propertyName}());
+        this.${parameter2.fieldName}(${parameter.fieldName}Instance.get${parameter2.propertyName}());
 </#list>
 </#if>
     }
@@ -132,7 +132,7 @@ public final class ${parameter.javaTypeName}Builder {
      *
      * ${proc.fullName}
      *
-     * @return The ${parameter.javaTypeName}Builder instance.
+     * @return The ${parameter.javaTypeName}Builder ${parameter.fieldName}Instance.
      */
 </#if>
     public ${parameter.javaTypeName}Builder ${parameter2.fieldName}(final ${parameter2.javaTypeName} ${parameter2.fieldName}) {
@@ -153,11 +153,11 @@ public final class ${parameter.javaTypeName}Builder {
 
 <#if documentation>
     /**
-     * Getter ${parameter.javaTypeName} instance.
+     * Getter ${parameter.javaTypeName} ${parameter.fieldName}Instance.
      *
      * ${proc.fullName}
      *
-     * @return The ${parameter.javaTypeName} instance.
+     * @return The ${parameter.javaTypeName} ${parameter.fieldName}Instance.
      */
 </#if>
     public ${parameter.javaTypeName} build() {

@@ -106,15 +106,15 @@ final class ${proc.className}OUTImpl implements${'\n'}        ${proc.className}O
     /**
      * Class Constructor ${proc.className}OUTImpl.
      *
-     * @param ${proc.className}OUT instance
+     * @param ${proc.className}OUT out${proc.className}Instance
      */
 </#if>
-    public ${proc.className}OUTImpl(final ${proc.className}OUT instance) {
+    public ${proc.className}OUTImpl(final ${proc.className}OUT out${proc.className}Instance) {
 <#if fullConstructor>
-        this(${'\n'}            <#list proc.outputParameters as parameter2>instance.get${parameter2.propertyName}()<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        this(${'\n'}            <#list proc.outputParameters as parameter2>out${proc.className}Instance.get${parameter2.propertyName}()<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 <#else>
 <#list proc.outputParameters as parameter2>
-        this.set${parameter2.propertyName}(instance.get${parameter2.propertyName}());
+        this.set${parameter2.propertyName}(out${proc.className}Instance.get${parameter2.propertyName}());
 </#list>
 </#if>
     }

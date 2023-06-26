@@ -108,16 +108,16 @@ public final class ${proc.className}INBuilder {
      *
      * ${proc.fullName}
      *
-     * @param ${proc.className}IN instance
+     * @param ${proc.className}IN in${proc.className}Instance
      *
      */
 </#if>
-    public ${proc.className}INBuilder(final ${proc.className}IN instance) {
+    public ${proc.className}INBuilder(final ${proc.className}IN in${proc.className}Instance) {
 <#if !fullConstructor>
-        this.input = new ${proc.className}INImpl(instance);
+        this.input = new ${proc.className}INImpl(in${proc.className}Instance);
 <#else>
 <#list proc.inputParameters as parameter>
-        this.${parameter.fieldName}(instance.get${parameter.propertyName}());
+        this.${parameter.fieldName}(in${proc.className}Instance.get${parameter.propertyName}());
 </#list>
 </#if>
     }
@@ -129,7 +129,7 @@ public final class ${proc.className}INBuilder {
      *
      * ${proc.fullName}
      *
-     * @return The ${proc.className}INBuilder instance.
+     * @return The ${proc.className}INBuilder in${proc.className}Instance.
      */
 </#if>
     public ${proc.className}INBuilder ${parameter.fieldName}(final ${parameter.javaTypeName} ${parameter.fieldName}) {
@@ -150,11 +150,11 @@ public final class ${proc.className}INBuilder {
 
 <#if documentation>
     /**
-     * Getter ${proc.className}IN instance.
+     * Getter ${proc.className}IN in${proc.className}Instance.
      *
      * ${proc.fullName}
      *
-     * @return The ${proc.className}IN instance.
+     * @return The ${proc.className}IN in${proc.className}Instance.
      */
 </#if>
     public ${proc.className}IN build() {

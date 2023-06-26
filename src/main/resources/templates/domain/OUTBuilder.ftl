@@ -108,16 +108,16 @@ public final class ${proc.className}OUTBuilder {
      *
      * ${proc.fullName}
      *
-     * @param ${proc.className}OUT instance
+     * @param ${proc.className}OUT out${proc.className}Instance
      *
      */
 </#if>
-    public ${proc.className}OUTBuilder(final ${proc.className}OUT instance) {
+    public ${proc.className}OUTBuilder(final ${proc.className}OUT out${proc.className}Instance) {
 <#if !fullConstructor>
-        this.output = new ${proc.className}OUTImpl(instance);
+        this.output = new ${proc.className}OUTImpl(out${proc.className}Instance);
 <#else>
 <#list proc.outputParameters as parameter>
-        this.${parameter.fieldName}(instance.get${parameter.propertyName}());
+        this.${parameter.fieldName}(out${proc.className}Instance.get${parameter.propertyName}());
 </#list>
 </#if>
     }
@@ -129,7 +129,7 @@ public final class ${proc.className}OUTBuilder {
      *
      * ${proc.fullName}
      *
-     * @return The ${proc.className}OUTBuilder instance.
+     * @return The ${proc.className}OUTBuilder out${proc.className}Instance.
      */
 </#if>
     public ${proc.className}OUTBuilder ${parameter.fieldName}(final <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName}) {
@@ -150,11 +150,11 @@ public final class ${proc.className}OUTBuilder {
 
 <#if documentation>
     /**
-     * Getter ${proc.className}OUT instance.
+     * Getter ${proc.className}OUT out${proc.className}Instance.
      *
      * ${proc.fullName}
      *
-     * @return The ${proc.className}OUT instance.
+     * @return The ${proc.className}OUT out${proc.className}Instance.
      */
 </#if>
     public ${proc.className}OUT build() {

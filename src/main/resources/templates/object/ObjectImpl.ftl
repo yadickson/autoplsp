@@ -78,6 +78,17 @@ final class ${parameter.javaTypeName}Impl implements${'\n'}        ${parameter.j
 </#if>
     private <#if fullConstructor>final </#if>${parameter2.javaTypeName} ${parameter2.fieldName}${parameter.javaTypeName}<#if !fullConstructor> = null</#if>;
 </#list>
+<#if !fullConstructor>
+
+<#if documentation>
+    /**
+     * Class Constructor ${parameter.javaTypeName}Impl.
+     *
+     */
+</#if>
+    public ${parameter.javaTypeName}Impl() {
+    }
+</#if>
 
 <#if documentation>
     /**

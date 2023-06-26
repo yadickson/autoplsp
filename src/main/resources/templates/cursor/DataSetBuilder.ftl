@@ -71,7 +71,7 @@ public final class ${parameter.javaTypeName}Builder {
      *
      */
 </#if>
-    private final ${parameter.javaTypeName} cursor;
+    private final ${parameter.javaTypeName}Impl cursor;
 <#else>
 <#list parameter.parameters as parameter2>
 

@@ -46,7 +46,7 @@ import org.springframework.stereotype.Repository;
 </#if>
 @Repository
 @SuppressWarnings({"rawtypes", "unchecked", "deprecated"})
-public final class ${proc.className}MapperImpl implements ${proc.className}Mapper {
+final class ${proc.className}MapperImpl implements ${proc.className}Mapper {
 
     private final ${proc.className}SP sp;
 

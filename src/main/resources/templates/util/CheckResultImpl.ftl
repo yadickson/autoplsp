@@ -17,18 +17,21 @@
  */
 </#if>
 package ${javaPackage}.${utilFolderName};
-
-import java.sql.SQLException;
-import java.util.Map;
+<#assign importList = ["java.sql.SQLException", "java.util.Map", "org.springframework.stereotype.Component"]>
 <#if logger>
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
+<#assign importList = importList + ["org.slf4j.Logger", "org.slf4j.LoggerFactory", "org.slf4j.Marker"]>
 </#if>
 
-import org.springframework.stereotype.Component;
+<#list importSort(importList) as import>
+<#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
 
+</#if>
+import ${import};
+<#assign previousImportMatch = import?keep_before_last(".") >
+</#list>
+<#if importList?has_content>
+
+</#if>
 <#if documentation>
 /**
  * Check result from store procedure or function.

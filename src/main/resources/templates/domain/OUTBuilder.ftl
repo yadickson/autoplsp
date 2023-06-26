@@ -30,7 +30,7 @@ package ${javaPackage}.${domainFolderName};
 <#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.javaTypeName}"]>
 </#if>
 </#list>
-<#list proc.inputParameters as parameter>
+<#list proc.outputParameters as parameter>
 <#if parameter.date>
 <#assign importList = importList + ["java.util.Date"]>
 <#if fullConstructor && utilFolderName != domainFolderName>
@@ -55,7 +55,7 @@ import ${import};
 </#if>
 <#if documentation>
 /**
- * Input builder parameters for <#if proc.function>function<#else>stored procedure</#if>.
+ * Output builder parameters for <#if proc.function>function<#else>stored procedure</#if>.
  *
  * ${proc.fullName}
  *
@@ -63,65 +63,65 @@ import ${import};
  * @version @GENERATOR.VERSION@
  */
  </#if>
-public final class ${proc.className}INBuilder {
+public final class ${proc.className}OUTBuilder {
 <#if !fullConstructor>
 
 <#if documentation>
     /**
-     * Input parameter ${proc.className}INImpl to build.
+     * Output parameter ${proc.className}OUTImpl to build.
      *
      * ${proc.fullName}
      */
 </#if>
-    private final ${proc.className}INImpl input;
+    private final ${proc.className}OUTImpl output;
 <#else>
-<#list proc.inputParameters as parameter>
+<#list proc.outputParameters as parameter>
 
 <#if documentation>
     /**
-     * Input parameter ${parameter.name}.
+     * Output parameter ${parameter.name}.
      *
      * ${proc.fullName}
      */
 </#if>
-    private ${parameter.javaTypeName} ${parameter.fieldName}${proc.className} = null;
+    private <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName}${proc.className} = null;
 </#list>
 </#if>
 
 <#if documentation>
     /**
-     * Class constructor ${proc.className}INBuilder.
+     * Class constructor ${proc.className}OUTBuilder.
      *
      * ${proc.fullName}
      *
      */
 </#if>
-    public ${proc.className}INBuilder() {
+    public ${proc.className}OUTBuilder() {
 <#if !fullConstructor>
-        this.input = new ${proc.className}INImpl();
+        this.output = new ${proc.className}OUTImpl();
 </#if>
     }
 
 <#if documentation>
     /**
-     * Class constructor ${proc.className}INBuilder.
+     * Class constructor ${proc.className}OUTBuilder.
      *
      * ${proc.fullName}
      *
-     * @param ${proc.className}IN instance
+     * @param ${proc.className}OUT instance
      *
      */
 </#if>
-    public ${proc.className}INBuilder(final ${proc.className}IN instance) {
+    public ${proc.className}OUTBuilder(final ${proc.className}OUT instance) {
 <#if !fullConstructor>
-        this.input = new ${proc.className}INImpl(instance);
+        this.output = new ${proc.className}OUTImpl(instance);
 <#else>
-<#list proc.inputParameters as parameter>
+<#list proc.outputParameters as parameter>
         this.${parameter.fieldName}(instance.get${parameter.propertyName}());
 </#list>
 </#if>
     }
-<#list proc.inputParameters as parameter>
+<#list proc.outputParameters as parameter>
 
 <#if documentation>
     /**
@@ -129,12 +129,12 @@ public final class ${proc.className}INBuilder {
      *
      * ${proc.fullName}
      *
-     * @return The ${proc.className}INBuilder instance.
+     * @return The ${proc.className}OUTBuilder instance.
      */
 </#if>
-    public ${proc.className}INBuilder ${parameter.fieldName}(final ${parameter.javaTypeName} ${parameter.fieldName}) {
+    public ${proc.className}OUTBuilder ${parameter.fieldName}(final <#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName}) {
 <#if !fullConstructor>
-        this.input.set${parameter.propertyName}(${parameter.fieldName});
+        this.output.set${parameter.propertyName}(${parameter.fieldName});
 <#else>
 <#if parameter.date>
         this.${parameter.fieldName}${proc.className} = ${prefixUtilityName}SafeDate.process(${parameter.fieldName});
@@ -150,18 +150,18 @@ public final class ${proc.className}INBuilder {
 
 <#if documentation>
     /**
-     * Getter ${proc.className}IN instance.
+     * Getter ${proc.className}OUT instance.
      *
      * ${proc.fullName}
      *
-     * @return The ${proc.className}IN instance.
+     * @return The ${proc.className}OUT instance.
      */
 </#if>
-    public ${proc.className}IN build() {
+    public ${proc.className}OUT build() {
 <#if fullConstructor>
-        return new ${proc.className}INImpl(${'\n'}            <#list proc.inputParameters as parameter>this.${parameter.fieldName}${proc.className}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        return new ${proc.className}OUTImpl(${'\n'}            <#list proc.outputParameters as parameter>this.${parameter.fieldName}${proc.className}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 <#else>
-        return this.input;
+        return this.output;
 </#if>
     }
 }

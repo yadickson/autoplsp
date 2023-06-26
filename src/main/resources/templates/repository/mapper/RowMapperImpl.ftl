@@ -17,9 +17,9 @@
  */
 </#if>
 package ${javaPackage}.${repositoryFolderName}.mapper;
-<#assign importList = ["java.sql.ResultSet", "java.sql.SQLException"]>
+<#assign importList = ["java.sql.ResultSet", "java.sql.SQLException", "org.springframework.stereotype.Component"]>
 <#if repositoryFolderName != cursorFolderName>
-<#assign importList = importList + ["${javaPackage}.${cursorFolderName}.${parameter.javaTypeName}", "${javaPackage}.${cursorFolderName}.${parameter.javaTypeName}Impl"]>
+<#assign importList = importList + ["${javaPackage}.${cursorFolderName}.${parameter.javaTypeName}", "${javaPackage}.${cursorFolderName}.${parameter.javaTypeName}Builder"]>
 </#if>
 <#list parameter.parameters as paramrs>
 <#if paramrs.date>
@@ -49,7 +49,8 @@ import ${import};
  * @version @GENERATOR.VERSION@
  */
 </#if>
-public final class ${parameter.javaTypeName}RowMapperImpl${'\n'}        implements ${parameter.javaTypeName}RowMapper {
+@Component
+final class ${parameter.javaTypeName}RowMapperImpl${'\n'}        implements ${parameter.javaTypeName}RowMapper {
 
 <#list parameter.parameters as paramrs>
 <#if documentation>
@@ -74,8 +75,8 @@ public final class ${parameter.javaTypeName}RowMapperImpl${'\n'}        implemen
     public ${parameter.javaTypeName} mapRow(${'\n'}            final ResultSet resultSet,${'\n'}            final int i${'\n'}    ) throws SQLException {
 <#if !fullConstructor>
 
-        ${parameter.javaTypeName}Impl row;
-        row = new ${parameter.javaTypeName}Impl();
+        ${parameter.javaTypeName}Builder builder;
+        builder = new ${parameter.javaTypeName}Builder();
 
 <#if parameter.parameters?size <= 10 >
 <#assign noFullChunk = 1>
@@ -96,17 +97,17 @@ public final class ${parameter.javaTypeName}RowMapperImpl${'\n'}        implemen
 </#list>
 
 <#list parameter.parameters as paramrs>
-        row.set${paramrs.propertyName}(${paramrs.fieldName}${parameter.javaTypeName});
+        builder.${paramrs.fieldName}(${paramrs.fieldName}${parameter.javaTypeName});
 </#list>
 <#else>
 <#assign step = 0 >
 <#list parameter.parameters?chunk(10) as childs>
 <#assign step++ >
-        fillStep${step}(resultSet, row);
+        fillStep${step}(resultSet, builder);
 </#list>
 </#if>
 
-        return row;
+        return builder.build();
 <#else>
 
 <#list parameter.parameters as paramrs>
@@ -125,7 +126,7 @@ public final class ${parameter.javaTypeName}RowMapperImpl${'\n'}        implemen
 </#if>
 </#list>
 
-        return new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter2>${parameter2.fieldName}${parameter.javaTypeName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+        return new ${parameter.javaTypeName}Builder()<#list parameter.parameters as parameter2>${'\n'}            .${parameter2.fieldName}(${parameter2.fieldName}${parameter.javaTypeName})</#list>${'\n'}            .build();
 </#if>
     }
 <#if !fullConstructor>
@@ -136,16 +137,16 @@ public final class ${parameter.javaTypeName}RowMapperImpl${'\n'}        implemen
 
 <#if documentation>
     /**
-     * Fill row values for step ${step}.
+     * Fill builder values for step ${step}.
      *
      * @param resultSet resultset.
-     * @param row row to fill.
+     * @param builder row to fill.
      * @throws SQLException if error.
      */
 </#if>
     private void fillStep${step}(
         final ResultSet resultSet,
-        final ${parameter.javaTypeName}Impl row
+        final ${parameter.javaTypeName}Builder builder
     ) throws SQLException {
 
 <#list childs as paramrs>
@@ -165,7 +166,7 @@ public final class ${parameter.javaTypeName}RowMapperImpl${'\n'}        implemen
 </#list>
 
 <#list childs as paramrs>
-        row.set${paramrs.propertyName}(${paramrs.fieldName}${parameter.javaTypeName});
+        builder.{paramrs.fieldName}(${paramrs.fieldName}${parameter.javaTypeName});
 </#list>
     }
 </#list>

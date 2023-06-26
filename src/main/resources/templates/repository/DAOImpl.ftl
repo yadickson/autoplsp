@@ -58,7 +58,7 @@ package ${javaPackage}.${repositoryFolderName};
 <#assign importList = importList + ["${javaPackage}.${domainFolderName}.${proc.className}IN"]>
 </#if>
 <#if proc.hasOutput && domainFolderName != repositoryFolderName>
-<#assign importList = importList + ["${javaPackage}.${domainFolderName}.${proc.className}OUT", "${javaPackage}.${domainFolderName}.${proc.className}OUTImpl"]>
+<#assign importList = importList + ["${javaPackage}.${domainFolderName}.${proc.className}OUT", "${javaPackage}.${domainFolderName}.${proc.className}OUTBuilder"]>
 </#if>
 <#if !proc.functionInline>
 <#assign importList = importList + ["${javaPackage}.${repositoryFolderName}.sp.${proc.className}SP"]>
@@ -102,7 +102,7 @@ import ${import};
 </#if>
 @Repository
 @SuppressWarnings({"unchecked"})
-public final class ${proc.className}DAOImpl${'\n'}        implements ${proc.className}DAO {
+final class ${proc.className}DAOImpl${'\n'}        implements ${proc.className}DAO {
 
 <#if logger>
 <#if documentation>
@@ -150,7 +150,6 @@ public final class ${proc.className}DAOImpl${'\n'}        implements ${proc.clas
     private final ${prefixUtilityName}ClobUtil clobUtil;
 
 </#if>
-
 <#list proc.arrayImports as parameter>
 <#if documentation>
     /**
@@ -169,7 +168,6 @@ public final class ${proc.className}DAOImpl${'\n'}        implements ${proc.clas
     private final ${parameter.javaTypeName}BuilderUtil ${parameter.javaTypeFieldName}BuilderUtil;
 
 </#list>
-
 <#if proc.checkResult>
 <#if documentation>
     /**
@@ -289,11 +287,6 @@ public final class ${proc.className}DAOImpl${'\n'}        implements ${proc.clas
 
         checkResult.check(out${proc.className});
 </#if>
-<#if !fullConstructor>
-
-        ${proc.className}OUTImpl result;
-        result = new ${proc.className}OUTImpl();
-</#if>
 
 <#list proc.outputParameters as parameter>
 <#if parameter.resultSet || parameter.returnResultSet>
@@ -314,17 +307,8 @@ public final class ${proc.className}DAOImpl${'\n'}        implements ${proc.clas
         ${parameter.fieldName}${proc.className} = (${parameter.javaTypeName}) out${proc.className}.get("${parameter.prefix}${parameter.name}");
 </#if>
 </#list>
-<#if !fullConstructor>
 
-<#list proc.outputParameters as parameter>
-        result.set${parameter.propertyName}(${parameter.fieldName}${proc.className});
-</#list>
-
-        return result;
-<#else>
-
-        return new ${proc.className}OUTImpl(${'\n'}            <#list proc.outputParameters as parameter>${parameter.fieldName}${proc.className}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
-</#if>
+        return new ${proc.className}OUTBuilder()<#list proc.outputParameters as parameter>${'\n'}            .${parameter.fieldName}(${parameter.fieldName}${proc.className})</#list>${'\n'}            .build();
 </#if>
     }
 

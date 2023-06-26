@@ -72,7 +72,7 @@ import ${import};
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-public final class ${proc.className}INImpl implements${'\n'}        ${proc.className}IN<#if serialization>,${'\n'}        Serializable</#if> {
+final class ${proc.className}INImpl implements${'\n'}        ${proc.className}IN<#if serialization>,${'\n'}        Serializable</#if> {
 <#if serialization>
 
 <#if documentation>
@@ -93,6 +93,34 @@ public final class ${proc.className}INImpl implements${'\n'}        ${proc.class
 </#if>
     private <#if fullConstructor>final </#if>${parameter.javaTypeName} ${parameter.fieldName}${proc.className}<#if !fullConstructor> = null</#if>;
 </#list>
+<#if !fullConstructor>
+
+<#if documentation>
+    /**
+     * Class Constructor ${proc.className}INImpl.
+     *
+     */
+</#if>
+    public ${proc.className}INImpl() {
+    }
+</#if>
+
+<#if documentation>
+    /**
+     * Class Constructor ${proc.className}INImpl.
+     *
+     * @param ${proc.className}IN instance
+     */
+</#if>
+    public ${proc.className}INImpl(final ${proc.className}IN instance) {
+<#if fullConstructor>
+        this(${'\n'}            <#list proc.inputParameters as parameter2>instance.get${parameter2.propertyName}()<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+<#else>
+<#list proc.inputParameters as parameter2>
+        this.set${parameter2.propertyName}(instance.get${parameter2.propertyName}());
+</#list>
+</#if>
+    }
 <#if fullConstructor>
 
 <#if documentation>

@@ -427,6 +427,7 @@ public final class JavaGenerator extends TemplateGenerator {
             }
             createTemplate(INPUT_MAP, DOMAIN_PATH + "OUT.ftl", getFileNamePath(parameterPath, procedure, "OUT"));
             createTemplate(INPUT_MAP, DOMAIN_PATH + "OUTImpl.ftl", getFileNamePath(parameterPath, procedure, "OUTImpl"));
+            createTemplate(INPUT_MAP, DOMAIN_PATH + "OUTBuilder.ftl", getFileNamePath(parameterPath, procedure, "OUTBuilder"));
         }
 
         makeInterfaces(procedure.getParameters());
@@ -448,6 +449,7 @@ public final class JavaGenerator extends TemplateGenerator {
                 }
                 createTemplate(INPUT_MAP, CURSOR_PATH + "DataSet.ftl", getFileNamePath(getCursorOutputPath(""), procedure, param, "RS"));
                 createTemplate(INPUT_MAP, CURSOR_PATH + "DataSetImpl.ftl", getFileNamePath(getCursorOutputPath(""), procedure, param, "RSImpl"));
+                createTemplate(INPUT_MAP, CURSOR_PATH + "DataSetBuilder.ftl", getFileNamePath(getCursorOutputPath(""), procedure, param, "RSBuilder"));
                 makeInterfaces(param.getParameters());
             }
         }

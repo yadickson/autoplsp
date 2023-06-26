@@ -6,6 +6,11 @@ package ${javaPackage}.${repositoryFolderName}.sp;
 <#assign importList = importList + ["org.junit.runner.RunWith", "org.mockito.runners.MockitoJUnitRunner", "org.junit.Assert", "org.junit.Test"]>
 </#if>
 <#assign importList = importList + ["org.mockito.Mock", "org.mockito.Mockito"]>
+<#list proc.parameters as parameter>
+<#if parameter.resultSet || parameter.returnResultSet>
+<#assign importList = importList + ["${javaPackage}.${repositoryFolderName}.mapper.${parameter.javaTypeName}RowMapper"]>
+</#if>
+</#list>
 
 <#list importSort(importList) as import>
 <#if previousImportMatch?? && !import?starts_with(previousImportMatch)>
@@ -29,13 +34,20 @@ class ${proc.className}SPImplTest {
 
     @Mock
     private JdbcTemplate jdbcTemplateMock;
+<#list proc.parameters as parameter>
+<#if parameter.resultSet || parameter.returnResultSet>
+
+    @Mock
+    private ${parameter.javaTypeName}RowMapper ${parameter.fieldName}RowMapperMock;
+</#if>
+</#list>
 
     @Test
     void should_check_${proc.constantFullName?lower_case}_sp_data_source() {
 
         Mockito.when(jdbcTemplateMock.getDataSource()).thenReturn(dataSourceMock);
 
-        ${proc.className}SPImpl sp = new ${proc.className}SPImpl(jdbcTemplateMock);
+        ${proc.className}SPImpl sp = new ${proc.className}SPImpl(${'\n'}            jdbcTemplateMock<#list proc.parameters as parameter><#if parameter.resultSet || parameter.returnResultSet>,${'\n'}            ${parameter.fieldName}RowMapperMock</#if></#list>${'\n'}        );
 
         <#if junit == 'junit5'>Assertions<#else>Assert</#if>.assertSame(dataSourceMock, sp.getJdbcTemplate().getDataSource());
 

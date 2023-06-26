@@ -41,7 +41,7 @@ import ${import};
  */
 </#if>
 @Component
-public final class ${table.propertyName}Impl implements ${table.propertyName} {
+final class ${table.propertyName}Impl implements ${table.propertyName} {
 <#list table.fields as field>
 <#if documentation>
     /**

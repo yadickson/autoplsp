@@ -44,7 +44,7 @@ import ${import};
  */
 </#if>
 @Component
-public final class ${prefixUtilityName}DateUtilImpl
+final class ${prefixUtilityName}DateUtilImpl
         implements ${prefixUtilityName}DateUtil {
 <#if logger>
 

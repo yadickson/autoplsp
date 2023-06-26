@@ -18,17 +18,19 @@
  */
 </#if>
 </#if>
-package ${javaPackage}.${objectFolderName};
+package ${javaPackage}.${cursorFolderName};
 <#assign importList = []>
 <#list parameter.parameters as parameter2>
 <#if parameter2.date>
+<#assign importSafeDate = 1>
 <#assign importList = importList + ["java.util.Date"]>
-<#if fullConstructor && utilFolderName != objectFolderName>
+<#if utilFolderName != cursorFolderName>
 <#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeDate"]>
 </#if>
 </#if>
 <#if parameter2.blob>
-<#if fullConstructor && utilFolderName != objectFolderName>
+<#assign importSafeByteArray = 1>
+<#if utilFolderName != cursorFolderName>
 <#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeByteArray"]>
 </#if>
 </#if>
@@ -46,27 +48,41 @@ import ${import};
 </#if>
 <#if documentation>
 /**
- * Bean object builder for datatype ${parameter.realObjectName}.
+ * DataSet builder parameter for <#if proc.function>function<#else>stored procedure</#if>.
+ *
+ * ${proc.fullName}
+ *
+ * ${parameter.name}
  *
  * @author @GENERATOR.NAME@
  * @version @GENERATOR.VERSION@
  */
- </#if>
+</#if>
 public final class ${parameter.javaTypeName}Builder {
 <#if !fullConstructor>
 
 <#if documentation>
     /**
-     * Bean object ${parameter.javaTypeName}Impl to build.
+     * ResultSet parameter ${parameter.javaTypeName} to build.
+     *
+     * ${proc.fullName}
+     *
+     * ${parameter.name}
+     *
      */
 </#if>
-    private final ${parameter.javaTypeName}Impl object;
+    private final ${parameter.javaTypeName} cursor;
 <#else>
 <#list parameter.parameters as parameter2>
 
 <#if documentation>
     /**
-     * Field ${parameter2.name}.
+     * Parameter ${parameter2.name}.
+     *
+     * ${proc.fullName}
+     *
+     * ${parameter.name}
+     *
      */
 </#if>
     private ${parameter2.javaTypeName} ${parameter2.fieldName}${parameter.javaTypeName} = null;
@@ -76,11 +92,16 @@ public final class ${parameter.javaTypeName}Builder {
 <#if documentation>
     /**
      * Class constructor ${parameter.javaTypeName}Builder.
+     *
+     * ${proc.fullName}
+     *
+     * ${parameter.name}
+     *
      */
 </#if>
     public ${parameter.javaTypeName}Builder() {
 <#if !fullConstructor>
-        this.object = new ${parameter.javaTypeName}Impl();
+        this.cursor = new ${parameter.javaTypeName}Impl();
 </#if>
     }
 
@@ -88,16 +109,18 @@ public final class ${parameter.javaTypeName}Builder {
     /**
      * Class constructor ${parameter.javaTypeName}Builder.
      *
+     * ${proc.fullName}
+     *
      * @param ${parameter.javaTypeName} instance
      *
      */
 </#if>
     public ${parameter.javaTypeName}Builder(final ${parameter.javaTypeName} instance) {
 <#if !fullConstructor>
-        this.object = new ${parameter.javaTypeName}Impl(instance);
+        this.cursor = new ${parameter.javaTypeName}Impl(instance);
 <#else>
 <#list parameter.parameters as parameter2>
-        this. ${parameter2.fieldName}(instance.get${parameter2.propertyName}());
+        this.${parameter2.fieldName}(instance.get${parameter2.propertyName}());
 </#list>
 </#if>
     }
@@ -107,12 +130,14 @@ public final class ${parameter.javaTypeName}Builder {
     /**
      * Getter of ${parameter2.name}.
      *
+     * ${proc.fullName}
+     *
      * @return The ${parameter.javaTypeName}Builder instance.
      */
 </#if>
     public ${parameter.javaTypeName}Builder ${parameter2.fieldName}(final ${parameter2.javaTypeName} ${parameter2.fieldName}) {
 <#if !fullConstructor>
-        this.object.set${parameter2.propertyName}(${parameter2.fieldName});
+        this.output.set${parameter.propertyName}(${parameter.fieldName});
 <#else>
 <#if parameter2.date>
         this.${parameter2.fieldName}${parameter.javaTypeName} = ${prefixUtilityName}SafeDate.process(${parameter2.fieldName});
@@ -130,14 +155,16 @@ public final class ${parameter.javaTypeName}Builder {
     /**
      * Getter ${parameter.javaTypeName} instance.
      *
-     * @return The ${parameter.javaTypeName}Object instance.
+     * ${proc.fullName}
+     *
+     * @return The ${parameter.javaTypeName} instance.
      */
 </#if>
     public ${parameter.javaTypeName} build() {
 <#if fullConstructor>
         return new ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter2>this.${parameter2.fieldName}${parameter.javaTypeName}<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
 <#else>
-        return this.object;
+        return this.cursor;
 </#if>
     }
 }

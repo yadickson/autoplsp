@@ -50,7 +50,7 @@ import ${import};
 <#if driverVersionName == 'ojdbc6' >
 @SuppressWarnings({"deprecation"})
 </#if>
-public final class ${prefixUtilityName}ClobUtilImpl
+final class ${prefixUtilityName}ClobUtilImpl
         implements ${prefixUtilityName}ClobUtil {
 <#if logger>
 

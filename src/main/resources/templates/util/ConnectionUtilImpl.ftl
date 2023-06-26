@@ -51,7 +51,7 @@ import java.util.Objects;
  */
 </#if>
 @Component
-public final class ${prefixUtilityName}ConnectionUtilImpl implements
+final class ${prefixUtilityName}ConnectionUtilImpl implements
         ${prefixUtilityName}ConnectionUtil {
 <#if logger>
 

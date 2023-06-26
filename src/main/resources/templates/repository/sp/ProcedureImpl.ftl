@@ -29,7 +29,7 @@ package ${javaPackage}.${repositoryFolderName}.sp;
 <#assign importList = importList + ["org.springframework.jdbc.core.SqlReturnResultSet"]>
 </#if>
 <#if parameter.resultSet || parameter.returnResultSet>
-<#assign importList = importList + ["${javaPackage}.${repositoryFolderName}.mapper.${parameter.javaTypeName}RowMapperImpl"]>
+<#assign importList = importList + ["${javaPackage}.${repositoryFolderName}.mapper.${parameter.javaTypeName}RowMapper"]>
 </#if>
 </#list>
 
@@ -54,7 +54,7 @@ import ${import};
  */
 </#if>
 @Repository
-public final class ${proc.className}SPImpl${'\n'}        extends StoredProcedure${'\n'}        implements ${proc.className}SP {
+final class ${proc.className}SPImpl${'\n'}        extends StoredProcedure${'\n'}        implements ${proc.className}SP {
 
 <#if documentation>
     /**
@@ -70,7 +70,7 @@ public final class ${proc.className}SPImpl${'\n'}        extends StoredProcedure
      * @param jdbcTemplate jdbcTemplate
      */
 </#if>
-    public ${proc.className}SPImpl(${'\n'}        @Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate${'\n'}    ) {
+    public ${proc.className}SPImpl(${'\n'}        @Qualifier("${jdbcTemplate}") final JdbcTemplate jdbcTemplate<#list proc.parameters as parameter><#if parameter.resultSet || parameter.returnResultSet>,${'\n'}        final ${parameter.javaTypeName}RowMapper ${parameter.fieldName}RowMapper</#if></#list>${'\n'}    ) {
 
         super(Objects.requireNonNull(jdbcTemplate.getDataSource()), SPROC_NAME);
 
@@ -80,13 +80,13 @@ public final class ${proc.className}SPImpl${'\n'}        extends StoredProcedure
 <#assign noFullChunk = 1>
 <#list proc.parameters as parameter>
         <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if> ${parameter.fieldName}${proc.className};
-</#list>
 
+</#list>
 <#list proc.parameters as parameter>
         ${parameter.fieldName}${proc.className} = new <#if parameter.returnResultSet>SqlReturnResultSet<#else>Sql<#if parameter.inputOutput>InOut<#elseif parameter.output>Out</#if>Parameter</#if>(
                 "${parameter.prefix}${parameter.name}"<#if ! parameter.returnResultSet >,
                 ${parameter.sqlTypeName}</#if><#if parameter.resultSet || parameter.returnResultSet >,
-                new ${parameter.javaTypeName}RowMapperImpl()</#if>
+                ${parameter.fieldName}RowMapper</#if>
         );
 
 </#list>
@@ -97,7 +97,7 @@ public final class ${proc.className}SPImpl${'\n'}        extends StoredProcedure
 <#assign step = 0 >
 <#list proc.parameters?chunk(10) as childs>
 <#assign step++ >
-        fillStep${step}();
+        fillStep${step}(<#list childs?filter(x -> x.resultSet || x.returnResultSet) as parameter>${parameter.fieldName}RowMapper<#sep>, </#sep></#list>);
 </#list>
 </#if>
 
@@ -113,17 +113,17 @@ public final class ${proc.className}SPImpl${'\n'}        extends StoredProcedure
      * Fill parameters declaration for step ${step}.
      */
 </#if>
-    private void fillStep${step}() {
+    private void fillStep${step}(<#list childs?filter(x -> x.resultSet || x.returnResultSet) as parameter>${'\n'}        final ${parameter.javaTypeName}RowMapper ${parameter.fieldName}RowMapper<#sep>, </#sep></#list>) {
 
 <#list childs as paramrs>
         <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if> ${paramrs.fieldName}${proc.className};
-</#list>
 
+</#list>
 <#list childs as paramrs>
         ${paramrs.fieldName}${proc.className} = new <#if paramrs.returnResultSet>SqlReturnResultSet<#else>Sql<#if paramrs.inputOutput>InOut<#elseif paramrs.output>Out</#if>Parameter</#if>(
                 "${paramrs.prefix}${paramrs.name}"<#if ! paramrs.returnResultSet >,
                 ${paramrs.sqlTypeName}</#if><#if paramrs.resultSet || paramrs.returnResultSet >,
-                new ${paramrs.javaTypeName}RowMapperImpl()</#if>
+                ${paramrs.fieldName}RowMapper</#if>
         );
 
 </#list>

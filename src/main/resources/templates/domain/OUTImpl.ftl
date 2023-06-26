@@ -69,7 +69,7 @@ import ${import};
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-public class ${proc.className}OUTImpl implements${'\n'}        ${proc.className}OUT<#if serialization>,${'\n'}        Serializable</#if> {
+final class ${proc.className}OUTImpl implements${'\n'}        ${proc.className}OUT<#if serialization>,${'\n'}        Serializable</#if> {
 <#if serialization> 
 
 <#if documentation>
@@ -90,6 +90,34 @@ public class ${proc.className}OUTImpl implements${'\n'}        ${proc.className}
 </#if>
     private <#if fullConstructor>final </#if><#if parameter.resultSet || parameter.returnResultSet>java.util.List<${parameter.javaTypeName}><#else>${parameter.javaTypeName}</#if> ${parameter.fieldName}${proc.className}<#if !fullConstructor> = null</#if>;
 </#list>
+<#if !fullConstructor>
+
+<#if documentation>
+    /**
+     * Class Constructor ${proc.className}OUTImpl.
+     *
+     */
+</#if>
+    public ${proc.className}OUTImpl() {
+    }
+</#if>
+
+<#if documentation>
+    /**
+     * Class Constructor ${proc.className}OUTImpl.
+     *
+     * @param ${proc.className}OUT instance
+     */
+</#if>
+    public ${proc.className}OUTImpl(final ${proc.className}OUT instance) {
+<#if fullConstructor>
+        this(${'\n'}            <#list proc.outputParameters as parameter2>instance.get${parameter2.propertyName}()<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+<#else>
+<#list proc.outputParameters as parameter2>
+        this.set${parameter2.propertyName}(instance.get${parameter2.propertyName}());
+</#list>
+</#if>
+    }
 <#if fullConstructor>
 
 <#if documentation>

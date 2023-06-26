@@ -59,7 +59,7 @@ import ${import};
 <#if jsonNonNull>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 </#if>
-public final class ${parameter.javaTypeName}Impl implements${'\n'}        ${parameter.javaTypeName}<#if serialization>,${'\n'}        Serializable</#if> {
+final class ${parameter.javaTypeName}Impl implements${'\n'}        ${parameter.javaTypeName}<#if serialization>,${'\n'}        Serializable</#if> {
 <#if serialization>
 
 <#if documentation>
@@ -78,6 +78,23 @@ public final class ${parameter.javaTypeName}Impl implements${'\n'}        ${para
 </#if>
     private <#if fullConstructor>final </#if>${parameter2.javaTypeName} ${parameter2.fieldName}${parameter.javaTypeName}<#if !fullConstructor> = null</#if>;
 </#list>
+
+<#if documentation>
+    /**
+     * Class Constructor ${parameter.javaTypeName}Impl.
+     *
+     * @param ${parameter.javaTypeName} instance
+     */
+</#if>
+    public ${parameter.javaTypeName}Impl(final ${parameter.javaTypeName} instance) {
+<#if fullConstructor>
+        this(${'\n'}            <#list parameter.parameters as parameter2>instance.get${parameter2.propertyName}()<#sep>,${'\n'}            </#sep></#list>${'\n'}        );
+<#else>
+<#list parameter.parameters as parameter2>
+        this.set${parameter2.propertyName}(instance.get${parameter2.propertyName}());
+</#list>
+</#if>
+    }
 <#if fullConstructor>
 
 <#if documentation>
@@ -89,7 +106,7 @@ public final class ${parameter.javaTypeName}Impl implements${'\n'}        ${para
 </#list>
      */
 </#if>
-    public ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} ${parameter2.fieldName}<#sep>,${'\n'}        </#sep></#list>) {
+    public ${parameter.javaTypeName}Impl(${'\n'}            <#list parameter.parameters as parameter2>final ${parameter2.javaTypeName} ${parameter2.fieldName}<#sep>,${'\n'}            </#sep></#list>${'\n'}    ) {
 <#list parameter.parameters as parameter2>
 <#if parameter2.date>
         this.${parameter2.fieldName}${parameter.javaTypeName} = ${prefixUtilityName}SafeDate.process(${parameter2.fieldName});

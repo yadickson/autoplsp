@@ -47,7 +47,7 @@ import ${import};
 <#if driverVersionName == 'ojdbc6' >
 @SuppressWarnings({"deprecation"})
 </#if>
-public final class ${prefixUtilityName}ArrayUtilImpl${'\n'}        implements ${prefixUtilityName}ArrayUtil {
+final class ${prefixUtilityName}ArrayUtilImpl${'\n'}        implements ${prefixUtilityName}ArrayUtil {
 <#if logger>
 
 <#if documentation>

@@ -61,7 +61,7 @@ import ${import};
  */
 </#if>
 @Component
-public final class ${parameter.javaTypeName}BuilderUtilImpl${'\n'}        implements ${parameter.javaTypeName}BuilderUtil {
+final class ${parameter.javaTypeName}BuilderUtilImpl${'\n'}        implements ${parameter.javaTypeName}BuilderUtil {
 <#if importBlobUtil??>
 
 <#if documentation>

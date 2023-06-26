@@ -29,7 +29,7 @@ package ${javaPackage}.${repositoryFolderName}.sp;
 <#assign importList = importList + ["org.springframework.jdbc.core.SqlReturnResultSet"]>
 </#if>
 <#if parameter.resultSet || parameter.returnResultSet>
-<#assign importList = importList + ["${javaPackage}.${repositoryFolderName}.mapper.${parameter.javaTypeName}RowMapperImpl"]>
+<#assign importList = importList + ["${javaPackage}.${repositoryFolderName}.mapper.${parameter.javaTypeName}RowMapper"]>
 </#if>
 </#list>
 
@@ -54,7 +54,7 @@ import ${import};
  */
 </#if>
 @Repository
-public final class ${proc.className}SqlQueryImpl${'\n'}        extends GenericSqlQuery${'\n'}        implements ${proc.className}SqlQuery {
+final class ${proc.className}SqlQueryImpl${'\n'}        extends GenericSqlQuery${'\n'}        implements ${proc.className}SqlQuery {
 
 <#if documentation>
     /**

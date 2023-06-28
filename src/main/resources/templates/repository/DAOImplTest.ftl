@@ -126,7 +126,7 @@ class ${proc.className}DAOImplTest {
 <#if proc.checkResult>
 
     @Mock
-    private ${prefixUtilityName}CheckResult checkResult;
+    private ${prefixUtilityName}CheckResult checkResultMock;
 </#if>
 <#if proc.hasInput>
 
@@ -227,7 +227,7 @@ class ${proc.className}DAOImplTest {
 </#if>
         repository.execute(<#if proc.hasInput>params</#if>);
 
-        InOrder inOrder = Mockito.inOrder(<#if proc.function>function<#else>procedure</#if>Mock<#if proc.checkResult>, checkResult</#if><#if importConnectionUtils??>, connectionUtilMock</#if>);
+        InOrder inOrder = Mockito.inOrder(<#if proc.function>function<#else>procedure</#if>Mock<#if proc.checkResult>, checkResultMock</#if><#if importConnectionUtils??>, connectionUtilMock</#if>);
 
 <#if importConnectionUtils??>
         inOrder.verify(connectionUtilMock, Mockito.times(1)).process();
@@ -236,13 +236,11 @@ class ${proc.className}DAOImplTest {
 <#if importConnectionUtils??>
         inOrder.verify(connectionUtilMock, Mockito.times(1)).release(Mockito.same(connectionMock));
 </#if>
-<#if importConnectionUtils?? || proc.checkResult>
-
-</#if>
-<#if proc.checkResult>
-        Mockito.verify(checkResult, Mockito.never()).check(<#if proc.hasOutput>Mockito.any()</#if>);
+<#if proc.checkResult && proc.hasOutput>
+        inOrder.verify(checkResultMock, Mockito.times(1)).check(Mockito.same(mapResult));
 </#if>
 <#if importConnectionUtils??>
+
         Mockito.verify(connectionMock, Mockito.never()).close();
 <#list proc.inputParameters as parameter>
 <#if parameter.object || parameter.array>

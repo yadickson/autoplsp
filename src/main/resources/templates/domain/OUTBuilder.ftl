@@ -20,11 +20,6 @@
 </#if>
 package ${javaPackage}.${domainFolderName};
 <#assign importList = []>
-<#list proc.arrayImports as parameter>
-<#if arrayFolderName != domainFolderName>
-<#assign importList = importList + ["${javaPackage}.${arrayFolderName}.${parameter.javaTypeName}"]>
-</#if>
-</#list>
 <#list proc.objectImports as parameter>
 <#if objectFolderName != domainFolderName>
 <#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.javaTypeName}"]>

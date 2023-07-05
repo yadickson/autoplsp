@@ -300,6 +300,7 @@ public final class JavaGenerator extends TemplateGenerator {
         }
 
         if (procedure.getHasDate() && !addSafeDate) {
+            addSafeDate = true;
             if (addDocumentation) {
                 createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
             }
@@ -312,7 +313,6 @@ public final class JavaGenerator extends TemplateGenerator {
 
         if (procedure.getHasBlob() && !addSafeByteArray) {
             addSafeByteArray = true;
-            addSafeDate = true;
             if (addDocumentation) {
                 createTemplate(INPUT_MAP, UTIL_PATH + "package-info.ftl", getUtilOutputFilePath("package-info.java"));
             }
@@ -443,6 +443,9 @@ public final class JavaGenerator extends TemplateGenerator {
 
         for (Parameter param : procedure.getParameters()) {
             if (param.isResultSet() || param.isReturnResultSet()) {
+
+
+
                 INPUT_MAP.put(PARAMETER_NAME, param);
                 if (addDocumentation) {
                     createTemplate(INPUT_MAP, CURSOR_PATH + "package-info.ftl", getCursorOutputFilePath("package-info.java"));

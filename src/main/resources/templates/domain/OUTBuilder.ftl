@@ -40,6 +40,8 @@ package ${javaPackage}.${domainFolderName};
 <#if fullConstructor && utilFolderName != domainFolderName>
 <#assign importList = importList + ["${javaPackage}.${utilFolderName}.${prefixUtilityName}SafeByteArray"]>
 </#if>
+<#elseif (parameter.resultSet || parameter.returnResultSet) && cursorFolderName != domainFolderName>
+<#assign importList = importList + ["${javaPackage}.${cursorFolderName}.${parameter.javaTypeName}"]>
 </#if>
 </#list>
 

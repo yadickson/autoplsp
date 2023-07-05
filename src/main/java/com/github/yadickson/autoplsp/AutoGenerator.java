@@ -586,7 +586,7 @@ public class AutoGenerator extends AbstractMojo {
     @Parameter(
             property = "autoplsp.objectFolderName",
             alias = "objectFolderName",
-            defaultValue = "config",
+            defaultValue = "object",
             readonly = true,
             required = false)
     private String objectFolderName;

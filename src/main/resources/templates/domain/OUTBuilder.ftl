@@ -20,11 +20,6 @@
 </#if>
 package ${javaPackage}.${domainFolderName};
 <#assign importList = []>
-<#list proc.objectImports as parameter>
-<#if objectFolderName != domainFolderName>
-<#assign importList = importList + ["${javaPackage}.${objectFolderName}.${parameter.javaTypeName}"]>
-</#if>
-</#list>
 <#list proc.outputParameters as parameter>
 <#if parameter.date>
 <#assign importList = importList + ["java.util.Date"]>

@@ -29,7 +29,7 @@ jobs:
         architecture: x64
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B clean package verify --file pom.xml
     - name: Badge
       if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
       uses: gaelgirodon/ci-badges-action@v1

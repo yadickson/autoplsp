@@ -27,6 +27,8 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_KEY }}
           passphrase: ${{ secrets.GPG_PASS }}
+      - name: List keys
+        run: gpg -K
       - name: Configure settings
         run: |
           echo "${{ secrets.SETTINGS }}" | base64 -d > settings.xml

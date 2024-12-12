@@ -695,12 +695,6 @@ $ mvn test
 ```
 
 
-[travis-image]: https://travis-ci.org/yadickson/autoplsp.svg?branch=master
-[travis-url]: https://travis-ci.org/yadickson/autoplsp
-
-[codecov-image]: https://codecov.io/gh/yadickson/autoplsp/branch/master/graph/badge.svg?branch=master
-[codecov-url]: https://codecov.io/gh/yadickson/autoplsp
-
 [oss-nexus-image]: https://img.shields.io/nexus/r/https/oss.sonatype.org/com.github.yadickson/autoplsp.svg
 [oss-nexus-url]: https://oss.sonatype.org/#nexus-search;quick~autoplsp
 

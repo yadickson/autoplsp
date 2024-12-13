@@ -21,18 +21,21 @@ jobs:
           distribution: 'adopt'
           architecture: x64
           cache: maven
+      - name: Download dependencies
+        run: |
+          mvn -B dependency:go-offline
       - name: Configure settings
         run: |
           echo "${{ secrets.SETTINGS }}" | base64 -d > settings.xml
-      - name: Configure keystore
+      - name: Configure key
         run: |
-          echo "${{ secrets.KEYSTORE }}" | base64 -d > keystore.jks
+          echo "${{ secrets.SIGN_KEY }}" | base64 -d > ~/.m2/sign-key.asc
       - name: Configure Version
         run: |
           mvn versions:set -DnewVersion=$(echo ${GITHUB_REF:10})
       - name: Publish Library
         run: |
-          mvn deploy --settings settings.xml -Prelease -Dstore.password="${{ secrets.STORE_PASS }}" -Dkey.password="${{ secrets.KEY_PASS }}"
+          mvn -B deploy --settings settings.xml -Prelease -Dsign.keyId="${{ secrets.SIGN_KEY_ID }}" -Dsign.keyPass="${{ secrets.SIGN_KEY_PASS }}"
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}

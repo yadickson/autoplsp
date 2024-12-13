@@ -21,22 +21,18 @@ jobs:
           distribution: 'adopt'
           architecture: x64
           cache: maven
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_KEY }}
-          passphrase: ${{ secrets.GPG_PASS }}
-      - name: List keys
-        run: gpg -K
       - name: Configure settings
         run: |
           echo "${{ secrets.SETTINGS }}" | base64 -d > settings.xml
+      - name: Configure keystore
+        run: |
+          echo "${{ secrets.KEYSTORE }}" | base64 -d > keystore.jks
       - name: Configure Version
         run: |
           mvn versions:set -DnewVersion=$(echo ${GITHUB_REF:10})
       - name: Publish Library
         run: |
-          mvn deploy --settings settings.xml -Prelease -Dgpg.executable=gpg -Dgpg.keyname="${{ secrets.GPG_ID }}" -Dgpg.passphrase="${{ secrets.GPG_PASS }}"
+          mvn deploy --settings settings.xml -Prelease -Dstore.password="${{ secrets.STORE_PASS }}" -Dkey.password="${{ secrets.KEY_PASS }}"
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
